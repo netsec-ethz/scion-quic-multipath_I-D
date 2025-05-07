@@ -19,14 +19,14 @@
 # Change the file extension to match the format (.xml for XML, etc...)
 #
 ###
-title: "TODO - Your title"
-abbrev: "TODO - Abbreviation"
+title: "QUIC Multipath over SCION"
+abbrev: "SCION-QUIC-MP"
 category: info
 
-docname: draft-todo-yourname-protocol-latest
+docname: draft-vanbommel-zaeschke-scion-quic-mp-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
-date:
+date: 2025-05-07
 consensus: true
 v: 3
 area: AREA
@@ -40,15 +40,18 @@ venue:
   type: Working Group
   mail: WG@example.com
   arch: https://example.com/WG
-  github: USER/REPO
+  github: netsec-ethz/scion-quic-multipath_I-D
   latest: https://example.com/LATEST
 
 author:
  -
-    fullname: Your Name Here
-    organization: Your Organization Here
+    fullname: Jelte van Bommel
+    organization: ETH Zurich - NetSec Group
     email: your.email@example.com
-
+ -
+    fullname: Tilmann Zäschke
+    organization: ETH Zurich - NetSec Group
+    email: tilmann.zaeschke@inf.ethz.ch
 normative:
 
 informative:
@@ -56,8 +59,10 @@ informative:
 
 --- abstract
 
-TODO Abstract
-
+Using Multipath Extension for QUIC [xxx] with SCION provides unique
+opportunities application but also for for congestion control, 
+path selection and related algorithms.
+This document discusses some opportunities and general recommendations.
 
 --- middle
 
