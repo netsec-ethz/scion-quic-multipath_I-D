@@ -52,10 +52,38 @@ author:
     fullname: Tilmann Zäschke
     organization: ETH Zurich - NetSec Group
     email: tilmann.zaeschke@inf.ethz.ch
+
 normative:
+  QUIC-TRANSPORT: rfc9000
+  QUIC-TLS: rfc9001
+  QUIC-RECOVERY: rfc9002
 
 informative:
-
+  DMTP: 
+    title: "Deadline Aware Streams in MP-QUIC"
+    date: "2025-03-03"
+    author: 
+    - 
+      ins Tony John
+      ins Till-Frederik Riechard 
+  RFC6356:
+  OLIA:
+    title: "MPTCP is not pareto-optimal: performance issues and
+a possible solution"
+    date: "2012"
+    seriesinfo: "Proceedings of the 8th international conference on
+Emerging networking experiments and technologies, ACM"
+    author:
+    -
+      ins: R. Khalili
+    -
+      ins: N. Gast
+    -
+      ins: M. Popovic
+    -
+      ins: U. Upadhyay
+    -
+      ins: J.-Y. Le Boudec
 
 --- abstract
 
@@ -68,12 +96,38 @@ This document discusses some opportunities and general recommendations.
 
 # Introduction
 
+
+
+
+We consider several application profiles, including data transfer {{data}},
+low latency {{lola}} and high availability / redundancy {{redu}}.
+
+One example of an application / algorithm is discussed in {{DMTP}}.
+
+
 TODO Introduction
 
 
 # Conventions and Definitions
 
 {::boilerplate bcp14-tagged}
+
+
+# Algorithms
+
+## Congestion Control
+
+
+## Path Selection
+
+
+# Applications
+
+## Data Transfer {#datra}
+
+## Low Latency {#lola}
+
+## High Availability / Redundancy {#redu}
 
 
 # Security Considerations
