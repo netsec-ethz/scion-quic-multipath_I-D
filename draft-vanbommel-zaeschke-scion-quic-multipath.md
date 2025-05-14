@@ -54,6 +54,9 @@ author:
     email: tilmann.zaeschke@inf.ethz.ch
 
 normative:
+  MPTCP-ARCHITECTURE: rfc6182
+  MPTCP-CONGESTION: rfc6356
+  DCCP-UDPENCAP: rfc6773 
   QUIC-TRANSPORT: rfc9000
   QUIC-TLS: rfc9001
   QUIC-RECOVERY: rfc9002
@@ -65,6 +68,7 @@ informative:
     author: 
     - 
       ins Tony John
+    -
       ins Till-Frederik Riechard 
   RFC6356:
   OLIA:
