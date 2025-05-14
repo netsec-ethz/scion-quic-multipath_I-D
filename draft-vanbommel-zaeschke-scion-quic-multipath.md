@@ -96,16 +96,16 @@ This document discusses some opportunities and general recommendations.
 
 # Introduction
 
-
-
-
-We consider several application profiles, including data transfer {{data}},
+We consider several application profiles, including data transfer {{datra}},
 low latency {{lola}} and high availability / redundancy {{redu}}.
 
 One example of an application / algorithm is discussed in {{DMTP}}.
 
-
-TODO Introduction
+The aim of this document is to provide guidelins for designing and 
+implementing multipathing over SCION. Some key differences to traditional
+(non-SCION) networks are the availability of the actual route (on the 
+granularity of autonomous systems) and the availability of path metadata,
+such as latency and banwidth, for path segments.
 
 
 # Conventions and Definitions
@@ -113,21 +113,42 @@ TODO Introduction
 {::boilerplate bcp14-tagged}
 
 
+
+
+
 # Algorithms
 
-## Congestion Control
+## Congestion Control {#concon}
 
 
-## Path Selection
+## Path Selection {#patsel}
+
+### Hybrid approach
+A hybrid approach could start with using low latency paths. If the 
+connection appears to be long lasting (e.g. at least 1 second duration
+and 1MB of traffic) it could start adding additional paths and see whether
+the traffic increases. Additional paths can be chosen following the 
+guidlines discussed in {{datra}}
+  
 
 
-# Applications
+# Applications (#apps}
 
 ## Data Transfer {#datra}
 
 ## Low Latency {#lola}
 
 ## High Availability / Redundancy {#redu}
+
+# API Design consideration
+
+Applications will have very different requirments on a multipath API.
+A comprehensive API should therefore allow for mostly automatic selection 
+of {{patsel}} Path Selection and Congestion Control algorithms {{concon}}.
+
+At the same time it should give access to SCION paths and their metadata 
+to allow implementation of custom algorithms.
+
 
 
 # Security Considerations
