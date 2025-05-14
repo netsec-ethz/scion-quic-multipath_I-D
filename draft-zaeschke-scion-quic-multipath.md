@@ -57,7 +57,7 @@ author:
     email: tilmann.zaeschke@inf.ethz.ch
 
 normative:
-  DCCP-UDPENCAP: rfc6773 
+  DCCP-UDPENCAP: rfc6773
   MPTCP-ARCHITECTURE: rfc6182
   MPTCP-CONGESTION: rfc6356
   QUIC-TRANSPORT: rfc9000
@@ -72,7 +72,7 @@ informative:
     - 
       ins: T. John
     -
-      ins: T. Riechard 
+      ins: T. Riechard
   RFC6356:
   OLIA:
     title: "MPTCP is not pareto-optimal: performance issues and
@@ -135,9 +135,9 @@ low latency {{lola}} and high availability / redundancy {{redu}}.
 
 One example of an application / algorithm is discussed in {{DMTP}}.
 
-The aim of this document is to provide guideliens for designing and 
+The aim of this document is to provide guideliens for designing and
 implementing multipathing over SCION. Some key differences to traditional
-(non-SCION) networks are the availability of the actual route (on the 
+(non-SCION) networks are the availability of the actual route (on the
 granularity of autonomous systems) and the availability of path metadata,
 such as latency and banwidth, for path segments.
 
@@ -154,12 +154,12 @@ such as latency and banwidth, for path segments.
 ## Path Selection {#patsel}
 
 ### Hybrid approach
-A hybrid approach could start with using low latency paths. If the 
+A hybrid approach could start with using low latency paths. If the
 connection appears to be long lasting (e.g. at least 1 second duration
 and 1MB of traffic) it could start adding additional paths and see whether
-the traffic increases. Additional paths can be chosen following the 
+the traffic increases. Additional paths can be chosen following the
 guidlines discussed in {{datra}}.
-  
+
 
 
 # Applications (#apps}
