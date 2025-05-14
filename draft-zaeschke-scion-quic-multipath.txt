@@ -14,9 +14,9 @@ Expires: 8 November 2025                                      7 May 2025
 Abstract
 
    Using Multipath Extension for QUIC [QUIC-MP] with SCION provides
-   unique opportunities application but also for for congestion control,
-   path selection and related algorithms.  This document discusses some
-   opportunities and general recommendations.
+   unique opportunities for application but also for for congestion
+   control, path selection and related algorithms.  This document
+   discusses some opportunities and general recommendations.
 
 About This Document
 
@@ -94,7 +94,7 @@ Table of Contents
 
    One example of an application / algorithm is discussed in [DMTP].
 
-   The aim of this document is to provide guidelins for designing and
+   The aim of this document is to provide guideliens for designing and
    implementing multipathing over SCION.  Some key differences to
    traditional (non-SCION) networks are the availability of the actual
    route (on the granularity of autonomous systems) and the availability
@@ -120,7 +120,7 @@ Table of Contents
    connection appears to be long lasting (e.g. at least 1 second
    duration and 1MB of traffic) it could start adding additional paths
    and see whether the traffic increases.  Additional paths can be
-   chosen following the guidlines discussed in Section 4.1
+   chosen following the guidlines discussed in Section 4.1.
 
 4.  Applications (#apps}
 
@@ -196,8 +196,8 @@ Table of Contents
 
 8.2.  Informative References
 
-   [DMTP]     Tony John and Till-Frederik Riechard, "Deadline Aware
-              Streams in MP-QUIC", March 2025.
+   [DMTP]     John, T. and T. Riechard, "Deadline Aware Streams in MP-
+              QUIC", March 2025.
 
    [OLIA]     Khalili, R., Gast, N., Popovic, M., Upadhyay, U., and J.
               Le Boudec, "MPTCP is not pareto-optimal: performance
