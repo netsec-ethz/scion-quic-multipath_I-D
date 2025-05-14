@@ -65,11 +65,11 @@ normative:
   QUIC-RECOVERY: rfc9002
 
 informative:
-  DMTP: 
+  DMTP:
     title: "Deadline Aware Streams in MP-QUIC"
     date: "2025-03-03"
-    author: 
-    - 
+    author:
+    -
       ins: T. John
     -
       ins: T. Riechard
