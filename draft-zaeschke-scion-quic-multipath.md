@@ -74,8 +74,6 @@ Emerging networking experiments and technologies, ACM"
   QUIC-MP:
     title: Multipath Extension for QUIC
     date: 2025
-# area: Transport
-# workgroup: QUIC Working Group
     author:
     -
       fullname:
