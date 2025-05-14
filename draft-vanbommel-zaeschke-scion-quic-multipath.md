@@ -67,9 +67,9 @@ informative:
     date: "2025-03-03"
     author: 
     - 
-      ins Tony John
+      ins: Tony John
     -
-      ins Till-Frederik Riechard 
+      ins: Till-Frederik Riechard 
   RFC6356:
   OLIA:
     title: "MPTCP is not pareto-optimal: performance issues and
