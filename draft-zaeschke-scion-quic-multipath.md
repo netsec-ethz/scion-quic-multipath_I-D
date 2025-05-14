@@ -57,9 +57,9 @@ author:
     email: tilmann.zaeschke@inf.ethz.ch
 
 normative:
+  DCCP-UDPENCAP: rfc6773 
   MPTCP-ARCHITECTURE: rfc6182
   MPTCP-CONGESTION: rfc6356
-  DCCP-UDPENCAP: rfc6773 
   QUIC-TRANSPORT: rfc9000
   QUIC-TLS: rfc9001
   QUIC-RECOVERY: rfc9002
@@ -70,9 +70,9 @@ informative:
     date: "2025-03-03"
     author: 
     - 
-      ins: Tony John
+      ins: T. John
     -
-      ins: Till-Frederik Riechard 
+      ins: T. Riechard 
   RFC6356:
   OLIA:
     title: "MPTCP is not pareto-optimal: performance issues and
@@ -122,8 +122,8 @@ Emerging networking experiments and technologies, ACM"
 --- abstract
 
 Using Multipath Extension for QUIC {{QUIC-MP}} with SCION provides unique
-opportunities application but also for for congestion control, 
-path selection and related algorithms.
+opportunities for application but also for for congestion control, path
+selection and related algorithms.
 This document discusses some opportunities and general recommendations.
 
 --- middle
@@ -135,7 +135,7 @@ low latency {{lola}} and high availability / redundancy {{redu}}.
 
 One example of an application / algorithm is discussed in {{DMTP}}.
 
-The aim of this document is to provide guidelins for designing and 
+The aim of this document is to provide guideliens for designing and 
 implementing multipathing over SCION. Some key differences to traditional
 (non-SCION) networks are the availability of the actual route (on the 
 granularity of autonomous systems) and the availability of path metadata,
@@ -147,13 +147,9 @@ such as latency and banwidth, for path segments.
 {::boilerplate bcp14-tagged}
 
 
-
-
-
 # Algorithms
 
 ## Congestion Control {#concon}
-
 
 ## Path Selection {#patsel}
 
@@ -162,7 +158,7 @@ A hybrid approach could start with using low latency paths. If the
 connection appears to be long lasting (e.g. at least 1 second duration
 and 1MB of traffic) it could start adding additional paths and see whether
 the traffic increases. Additional paths can be chosen following the 
-guidlines discussed in {{datra}}
+guidlines discussed in {{datra}}.
   
 
 
@@ -177,10 +173,10 @@ guidlines discussed in {{datra}}
 # API Design consideration
 
 Applications will have very different requirments on a multipath API.
-A comprehensive API should therefore allow for mostly automatic selection 
+A comprehensive API should therefore allow for mostly automatic selection
 of {{patsel}} Path Selection and Congestion Control algorithms {{concon}}.
 
-At the same time it should give access to SCION paths and their metadata 
+At the same time it should give access to SCION paths and their metadata
 to allow implementation of custom algorithms.
 
 
