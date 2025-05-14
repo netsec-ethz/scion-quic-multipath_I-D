@@ -9,19 +9,19 @@ number:
 date: 2025-05-07
 consensus: true
 v: 3
-area: AREA
-workgroup: WG Working Group
+# area: AREA
+# workgroup: WG Working Group
 keyword:
  - SCION
  - QUIC
  - multipath
 venue:
-  group: WG
-  type: Working Group
-  mail: WG@example.com
-  arch: https://example.com/WG
-  github: netsec-ethz/scion-quic-multipath_I-D
-  latest: https://example.com/LATEST
+#  group: WG
+#  type: Working Group
+#  mail: WG@example.com
+#  arch: https://example.com/WG
+  github: "netsec-ethz/scion-quic-multipath_I-D"
+  latest: "https://netsec-ethz.github.io/scion-quic-multipath_I-D/draft-zaeschke-scion-quic-multipath.html"
 
 author:
  -
@@ -74,8 +74,8 @@ Emerging networking experiments and technologies, ACM"
   QUIC-MP:
     title: Multipath Extension for QUIC
     date: 2025
-    area: Transport
-    workgroup: QUIC Working Group
+# area: Transport
+# workgroup: QUIC Working Group
     author:
     -
       fullname:
