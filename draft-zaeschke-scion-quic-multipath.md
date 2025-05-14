@@ -23,7 +23,7 @@ title: "QUIC Multipath over SCION"
 abbrev: "SCION-QUIC-MP"
 category: info
 
-docname: draft-vanbommel-zaeschke-scion-quic-mp-latest
+docname: draft-zaeschke-scion-quic-mp-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
 date: 2025-05-07
@@ -32,9 +32,9 @@ v: 3
 area: AREA
 workgroup: WG Working Group
 keyword:
- - next generation
- - unicorn
- - sparkling distributed ledger
+ - SCION
+ - QUIC
+ - multipath
 venue:
   group: WG
   type: Working Group
@@ -45,12 +45,15 @@ venue:
 
 author:
  -
-    fullname: Jelte van Bommel
+    ins: J. van Bommel
+    name: Jelte van Bommel
     organization: ETH Zurich - NetSec Group
     email: your.email@example.com
  -
-    fullname: Tilmann Zäschke
-    organization: ETH Zurich - NetSec Group
+    ins: T. Zaeschke
+    name: Tilmann Zaeschke
+    role: editor
+    org: ETH Zurich - NetSec Group
     email: tilmann.zaeschke@inf.ethz.ch
 
 normative:
@@ -88,10 +91,41 @@ Emerging networking experiments and technologies, ACM"
       ins: U. Upadhyay
     -
       ins: J.-Y. Le Boudec
+  QUIC-MP:
+    title: Multipath Extension for QUIC
+    date: 2025
+    category: std
+    ipr: trust200902
+    area: Transport
+    workgroup: QUIC Working Group
+    keyword: Internet-Draft
+    stand_alone: yes
+    author:
+    -
+      fullname:
+          :: "刘彦梅"
+          ascii: "Yanmei Liu"
+    -
+       fullname:
+         :: "马云飞"
+         ascii: "Yunfei Ma"
+    -
+       ins: Q. De Coninck
+       name: Quentin De Coninck
+    -
+       ins: O. Bonaventure
+       name: Olivier Bonaventure
+    -
+       ins: C. Huitema
+       name: Christian Huitema
+    -
+       ins: M. Kuehlewind
+       name: Mirja Kuehlewind
+
 
 --- abstract
 
-Using Multipath Extension for QUIC [xxx] with SCION provides unique
+Using Multipath Extension for QUIC {{QUIC-MP}} with SCION provides unique
 opportunities application but also for for congestion control, 
 path selection and related algorithms.
 This document discusses some opportunities and general recommendations.
