@@ -94,12 +94,8 @@ Emerging networking experiments and technologies, ACM"
   QUIC-MP:
     title: Multipath Extension for QUIC
     date: 2025
-    category: std
-    ipr: trust200902
     area: Transport
     workgroup: QUIC Working Group
-    keyword: Internet-Draft
-    stand_alone: yes
     author:
     -
       fullname:
