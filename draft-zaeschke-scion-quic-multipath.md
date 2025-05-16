@@ -174,8 +174,8 @@ congestion control (see {{concon}}).
 In order to facilitate these algorithms, this documents contains
 suggestions for API design and general use in applications.
 
-Multipath usage profiles are categorized into data transfer {{datra}}
-, low latency {{lola}} and high availability / redundancy {{redu}}.
+Multipath usage profiles are categorized into data transfer {{datra}},
+low latency {{lola}} and high availability / redundancy {{redu}}.
 
 One example of an application / algorithm is discussed in {{DMTP}}.
 
@@ -237,6 +237,15 @@ ISDs to be formed along national boundaries or federations of nations.
 **Leaf AS**: An AS at the "edge" of an ISD, with no other
 downstream ASes.
 
+**Inter AS link**: A direct link between two external interfaces of two
+ASes.
+
+**Intra AS link**: A direct link between twi internal interfaces of
+a single AS. A direct link may contains serveral internal hops.
+
+**Link**: General term that refers to "inter AS links" and "intra AS
+links".
+
 **MAC**: Message Authentication Code.  In the rest of this document,
 "MAC" always refers to "Message Authentication Code" and never to
 "Medium Access Control".  When "Medium Access Control address" is
@@ -250,18 +259,16 @@ endpoints from crafting Hop Fields (HFs) themselves, modifying HFs
 in authorized path segments, or combining HFs of different path
 segments.
 
-**Path Control**: Path control is a property of a network
-architecture that gives endpoints the ability to select how their
-packets travel through the network.  Path control is stronger than
-path transparency.
+**Path**: Besides the 4-tuple of address/IP at each endpoint, the
+information includes a list of all traversed ASes and
+respective links between ASes, as well as metadata about ASes and links,
+such as MTU, bandwidth, latency, AS internal hopcount, or geolocation
+information.
 
-**Path Segment**: Path segments are derived from path segment
-construction beacons (PCBs).  A path segment can be (1) an up
-segment (i.e. a path between a non-core AS and a core AS in the
-same ISD), (2) a down segment (i.e. the same as an up segment, but
-in the opposite direction), or (3) a core segment (i.e., a path
-between core ASes).  Up to three path segments can be used to create
-a forwarding path.
+**Path metadata**: Path metadata is additional data that is available to
+clients when they request a selection of paths to a destination.
+Path metadata is authenticated wrt to owner of each link, but
+otherwise not verified.
 
 **SCMP**: A signaling protocol analogous to the Internet Control
 Message Protocol (ICMP).  This is described in
