@@ -101,19 +101,20 @@ Emerging networking experiments and technologies, ACM"
 I-D.rustignoli-scion-overview:
     title: SCION Overview
     date: 2025
-    target: https://datatracker.ietf.org/doc/html/draft-dekater-panrg-scion-overview/
+    target: https://datatracker.ietf.org/doc/draft-dekater-panrg-scion-overview/
     author:
-     -   ins: C. de Kater
+     -
+         ins: C. de Kater
          name: Corine de Kater
          org: SCION Association
          email: c_de_kater@gmx.ch
-
-     -   ins: N. Rustignoli
+     -
+         ins: N. Rustignoli
          name: Nicola Rustignoli
          org: SCION Association
          email: nic@scion.org
-
-     -   ins: A. Perrig
+     -
+         ins: A. Perrig
          name: Adrian Perrig
          org: ETH Zuerich
          email: adrian.perrig@inf.ethz.ch
