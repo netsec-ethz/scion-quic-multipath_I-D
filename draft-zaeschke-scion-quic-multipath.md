@@ -9,6 +9,7 @@ submissiontype: IRTF  # also: "independent", "editorial", "IAB", "IRTF"
 date: 2025-05-07
 # consensus: true
 # v: 3
+ipr: trust200902
 # area: AREA
 workgroup: PANRG
 keyword:
