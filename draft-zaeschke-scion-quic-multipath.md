@@ -4,7 +4,7 @@ abbrev: "SCION-QUIC-MP"
 category: info
 
 docname: draft-zaeschke-scion-quic-multipath-latest
-submissiontype: IRTF  # also: "independent", "editorial", "IAB", "IRTF"
+submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
 date: 2025-05-07
 consensus: true
