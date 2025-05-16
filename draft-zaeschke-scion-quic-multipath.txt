@@ -14,10 +14,11 @@ Expires: 8 November 2025                                      7 May 2025
 Abstract
 
    This document gives general recommendations when using the Multipath
-   Extension for QUIC [QUIC-MP] with SCION I-D.rustignoli-scion-
-   overview.  The recommendations relate to algorithms for congestion
-   control and path selection, as well as general considerations for API
-   design and applications that use multipath QUIC over SCION.
+   Extension for QUIC [QUIC-MP] with SCION
+   [I-D.rustignoli-scion-overview].  The recommendations relate to
+   algorithms for congestion control and path selection, as well as
+   general considerations for API design and applications that use
+   multipath QUIC over SCION.
 
 About This Document
 
@@ -207,6 +208,11 @@ Table of Contents
    [QUIC-MP]  刘彦梅 (Liu, Y.), 马云飞 (Ma, Y.), De Coninck, Q., Bonaventure,
               O., Huitema, C., and M. Kuehlewind, "Multipath Extension
               for QUIC", 2025.
+
+   [I-D.rustignoli-scion-overview]
+              de Kater, C., Rustignoli, N., and A. Perrig, "SCION
+              Overview", 2025, <https://datatracker.ietf.org/doc/draft-
+              dekater-panrg-scion-overview/>.
 
 Acknowledgments
 
