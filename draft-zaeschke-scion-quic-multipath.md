@@ -10,7 +10,7 @@ date: 2025-05-07
 # consensus: true
 # v: 3
 ipr: trust200902
-# area: AREA
+# area: IRTF
 workgroup: PANRG
 keyword:
  - SCION
@@ -43,6 +43,7 @@ normative:
   QUIC-TRANSPORT: rfc9000
   QUIC-TLS: rfc9001
   QUIC-RECOVERY: rfc9002
+  RFC2914:
   RFC8085:
   RFC8899:
 
@@ -77,8 +78,6 @@ Emerging networking experiments and technologies, ACM"
   QUIC-MP:
     title: Multipath Extension for QUIC
     date: 2025
-# area: Transport
-# workgroup: QUIC Working Group
     author:
     -
       fullname:
@@ -318,6 +317,9 @@ or possibly kept as backup paths for emergencies.
 
 
 ## Congestion Control {#concon}
+
+General recommendations for congestion control are defined in
+Congestion Control Principles {{RFC2914}}.
 
 Congestion control for QUIC is discussed in
 QUIC Loss Detection and Congestion Control {{RFC9002}}.
