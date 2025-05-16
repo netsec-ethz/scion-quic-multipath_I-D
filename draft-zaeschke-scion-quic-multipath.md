@@ -9,13 +9,18 @@ submissiontype: IRTF  # also: "independent", "editorial", "IAB", "IRTF"
 date: 2025-05-07
 # consensus: true
 # v: 3
+
 ipr: trust200902
-# area: IRTF
+
+area: IRTF
+
 workgroup: PANRG
+
 keyword:
  - SCION
  - QUIC
  - multipath
+
 venue:
   group: WG
   type: Working Group
@@ -24,12 +29,16 @@ venue:
   github: "netsec-ethz/scion-quic-multipath_I-D"
   latest: "https://netsec-ethz.github.io/scion-quic-multipath_I-D/draft-zaeschke-scion-quic-multipath.html"
 
+stand_alone: yes
+
+pi: [toc, sortrefs, symrefs]
+
 author:
  -
     ins: J. van Bommel
     name: Jelte van Bommel
     org: ETH Zurich
-    email: "tilmann.zaeschke@inf.ethz.ch"
+    email: "jelte.vanbommel@inf.ethz.ch"
  -
     ins: T. Zaeschke
     name: Tilmann Zaeschke
@@ -322,7 +331,7 @@ General recommendations for congestion control are defined in
 Congestion Control Principles {{RFC2914}}.
 
 Congestion control for QUIC is discussed in
-QUIC Loss Detection and Congestion Control {{RFC9002}}.
+QUIC Loss Detection and Congestion Control {{QUIC-RECOVERY}}.
 
 More generally, congestion control for UDP is discussed in the
 UDP Usage Guidelines {{RFC8085}}. UDUp MTU discovery is further
