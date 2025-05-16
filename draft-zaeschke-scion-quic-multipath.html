@@ -1264,8 +1264,8 @@ for algorithms that select paths (see <a href="#patsel" class="auto internal xre
 congestion control (see <a href="#concon" class="auto internal xref">Section 4.3</a>).<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">In order to facilitate these algorithms, this documents contains
 suggestions for API design and general use in applications.<a href="#section-1-3" class="pilcrow">¶</a></p>
-<p id="section-1-4">Multipath usage profiles are categorized into data transfer <a href="#datra" class="auto internal xref">Section 5.1</a>
-, low latency <a href="#lola" class="auto internal xref">Section 5.2</a> and high availability / redundancy <a href="#redu" class="auto internal xref">Section 5.3</a>.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-4">Multipath usage profiles are categorized into data transfer <a href="#datra" class="auto internal xref">Section 5.1</a>,
+low latency <a href="#lola" class="auto internal xref">Section 5.2</a> and high availability / redundancy <a href="#redu" class="auto internal xref">Section 5.3</a>.<a href="#section-1-4" class="pilcrow">¶</a></p>
 <p id="section-1-5">One example of an application / algorithm is discussed in <span>[<a href="#DMTP" class="cite xref">DMTP</a>]</span>.<a href="#section-1-5" class="pilcrow">¶</a></p>
 <div id="terms">
 <section id="section-1.1">
@@ -1317,31 +1317,35 @@ environment (e.g. a common jurisdiction).  A possible model is for
 ISDs to be formed along national boundaries or federations of nations.<a href="#section-1.1-9" class="pilcrow">¶</a></p>
 <p id="section-1.1-10"><strong>Leaf AS</strong>: An AS at the "edge" of an ISD, with no other
 downstream ASes.<a href="#section-1.1-10" class="pilcrow">¶</a></p>
-<p id="section-1.1-11"><strong>MAC</strong>: Message Authentication Code.  In the rest of this document,
+<p id="section-1.1-11"><strong>Inter AS link</strong>: A direct link between two external interfaces of two
+ASes.<a href="#section-1.1-11" class="pilcrow">¶</a></p>
+<p id="section-1.1-12"><strong>Intra AS link</strong>: A direct link between twi internal interfaces of
+a single AS. A direct link may contains serveral internal hops.<a href="#section-1.1-12" class="pilcrow">¶</a></p>
+<p id="section-1.1-13"><strong>Link</strong>: General term that refers to "inter AS links" and "intra AS
+links".<a href="#section-1.1-13" class="pilcrow">¶</a></p>
+<p id="section-1.1-14"><strong>MAC</strong>: Message Authentication Code.  In the rest of this document,
 "MAC" always refers to "Message Authentication Code" and never to
 "Medium Access Control".  When "Medium Access Control address" is
-implied, the phrase "Link Layer Address" is used.<a href="#section-1.1-11" class="pilcrow">¶</a></p>
-<p id="section-1.1-12"><strong>Path Authorization</strong>: A requirement for the data plane is that
+implied, the phrase "Link Layer Address" is used.<a href="#section-1.1-14" class="pilcrow">¶</a></p>
+<p id="section-1.1-15"><strong>Path Authorization</strong>: A requirement for the data plane is that
 endpoints can only use paths that were constructed and authorized
 by ASes in the control plane.  This property is called path
 authorization.  The goal of path authorization is to prevent
 endpoints from crafting Hop Fields (HFs) themselves, modifying HFs
 in authorized path segments, or combining HFs of different path
-segments.<a href="#section-1.1-12" class="pilcrow">¶</a></p>
-<p id="section-1.1-13"><strong>Path Control</strong>: Path control is a property of a network
-architecture that gives endpoints the ability to select how their
-packets travel through the network.  Path control is stronger than
-path transparency.<a href="#section-1.1-13" class="pilcrow">¶</a></p>
-<p id="section-1.1-14"><strong>Path Segment</strong>: Path segments are derived from path segment
-construction beacons (PCBs).  A path segment can be (1) an up
-segment (i.e. a path between a non-core AS and a core AS in the
-same ISD), (2) a down segment (i.e. the same as an up segment, but
-in the opposite direction), or (3) a core segment (i.e., a path
-between core ASes).  Up to three path segments can be used to create
-a forwarding path.<a href="#section-1.1-14" class="pilcrow">¶</a></p>
-<p id="section-1.1-15"><strong>SCMP</strong>: A signaling protocol analogous to the Internet Control
+segments.<a href="#section-1.1-15" class="pilcrow">¶</a></p>
+<p id="section-1.1-16"><strong>Path</strong>: Besides the 4-tuple of address/IP at each endpoint, the
+information includes a list of all traversed ASes and
+respective links between ASes, as well as metadata about ASes and links,
+such as MTU, bandwidth, latency, AS internal hopcount, or geolocation
+information.<a href="#section-1.1-16" class="pilcrow">¶</a></p>
+<p id="section-1.1-17"><strong>Path metadata</strong>: Path metadata is additional data that is available to
+clients when they request a selection of paths to a destination.
+Path metadata is authenticated wrt to owner of each link, but
+otherwise not verified.<a href="#section-1.1-17" class="pilcrow">¶</a></p>
+<p id="section-1.1-18"><strong>SCMP</strong>: A signaling protocol analogous to the Internet Control
 Message Protocol (ICMP).  This is described in
-<span>[<a href="#I-D.dekater-scion-controlplane" class="cite xref">I-D.dekater-scion-controlplane</a>]</span>.<a href="#section-1.1-15" class="pilcrow">¶</a></p>
+<span>[<a href="#I-D.dekater-scion-controlplane" class="cite xref">I-D.dekater-scion-controlplane</a>]</span>.<a href="#section-1.1-18" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
