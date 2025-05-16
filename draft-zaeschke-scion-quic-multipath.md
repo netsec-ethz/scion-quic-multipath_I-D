@@ -4,22 +4,22 @@ abbrev: "SCION-QUIC-MP"
 category: info
 
 docname: draft-zaeschke-scion-quic-multipath-latest
-submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
-number:
+submissiontype: IRTF  # also: "independent", "editorial", "IAB", "IRTF"
+# number:
 date: 2025-05-07
-consensus: true
-v: 3
+# consensus: true
+# v: 3
 # area: AREA
-# workgroup: WG Working Group
+workgroup: PANRG
 keyword:
  - SCION
  - QUIC
  - multipath
 venue:
-#  group: WG
-#  type: Working Group
-#  mail: WG@example.com
-#  arch: https://example.com/WG
+  group: WG
+  type: Working Group
+  mail: panrg@irtf.org
+  arch: https://datatracker.ietf.org/rg/panrg
   github: "netsec-ethz/scion-quic-multipath_I-D"
   latest: "https://netsec-ethz.github.io/scion-quic-multipath_I-D/draft-zaeschke-scion-quic-multipath.html"
 
@@ -27,7 +27,7 @@ author:
  -
     ins: J. van Bommel
     name: Jelte van Bommel
-    organization: ETH Zurich - NetSec Group
+    org: ETH Zurich - NetSec Group
     email: "tilmann.zaeschke@inf.ethz.ch"
  -
     ins: T. Zaeschke
@@ -71,6 +71,29 @@ Emerging networking experiments and technologies, ACM"
       ins: U. Upadhyay
     -
       ins: J.-Y. Le Boudec
+  PERRIG2017:
+    title: "SCION: A Secure Internet Architecture"
+    date: 2017
+    target: https://doi.org/10.1007/978-3-319-67080-5
+    seriesinfo:
+      ISBN: 978-3-319-67079-9
+    author:
+      -
+        ins: A. Perrig
+        name: Adrian Perrig
+        org: ETH Zuerich
+      -
+        ins: P. Szalachowski
+        name: Pawel Szalachowski
+        org: ETH Zuerich
+      -
+        ins: R. Reischuk
+        name: Raphael Reischuk
+        org: ETH Zuerich
+      -
+        ins: L. Chuat
+        name: Laurent Chuat
+        org: ETH Zuerich
   QUIC-MP:
     title: Multipath Extension for QUIC
     date: 2025
@@ -96,28 +119,111 @@ Emerging networking experiments and technologies, ACM"
        ins: M. Kuehlewind
        name: Mirja Kuehlewind
 
+I-D.rustignoli-scion-overview:
+    title: SCION Overview
+    date: 2025
+    target: https://datatracker.ietf.org/doc/html/draft-dekater-panrg-scion-overview/
+    author:
+     -   ins: C. de Kater
+         name: Corine de Kater
+         org: SCION Association
+         email: c_de_kater@gmx.ch
+
+     -   ins: N. Rustignoli
+         name: Nicola Rustignoli
+         org: SCION Association
+         email: nic@scion.org
+
+     -   ins: A. Perrig
+         name: Adrian Perrig
+         org: ETH Zuerich
+         email: adrian.perrig@inf.ethz.ch
+
+I-D.rustignoli-scion-components:
+    title: SCION Components Analysis
+    date: 2023
+    target: https://datatracker.ietf.org/doc/draft-rustignoli-panrg-scion-components/
+    author:
+      -
+        ins: C. de Kater
+        name: Corine de Kater
+        org: SCION Association
+      -
+        ins: N. Rustignoli
+        name: Nicola Rustignoli
+        org: SCION Association
+
+  I-D.dekater-scion-pki:
+    title: SCION Control-Plane PKI
+    date: 2023
+    target: https://datatracker.ietf.org/doc/draft-dekater-scion-pki/
+    author:
+      -
+        ins: C. de Kater
+        name: Corine de Kater
+        org: SCION Association
+      -
+        ins: N. Rustignoli
+        name: Nicola Rustignoli
+        org: SCION Association
+
+  I-D.dekater-scion-controlplane:
+    title: SCION Control Plane
+    date: 2023
+    target: https://datatracker.ietf.org/doc/draft-dekater-scion-controlplane/
+    author:
+      -
+        ins: C. de Kater
+        name: Corine de Kater
+        org: SCION Association
+      -
+        ins: M. Frei
+        name: Matthias Frei
+        org: SCION Association
+      -
+        ins: N. Rustignoli
+        name: Nicola Rustignoli
+        org: SCION Association
+
+  I-D.dekater-scion-dataplane:
+    title: SCION Data Plane
+    date: 2023
+    target: https://datatracker.ietf.org/doc/draft-dekater-scion-dataplane/
+    author:
+      -
+        ins: C. de Kater
+        name: Corine de Kater
+        org: SCION Association
+      -
+        ins: N. Rustignoli
+        name: Nicola Rustignoli
+        org: SCION Association
 
 --- abstract
 
-Using Multipath Extension for QUIC {{QUIC-MP}} with SCION provides unique
-opportunities for application but also for for congestion control, path
-selection and related algorithms.
-This document discusses some opportunities and general recommendations.
+This document gives general recommendations when using the Multipath
+Extension for QUIC [{{QUIC-MP}}] with SCION
+[{{I-D.rustignoli-scion-overview}}].  The recommendations
+relate to algorithms for congestion control and path selection, as
+well as general considerations for API design and applications that use
+multipath QUIC over SCION.
 
 --- middle
 
 # Introduction
 
-We consider several application profiles, including data transfer {{datra}},
-low latency {{lola}} and high availability / redundancy {{redu}}.
+We consider several application profiles, including data transfer
+{{datra}}, low latency {{lola}} and high availability / redundancy
+{{redu}}.
 
 One example of an application / algorithm is discussed in {{DMTP}}.
 
 The aim of this document is to provide guideliens for designing and
-implementing multipathing over SCION. Some key differences to traditional
-(non-SCION) networks are the availability of the actual route (on the
-granularity of autonomous systems) and the availability of path metadata,
-such as latency and banwidth, for path segments.
+implementing multipathing over SCION. Some key differences to
+traditional (non-SCION) networks are the availability of the actual
+route (on the granularity of autonomous systems) and the
+availability of path metadata, such as latency and banwidth, for
+path segments.
 
 
 # Conventions and Definitions
@@ -134,9 +240,9 @@ such as latency and banwidth, for path segments.
 ### Hybrid approach
 A hybrid approach could start with using low latency paths. If the
 connection appears to be long lasting (e.g. at least 1 second duration
-and 1MB of traffic) it could start adding additional paths and see whether
-the traffic increases. Additional paths can be chosen following the
-guidlines discussed in {{datra}}.
+and 1MB of traffic) it could start adding additional paths and see
+whether the traffic increases. Additional paths can be chosen
+following the guidlines discussed in {{datra}}.
 
 
 
@@ -151,8 +257,9 @@ guidlines discussed in {{datra}}.
 # API Design consideration
 
 Applications will have very different requirments on a multipath API.
-A comprehensive API should therefore allow for mostly automatic selection
-of {{patsel}} Path Selection and Congestion Control algorithms {{concon}}.
+A comprehensive API should therefore allow for mostly automatic
+selection of {{patsel}} Path Selection and Congestion Control
+algorithms {{concon}}.
 
 At the same time it should give access to SCION paths and their metadata
 to allow implementation of custom algorithms.
@@ -161,8 +268,9 @@ to allow implementation of custom algorithms.
 
 # Security Considerations
 
-TODO Security
+This document has no security considerations.
 
+TODO ?
 
 # IANA Considerations
 
