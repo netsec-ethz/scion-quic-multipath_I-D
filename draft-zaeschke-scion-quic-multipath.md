@@ -39,7 +39,6 @@ author:
 normative:
   DCCP-UDPENCAP: rfc6773
   MPTCP-ARCHITECTURE: rfc6182
-  MPTCP-CONGESTION: rfc6356
   QUIC-TRANSPORT: rfc9000
   QUIC-TLS: rfc9001
   QUIC-RECOVERY: rfc9002
@@ -134,6 +133,8 @@ path segments.
 # Algorithms
 
 ## Congestion Control {#concon}
+
+Congestion control is also discussed for TCP in {{RFC6356}}.
 
 ## Path Selection {#patsel}
 
