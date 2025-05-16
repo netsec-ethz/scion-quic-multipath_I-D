@@ -22,3 +22,4 @@ draft-zaeschke-scion-quic-multipath.xml
 package-lock.json
 report.xml
 !requirements.txt
+/venv/
