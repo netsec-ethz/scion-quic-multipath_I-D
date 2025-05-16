@@ -97,13 +97,33 @@ Emerging networking experiments and technologies, ACM"
     -
        ins: M. Kuehlewind
        name: Mirja Kuehlewind
+  I-D.rustignoli-scion-overview:
+    title: SCION Overview
+    date: 2025
+    target: https://datatracker.ietf.org/doc/draft-dekater-panrg-scion-overview/
+    author:
+      -
+        ins: C. de Kater
+        name: Corine de Kater
+        org: SCION Association
+        email: c_de_kater@gmx.ch
+      -
+        ins: N. Rustignoli
+        name: Nicola Rustignoli
+        org: SCION Association
+        email: nic@scion.org
+      -
+        ins: A. Perrig
+        name: Adrian Perrig
+        org: ETH Zuerich
+        email: adrian.perrig@inf.ethz.ch
 
 
 --- abstract
 
 This document gives general recommendations when using the Multipath
 Extension for QUIC {{QUIC-MP}} with SCION
-I-D.rustignoli-scion-overview.  The recommendations
+{{I-D.rustignoli-scion-overview}}.  The recommendations
 relate to algorithms for congestion control and path selection, as
 well as general considerations for API design and applications that use
 multipath QUIC over SCION.
