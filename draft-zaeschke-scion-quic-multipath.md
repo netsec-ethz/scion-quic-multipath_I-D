@@ -10,16 +10,16 @@ date: 2025-05-07
 consensus: true
 v: 3
 # area: AREA
-workgroup: PANRG
+# workgroup: PANRG
 keyword:
  - SCION
  - QUIC
  - multipath
 venue:
-  group: WG
-  type: Working Group
-  mail: panrg@irtf.org
-  arch: https://datatracker.ietf.org/rg/panrg
+#  group: WG
+#  type: Working Group
+#  mail: panrg@irtf.org
+#  arch: https://datatracker.ietf.org/rg/panrg
   github: "netsec-ethz/scion-quic-multipath_I-D"
   latest: "https://netsec-ethz.github.io/scion-quic-multipath_I-D/draft-zaeschke-scion-quic-multipath.html"
 
@@ -202,8 +202,8 @@ I-D.rustignoli-scion-components:
 --- abstract
 
 This document gives general recommendations when using the Multipath
-Extension for QUIC [{{QUIC-MP}}] with SCION
-[{{I-D.rustignoli-scion-overview}}].  The recommendations
+Extension for QUIC {{QUIC-MP}} with SCION
+{{I-D.rustignoli-scion-overview}}.  The recommendations
 relate to algorithms for congestion control and path selection, as
 well as general considerations for API design and applications that use
 multipath QUIC over SCION.
