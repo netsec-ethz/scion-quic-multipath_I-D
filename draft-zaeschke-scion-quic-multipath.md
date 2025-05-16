@@ -28,13 +28,13 @@ author:
  -
     ins: J. van Bommel
     name: Jelte van Bommel
-    org: ETH Zurich - NetSec Group
+    org: ETH Zurich
     email: "tilmann.zaeschke@inf.ethz.ch"
  -
     ins: T. Zaeschke
     name: Tilmann Zaeschke
     role: editor
-    org: ETH Zurich - NetSec Group
+    org: ETH Zurich
     email: tilmann.zaeschke@inf.ethz.ch
 
 normative:
@@ -43,6 +43,8 @@ normative:
   QUIC-TRANSPORT: rfc9000
   QUIC-TLS: rfc9001
   QUIC-RECOVERY: rfc9002
+  RFC8085:
+  RFC8899:
 
 informative:
   DMTP:
@@ -104,21 +106,15 @@ Emerging networking experiments and technologies, ACM"
     date: 2025
     target: https://datatracker.ietf.org/doc/draft-dekater-panrg-scion-overview/
     author:
-      -
-        ins: C. de Kater
-        name: Corine de Kater
-        org: SCION Association
-        email: c_de_kater@gmx.ch
-      -
-        ins: N. Rustignoli
-        name: Nicola Rustignoli
-        org: SCION Association
-        email: nic@scion.org
-      -
-        ins: A. Perrig
-        name: Adrian Perrig
-        org: ETH Zuerich
-        email: adrian.perrig@inf.ethz.ch
+    -
+      ins: C. de Kater
+      name: Corine de Kater
+    -
+      ins: N. Rustignoli
+      name: Nicola Rustignoli
+    -
+      ins: A. Perrig
+      name: Adrian Perrig
 
   I-D.dekater-scion-controlplane:
     title: SCION Control Plane
@@ -128,15 +124,12 @@ Emerging networking experiments and technologies, ACM"
     -
       ins: C. de Kater
       name: Corine de Kater
-      org: SCION Association
     -
       ins: M. Frei
       name: Matthias Frei
-      org: SCION Association
     -
       ins: N. Rustignoli
       name: Nicola Rustignoli
-      org: SCION Association
 
 
 --- abstract
@@ -156,7 +149,7 @@ The SCION protocol makes detailed path information available to
 endpoints. Besides the 4-tuple of address/IP at each endpoint, the
 information includes a list of all traversed ASes and
 respective links between ASes, as well as metadata about ASes and links,
-such as bandwidth, latency, AS internal hopcount, or geolocation
+such as MTU, bandwidth, latency, AS internal hopcount, or geolocation
 information.
 
 In the context of multipathing, this path information can be useful
@@ -166,9 +159,8 @@ congestion control (see {{concon}}).
 In order to facilitate these algorithms, this documents contains
 suggestions for API design and general use in applications.
 
-Multipath usage profiles are categorized into including data
-transfer {{datra}}, low latency {{lola}} and high availability /
-redundancy {{redu}}.
+Multipath usage profiles are categorized into data transfer {{datra}}
+, low latency {{lola}} and high availability / redundancy {{redu}}.
 
 One example of an application / algorithm is discussed in {{DMTP}}.
 
@@ -176,7 +168,7 @@ One example of an application / algorithm is discussed in {{DMTP}}.
 ## Terminology {#terms}
 
 **Autonomous System (AS)**: An autonomous system is a network under
-a  common administrative control.  For example, the network of an
+a common administrative control.  For example, the network of an
 Internet service provider or organization can constitute an AS.
 
 **Core AS**: Each SCION isolation domain (ISD) is administered by a
@@ -295,15 +287,44 @@ updated rarely, for example once a day.
 Path metadata may also be incomplete, ASes are not required to provide
 or regularly update the data.
 
+Users of path metadata must keep in mind that the data is mostly not
+verifyable but depends on the diligence and trusworthyness of the
+link owners.
+However, once disseminated by a link owner, the patgh metadata is
+authenticated an cannot be changed by other parties.
+
+Due to the inherent unreliability, users should implement sanity
+checks the verify that a link holds up to the promised capabilities.
+
 
 # Algorithms
 
+## MTU
+
+SCION provides MTU information for every AS-level link on a path.
+
+
 ## Detecting Bad ASes and Links
 
+By comparing performance (latency, bandwidth, packet droprate, link
+errors, MTU) of multiple paths, we can (with some accuracy) detect
+unreliable links and ASes.
+These can be blacklisted and excluded from further path selection,
+or possibly kept as backup paths for emergencies.
 
+**TODO** Add reference to ressearch.
+
+**TODO** Move to Path Metadata section?
 
 
 ## Congestion Control {#concon}
+
+Congestion control for QUIC is discussed in
+QUIC Loss Detection and Congestion Control {{RFC9002}}.
+
+More generally, congestion control for UDP is discussed in the
+UDP Usage Guidelines {{RFC8085}}. UDUp MTU discovery is further
+developed in {{RFC8899}}.
 
 Congestion control is also discussed for TCP in {{RFC6356}}.
 
