@@ -27,7 +27,7 @@ author:
  -
     ins: J. van Bommel
     name: Jelte van Bommel
-    org: ETH Zurich - NetSec Group
+    organization: ETH Zurich - NetSec Group
     email: "tilmann.zaeschke@inf.ethz.ch"
  -
     ins: T. Zaeschke
@@ -97,6 +97,8 @@ Emerging networking experiments and technologies, ACM"
   QUIC-MP:
     title: Multipath Extension for QUIC
     date: 2025
+# area: Transport
+# workgroup: QUIC Working Group
     author:
     -
       fullname:
