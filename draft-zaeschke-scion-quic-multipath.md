@@ -1,14 +1,21 @@
 ---
 title: "QUIC Multipath over SCION"
+
 abbrev: "SCION-QUIC-MP"
+
 category: info
 
 docname: draft-zaeschke-scion-quic-multipath-latest
+
 submissiontype: IRTF  # also: "independent", "editorial", "IAB", "IRTF"
-# number:
+
+number:
+
 date: 2025-05-07
-# consensus: true
-# v: 3
+
+consensus: true
+
+v: 3
 
 ipr: trust200902
 
