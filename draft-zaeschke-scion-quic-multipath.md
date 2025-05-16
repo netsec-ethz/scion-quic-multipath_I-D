@@ -10,7 +10,7 @@ date: 2025-05-07
 consensus: true
 v: 3
 # area: AREA
-# workgroup: PANRG
+# workgroup: WG Working Group
 keyword:
  - SCION
  - QUIC
@@ -18,8 +18,8 @@ keyword:
 venue:
 #  group: WG
 #  type: Working Group
-#  mail: panrg@irtf.org
-#  arch: https://datatracker.ietf.org/rg/panrg
+#  mail: WG@example.com
+#  arch: https://example.com/WG
   github: "netsec-ethz/scion-quic-multipath_I-D"
   latest: "https://netsec-ethz.github.io/scion-quic-multipath_I-D/draft-zaeschke-scion-quic-multipath.html"
 
@@ -71,29 +71,6 @@ Emerging networking experiments and technologies, ACM"
       ins: U. Upadhyay
     -
       ins: J.-Y. Le Boudec
-  PERRIG2017:
-    title: "SCION: A Secure Internet Architecture"
-    date: 2017
-    target: https://doi.org/10.1007/978-3-319-67080-5
-    seriesinfo:
-      ISBN: 978-3-319-67079-9
-    author:
-      -
-        ins: A. Perrig
-        name: Adrian Perrig
-        org: ETH Zuerich
-      -
-        ins: P. Szalachowski
-        name: Pawel Szalachowski
-        org: ETH Zuerich
-      -
-        ins: R. Reischuk
-        name: Raphael Reischuk
-        org: ETH Zuerich
-      -
-        ins: L. Chuat
-        name: Laurent Chuat
-        org: ETH Zuerich
   QUIC-MP:
     title: Multipath Extension for QUIC
     date: 2025
