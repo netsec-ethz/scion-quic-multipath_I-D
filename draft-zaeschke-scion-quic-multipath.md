@@ -103,7 +103,7 @@ Emerging networking experiments and technologies, ACM"
 
 This document gives general recommendations when using the Multipath
 Extension for QUIC {{QUIC-MP}} with SCION
-{{I-D.rustignoli-scion-overview}}.  The recommendations
+I-D.rustignoli-scion-overview.  The recommendations
 relate to algorithms for congestion control and path selection, as
 well as general considerations for API design and applications that use
 multipath QUIC over SCION.
