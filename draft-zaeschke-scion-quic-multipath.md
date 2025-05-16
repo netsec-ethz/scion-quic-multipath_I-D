@@ -4,22 +4,22 @@ abbrev: "SCION-QUIC-MP"
 category: info
 
 docname: draft-zaeschke-scion-quic-multipath-latest
-submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
-number:
+submissiontype: IRTF  # also: "independent", "editorial", "IAB", "IRTF"
+# number:
 date: 2025-05-07
-consensus: true
-v: 3
+# consensus: true
+# v: 3
 # area: AREA
-# workgroup: WG Working Group
+workgroup: PANRG
 keyword:
  - SCION
  - QUIC
  - multipath
 venue:
-#  group: WG
-#  type: Working Group
-#  mail: WG@example.com
-#  arch: https://example.com/WG
+  group: WG
+  type: Working Group
+  mail: panrg@irtf.org
+  arch: https://datatracker.ietf.org/rg/panrg
   github: "netsec-ethz/scion-quic-multipath_I-D"
   latest: "https://netsec-ethz.github.io/scion-quic-multipath_I-D/draft-zaeschke-scion-quic-multipath.html"
 
@@ -27,7 +27,7 @@ author:
  -
     ins: J. van Bommel
     name: Jelte van Bommel
-    organization: ETH Zurich - NetSec Group
+    org: ETH Zurich - NetSec Group
     email: "tilmann.zaeschke@inf.ethz.ch"
  -
     ins: T. Zaeschke
