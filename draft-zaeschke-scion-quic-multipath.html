@@ -1064,7 +1064,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <div id="internal-metadata" class="document-information">
 <dl id="identifiers">
 <dt class="label-workgroup">Workgroup:</dt>
-<dd class="workgroup">Network Working Group</dd>
+<dd class="workgroup">PANRG</dd>
 <dt class="label-internet-draft">Internet-Draft:</dt>
 <dd class="internet-draft">draft-zaeschke-scion-quic-multipath-latest</dd>
 <dt class="label-published">Published:</dt>
@@ -1107,8 +1107,13 @@ multipath QUIC over SCION.<a href="#section-abstract-1" class="pilcrow">¶</a></
 <p id="section-note.1-2">
         The latest revision of this draft can be found at <span><a href="https://netsec-ethz.github.io/scion-quic-multipath_I-D/draft-zaeschke-scion-quic-multipath.html">https://netsec-ethz.github.io/scion-quic-multipath_I-D/draft-zaeschke-scion-quic-multipath.html</a></span>.
         Status information for this document may be found at <span><a href="https://datatracker.ietf.org/doc/draft-zaeschke-scion-quic-multipath/">https://datatracker.ietf.org/doc/draft-zaeschke-scion-quic-multipath/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
-<p id="section-note.1-3">Source for this draft and an issue tracker can be found at
-        <span><a href="https://github.com/netsec-ethz/scion-quic-multipath_I-D">https://github.com/netsec-ethz/scion-quic-multipath_I-D</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
+<p id="section-note.1-3">
+        Discussion of this document takes place on the
+        WG Working Group mailing list (<span><a href="mailto:panrg@irtf.org">mailto:panrg@irtf.org</a></span>),
+        which is archived at <span><a href="https://datatracker.ietf.org/rg/panrg">https://datatracker.ietf.org/rg/panrg</a></span>.
+        Subscribe at <span><a href="https://www.ietf.org/mailman/listinfo/panrg/">https://www.ietf.org/mailman/listinfo/panrg/</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
+<p id="section-note.1-4">Source for this draft and an issue tracker can be found at
+        <span><a href="https://github.com/netsec-ethz/scion-quic-multipath_I-D">https://github.com/netsec-ethz/scion-quic-multipath_I-D</a></span>.<a href="#section-note.1-4" class="pilcrow">¶</a></p>
 </section>
 <div id="status-of-memo">
 <section id="section-boilerplate.1">
@@ -1146,10 +1151,7 @@ multipath QUIC over SCION.<a href="#section-abstract-1" class="pilcrow">¶</a></
             (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
             publication of this document. Please review these documents
             carefully, as they describe your rights and restrictions with
-            respect to this document. Code Components extracted from this
-            document must include Revised BSD License text as described in
-            Section 4.e of the Trust Legal Provisions and are provided without
-            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+            respect to this document.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="toc">
@@ -1261,7 +1263,8 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 <section id="section-3.1">
         <h3 id="name-congestion-control">
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-congestion-control" class="section-name selfRef">Congestion Control</a>
-      </h3>
+        </h3>
+<p id="section-3.1-1">Congestion control is also discussed for TCP in <span>[<a href="#RFC6356" class="cite xref">RFC6356</a>]</span>.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="patsel">
@@ -1354,37 +1357,33 @@ to allow implementation of custom algorithms.<a href="#section-5-2" class="pilcr
 <a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
-<dt id="DCCP-UDPENCAP">[DCCP-UDPENCAP]</dt>
+<dt id="RFC6773">[RFC6773]</dt>
         <dd>
-<span class="refAuthor">Phelan, T.</span>, <span class="refAuthor">Fairhurst, G.</span>, and <span class="refAuthor">C. Perkins</span>, <span class="refTitle">"DCCP-UDP: A Datagram Congestion Control Protocol UDP Encapsulation for NAT Traversal"</span>, <span class="seriesInfo">RFC 6773</span>, <span class="seriesInfo">DOI 10.17487/RFC6773</span>, <time datetime="2012-11" class="refDate">November 2012</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6773">https://www.rfc-editor.org/rfc/rfc6773</a>&gt;</span>. </dd>
+<span class="refAuthor">Phelan, T.</span>, <span class="refAuthor">Fairhurst, G.</span>, and <span class="refAuthor">C. Perkins</span>, <span class="refTitle">"DCCP-UDP: A Datagram Congestion Control Protocol UDP Encapsulation for NAT Traversal"</span>, <span class="seriesInfo">RFC 6773</span>, <span class="seriesInfo">DOI 10.17487/RFC6773</span>, <time datetime="2012-11" class="refDate">November 2012</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6773">https://www.rfc-editor.org/info/rfc6773</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="MPTCP-ARCHITECTURE">[MPTCP-ARCHITECTURE]</dt>
+<dt id="RFC6182">[RFC6182]</dt>
         <dd>
-<span class="refAuthor">Ford, A.</span>, <span class="refAuthor">Raiciu, C.</span>, <span class="refAuthor">Handley, M.</span>, <span class="refAuthor">Barre, S.</span>, and <span class="refAuthor">J. Iyengar</span>, <span class="refTitle">"Architectural Guidelines for Multipath TCP Development"</span>, <span class="seriesInfo">RFC 6182</span>, <span class="seriesInfo">DOI 10.17487/RFC6182</span>, <time datetime="2011-03" class="refDate">March 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6182">https://www.rfc-editor.org/rfc/rfc6182</a>&gt;</span>. </dd>
+<span class="refAuthor">Ford, A.</span>, <span class="refAuthor">Raiciu, C.</span>, <span class="refAuthor">Handley, M.</span>, <span class="refAuthor">Barre, S.</span>, and <span class="refAuthor">J. Iyengar</span>, <span class="refTitle">"Architectural Guidelines for Multipath TCP Development"</span>, <span class="seriesInfo">RFC 6182</span>, <span class="seriesInfo">DOI 10.17487/RFC6182</span>, <time datetime="2011-03" class="refDate">March 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6182">https://www.rfc-editor.org/info/rfc6182</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="MPTCP-CONGESTION">[MPTCP-CONGESTION]</dt>
+<dt id="RFC9000">[RFC9000]</dt>
         <dd>
-<span class="refAuthor">Raiciu, C.</span>, <span class="refAuthor">Handley, M.</span>, and <span class="refAuthor">D. Wischik</span>, <span class="refTitle">"Coupled Congestion Control for Multipath Transport Protocols"</span>, <span class="seriesInfo">RFC 6356</span>, <span class="seriesInfo">DOI 10.17487/RFC6356</span>, <time datetime="2011-10" class="refDate">October 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6356">https://www.rfc-editor.org/rfc/rfc6356</a>&gt;</span>. </dd>
+<span class="refAuthor">Iyengar, J., Ed.</span> and <span class="refAuthor">M. Thomson, Ed.</span>, <span class="refTitle">"QUIC: A UDP-Based Multiplexed and Secure Transport"</span>, <span class="seriesInfo">RFC 9000</span>, <span class="seriesInfo">DOI 10.17487/RFC9000</span>, <time datetime="2021-05" class="refDate">May 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9000">https://www.rfc-editor.org/info/rfc9000</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="QUIC-RECOVERY">[QUIC-RECOVERY]</dt>
+<dt id="RFC9001">[RFC9001]</dt>
         <dd>
-<span class="refAuthor">Iyengar, J., Ed.</span> and <span class="refAuthor">I. Swett, Ed.</span>, <span class="refTitle">"QUIC Loss Detection and Congestion Control"</span>, <span class="seriesInfo">RFC 9002</span>, <span class="seriesInfo">DOI 10.17487/RFC9002</span>, <time datetime="2021-05" class="refDate">May 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9002">https://www.rfc-editor.org/rfc/rfc9002</a>&gt;</span>. </dd>
+<span class="refAuthor">Thomson, M., Ed.</span> and <span class="refAuthor">S. Turner, Ed.</span>, <span class="refTitle">"Using TLS to Secure QUIC"</span>, <span class="seriesInfo">RFC 9001</span>, <span class="seriesInfo">DOI 10.17487/RFC9001</span>, <time datetime="2021-05" class="refDate">May 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9001">https://www.rfc-editor.org/info/rfc9001</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="QUIC-TLS">[QUIC-TLS]</dt>
+<dt id="RFC9002">[RFC9002]</dt>
         <dd>
-<span class="refAuthor">Thomson, M., Ed.</span> and <span class="refAuthor">S. Turner, Ed.</span>, <span class="refTitle">"Using TLS to Secure QUIC"</span>, <span class="seriesInfo">RFC 9001</span>, <span class="seriesInfo">DOI 10.17487/RFC9001</span>, <time datetime="2021-05" class="refDate">May 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9001">https://www.rfc-editor.org/rfc/rfc9001</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="QUIC-TRANSPORT">[QUIC-TRANSPORT]</dt>
-        <dd>
-<span class="refAuthor">Iyengar, J., Ed.</span> and <span class="refAuthor">M. Thomson, Ed.</span>, <span class="refTitle">"QUIC: A UDP-Based Multiplexed and Secure Transport"</span>, <span class="seriesInfo">RFC 9000</span>, <span class="seriesInfo">DOI 10.17487/RFC9000</span>, <time datetime="2021-05" class="refDate">May 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9000">https://www.rfc-editor.org/rfc/rfc9000</a>&gt;</span>. </dd>
+<span class="refAuthor">Iyengar, J., Ed.</span> and <span class="refAuthor">I. Swett, Ed.</span>, <span class="refTitle">"QUIC Loss Detection and Congestion Control"</span>, <span class="seriesInfo">RFC 9002</span>, <span class="seriesInfo">DOI 10.17487/RFC9002</span>, <time datetime="2021-05" class="refDate">May 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9002">https://www.rfc-editor.org/info/rfc9002</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
-<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
       <dd>
-<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8174">https://www.rfc-editor.org/info/rfc8174</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -1399,17 +1398,17 @@ to allow implementation of custom algorithms.<a href="#section-5-2" class="pilcr
         <dd>
 <span class="refAuthor">John, T.</span> and <span class="refAuthor">T. Riechard</span>, <span class="refTitle">"Deadline Aware Streams in MP-QUIC"</span>, <time datetime="2025-03" class="refDate">March 2025</time>. </dd>
 <dd class="break"></dd>
+<dt id="RFC6356">[RFC6356]</dt>
+        <dd>
+<span class="refAuthor">Raiciu, C.</span>, <span class="refAuthor">Handley, M.</span>, and <span class="refAuthor">D. Wischik</span>, <span class="refTitle">"Coupled Congestion Control for Multipath Transport Protocols"</span>, <span class="seriesInfo">RFC 6356</span>, <span class="seriesInfo">DOI 10.17487/RFC6356</span>, <time datetime="2011-10" class="refDate">October 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6356">https://www.rfc-editor.org/info/rfc6356</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="OLIA">[OLIA]</dt>
         <dd>
 <span class="refAuthor">Khalili, R.</span>, <span class="refAuthor">Gast, N.</span>, <span class="refAuthor">Popovic, M.</span>, <span class="refAuthor">Upadhyay, U.</span>, and <span class="refAuthor">J. Le Boudec</span>, <span class="refTitle">"MPTCP is not pareto-optimal: performance issues and a possible solution"</span>, <span class="seriesInfo">Proceedings of the 8th international conference on Emerging networking experiments and technologies, ACM </span>, <time datetime="2012" class="refDate">2012</time>. </dd>
 <dd class="break"></dd>
 <dt id="QUIC-MP">[QUIC-MP]</dt>
-        <dd>
-<span class="refAuthor"><span class="non-ascii">刘彦梅</span> (<span class="ascii">Liu, Y.</span>)</span>, <span class="refAuthor"><span class="non-ascii">马云飞</span> (<span class="ascii">Ma, Y.</span>)</span>, <span class="refAuthor">De Coninck, Q.</span>, <span class="refAuthor">Bonaventure, O.</span>, <span class="refAuthor">Huitema, C.</span>, and <span class="refAuthor">M. Kuehlewind</span>, <span class="refTitle">"Multipath Extension for QUIC"</span>, <time datetime="2025" class="refDate">2025</time>. </dd>
-<dd class="break"></dd>
-<dt id="RFC6356">[RFC6356]</dt>
       <dd>
-<span class="refAuthor">Raiciu, C.</span>, <span class="refAuthor">Handley, M.</span>, and <span class="refAuthor">D. Wischik</span>, <span class="refTitle">"Coupled Congestion Control for Multipath Transport Protocols"</span>, <span class="seriesInfo">RFC 6356</span>, <span class="seriesInfo">DOI 10.17487/RFC6356</span>, <time datetime="2011-10" class="refDate">October 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6356">https://www.rfc-editor.org/rfc/rfc6356</a>&gt;</span>. </dd>
+<span class="refAuthor"><span class="non-ascii">刘彦梅</span> (<span class="ascii">Liu, Y.</span>)</span>, <span class="refAuthor"><span class="non-ascii">马云飞</span> (<span class="ascii">Ma, Y.</span>)</span>, <span class="refAuthor">De Coninck, Q.</span>, <span class="refAuthor">Bonaventure, O.</span>, <span class="refAuthor">Huitema, C.</span>, and <span class="refAuthor">M. Kuehlewind</span>, <span class="refTitle">"Multipath Extension for QUIC"</span>, <time datetime="2025" class="refDate">2025</time>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
