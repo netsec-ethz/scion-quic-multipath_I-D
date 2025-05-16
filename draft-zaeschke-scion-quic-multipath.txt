@@ -4,7 +4,7 @@
 
 PANRG                                                      J. van Bommel
 Internet-Draft                                          T. Zaeschke, Ed.
-Intended status: Informational                 ETH Zurich - NetSec Group
+Intended status: Informational                                ETH Zurich
 Expires: 8 November 2025                                      7 May 2025
 
 
@@ -75,10 +75,11 @@ Table of Contents
      3.1.  Disjunctness
      3.2.  Path Metadata
    4.  Algorithms
-     4.1.  Detecting Bad ASes and Links
-     4.2.  Congestion Control
-     4.3.  Path Selection
-       4.3.1.  Hybrid approach
+     4.1.  MTU
+     4.2.  Detecting Bad ASes and Links
+     4.3.  Congestion Control
+     4.4.  Path Selection
+       4.4.1.  Hybrid approach
    5.  Applications (#apps}
      5.1.  Data Transfer
      5.2.  Low Latency
@@ -98,17 +99,18 @@ Table of Contents
    endpoints.  Besides the 4-tuple of address/IP at each endpoint, the
    information includes a list of all traversed ASes and respective
    links between ASes, as well as metadata about ASes and links, such as
-   bandwidth, latency, AS internal hopcount, or geolocation information.
+   MTU, bandwidth, latency, AS internal hopcount, or geolocation
+   information.
 
    In the context of multipathing, this path information can be useful
-   for algorithms that select paths (see Section 4.3) and perform
-   congestion control (see Section 4.2).
+   for algorithms that select paths (see Section 4.4) and perform
+   congestion control (see Section 4.3).
 
    In order to facilitate these algorithms, this documents contains
    suggestions for API design and general use in applications.
 
-   Multipath usage profiles are categorized into including data transfer
-   Section 5.1, low latency Section 5.2 and high availability /
+   Multipath usage profiles are categorized into data transfer
+   Section 5.1 , low latency Section 5.2 and high availability /
    redundancy Section 5.3.
 
    One example of an application / algorithm is discussed in [DMTP].
@@ -243,17 +245,46 @@ Table of Contents
    Path metadata may also be incomplete, ASes are not required to
    provide or regularly update the data.
 
+   Users of path metadata must keep in mind that the data is mostly not
+   verifyable but depends on the diligence and trusworthyness of the
+   link owners.  However, once disseminated by a link owner, the patgh
+   metadata is authenticated an cannot be changed by other parties.
+
+   Due to the inherent unreliability, users should implement sanity
+   checks the verify that a link holds up to the promised capabilities.
+
 4.  Algorithms
 
-4.1.  Detecting Bad ASes and Links
+4.1.  MTU
 
-4.2.  Congestion Control
+   SCION provides MTU information for every AS-level link on a path.
+
+4.2.  Detecting Bad ASes and Links
+
+   By comparing performance (latency, bandwidth, packet droprate, link
+   errors, MTU) of multiple paths, we can (with some accuracy) detect
+   unreliable links and ASes.  These can be blacklisted and excluded
+   from further path selection, or possibly kept as backup paths for
+   emergencies.
+
+   *TODO* Add reference to ressearch.
+
+   *TODO* Move to Path Metadata section?
+
+4.3.  Congestion Control
+
+   Congestion control for QUIC is discussed in QUIC Loss Detection and
+   Congestion Control [RFC9002].
+
+   More generally, congestion control for UDP is discussed in the UDP
+   Usage Guidelines [RFC8085].  UDUp MTU discovery is further developed
+   in [RFC8899].
 
    Congestion control is also discussed for TCP in [RFC6356].
 
-4.3.  Path Selection
+4.4.  Path Selection
 
-4.3.1.  Hybrid approach
+4.4.1.  Hybrid approach
 
    A hybrid approach could start with using low latency paths.  If the
    connection appears to be long lasting (e.g. at least 1 second
@@ -273,8 +304,8 @@ Table of Contents
 
    Applications will have very different requirments on a multipath API.
    A comprehensive API should therefore allow for mostly automatic
-   selection of Section 4.3 Path Selection and Congestion Control
-   algorithms Section 4.2.
+   selection of Section 4.4 Path Selection and Congestion Control
+   algorithms Section 4.3.
 
    At the same time it should give access to SCION paths and their
    metadata to allow implementation of custom algorithms.
@@ -315,6 +346,15 @@ Table of Contents
    [RFC9002]  Iyengar, J., Ed. and I. Swett, Ed., "QUIC Loss Detection
               and Congestion Control", RFC 9002, DOI 10.17487/RFC9002,
               May 2021, <https://www.rfc-editor.org/info/rfc9002>.
+
+   [RFC8085]  Eggert, L., Fairhurst, G., and G. Shepherd, "UDP Usage
+              Guidelines", BCP 145, RFC 8085, DOI 10.17487/RFC8085,
+              March 2017, <https://www.rfc-editor.org/info/rfc8085>.
+
+   [RFC8899]  Fairhurst, G., Jones, T., Tüxen, M., Rüngeler, I., and T.
+              Völker, "Packetization Layer Path MTU Discovery for
+              Datagram Transports", RFC 8899, DOI 10.17487/RFC8899,
+              September 2020, <https://www.rfc-editor.org/info/rfc8899>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -366,10 +406,10 @@ Acknowledgments
 Authors' Addresses
 
    Jelte van Bommel
-   ETH Zurich - NetSec Group
+   ETH Zurich
    Email: tilmann.zaeschke@inf.ethz.ch
 
 
    Tilmann Zaeschke (editor)
-   ETH Zurich - NetSec Group
+   ETH Zurich
    Email: tilmann.zaeschke@inf.ethz.ch
