@@ -8,10 +8,12 @@
 <meta content="Jelte van Bommel" name="author">
 <meta content="Tilmann Zaeschke" name="author">
 <meta content="
-       Using Multipath Extension for QUIC   with SCION provides unique
-opportunities for application but also for for congestion control, path
-selection and related algorithms.
-This document discusses some opportunities and general recommendations. 
+       This document gives general recommendations when using the Multipath
+Extension for QUIC   with SCION
+I-D.rustignoli-scion-overview.  The recommendations
+relate to algorithms for congestion control and path selection, as
+well as general considerations for API design and applications that use
+multipath QUIC over SCION. 
     " name="description">
 <meta content="xml2rfc 3.28.1" name="generator">
 <meta content="SCION" name="keyword">
@@ -1090,10 +1092,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">QUIC Multipath over SCION</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">Using Multipath Extension for QUIC <span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> with SCION provides unique
-opportunities for application but also for for congestion control, path
-selection and related algorithms.
-This document discusses some opportunities and general recommendations.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document gives general recommendations when using the Multipath
+Extension for QUIC <span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> with SCION
+I-D.rustignoli-scion-overview.  The recommendations
+relate to algorithms for congestion control and path selection, as
+well as general considerations for API design and applications that use
+multipath QUIC over SCION.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1225,14 +1229,16 @@ This document discusses some opportunities and general recommendations.<a href="
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">We consider several application profiles, including data transfer <a href="#datra" class="auto internal xref">Section 4.1</a>,
-low latency <a href="#lola" class="auto internal xref">Section 4.2</a> and high availability / redundancy <a href="#redu" class="auto internal xref">Section 4.3</a>.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-1">We consider several application profiles, including data transfer
+<a href="#datra" class="auto internal xref">Section 4.1</a>, low latency <a href="#lola" class="auto internal xref">Section 4.2</a> and high availability / redundancy
+<a href="#redu" class="auto internal xref">Section 4.3</a>.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">One example of an application / algorithm is discussed in <span>[<a href="#DMTP" class="cite xref">DMTP</a>]</span>.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">The aim of this document is to provide guideliens for designing and
-implementing multipathing over SCION. Some key differences to traditional
-(non-SCION) networks are the availability of the actual route (on the
-granularity of autonomous systems) and the availability of path metadata,
-such as latency and banwidth, for path segments.<a href="#section-1-3" class="pilcrow">¶</a></p>
+implementing multipathing over SCION. Some key differences to
+traditional (non-SCION) networks are the availability of the actual
+route (on the granularity of autonomous systems) and the
+availability of path metadata, such as latency and banwidth, for
+path segments.<a href="#section-1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1270,9 +1276,9 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
           </h4>
 <p id="section-3.2.1-1">A hybrid approach could start with using low latency paths. If the
 connection appears to be long lasting (e.g. at least 1 second duration
-and 1MB of traffic) it could start adding additional paths and see whether
-the traffic increases. Additional paths can be chosen following the
-guidlines discussed in <a href="#datra" class="auto internal xref">Section 4.1</a>.<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
+and 1MB of traffic) it could start adding additional paths and see
+whether the traffic increases. Additional paths can be chosen
+following the guidlines discussed in <a href="#datra" class="auto internal xref">Section 4.1</a>.<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1313,8 +1319,9 @@ guidlines discussed in <a href="#datra" class="auto internal xref">Section 4.1</
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-api-design-consideration" class="section-name selfRef">API Design consideration</a>
       </h2>
 <p id="section-5-1">Applications will have very different requirments on a multipath API.
-A comprehensive API should therefore allow for mostly automatic selection
-of <a href="#patsel" class="auto internal xref">Section 3.2</a> Path Selection and Congestion Control algorithms <a href="#concon" class="auto internal xref">Section 3.1</a>.<a href="#section-5-1" class="pilcrow">¶</a></p>
+A comprehensive API should therefore allow for mostly automatic
+selection of <a href="#patsel" class="auto internal xref">Section 3.2</a> Path Selection and Congestion Control
+algorithms <a href="#concon" class="auto internal xref">Section 3.1</a>.<a href="#section-5-1" class="pilcrow">¶</a></p>
 <p id="section-5-2">At the same time it should give access to SCION paths and their metadata
 to allow implementation of custom algorithms.<a href="#section-5-2" class="pilcrow">¶</a></p>
 </section>
@@ -1324,7 +1331,8 @@ to allow implementation of custom algorithms.<a href="#section-5-2" class="pilcr
       <h2 id="name-security-considerations">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-6-1">TODO Security<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-1">This document has no security considerations.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">TODO ?<a href="#section-6-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">

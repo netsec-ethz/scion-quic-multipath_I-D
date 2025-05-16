@@ -13,10 +13,11 @@ Expires: 8 November 2025                                      7 May 2025
 
 Abstract
 
-   Using Multipath Extension for QUIC [QUIC-MP] with SCION provides
-   unique opportunities for application but also for for congestion
-   control, path selection and related algorithms.  This document
-   discusses some opportunities and general recommendations.
+   This document gives general recommendations when using the Multipath
+   Extension for QUIC [QUIC-MP] with SCION I-D.rustignoli-scion-
+   overview.  The recommendations relate to algorithms for congestion
+   control and path selection, as well as general considerations for API
+   design and applications that use multipath QUIC over SCION.
 
 About This Document
 
@@ -139,7 +140,9 @@ Table of Contents
 
 6.  Security Considerations
 
-   TODO Security
+   This document has no security considerations.
+
+   TODO ?
 
 7.  IANA Considerations
 
