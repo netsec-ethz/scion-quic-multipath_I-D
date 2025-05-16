@@ -277,7 +277,7 @@ Table of Contents
    Congestion Control Principles [RFC2914].
 
    Congestion control for QUIC is discussed in QUIC Loss Detection and
-   Congestion Control [RFC9002].
+   Congestion Control [QUIC-RECOVERY].
 
    More generally, congestion control for UDP is discussed in the UDP
    Usage Guidelines [RFC8085].  UDUp MTU discovery is further developed
@@ -327,64 +327,69 @@ Table of Contents
 
 9.1.  Normative References
 
-   [RFC6773]  Phelan, T., Fairhurst, G., and C. Perkins, "DCCP-UDP: A
+   [DCCP-UDPENCAP]
+              Phelan, T., Fairhurst, G., and C. Perkins, "DCCP-UDP: A
               Datagram Congestion Control Protocol UDP Encapsulation for
               NAT Traversal", RFC 6773, DOI 10.17487/RFC6773, November
-              2012, <https://www.rfc-editor.org/info/rfc6773>.
+              2012, <https://www.rfc-editor.org/rfc/rfc6773>.
 
-   [RFC6182]  Ford, A., Raiciu, C., Handley, M., Barre, S., and J.
+   [MPTCP-ARCHITECTURE]
+              Ford, A., Raiciu, C., Handley, M., Barre, S., and J.
               Iyengar, "Architectural Guidelines for Multipath TCP
               Development", RFC 6182, DOI 10.17487/RFC6182, March 2011,
-              <https://www.rfc-editor.org/info/rfc6182>.
+              <https://www.rfc-editor.org/rfc/rfc6182>.
 
-   [RFC9000]  Iyengar, J., Ed. and M. Thomson, Ed., "QUIC: A UDP-Based
+   [QUIC-RECOVERY]
+              Iyengar, J., Ed. and I. Swett, Ed., "QUIC Loss Detection
+              and Congestion Control", RFC 9002, DOI 10.17487/RFC9002,
+              May 2021, <https://www.rfc-editor.org/rfc/rfc9002>.
+
+   [QUIC-TLS] Thomson, M., Ed. and S. Turner, Ed., "Using TLS to Secure
+              QUIC", RFC 9001, DOI 10.17487/RFC9001, May 2021,
+              <https://www.rfc-editor.org/rfc/rfc9001>.
+
+   [QUIC-TRANSPORT]
+              Iyengar, J., Ed. and M. Thomson, Ed., "QUIC: A UDP-Based
               Multiplexed and Secure Transport", RFC 9000,
               DOI 10.17487/RFC9000, May 2021,
-              <https://www.rfc-editor.org/info/rfc9000>.
-
-   [RFC9001]  Thomson, M., Ed. and S. Turner, Ed., "Using TLS to Secure
-              QUIC", RFC 9001, DOI 10.17487/RFC9001, May 2021,
-              <https://www.rfc-editor.org/info/rfc9001>.
-
-   [RFC9002]  Iyengar, J., Ed. and I. Swett, Ed., "QUIC Loss Detection
-              and Congestion Control", RFC 9002, DOI 10.17487/RFC9002,
-              May 2021, <https://www.rfc-editor.org/info/rfc9002>.
-
-   [RFC2914]  Floyd, S., "Congestion Control Principles", BCP 41,
-              RFC 2914, DOI 10.17487/RFC2914, September 2000,
-              <https://www.rfc-editor.org/info/rfc2914>.
-
-   [RFC8085]  Eggert, L., Fairhurst, G., and G. Shepherd, "UDP Usage
-              Guidelines", BCP 145, RFC 8085, DOI 10.17487/RFC8085,
-              March 2017, <https://www.rfc-editor.org/info/rfc8085>.
-
-   [RFC8899]  Fairhurst, G., Jones, T., Tüxen, M., Rüngeler, I., and T.
-              Völker, "Packetization Layer Path MTU Discovery for
-              Datagram Transports", RFC 8899, DOI 10.17487/RFC8899,
-              September 2020, <https://www.rfc-editor.org/info/rfc8899>.
+              <https://www.rfc-editor.org/rfc/rfc9000>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
-              <https://www.rfc-editor.org/info/rfc2119>.
+              <https://www.rfc-editor.org/rfc/rfc2119>.
+
+   [RFC2914]  Floyd, S., "Congestion Control Principles", BCP 41,
+              RFC 2914, DOI 10.17487/RFC2914, September 2000,
+              <https://www.rfc-editor.org/rfc/rfc2914>.
+
+   [RFC8085]  Eggert, L., Fairhurst, G., and G. Shepherd, "UDP Usage
+              Guidelines", BCP 145, RFC 8085, DOI 10.17487/RFC8085,
+              March 2017, <https://www.rfc-editor.org/rfc/rfc8085>.
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
-              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
+              May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+   [RFC8899]  Fairhurst, G., Jones, T., Tüxen, M., Rüngeler, I., and T.
+              Völker, "Packetization Layer Path MTU Discovery for
+              Datagram Transports", RFC 8899, DOI 10.17487/RFC8899,
+              September 2020, <https://www.rfc-editor.org/rfc/rfc8899>.
 
 9.2.  Informative References
 
    [DMTP]     John, T. and T. Riechard, "Deadline Aware Streams in MP-
               QUIC", March 2025.
 
-   [RFC6356]  Raiciu, C., Handley, M., and D. Wischik, "Coupled
-              Congestion Control for Multipath Transport Protocols",
-              RFC 6356, DOI 10.17487/RFC6356, October 2011,
-              <https://www.rfc-editor.org/info/rfc6356>.
+   [I-D.dekater-scion-controlplane]
+              de Kater, C., Frei, M., and N. Rustignoli, "SCION Control
+              Plane", 2023, <https://datatracker.ietf.org/doc/draft-
+              dekater-scion-controlplane/>.
 
-   [RFC9473]  Enghardt, R. and C. Krähenbühl, "A Vocabulary of Path
-              Properties", RFC 9473, DOI 10.17487/RFC9473, September
-              2023, <https://www.rfc-editor.org/info/rfc9473>.
+   [I-D.rustignoli-scion-overview]
+              de Kater, C., Rustignoli, N., and A. Perrig, "SCION
+              Overview", 2025, <https://datatracker.ietf.org/doc/draft-
+              dekater-panrg-scion-overview/>.
 
    [OLIA]     Khalili, R., Gast, N., Popovic, M., Upadhyay, U., and J.
               Le Boudec, "MPTCP is not pareto-optimal: performance
@@ -396,15 +401,14 @@ Table of Contents
               O., Huitema, C., and M. Kuehlewind, "Multipath Extension
               for QUIC", 2025.
 
-   [I-D.rustignoli-scion-overview]
-              de Kater, C., Rustignoli, N., and A. Perrig, "SCION
-              Overview", 2025, <https://datatracker.ietf.org/doc/draft-
-              dekater-panrg-scion-overview/>.
+   [RFC6356]  Raiciu, C., Handley, M., and D. Wischik, "Coupled
+              Congestion Control for Multipath Transport Protocols",
+              RFC 6356, DOI 10.17487/RFC6356, October 2011,
+              <https://www.rfc-editor.org/rfc/rfc6356>.
 
-   [I-D.dekater-scion-controlplane]
-              de Kater, C., Frei, M., and N. Rustignoli, "SCION Control
-              Plane", 2023, <https://datatracker.ietf.org/doc/draft-
-              dekater-scion-controlplane/>.
+   [RFC9473]  Enghardt, R. and C. Krähenbühl, "A Vocabulary of Path
+              Properties", RFC 9473, DOI 10.17487/RFC9473, September
+              2023, <https://www.rfc-editor.org/rfc/rfc9473>.
 
 Acknowledgments
 
@@ -414,7 +418,7 @@ Authors' Addresses
 
    Jelte van Bommel
    ETH Zurich
-   Email: tilmann.zaeschke@inf.ethz.ch
+   Email: jelte.vanbommel@inf.ethz.ch
 
 
    Tilmann Zaeschke (editor)
