@@ -470,7 +470,20 @@ satisfy latency, bandwidth, and other constraints.
 Additional polling with SCMP or with additikonal QUIC stream may be
 used to regularly measure packet drop rates or latency variations.
 
-## QUIC Integration Considerations
+
+# API Design consideration
+
+## Multipathing for Applications
+
+Applications will have very different requirments on a multipath API.
+A comprehensive API should therefore allow for mostly automatic
+selection of {{patsel}} Path Selection and Congestion Control
+algorithms {{concon}}.
+
+At the same time it should give access to SCION paths and their metadata
+to allow implementation of custom algorithms.
+
+## Algorithm Integration
 
 Several proposals in {{lola}} and {{redu}} suggest sending data
 redundantly in parallel on multiple paths.
@@ -481,19 +494,6 @@ Congestion control algorithms and path selection algorithms should
 try to hide parallel transfer and measurement streams from the
 application.  This may also depend on API designer to such
 transparent  multipathing with additional code on the application level.
-
-
-
-# API Design consideration
-
-Applications will have very different requirments on a multipath API.
-A comprehensive API should therefore allow for mostly automatic
-selection of {{patsel}} Path Selection and Congestion Control
-algorithms {{concon}}.
-
-At the same time it should give access to SCION paths and their metadata
-to allow implementation of custom algorithms.
-
 
 
 # Security Considerations
