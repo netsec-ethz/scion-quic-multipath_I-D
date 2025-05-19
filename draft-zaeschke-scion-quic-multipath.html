@@ -1222,6 +1222,9 @@ multiple interfaces is mentioned but not discussed in detail.<a href="#section-a
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3">
                 <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="auto internal xref">5.3</a>.  <a href="#name-high-availability-redundanc" class="internal xref">High Availability / Redundancy</a></p>
 </li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.4">
+                <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="auto internal xref">5.4</a>.  <a href="#name-quic-integration-considerat" class="internal xref">QUIC Integration Considerations</a></p>
+</li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
@@ -1533,38 +1536,63 @@ possible latency.  For example:<a href="#section-5.2-1" class="pilcrow">¶</a></
   different frequency and over many more paths than payload traffic.
   This can be useful if payload packets are large and sending them
   reduntantly over multiple links is to costly or considered to invasive
-  with respect to other network users.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
-<p id="section-5.2-3">Low frequency measurements may be combined with traffic prediction
+  with respect to other network users.
+  Low frequency measurements may be combined with traffic prediction
   algorithms in order to identify best paths between measurements.
   Due to low bandwidth overhead, this may be the most cost efficient
-  approach.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
-<p id="section-5.2-4">It may be possible to do this with SCION SCMP packets, either with
+  approach.
+  It may be possible to do this with SCION SCMP packets, either with
   ECHO packets or possibly with traceroute if the AS internal latency
   of the destination AS is negligible (because it may be small of it may
   be almost the same for all border routersthat are on interesting
-  paths).<a href="#section-5.2-4" class="pilcrow">¶</a></p>
-<p id="section-5.2-5">2) With implicit measurements through QUIC ACK frames.
+  paths).<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.2-3">2) With implicit measurements through QUIC ACK frames.
   <span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2" class="relref">Section 13.2</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> recommends sending an ACK frame
   after receiving at least two ack-eliciting packets or after a delay.
   If the application sends data on multiple paths in parallel, this may
-  be sufficient for some low latency applications.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
-<p id="section-5.2-6"><span>[<a href="#QUIC-ACKFREQUENCY" class="cite xref">QUIC-ACKFREQUENCY</a>]</span> proposes an extension that allows more control
-  over how often and when ACK-FRAMES are sent.<a href="#section-5.2-6" class="pilcrow">¶</a></p>
-<p id="section-5.2-7">This approach can be useful if <span>[<a href="#QUIC-ACKFREQUENCY" class="cite xref">QUIC-ACKFREQUENCY</a>]</span> is
+  be sufficient for some low latency applications.
+  <span>[<a href="#QUIC-ACKFREQUENCY" class="cite xref">QUIC-ACKFREQUENCY</a>]</span> proposes an extension that allows more control
+  over how often and when ACK-FRAMES are sent.
+  This approach can be useful if <span>[<a href="#QUIC-ACKFREQUENCY" class="cite xref">QUIC-ACKFREQUENCY</a>]</span> becomes
   available or if the ACK behavior of the standard QUIC server is
-  sufficient.<a href="#section-5.2-7" class="pilcrow">¶</a></p>
-<p id="section-5.2-8">3) With implicit measurements through application specific ACKs.
-This is useful if the application can sensibly be adapted to have its
-own ACK protocol.<a href="#section-5.2-8" class="pilcrow">¶</a></p>
-<p id="section-5.2-9">Network analysis can be used to identify, and subsequenlty avoid, links
-with high or unreliable latency.<a href="#section-5.2-9" class="pilcrow">¶</a></p>
+  sufficient.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+<p id="section-5.2-4">3) With implicit measurements through application specific ACKs.
+  This is useful if the application can sensibly be adapted to have its
+  own ACK protocol.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
+<p id="section-5.2-5">Network analysis can be used to identify, and subsequenlty avoid, links
+with high or unreliable latency.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="redu">
 <section id="section-5.3">
         <h3 id="name-high-availability-redundanc">
 <a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-high-availability-redundanc" class="section-name selfRef">High Availability / Redundancy</a>
-      </h3>
+        </h3>
+<p id="section-5.3-1">A approach to high availability is to send data on multiple paths in
+parallel. A tradeoff here is that sending on all available paths is
+probably infeasibale. Depending on cost factors, and to avoid
+overloading the network, any algorithms should keep redundant
+sending to a minimum.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+<p id="section-5.3-2">Path analysis can be used to identify multiple paths that are mostly
+or completely (using multiple interfaces) disjunct, but that still
+satisfy latency, bandwidth, and other constraints.<a href="#section-5.3-2" class="pilcrow">¶</a></p>
+<p id="section-5.3-3">Additional polling with SCMP or with additikonal QUIC stream may be
+used to regularly measure packet drop rates or latency variations.<a href="#section-5.3-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="quic-integration-considerations">
+<section id="section-5.4">
+        <h3 id="name-quic-integration-considerat">
+<a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-quic-integration-considerat" class="section-name selfRef">QUIC Integration Considerations</a>
+        </h3>
+<p id="section-5.4-1">Several proposals in <a href="#lola" class="auto internal xref">Section 5.2</a> and <a href="#redu" class="auto internal xref">Section 5.3</a> suggest sending data
+redundantly in parallel on multiple paths.
+Similarly, some proposals suggest sending packets purely for latency
+measurements.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
+<p id="section-5.4-2">Congestion control algorithms and path selection algorithms should
+try to hide parallel transfer and measurement streams from the
+application.  This may also depend on API designer to such
+transparent  multipathing with additional code on the application level.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
