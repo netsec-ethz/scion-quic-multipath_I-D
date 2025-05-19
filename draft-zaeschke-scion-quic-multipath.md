@@ -64,16 +64,13 @@ normative:
   RFC8899:
 
 informative:
-  DMTP:
-    title: "Deadline Aware Streams in MP-QUIC"
-    date: "2025-03-03"
-    author:
-    -
-      ins: T. John
-    -
-      ins: T. Riechard
+  DMTP: I-D.draft-tjohn-quic-multipath-dmtp
+  QUIC-ACKFREQUENCY: I-D.draft-ietf-quic-ack-frequency
+  QUIC-MP: I-D.draft-ietf-quic-multipath
   RFC6356:
   RFC9473:
+  SCION-OVERVIEW: I-D.draft-dekater-panrg-scion-overview
+  SCION-CP: I-D.draft-dekater-scion-controlplane
   OLIA:
     title: "MPTCP is not pareto-optimal: performance issues and
 a possible solution"
@@ -92,81 +89,12 @@ Emerging networking experiments and technologies, ACM"
     -
       ins: J.-Y. Le Boudec
 
-  QUIC-ACKFREQUENCY:
-    title: "QUIC Acknowledgment Frequency"
-    date: 2025
-    author:
-      -
-        ins: J. Iyengar
-        name: Jana Iyengar
-      -
-        ins: I. Swett
-        name: Ian Swett
-      -
-        ins: M. Kühlewind
-        name: Mirja Kühlewind
-
-  QUIC-MP:
-    title: Multipath Extension for QUIC
-    date: 2025
-    author:
-    -
-      fullname:
-          :: "刘彦梅"
-          ascii: "Yanmei Liu"
-    -
-       fullname:
-         :: "马云飞"
-         ascii: "Yunfei Ma"
-    -
-       ins: Q. De Coninck
-       name: Quentin De Coninck
-    -
-       ins: O. Bonaventure
-       name: Olivier Bonaventure
-    -
-       ins: C. Huitema
-       name: Christian Huitema
-    -
-       ins: M. Kuehlewind
-       name: Mirja Kuehlewind
-
-  I-D.rustignoli-scion-overview:
-    title: SCION Overview
-    date: 2025
-    target: https://datatracker.ietf.org/doc/draft-dekater-panrg-scion-overview/
-    author:
-    -
-      ins: C. de Kater
-      name: Corine de Kater
-    -
-      ins: N. Rustignoli
-      name: Nicola Rustignoli
-    -
-      ins: A. Perrig
-      name: Adrian Perrig
-
-  I-D.dekater-scion-controlplane:
-    title: SCION Control Plane
-    date: 2023
-    target: https://datatracker.ietf.org/doc/draft-dekater-scion-controlplane/
-    author:
-    -
-      ins: C. de Kater
-      name: Corine de Kater
-    -
-      ins: M. Frei
-      name: Matthias Frei
-    -
-      ins: N. Rustignoli
-      name: Nicola Rustignoli
-
 
 --- abstract
 
 This document gives general recommendations when using the Multipath
 Extension for QUIC {{QUIC-MP}} with SCION
-{{I-D.rustignoli-scion-overview}}.  The recommendations concern
+{{SCION-OVERVIEW}}.  The recommendations concern
 algorithms for congestion control and path selection, as well as
 general considerations for API design and applications that use
 multipath QUIC over SCION.
@@ -290,8 +218,7 @@ Path metadata is authenticated wrt to owner of each link, but
 otherwise not verified.
 
 **SCMP**: A signaling protocol analogous to the Internet Control
-Message Protocol (ICMP).  This is described in
-{{I-D.dekater-scion-controlplane}}.
+Message Protocol (ICMP).  This is described in {{SCION-CP}}.
 
 # Conventions and Definitions
 
