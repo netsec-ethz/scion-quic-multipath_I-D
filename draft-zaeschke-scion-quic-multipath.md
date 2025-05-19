@@ -91,6 +91,21 @@ Emerging networking experiments and technologies, ACM"
       ins: U. Upadhyay
     -
       ins: J.-Y. Le Boudec
+
+  QUIC-ACKFREQUENCY:
+    title: "QUIC Acknowledgment Frequency"
+    date: 2025
+    author:
+      -
+        ins: J. Iyengar
+        name: Jana Iyengar
+      -
+        ins: I. Swett
+        name: Ian Swett
+      -
+        ins: M. Kühlewind
+        name: Mirja Kühlewind
+
   QUIC-MP:
     title: Multipath Extension for QUIC
     date: 2025
@@ -151,10 +166,14 @@ Emerging networking experiments and technologies, ACM"
 
 This document gives general recommendations when using the Multipath
 Extension for QUIC {{QUIC-MP}} with SCION
-{{I-D.rustignoli-scion-overview}}.  The recommendations
-concern algorithms for congestion control and path selection, as
-well as general considerations for API design and applications that use
+{{I-D.rustignoli-scion-overview}}.  The recommendations concern
+algorithms for congestion control and path selection, as well as
+general considerations for API design and applications that use
 multipath QUIC over SCION.
+
+This document discusses multipathing mainly in the sense of multiple
+paths per 4-tuple (client IP/port + server IP/port). Multipathing over
+multiple interfaces is mentioned but not discussed in detail.
 
 --- middle
 
@@ -286,10 +305,17 @@ This document distinguishes the following usage scenarios:
   multiple paths.
 * Minimum latency (MinLat): Optimizing latency by regualrily checking
   multiple paths and using the one with the lowest latency.
-* Minimum latencythrouh redundancy (MinLatRed): Optimizing latency
+* Minimum latency throuh redundancy (MinLatRed): Optimizing latency
   by parallel transmission on multiple path.
 * Failure tolerance (FT): Optimizing for failure tolerance by
   parallel transfer on multiple paths.
+
+The disciussions of these scenarios are written with multiple paths
+per interface in mind (i.e. multiple paths per 4-tuple).  However, they
+can usually be generalized to multipathing over multiple interfaces.
+
+**TODO** "Usually" should be replaced with "Unless noted otherwise" or
+possibly "cannot be generalized, unless noted otherwise". Let's see.
 
 
 ## Disjunctness
@@ -341,6 +367,8 @@ or possibly kept as backup paths for emergencies.
 
 ## Congestion Control {#concon}
 
+
+
 General recommendations for congestion control are defined in
 Congestion Control Principles {{RFC2914}}.
 
@@ -352,6 +380,21 @@ UDP Usage Guidelines {{RFC8085}}. UDUp MTU discovery is further
 developed in {{RFC8899}}.
 
 Congestion control is also discussed for TCP in {{RFC6356}}.
+
+There are several congestion control algorithms proposed in literature,
+e.g. LIA, OLIA, BALIA and RSF.  These cobine congestion control with
+path selection algorithms.
+For simplicity, we suggest separating concerns in terms of
+congestion control and path selection. This allows us to better
+tailor the solutions to the different scenarios discussed in
+(SCENARIOS).
+The proposition is to use standard congestion control per path (LIST
+HERE), tailored for each use case (max bandwidth / low latency) and
+on top of that separately use path selection (load distribution)
+algorithms.
+
+**TODO** Terminology: path selection vs load distribution?
+
 
 ## Path Selection {#patsel}
 
@@ -368,7 +411,57 @@ following the guidlines discussed in {{datra}}.
 
 ## Data Transfer {#datra}
 
+The aim of a data transfer application is to maximize throughput,
+regardless of latency, jitter or packet loss.
+
+The solution here is to identify multiple paths that are either
+disjunct, or where the non-disjunct links allow higher throughput than
+other pinks on the same paths (i.e. high enough to prevent the
+link from being a bottleneck).
+
 ## Low Latency {#lola}
+
+There are multiple approaches to transfer traffic with the lowest
+possible latency.  For example:
+
+  1) With separate latency measurents. Latency measurments run in
+  parallel to data traffic. This allows performing measurements at a
+  different frequency and over many more paths than payload traffic.
+  This can be useful if payload packets are large and sending them
+  reduntantly over multiple links is to costly or considered to invasive
+  with respect to other network users.
+
+  Low frequency measurements may be combined with traffic prediction
+  algorithms in order to identify best paths between measurements.
+  Due to low bandwidth overhead, this may be the most cost efficient
+  approach.
+
+  It may be possible to do this with SCION SCMP packets, either with
+  ECHO packets or possibly with traceroute if the AS internal latency
+  of the destination AS is negligible (because it may be small of it may
+  be almost the same for all border routersthat are on interesting
+  paths).
+
+  2) With implicit measurements through QUIC ACK frames.
+  {{Section 13.2 of QUIC-TRANSPORT}} recommends sending an ACK frame
+  after receiving at least two ack-eliciting packets or after a delay.
+  If the application sends data on multiple paths in parallel, this may
+  be sufficient for some low latency applications.
+
+  {{QUIC-ACKFREQUENCY}} proposes an extension that allows more control
+  over how often and when ACK-FRAMES are sent.
+
+  This approach can be useful if {{QUIC-ACKFREQUENCY}} is
+  available or if the ACK behavior of the standard QUIC server is
+  sufficient.
+
+3) With implicit measurements through application specific ACKs.
+This is useful if the application can sensibly be adapted to have its
+own ACK protocol.
+
+
+Network analysis can be used to identify, and subsequenlty avoid, links
+with high or unreliable latency.
 
 ## High Availability / Redundancy {#redu}
 
