@@ -1222,6 +1222,9 @@ multiple interfaces is mentioned but not discussed in detail.<a href="#section-a
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3">
                 <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="auto internal xref">5.3</a>.  <a href="#name-high-availability-redundanc" class="internal xref">High Availability / Redundancy</a></p>
 </li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.4">
+                <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="auto internal xref">5.4</a>.  <a href="#name-multipathing-for-anonymity" class="internal xref">Multipathing for Anonymity</a></p>
+</li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
@@ -1593,6 +1596,27 @@ satisfy latency, bandwidth, and other constraints.<a href="#section-5.3-2" class
 used to regularly measure packet drop rates or latency variations.<a href="#section-5.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
+<div id="anon">
+<section id="section-5.4">
+        <h3 id="name-multipathing-for-anonymity">
+<a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-multipathing-for-anonymity" class="section-name selfRef">Multipathing for Anonymity</a>
+        </h3>
+<p id="section-5.4-1">Multipathing could also be used for anonymity, e.g. by switching
+paths at random intervalls.
+With a continuous datastream, care should be taken that new
+paths are not just switched over from one to the next, otherwise
+traffic characteristics may be used to identify paths.
+For example, paths could be identified by packet frequency, packet
+burst frequency or general bandwidth.
+For continuous stream, just moving one stream from one path to another
+may expose stream identity.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
+<p id="section-5.4-2">As mitigation, a sender could start sending on a new path for a
+while before stopping sending on the old path. The sender could send
+redundant data or random data at a suitable bandwidth.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
+<p id="section-5.4-3"><strong>TODO</strong> Should we really recommend bandwidth usage.
+<strong>TODO</strong> Is this SCION specific?<a href="#section-5.4-3" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="api-design-consideration">
@@ -1646,11 +1670,12 @@ not help anonymity?<a href="#section-7-2" class="pilcrow">¶</a></p>
 <a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-latency-polling" class="section-name selfRef">Latency Polling</a>
         </h3>
 <p id="section-7.1-1">If a user sends latency measurements on 10 paths in parallel
-every 50 seconds, then these 10 paths can (with some probablility)
-be attribuyted to the same user.
+every 5 seconds, then these 10 paths can (with some probablility)
+be attributed to the same user.
 Solution: do not send all probes at the same time.
 To prevent patterns (1. after 0.1s, 2. after 0.3s, 3. after 0.35s, ...)
-the intervall should not be fixed.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+the intervall between packets on each path should also vary.
+Additionally, the number of polled paths should vary.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="more-">
@@ -1658,7 +1683,8 @@ the intervall should not be fixed.<a href="#section-7.1-1" class="pilcrow">¶</a
         <h3 id="name-more">
 <a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-more" class="section-name selfRef">More ?</a>
         </h3>
-<p id="section-7.2-1"><strong>TODO</strong><a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2-1">See <a href="#anon" class="auto internal xref">Section 5.4</a>.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2-2"><strong>TODO</strong><a href="#section-7.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
