@@ -1484,8 +1484,23 @@ More generally, congestion control for UDP is discussed in the
 UDP Usage Guidelines <span>[<a href="#UDP-GUIDELINES" class="cite xref">UDP-GUIDELINES</a>]</span>. UDP MTU discovery is further
 developed in <span>[<a href="#MTU-DISCOVERY" class="cite xref">MTU-DISCOVERY</a>]</span>.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
 <p id="section-4.3-2">Multipath congestion control is also discussed for TCP in
-<span>[<a href="#CC-MULTIPATH-TCP" class="cite xref">CC-MULTIPATH-TCP</a>]</span>.<a href="#section-4.3-2" class="pilcrow">¶</a></p>
-<p id="section-4.3-3">There are several congestion control algorithms proposed in literature,
+<span>[<a href="#CC-MULTIPATH-TCP" class="cite xref">CC-MULTIPATH-TCP</a>]</span>. They state that "One of the prominent
+   problems is that running existing algorithms such as standard TCP
+   independently on each path would give the multipath flow more than
+   its fair share at a bottleneck link traversed by more than one of its
+   subflows.".
+This can be avoided in SCION through link-level analysis of flows
+and selecting paths that do not create or share a bottleneck link.
+This avoids the need for Coupled Congestion Control.<a href="#section-4.3-2" class="pilcrow">¶</a></p>
+<p id="section-4.3-3">The second point in <span>[<a href="#CC-MULTIPATH-TCP" class="cite xref">CC-MULTIPATH-TCP</a>]</span> is "Further, it is desirable
+   that a source with multiple paths
+   available will transfer more traffic using the least congested of the
+   paths, achieving a property called "resource pooling" where a bundle
+   of links effectively behaves like one shared link with bigger
+   capacity.".
+This can be achieved with a simple load distribution algorithm.<a href="#section-4.3-3" class="pilcrow">¶</a></p>
+<p id="section-4.3-4"><strong>TODO</strong> Differentiate "load distribution" from "path selection".<a href="#section-4.3-4" class="pilcrow">¶</a></p>
+<p id="section-4.3-5">There are several congestion control algorithms proposed in literature,
 e.g. LIA, OLIA, BALIA and RSF.  These combine congestion control with
 path selection algorithms.
 For simplicity, we suggest separating concerns in terms of
@@ -1495,8 +1510,8 @@ tailor the solutions to the different scenarios discussed in
 The proposition is to use standard congestion control per path (LIST
 HERE), tailored for each use case (max bandwidth / low latency) and
 on top of that separately use path selection (load distribution)
-algorithms.<a href="#section-4.3-3" class="pilcrow">¶</a></p>
-<p id="section-4.3-4"><strong>TODO</strong> Terminology: path selection vs load distribution?<a href="#section-4.3-4" class="pilcrow">¶</a></p>
+algorithms.<a href="#section-4.3-5" class="pilcrow">¶</a></p>
+<p id="section-4.3-6"><strong>TODO</strong> Terminology: path selection vs load distribution?<a href="#section-4.3-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="patsel">

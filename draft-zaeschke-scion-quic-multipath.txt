@@ -303,7 +303,22 @@ Table of Contents
    discovery is further developed in [MTU-DISCOVERY].
 
    Multipath congestion control is also discussed for TCP in
-   [CC-MULTIPATH-TCP].
+   [CC-MULTIPATH-TCP].  They state that "One of the prominent problems
+   is that running existing algorithms such as standard TCP
+   independently on each path would give the multipath flow more than
+   its fair share at a bottleneck link traversed by more than one of its
+   subflows.".  This can be avoided in SCION through link-level analysis
+   of flows and selecting paths that do not create or share a bottleneck
+   link.  This avoids the need for Coupled Congestion Control.
+
+   The second point in [CC-MULTIPATH-TCP] is "Further, it is desirable
+   that a source with multiple paths available will transfer more
+   traffic using the least congested of the paths, achieving a property
+   called "resource pooling" where a bundle of links effectively behaves
+   like one shared link with bigger capacity.".  This can be achieved
+   with a simple load distribution algorithm.
+
+   *TODO* Differentiate "load distribution" from "path selection".
 
    There are several congestion control algorithms proposed in
    literature, e.g. LIA, OLIA, BALIA and RSF.  These combine congestion
