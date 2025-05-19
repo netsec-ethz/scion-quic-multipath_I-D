@@ -430,12 +430,10 @@ possible latency.  For example:
   This can be useful if payload packets are large and sending them
   reduntantly over multiple links is to costly or considered to invasive
   with respect to other network users.
-
   Low frequency measurements may be combined with traffic prediction
   algorithms in order to identify best paths between measurements.
   Due to low bandwidth overhead, this may be the most cost efficient
   approach.
-
   It may be possible to do this with SCION SCMP packets, either with
   ECHO packets or possibly with traceroute if the AS internal latency
   of the destination AS is negligible (because it may be small of it may
@@ -447,23 +445,48 @@ possible latency.  For example:
   after receiving at least two ack-eliciting packets or after a delay.
   If the application sends data on multiple paths in parallel, this may
   be sufficient for some low latency applications.
-
   {{QUIC-ACKFREQUENCY}} proposes an extension that allows more control
   over how often and when ACK-FRAMES are sent.
-
-  This approach can be useful if {{QUIC-ACKFREQUENCY}} is
+  This approach can be useful if {{QUIC-ACKFREQUENCY}} becomes
   available or if the ACK behavior of the standard QUIC server is
   sufficient.
 
-3) With implicit measurements through application specific ACKs.
-This is useful if the application can sensibly be adapted to have its
-own ACK protocol.
+  3) With implicit measurements through application specific ACKs.
+  This is useful if the application can sensibly be adapted to have its
+  own ACK protocol.
 
 
 Network analysis can be used to identify, and subsequenlty avoid, links
 with high or unreliable latency.
 
 ## High Availability / Redundancy {#redu}
+
+A approach to high availability is to send data on multiple paths in
+parallel. A tradeoff here is that sending on all available paths is
+probably infeasibale. Depending on cost factors, and to avoid
+overloading the network, any algorithms should keep redundant
+sending to a minimum.
+
+Path analysis can be used to identify multiple paths that are mostly
+or completely (using multiple interfaces) disjunct, but that still
+satisfy latency, bandwidth, and other constraints.
+
+Additional polling with SCMP or with additikonal QUIC stream may be
+used to regularly measure packet drop rates or latency variations.
+
+## QUIC Integration Considerations
+
+Several proposals in {{lola}} and {{redu}} suggest sending data
+redundantly in parallel on multiple paths.
+Similarly, some proposals suggest sending packets purely for latency
+measurements.
+
+Congestion control algorithms and path selection algorithms should
+try to hide parallel transfer and measurement streams from the
+application.  This may also depend on API designer to such
+transparent  multipathing with additional code on the application level.
+
+
 
 # API Design consideration
 
