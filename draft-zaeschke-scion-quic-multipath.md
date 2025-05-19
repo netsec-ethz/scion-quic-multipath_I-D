@@ -1,5 +1,5 @@
 ---
-title: "QUIC Multipath over SCION"
+title: "Guidelines for QUIC Multipath over SCION"
 
 abbrev: "SCION-QUIC-MP"
 
@@ -92,12 +92,11 @@ Emerging networking experiments and technologies, ACM"
 
 --- abstract
 
-This document gives general recommendations when using the Multipath
-Extension for QUIC {{QUIC-MP}} with SCION
-{{SCION-OVERVIEW}}.  The recommendations concern
-algorithms for congestion control and path selection, as well as
-general considerations for API design and applications that use
-multipath QUIC over SCION.
+This document provides guidelines for using the Multipath Extension
+for QUIC {{QUIC-MP}} with SCION {{SCION-OVERVIEW}}.
+The recommendations concern algorithms for congestion control and
+path selection, as well as general considerations for API design and
+applications that use multipath QUIC over SCION.
 
 This document discusses multipathing mainly in the sense of multiple
 paths per 4-tuple (client IP/port + server IP/port). Multipathing over
