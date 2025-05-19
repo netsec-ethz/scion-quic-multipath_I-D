@@ -367,14 +367,10 @@ or possibly kept as backup paths for emergencies.
 
 ## Congestion Control {#concon}
 
-
-
 General recommendations for congestion control are defined in
 Congestion Control Principles {{RFC2914}}.
-
 Congestion control for QUIC is discussed in
 QUIC Loss Detection and Congestion Control {{QUIC-RECOVERY}}.
-
 More generally, congestion control for UDP is discussed in the
 UDP Usage Guidelines {{RFC8085}}. UDUp MTU discovery is further
 developed in {{RFC8899}}.
