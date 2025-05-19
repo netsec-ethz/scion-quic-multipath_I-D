@@ -500,7 +500,22 @@ transparent  multipathing with additional code on the application level.
 
 This document has no security considerations.
 
-TODO ?
+May sending data on multiple paths in parallel, or at reguklar
+intervballs, expose information about data streams? E.g. can streams
+be associated with users such that a change in connection ID does
+not help anonymity?
+
+## Latency Polling
+
+If a user sends latency measurements on 10 paths in parallel
+every 50 seconds, then these 10 paths can (with some probablility)
+be attribuyted to the same user.
+Solution: do not send all probes at the same time.
+To prevent patterns (1. after 0.1s, 2. after 0.3s, 3. after 0.35s, ...)
+the intervall should not be fixed.
+
+## More ?
+**TODO**
 
 # IANA Considerations
 
