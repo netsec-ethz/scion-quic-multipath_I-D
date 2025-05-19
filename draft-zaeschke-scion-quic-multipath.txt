@@ -88,8 +88,9 @@ Table of Contents
      5.1.  Data Transfer
      5.2.  Low Latency
      5.3.  High Availability / Redundancy
-     5.4.  QUIC Integration Considerations
    6.  API Design consideration
+     6.1.  Multipathing for Applications
+     6.2.  Algorithm Integration
    7.  Security Considerations
    8.  IANA Considerations
    9.  References
@@ -387,7 +388,19 @@ Table of Contents
    Additional polling with SCMP or with additikonal QUIC stream may be
    used to regularly measure packet drop rates or latency variations.
 
-5.4.  QUIC Integration Considerations
+6.  API Design consideration
+
+6.1.  Multipathing for Applications
+
+   Applications will have very different requirments on a multipath API.
+   A comprehensive API should therefore allow for mostly automatic
+   selection of Section 4.4 Path Selection and Congestion Control
+   algorithms Section 4.3.
+
+   At the same time it should give access to SCION paths and their
+   metadata to allow implementation of custom algorithms.
+
+6.2.  Algorithm Integration
 
    Several proposals in Section 5.2 and Section 5.3 suggest sending data
    redundantly in parallel on multiple paths.  Similarly, some proposals
@@ -398,16 +411,6 @@ Table of Contents
    application.  This may also depend on API designer to such
    transparent multipathing with additional code on the application
    level.
-
-6.  API Design consideration
-
-   Applications will have very different requirments on a multipath API.
-   A comprehensive API should therefore allow for mostly automatic
-   selection of Section 4.4 Path Selection and Congestion Control
-   algorithms Section 4.3.
-
-   At the same time it should give access to SCION paths and their
-   metadata to allow implementation of custom algorithms.
 
 7.  Security Considerations
 

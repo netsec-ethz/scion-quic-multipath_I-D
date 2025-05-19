@@ -1222,13 +1222,18 @@ multiple interfaces is mentioned but not discussed in detail.<a href="#section-a
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3">
                 <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="auto internal xref">5.3</a>.  <a href="#name-high-availability-redundanc" class="internal xref">High Availability / Redundancy</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.4">
-                <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="auto internal xref">5.4</a>.  <a href="#name-quic-integration-considerat" class="internal xref">QUIC Integration Considerations</a></p>
-</li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-api-design-consideration" class="internal xref">API Design consideration</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-multipathing-for-applicatio" class="internal xref">Multipathing for Applications</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-algorithm-integration" class="internal xref">Algorithm Integration</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
             <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
@@ -1580,21 +1585,6 @@ satisfy latency, bandwidth, and other constraints.<a href="#section-5.3-2" class
 used to regularly measure packet drop rates or latency variations.<a href="#section-5.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="quic-integration-considerations">
-<section id="section-5.4">
-        <h3 id="name-quic-integration-considerat">
-<a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-quic-integration-considerat" class="section-name selfRef">QUIC Integration Considerations</a>
-        </h3>
-<p id="section-5.4-1">Several proposals in <a href="#lola" class="auto internal xref">Section 5.2</a> and <a href="#redu" class="auto internal xref">Section 5.3</a> suggest sending data
-redundantly in parallel on multiple paths.
-Similarly, some proposals suggest sending packets purely for latency
-measurements.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
-<p id="section-5.4-2">Congestion control algorithms and path selection algorithms should
-try to hide parallel transfer and measurement streams from the
-application.  This may also depend on API designer to such
-transparent  multipathing with additional code on the application level.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
-</section>
-</div>
 </section>
 </div>
 <div id="api-design-consideration">
@@ -1602,12 +1592,34 @@ transparent  multipathing with additional code on the application level.<a href=
       <h2 id="name-api-design-consideration">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-api-design-consideration" class="section-name selfRef">API Design consideration</a>
       </h2>
-<p id="section-6-1">Applications will have very different requirments on a multipath API.
+<div id="multipathing-for-applications">
+<section id="section-6.1">
+        <h3 id="name-multipathing-for-applicatio">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-multipathing-for-applicatio" class="section-name selfRef">Multipathing for Applications</a>
+        </h3>
+<p id="section-6.1-1">Applications will have very different requirments on a multipath API.
 A comprehensive API should therefore allow for mostly automatic
 selection of <a href="#patsel" class="auto internal xref">Section 4.4</a> Path Selection and Congestion Control
-algorithms <a href="#concon" class="auto internal xref">Section 4.3</a>.<a href="#section-6-1" class="pilcrow">¶</a></p>
-<p id="section-6-2">At the same time it should give access to SCION paths and their metadata
-to allow implementation of custom algorithms.<a href="#section-6-2" class="pilcrow">¶</a></p>
+algorithms <a href="#concon" class="auto internal xref">Section 4.3</a>.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1-2">At the same time it should give access to SCION paths and their metadata
+to allow implementation of custom algorithms.<a href="#section-6.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="algorithm-integration">
+<section id="section-6.2">
+        <h3 id="name-algorithm-integration">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-algorithm-integration" class="section-name selfRef">Algorithm Integration</a>
+        </h3>
+<p id="section-6.2-1">Several proposals in <a href="#lola" class="auto internal xref">Section 5.2</a> and <a href="#redu" class="auto internal xref">Section 5.3</a> suggest sending data
+redundantly in parallel on multiple paths.
+Similarly, some proposals suggest sending packets purely for latency
+measurements.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.2-2">Congestion control algorithms and path selection algorithms should
+try to hide parallel transfer and measurement streams from the
+application.  This may also depend on API designer to such
+transparent  multipathing with additional code on the application level.<a href="#section-6.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="security-considerations">
