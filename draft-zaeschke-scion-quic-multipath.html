@@ -1097,7 +1097,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">This document gives general recommendations when using the Multipath
 Extension for QUIC <span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> with SCION
-<span>[<a href="#I-D.rustignoli-scion-overview" class="cite xref">I-D.rustignoli-scion-overview</a>]</span>.  The recommendations concern
+<span>[<a href="#SCION-OVERVIEW" class="cite xref">SCION-OVERVIEW</a>]</span>.  The recommendations concern
 algorithms for congestion control and path selection, as well as
 general considerations for API design and applications that use
 multipath QUIC over SCION.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
@@ -1369,8 +1369,7 @@ clients when they request a selection of paths to a destination.
 Path metadata is authenticated wrt to owner of each link, but
 otherwise not verified.<a href="#section-1.1-17" class="pilcrow">¶</a></p>
 <p id="section-1.1-18"><strong>SCMP</strong>: A signaling protocol analogous to the Internet Control
-Message Protocol (ICMP).  This is described in
-<span>[<a href="#I-D.dekater-scion-controlplane" class="cite xref">I-D.dekater-scion-controlplane</a>]</span>.<a href="#section-1.1-18" class="pilcrow">¶</a></p>
+Message Protocol (ICMP).  This is described in <span>[<a href="#SCION-CP" class="cite xref">SCION-CP</a>]</span>.<a href="#section-1.1-18" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1761,15 +1760,7 @@ Additionally, the number of polled paths should vary.<a href="#section-7.1-1" cl
 <dl class="references">
 <dt id="DMTP">[DMTP]</dt>
         <dd>
-<span class="refAuthor">John, T.</span> and <span class="refAuthor">T. Riechard</span>, <span class="refTitle">"Deadline Aware Streams in MP-QUIC"</span>, <time datetime="2025-03" class="refDate">March 2025</time>. </dd>
-<dd class="break"></dd>
-<dt id="I-D.dekater-scion-controlplane">[I-D.dekater-scion-controlplane]</dt>
-        <dd>
-<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Frei, M.</span>, and <span class="refAuthor">N. Rustignoli</span>, <span class="refTitle">"SCION Control Plane"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-dekater-scion-controlplane/">https://datatracker.ietf.org/doc/draft-dekater-scion-controlplane/</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="I-D.rustignoli-scion-overview">[I-D.rustignoli-scion-overview]</dt>
-        <dd>
-<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">A. Perrig</span>, <span class="refTitle">"SCION Overview"</span>, <time datetime="2025" class="refDate">2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-dekater-panrg-scion-overview/">https://datatracker.ietf.org/doc/draft-dekater-panrg-scion-overview/</a>&gt;</span>. </dd>
+<span class="refAuthor">John, T.</span> and <span class="refAuthor">T. Riechard</span>, <span class="refTitle">"Deadline Aware Streams in MP-QUIC"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-tjohn-quic-multipath-dmtp-00</span>, <time datetime="2025-03-03" class="refDate">3 March 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-tjohn-quic-multipath-dmtp-00">https://datatracker.ietf.org/doc/html/draft-tjohn-quic-multipath-dmtp-00</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="OLIA">[OLIA]</dt>
         <dd>
@@ -1777,19 +1768,27 @@ Additionally, the number of polled paths should vary.<a href="#section-7.1-1" cl
 <dd class="break"></dd>
 <dt id="QUIC-ACKFREQUENCY">[QUIC-ACKFREQUENCY]</dt>
         <dd>
-<span class="refAuthor">Iyengar, J.</span>, <span class="refAuthor">Swett, I.</span>, and <span class="refAuthor">M. Kühlewind</span>, <span class="refTitle">"QUIC Acknowledgment Frequency"</span>, <time datetime="2025" class="refDate">2025</time>. </dd>
+<span class="refAuthor">Iyengar, J.</span>, <span class="refAuthor">Swett, I.</span>, and <span class="refAuthor">M. Kühlewind</span>, <span class="refTitle">"QUIC Acknowledgment Frequency"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-quic-ack-frequency-11</span>, <time datetime="2025-02-28" class="refDate">28 February 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-ack-frequency-11">https://datatracker.ietf.org/doc/html/draft-ietf-quic-ack-frequency-11</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="QUIC-MP">[QUIC-MP]</dt>
         <dd>
-<span class="refAuthor"><span class="non-ascii">刘彦梅</span> (<span class="ascii">Liu, Y.</span>)</span>, <span class="refAuthor"><span class="non-ascii">马云飞</span> (<span class="ascii">Ma, Y.</span>)</span>, <span class="refAuthor">De Coninck, Q.</span>, <span class="refAuthor">Bonaventure, O.</span>, <span class="refAuthor">Huitema, C.</span>, and <span class="refAuthor">M. Kuehlewind</span>, <span class="refTitle">"Multipath Extension for QUIC"</span>, <time datetime="2025" class="refDate">2025</time>. </dd>
+<span class="refAuthor">Liu, Y.</span>, <span class="refAuthor">Ma, Y.</span>, <span class="refAuthor">De Coninck, Q.</span>, <span class="refAuthor">Bonaventure, O.</span>, <span class="refAuthor">Huitema, C.</span>, and <span class="refAuthor">M. Kühlewind</span>, <span class="refTitle">"Multipath Extension for QUIC"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-quic-multipath-14</span>, <time datetime="2025-04-23" class="refDate">23 April 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14">https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC6356">[RFC6356]</dt>
         <dd>
 <span class="refAuthor">Raiciu, C.</span>, <span class="refAuthor">Handley, M.</span>, and <span class="refAuthor">D. Wischik</span>, <span class="refTitle">"Coupled Congestion Control for Multipath Transport Protocols"</span>, <span class="seriesInfo">RFC 6356</span>, <span class="seriesInfo">DOI 10.17487/RFC6356</span>, <time datetime="2011-10" class="refDate">October 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6356">https://www.rfc-editor.org/rfc/rfc6356</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9473">[RFC9473]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Enghardt, R.</span> and <span class="refAuthor">C. Krähenbühl</span>, <span class="refTitle">"A Vocabulary of Path Properties"</span>, <span class="seriesInfo">RFC 9473</span>, <span class="seriesInfo">DOI 10.17487/RFC9473</span>, <time datetime="2023-09" class="refDate">September 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9473">https://www.rfc-editor.org/rfc/rfc9473</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="SCION-CP">[SCION-CP]</dt>
+        <dd>
+<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Control Plane"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dekater-scion-controlplane-08</span>, <time datetime="2025-03-03" class="refDate">3 March 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-controlplane-08">https://datatracker.ietf.org/doc/html/draft-dekater-scion-controlplane-08</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="SCION-OVERVIEW">[SCION-OVERVIEW]</dt>
+      <dd>
+<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">A. Perrig</span>, <span class="refTitle">"SCION Overview"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dekater-panrg-scion-overview-06</span>, <time datetime="2024-05-07" class="refDate">7 May 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dekater-panrg-scion-overview-06">https://datatracker.ietf.org/doc/html/draft-dekater-panrg-scion-overview-06</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>

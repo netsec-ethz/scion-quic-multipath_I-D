@@ -14,11 +14,10 @@ Expires: 8 November 2025                                      7 May 2025
 Abstract
 
    This document gives general recommendations when using the Multipath
-   Extension for QUIC [QUIC-MP] with SCION
-   [I-D.rustignoli-scion-overview].  The recommendations concern
-   algorithms for congestion control and path selection, as well as
-   general considerations for API design and applications that use
-   multipath QUIC over SCION.
+   Extension for QUIC [QUIC-MP] with SCION [SCION-OVERVIEW].  The
+   recommendations concern algorithms for congestion control and path
+   selection, as well as general considerations for API design and
+   applications that use multipath QUIC over SCION.
 
    This document discusses multipathing mainly in the sense of multiple
    paths per 4-tuple (client IP/port + server IP/port).  Multipathing
@@ -217,8 +216,7 @@ Table of Contents
    otherwise not verified.
 
    *SCMP*: A signaling protocol analogous to the Internet Control
-   Message Protocol (ICMP).  This is described in
-   [I-D.dekater-scion-controlplane].
+   Message Protocol (ICMP).  This is described in [SCION-CP].
 
 2.  Conventions and Definitions
 
@@ -520,17 +518,10 @@ Table of Contents
 9.2.  Informative References
 
    [DMTP]     John, T. and T. Riechard, "Deadline Aware Streams in MP-
-              QUIC", March 2025.
-
-   [I-D.dekater-scion-controlplane]
-              de Kater, C., Frei, M., and N. Rustignoli, "SCION Control
-              Plane", 2023, <https://datatracker.ietf.org/doc/draft-
-              dekater-scion-controlplane/>.
-
-   [I-D.rustignoli-scion-overview]
-              de Kater, C., Rustignoli, N., and A. Perrig, "SCION
-              Overview", 2025, <https://datatracker.ietf.org/doc/draft-
-              dekater-panrg-scion-overview/>.
+              QUIC", Work in Progress, Internet-Draft, draft-tjohn-quic-
+              multipath-dmtp-00, 3 March 2025,
+              <https://datatracker.ietf.org/doc/html/draft-tjohn-quic-
+              multipath-dmtp-00>.
 
    [OLIA]     Khalili, R., Gast, N., Popovic, M., Upadhyay, U., and J.
               Le Boudec, "MPTCP is not pareto-optimal: performance
@@ -540,11 +531,16 @@ Table of Contents
 
    [QUIC-ACKFREQUENCY]
               Iyengar, J., Swett, I., and M. Kühlewind, "QUIC
-              Acknowledgment Frequency", 2025.
+              Acknowledgment Frequency", Work in Progress, Internet-
+              Draft, draft-ietf-quic-ack-frequency-11, 28 February 2025,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-quic-
+              ack-frequency-11>.
 
-   [QUIC-MP]  刘彦梅 (Liu, Y.), 马云飞 (Ma, Y.), De Coninck, Q., Bonaventure,
-              O., Huitema, C., and M. Kuehlewind, "Multipath Extension
-              for QUIC", 2025.
+   [QUIC-MP]  Liu, Y., Ma, Y., De Coninck, Q., Bonaventure, O., Huitema,
+              C., and M. Kühlewind, "Multipath Extension for QUIC", Work
+              in Progress, Internet-Draft, draft-ietf-quic-multipath-14,
+              23 April 2025, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-quic-multipath-14>.
 
    [RFC6356]  Raiciu, C., Handley, M., and D. Wischik, "Coupled
               Congestion Control for Multipath Transport Protocols",
@@ -554,6 +550,19 @@ Table of Contents
    [RFC9473]  Enghardt, R. and C. Krähenbühl, "A Vocabulary of Path
               Properties", RFC 9473, DOI 10.17487/RFC9473, September
               2023, <https://www.rfc-editor.org/rfc/rfc9473>.
+
+   [SCION-CP] de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
+              Plane", Work in Progress, Internet-Draft, draft-dekater-
+              scion-controlplane-08, 3 March 2025,
+              <https://datatracker.ietf.org/doc/html/draft-dekater-
+              scion-controlplane-08>.
+
+   [SCION-OVERVIEW]
+              de Kater, C., Rustignoli, N., and A. Perrig, "SCION
+              Overview", Work in Progress, Internet-Draft, draft-
+              dekater-panrg-scion-overview-06, 7 May 2024,
+              <https://datatracker.ietf.org/doc/html/draft-dekater-
+              panrg-scion-overview-06>.
 
 Acknowledgments
 
