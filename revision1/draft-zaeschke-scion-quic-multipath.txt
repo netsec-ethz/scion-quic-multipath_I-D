@@ -1,0 +1,605 @@
+
+
+
+
+PANRG                                                      J. van Bommel
+Internet-Draft                                          T. Zaeschke, Ed.
+Intended status: Informational                                ETH Zurich
+Expires: 8 November 2025                                      7 May 2025
+
+
+                Guidelines for QUIC Multipath over SCION
+               draft-zaeschke-scion-quic-multipath-latest
+
+Abstract
+
+   This document provides guidelines for using the Multipath Extension
+   for QUIC [QUIC-MP] with SCION [SCION-OVERVIEW].  The recommendations
+   concern algorithms for congestion control and path selection, as well
+   as general considerations for API design and applications that use
+   multipath QUIC over SCION.
+
+   This document discusses multipathing mainly in the sense of multiple
+   paths per 4-tuple (client IP/port + server IP/port).  Multipathing
+   over multiple interfaces is mentioned but not discussed in detail.
+
+About This Document
+
+   This note is to be removed before publishing as an RFC.
+
+   The latest revision of this draft can be found at https://netsec-
+   ethz.github.io/scion-quic-multipath_I-D/draft-zaeschke-scion-quic-
+   multipath.html.  Status information for this document may be found at
+   https://datatracker.ietf.org/doc/draft-zaeschke-scion-quic-
+   multipath/.
+
+   Discussion of this document takes place on the WG Working Group
+   mailing list (mailto:panrg@irtf.org), which is archived at
+   https://datatracker.ietf.org/rg/panrg.  Subscribe at
+   https://www.ietf.org/mailman/listinfo/panrg/.
+
+   Source for this draft and an issue tracker can be found at
+   https://github.com/netsec-ethz/scion-quic-multipath_I-D.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 8 November 2025.
+
+Copyright Notice
+
+   Copyright (c) 2025 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.
+
+Table of Contents
+
+   1.  Introduction
+     1.1.  Terminology
+   2.  Conventions and Definitions
+   3.  Multipath Scenarios
+     3.1.  Disjunctness
+     3.2.  Path Metadata
+   4.  Algorithms
+     4.1.  MTU
+     4.2.  Detecting Byzantine ASes and Links
+     4.3.  Congestion Control
+     4.4.  Path Selection
+       4.4.1.  Hybrid approach
+   5.  Applications (#apps}
+     5.1.  Data Transfer
+     5.2.  Low Latency
+     5.3.  High Availability / Redundancy
+     5.4.  Multipathing for Anonymity
+   6.  API Design consideration
+     6.1.  Multipathing for Applications
+     6.2.  Algorithm Integration
+   7.  Security Considerations
+     7.1.  Latency Polling
+     7.2.  More ?
+   8.  IANA Considerations
+   9.  References
+     9.1.  Normative References
+     9.2.  Informative References
+   Acknowledgments
+   Authors' Addresses
+
+1.  Introduction
+
+   The SCION protocol makes detailed path information available to
+   endpoints.  Besides the 4-tuple of address/IP at each endpoint, the
+   information includes a list of all traversed ASes and respective
+   links between ASes, as well as metadata about ASes and links, such as
+   MTU, bandwidth, latency, AS internal hopcount, or geolocation
+   information.
+
+   In the context of multipathing, this path information can be useful
+   for algorithms that select paths (see Section 4.4) and perform
+   congestion control (see Section 4.3).
+
+   In order to facilitate these algorithms, this documents contains
+   suggestions for API design and general use in applications.
+
+   Multipath usage profiles are categorized into data transfer
+   Section 5.1, low latency Section 5.2 and high availability /
+   redundancy Section 5.3.
+
+   One example of an application / algorithm is discussed in [DMTP].
+
+1.1.  Terminology
+
+   *Autonomous System (AS)*: An autonomous system is a network under a
+   common administrative control.  For example, the network of an
+   Internet service provider or organization can constitute an AS.
+
+   *Core AS*: Each SCION isolation domain (ISD) is administered by a set
+   of distinguished autonomous systems (ASes) called core ASes, which
+   are responsible for initiating the path discovery and path
+   construction process (in SCION called "beaconing").
+
+   *Data Plane*: The data plane (sometimes also referred to as the
+   forwarding plane) is responsible for forwarding data packets that
+   endpoints have injected into the network.  After routing information
+   has been disseminated by the control plane, packets are forwarded by
+   the data plane in accordance with such information.
+
+   *Egress/Ingress*: refers to the direction of travel.  In SCION, path
+   construction with beaconing happens in one direction, while actual
+   traffic might follow the opposite direction.  This document clarifies
+   on a case-by-case basis whether 'egress' or 'ingress' refers to the
+   direction of travel of the SCION packet or to the direction of
+   beaconing.
+
+   *Endpoint*: An endpoint is the start or the end of a SCION path, as
+   defined in [PATH-VOCABULARY].
+
+   *Hop Field (HF)*: As they traverse the network, path segment
+   construction beacons (PCBs) accumulate cryptographically protected
+   AS-level path information in the form of Hop Fields.  In the data
+   plane, Hop Fields are used for packet forwarding: they contain the
+   incoming and outgoing interface IDs of the ASes on the forwarding
+   path.
+
+   *Info Field (INF)*: Each path segment construction beacon (PCB)
+   contains a single Info field, which provides basic information about
+   the PCB.  Together with Hop Fields (HFs), these are used to create
+   forwarding paths.
+
+   *Interface Identifier (Interface ID)*: A 16-bit identifier that
+   designates a SCION interface at the end of a link connecting two
+   SCION ASes, with each interface belonging to one border router.  Hop
+   fields describe the traversal of an AS by a pair of interface IDs
+   called ConsIngress and ConsEgress, as they refer to the ingress and
+   egress interfaces in the direction of path construction (beaconing).
+   The Interface ID MUST be unique within each AS.  Interface ID 0 is
+   not a valid identifier as implementations MAY use it as the
+   "unspecified" value.
+
+   *Isolation Domain (ISD)*: In SCION, Autonomous Systems (ASes) are
+   organized into logical groups called Isolation Domains or ISDs.  Each
+   ISD consists of ASes that span an area with a uniform trust
+   environment (e.g. a common jurisdiction).  A possible model is for
+   ISDs to be formed along national boundaries or federations of
+   nations.
+
+   *Leaf AS*: An AS at the "edge" of an ISD, with no other downstream
+   ASes.
+
+   *Inter AS link*: A direct link between two external interfaces of two
+   ASes.
+
+   *Intra AS link*: A direct link between twi internal interfaces of a
+   single AS.  A direct link may contains several internal hops.
+
+   *Link*: General term that refers to "inter-AS links" and "intra-AS
+   links".
+
+   *MAC*: Message Authentication Code.  In the rest of this document,
+   "MAC" always refers to "Message Authentication Code" and never to
+   "Medium Access Control".  When "Medium Access Control address" is
+   implied, the phrase "Link Layer Address" is used.
+
+   *Path Authorization*: A requirement for the data plane is that
+   endpoints can only use paths that were constructed and authorized by
+   ASes in the control plane.  This property is called path
+   authorization.  The goal of path authorization is to prevent
+   endpoints from crafting Hop Fields (HFs) themselves, modifying HFs in
+   authorized path segments, or combining HFs of different path
+   segments.
+
+   *Path*: Besides the 4-tuple of address/IP at each endpoint, the
+   information includes a list of all traversed ASes and respective
+   links between ASes, as well as metadata about ASes and links, such as
+   MTU, bandwidth, latency, AS internal hopcount, or geolocation
+   information.
+
+   *Path metadata*: Path metadata is additional data that is available
+   to clients when they request a selection of paths to a destination.
+   Path metadata is authenticated wrt to owner of each link, but
+   otherwise not verified.
+
+   *SCMP*: A signaling protocol analogous to the Internet Control
+   Message Protocol (ICMP).  This is described in [SCION-CP].
+
+2.  Conventions and Definitions
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+3.  Multipath Scenarios
+
+   This document distinguishes the following usage scenarios:
+
+   *  High bandwidth (HBW): Optimizing bandwidth by parallel transfer on
+      multiple paths.
+
+   *  Minimum latency (MinLat): Optimizing latency by regularly checking
+      multiple paths and using the one with the lowest latency.
+
+   *  Minimum latency through redundancy (MinLatRed): Optimizing latency
+      by parallel transmission on multiple path.
+
+   *  Failure tolerance (FT): Optimizing for failure tolerance by
+      parallel transfer on multiple paths.
+
+   The discussions of these scenarios are written with multiple paths
+   per interface in mind (i.e. multiple paths per 4-tuple).  However,
+   they can usually be generalized to multipathing over multiple
+   interfaces.
+
+   *TODO* "Usually" should be replaced with "Unless noted otherwise" or
+   possibly "cannot be generalized, unless noted otherwise".  Let's see.
+
+3.1.  Disjunctness
+
+   For FT, paths are only interesting if they are disjunct.  For HWB,
+   paths should mostly be disjunct, but overlap is acceptable if the
+   overlapping links have high BW available.
+
+   For MinLat and MinLatRed, path disjunctness is mostly irrelevant.
+
+   *TODO* Discuss link level, router level and AS level path
+   disjunctness.
+
+3.2.  Path Metadata
+
+   SCION paths have associated metadata with latency and bandwidth
+   information.  The values represent best case values and tend to be
+   updated rarely, for example once a day.
+
+   Path metadata may also be incomplete, ASes are not required to
+   provide or regularly update the data.
+
+   Users of path metadata must keep in mind that the data is mostly not
+   verifiable but depends on the diligence and trustworthiness of the
+   link owners.  However, once disseminated by a link owner, the path
+   metadata is authenticated an cannot be changed by other parties.
+
+   Due to the inherent unreliability, users should implement sanity
+   checks the verify that a link holds up to the promised capabilities.
+
+4.  Algorithms
+
+4.1.  MTU
+
+   SCION provides MTU information for every AS-level link on a path.
+
+4.2.  Detecting Byzantine ASes and Links
+
+   By comparing performance (latency, bandwidth, packet drop rate, link
+   errors, MTU) of multiple paths, we can (with some accuracy) detect
+   unreliable links and ASes.  These can be blacklisted and excluded
+   from further path selection, or possibly kept as backup paths for
+   emergencies.
+
+   *TODO* Add reference to research.
+
+   *TODO* Move to Path Metadata section?
+
+4.3.  Congestion Control
+
+   General recommendations for congestion control are defined in
+   Congestion Control Principles [CC-PRINCIPLES].  Congestion control
+   for QUIC is discussed in QUIC Loss Detection and Congestion Control
+   [QUIC-RECOVERY].  More generally, congestion control for UDP is
+   discussed in the UDP Usage Guidelines [UDP-GUIDELINES].  UDP MTU
+   discovery is further developed in [MTU-DISCOVERY].
+
+   Multipath congestion control is also discussed for TCP in
+   [CC-MULTIPATH-TCP].  They state that "One of the prominent problems
+   is that running existing algorithms such as standard TCP
+   independently on each path would give the multipath flow more than
+   its fair share at a bottleneck link traversed by more than one of its
+   subflows.".  This can be avoided in SCION through link-level analysis
+   of flows and selecting paths that do not create or share a bottleneck
+   link.  This avoids the need for Coupled Congestion Control.
+
+   The second point in [CC-MULTIPATH-TCP] is "Further, it is desirable
+   that a source with multiple paths available will transfer more
+   traffic using the least congested of the paths, achieving a property
+   called "resource pooling" where a bundle of links effectively behaves
+   like one shared link with bigger capacity.".  This can be achieved
+   with a simple load distribution algorithm.
+
+   *TODO* Differentiate "load distribution" from "path selection".
+
+   There are several congestion control algorithms proposed in
+   literature, e.g. LIA, OLIA, BALIA and RSF.  These combine congestion
+   control with path selection algorithms.  For simplicity, we suggest
+   separating concerns in terms of congestion control and path
+   selection.  This allows us to better tailor the solutions to the
+   different scenarios discussed in (SCENARIOS).  The proposition is to
+   use standard congestion control per path (LIST HERE), tailored for
+   each use case (max bandwidth / low latency) and on top of that
+   separately use path selection (load distribution) algorithms.
+
+   *TODO* Terminology: path selection vs load distribution?
+
+4.4.  Path Selection
+
+4.4.1.  Hybrid approach
+
+   A hybrid approach could start with using low latency paths.  If the
+   connection appears to be long lasting (e.g. at least 1 second
+   duration and 1MB of traffic) it could start adding additional paths
+   and see whether the traffic increases.  Additional paths can be
+   chosen following the guidelines discussed in Section 5.1.
+
+5.  Applications (#apps}
+
+5.1.  Data Transfer
+
+   The aim of a data transfer application is to maximize throughput,
+   regardless of latency, jitter or packet loss.
+
+   The solution here is to identify multiple paths that are either
+   disjunct, or where the non-disjunct links allow higher throughput
+   than other links on the same paths (i.e. high enough to prevent the
+   link from being a bottleneck).
+
+5.2.  Low Latency
+
+   There are multiple approaches to transfer traffic with the lowest
+   possible latency.  For example:
+
+   1) With separate latency measurements.  Latency measurements run in
+   parallel to data traffic.  This allows performing measurements at a
+   different frequency and over many more paths than payload traffic.
+   This can be useful if payload packets are large and sending them
+   redundantly over multiple links is to costly or considered to
+   invasive with respect to other network users.  Low frequency
+   measurements may be combined with traffic prediction algorithms in
+   order to identify best paths between measurements.  Due to low
+   bandwidth overhead, this may be the most cost efficient approach.  It
+   may be possible to do this with SCION SCMP packets, either with ECHO
+   packets or possibly with traceroute if the AS internal latency of the
+   destination AS is negligible (because it may be small or it may be
+   almost the same for all border routers that are on interesting
+   paths).
+
+   2) With implicit measurements through QUIC ACK frames.  Section 13.2
+   of [QUIC-TRANSPORT] recommends sending an ACK frame after receiving
+   at least two ack-eliciting packets or after a delay.  If the
+   application sends data on multiple paths in parallel, this may be
+   sufficient for some low latency applications.  [QUIC-ACKFREQUENCY]
+   proposes an extension that allows more control over how often and
+   when ACK-FRAMES are sent.  This approach can be useful if
+   [QUIC-ACKFREQUENCY] becomes available or if the ACK behavior of the
+   standard QUIC server is sufficient.
+
+   3) With implicit measurements through application specific ACKs.
+   This is useful if the application can sensibly be adapted to have its
+   own ACK protocol.
+
+   Network analysis can be used to identify, and subsequently avoid,
+   links with high or unreliable latency.
+
+5.3.  High Availability / Redundancy
+
+   An approach to high availability is to send data on multiple paths in
+   parallel.  A tradeoff here is that sending on all available paths is
+   probably infeasible.  Depending on cost factors, and to avoid
+   overloading the network, any algorithms should keep redundant sending
+   to a minimum.
+
+   Path analysis can be used to identify multiple paths that are mostly
+   or completely (using multiple interfaces) disjunct, but that still
+   satisfy latency, bandwidth, and other constraints.
+
+   Additional polling with SCMP or with additional QUIC stream may be
+   used to regularly measure packet drop rates or latency variations.
+
+5.4.  Multipathing for Anonymity
+
+   Multipathing could also be used for anonymity, e.g. by switching
+   paths at random intervals.  With a continuous data stream, care
+   should be taken that new paths are not just switched over from one to
+   the next, otherwise traffic characteristics may be used to identify
+   paths.  For example, paths could be identified by packet frequency,
+   packet burst frequency or general bandwidth.  For continuous stream,
+   just moving one stream from one path to another may expose stream
+   identity.
+
+   As mitigation, a sender could start sending on a new path for a while
+   before stopping sending on the old path.  The sender could send
+   redundant data or random data at a suitable bandwidth.
+
+   *TODO* Should we really recommend bandwidth usage.
+
+   *TODO* Is this SCION specific?  SCION allows for choosing paths based
+   on trusted or untrusted ASes, but this is not specific to
+   multipathing...
+
+6.  API Design consideration
+
+6.1.  Multipathing for Applications
+
+   Applications will have very different requirements on a multipath
+   API.  A comprehensive API should therefore allow for mostly automatic
+   selection of Section 4.4 Path Selection and Congestion Control
+   algorithms Section 4.3.
+
+   At the same time it should give access to SCION paths and their
+   metadata to allow implementation of custom algorithms.
+
+6.2.  Algorithm Integration
+
+   Several proposals in Section 5.2 and Section 5.3 suggest sending data
+   redundantly in parallel on multiple paths.  Similarly, some proposals
+   suggest sending packets purely for latency measurements.
+
+   Congestion control algorithms and path selection algorithms should
+   try to hide parallel transfer and measurement streams from the
+   application.  This may also depend on API designer to provide such
+   transparent multipathing with additional code on the application
+   level.
+
+7.  Security Considerations
+
+   This document has no security considerations.
+
+   May sending data on multiple paths in parallel, or at regular
+   intervals, expose information about data streams?  E.g. can streams
+   be associated with users such that a change in connection ID does not
+   help anonymity?
+
+7.1.  Latency Polling
+
+   If a user sends latency measurements on 10 paths in parallel every 5
+   seconds, then these 10 paths can (with some probability) be
+   attributed to the same user.  Solution: do not send all probes at the
+   same time.  To prevent patterns (1. after 0.1s, 2. after 0.3s, 3.
+   after 0.35s, ...) the interval between packets on each path should
+   also vary.  Additionally, the number of polled paths should vary.
+
+7.2.  More ?
+
+   See Section 5.4.
+
+   *TODO*
+
+8.  IANA Considerations
+
+   This document has no IANA actions.
+
+9.  References
+
+9.1.  Normative References
+
+   [CC-PRINCIPLES]
+              Floyd, S., "Congestion Control Principles", BCP 41,
+              RFC 2914, DOI 10.17487/RFC2914, September 2000,
+              <https://www.rfc-editor.org/rfc/rfc2914>.
+
+   [DCCP-UDPENCAP]
+              Phelan, T., Fairhurst, G., and C. Perkins, "DCCP-UDP: A
+              Datagram Congestion Control Protocol UDP Encapsulation for
+              NAT Traversal", RFC 6773, DOI 10.17487/RFC6773, November
+              2012, <https://www.rfc-editor.org/rfc/rfc6773>.
+
+   [MPTCP-ARCHITECTURE]
+              Ford, A., Raiciu, C., Handley, M., Barre, S., and J.
+              Iyengar, "Architectural Guidelines for Multipath TCP
+              Development", RFC 6182, DOI 10.17487/RFC6182, March 2011,
+              <https://www.rfc-editor.org/rfc/rfc6182>.
+
+   [MTU-DISCOVERY]
+              Fairhurst, G., Jones, T., Tüxen, M., Rüngeler, I., and T.
+              Völker, "Packetization Layer Path MTU Discovery for
+              Datagram Transports", RFC 8899, DOI 10.17487/RFC8899,
+              September 2020, <https://www.rfc-editor.org/rfc/rfc8899>.
+
+   [QUIC-RECOVERY]
+              Iyengar, J., Ed. and I. Swett, Ed., "QUIC Loss Detection
+              and Congestion Control", RFC 9002, DOI 10.17487/RFC9002,
+              May 2021, <https://www.rfc-editor.org/rfc/rfc9002>.
+
+   [QUIC-TLS] Thomson, M., Ed. and S. Turner, Ed., "Using TLS to Secure
+              QUIC", RFC 9001, DOI 10.17487/RFC9001, May 2021,
+              <https://www.rfc-editor.org/rfc/rfc9001>.
+
+   [QUIC-TRANSPORT]
+              Iyengar, J., Ed. and M. Thomson, Ed., "QUIC: A UDP-Based
+              Multiplexed and Secure Transport", RFC 9000,
+              DOI 10.17487/RFC9000, May 2021,
+              <https://www.rfc-editor.org/rfc/rfc9000>.
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/rfc/rfc2119>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+   [UDP-GUIDELINES]
+              Eggert, L., Fairhurst, G., and G. Shepherd, "UDP Usage
+              Guidelines", BCP 145, RFC 8085, DOI 10.17487/RFC8085,
+              March 2017, <https://www.rfc-editor.org/rfc/rfc8085>.
+
+9.2.  Informative References
+
+   [CC-MULTIPATH-TCP]
+              Raiciu, C., Handley, M., and D. Wischik, "Coupled
+              Congestion Control for Multipath Transport Protocols",
+              RFC 6356, DOI 10.17487/RFC6356, October 2011,
+              <https://www.rfc-editor.org/rfc/rfc6356>.
+
+   [DMTP]     John, T. and T. Riechard, "Deadline Aware Streams in MP-
+              QUIC", Work in Progress, Internet-Draft, draft-tjohn-quic-
+              multipath-dmtp-00, 3 March 2025,
+              <https://datatracker.ietf.org/doc/html/draft-tjohn-quic-
+              multipath-dmtp-00>.
+
+   [OLIA]     Khalili, R., Gast, N., Popovic, M., Upadhyay, U., and J.
+              Le Boudec, "MPTCP is not pareto-optimal: performance
+              issues and a possible solution", Proceedings of the 8th
+              international conference on Emerging networking
+              experiments and technologies, ACM , 2012.
+
+   [PATH-VOCABULARY]
+              Enghardt, R. and C. Krähenbühl, "A Vocabulary of Path
+              Properties", RFC 9473, DOI 10.17487/RFC9473, September
+              2023, <https://www.rfc-editor.org/rfc/rfc9473>.
+
+   [QUIC-ACKFREQUENCY]
+              Iyengar, J., Swett, I., and M. Kühlewind, "QUIC
+              Acknowledgment Frequency", Work in Progress, Internet-
+              Draft, draft-ietf-quic-ack-frequency-11, 28 February 2025,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-quic-
+              ack-frequency-11>.
+
+   [QUIC-MP]  Liu, Y., Ma, Y., De Coninck, Q., Bonaventure, O., Huitema,
+              C., and M. Kühlewind, "Multipath Extension for QUIC", Work
+              in Progress, Internet-Draft, draft-ietf-quic-multipath-14,
+              23 April 2025, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-quic-multipath-14>.
+
+   [SCION-CP] de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
+              Plane", Work in Progress, Internet-Draft, draft-dekater-
+              scion-controlplane-08, 3 March 2025,
+              <https://datatracker.ietf.org/doc/html/draft-dekater-
+              scion-controlplane-08>.
+
+   [SCION-OVERVIEW]
+              de Kater, C., Rustignoli, N., and A. Perrig, "SCION
+              Overview", Work in Progress, Internet-Draft, draft-
+              dekater-panrg-scion-overview-06, 7 May 2024,
+              <https://datatracker.ietf.org/doc/html/draft-dekater-
+              panrg-scion-overview-06>.
+
+Acknowledgments
+
+   TODO acknowledge.
+
+Authors' Addresses
+
+   Jelte van Bommel
+   ETH Zurich
+   Email: jelte.vanbommel@inf.ethz.ch
+
+
+   Tilmann Zaeschke (editor)
+   ETH Zurich
+   Email: tilmann.zaeschke@inf.ethz.ch
