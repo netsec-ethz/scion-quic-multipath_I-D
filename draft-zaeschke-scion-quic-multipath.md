@@ -470,6 +470,26 @@ satisfy latency, bandwidth, and other constraints.
 Additional polling with SCMP or with additikonal QUIC stream may be
 used to regularly measure packet drop rates or latency variations.
 
+## Multipathing for Anonymity {#anon}
+
+Multipathing could also be used for anonymity, e.g. by switching
+paths at random intervalls.
+With a continuous datastream, care should be taken that new
+paths are not just switched over from one to the next, otherwise
+traffic characteristics may be used to identify paths.
+For example, paths could be identified by packet frequency, packet
+burst frequency or general bandwidth.
+For continuous stream, just moving one stream from one path to another
+may expose stream identity.
+
+As mitigation, a sender could start sending on a new path for a
+while before stopping sending on the old path. The sender could send
+redundant data or random data at a suitable bandwidth.
+
+**TODO** Should we really recommend bandwidth usage.
+**TODO** Is this SCION specific?
+
+
 
 # API Design consideration
 
@@ -508,13 +528,17 @@ not help anonymity?
 ## Latency Polling
 
 If a user sends latency measurements on 10 paths in parallel
-every 50 seconds, then these 10 paths can (with some probablility)
-be attribuyted to the same user.
+every 5 seconds, then these 10 paths can (with some probablility)
+be attributed to the same user.
 Solution: do not send all probes at the same time.
 To prevent patterns (1. after 0.1s, 2. after 0.3s, 3. after 0.35s, ...)
-the intervall should not be fixed.
+the intervall between packets on each path should also vary.
+Additionally, the number of polled paths should vary.
 
 ## More ?
+
+See {{#anon}}.
+
 **TODO**
 
 # IANA Considerations
