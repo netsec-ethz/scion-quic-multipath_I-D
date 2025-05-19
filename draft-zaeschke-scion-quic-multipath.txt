@@ -148,7 +148,7 @@ Table of Contents
    beaconing.
 
    *Endpoint*: An endpoint is the start or the end of a SCION path, as
-   defined in [RFC9473].
+   defined in [PATH-VOCABULARY].
 
    *Hop Field (HF)*: As they traverse the network, path segment
    construction beacons (PCBs) accumulate cryptographically protected
@@ -296,13 +296,14 @@ Table of Contents
 4.3.  Congestion Control
 
    General recommendations for congestion control are defined in
-   Congestion Control Principles [RFC2914].  Congestion control for QUIC
-   is discussed in QUIC Loss Detection and Congestion Control
+   Congestion Control Principles [CC-PRINCIPLES].  Congestion control
+   for QUIC is discussed in QUIC Loss Detection and Congestion Control
    [QUIC-RECOVERY].  More generally, congestion control for UDP is
-   discussed in the UDP Usage Guidelines [RFC8085].  UDUp MTU discovery
-   is further developed in [RFC8899].
+   discussed in the UDP Usage Guidelines [UDP-GUIDELINES].  UDP MTU
+   discovery is further developed in [MTU-DISCOVERY].
 
-   Congestion control is also discussed for TCP in [RFC6356].
+   Multipath congestion control is also discussed for TCP in
+   [CC-MULTIPATH-TCP].
 
    There are several congestion control algorithms proposed in
    literature, e.g. LIA, OLIA, BALIA and RSF.  These combine congestion
@@ -466,6 +467,11 @@ Table of Contents
 
 9.1.  Normative References
 
+   [CC-PRINCIPLES]
+              Floyd, S., "Congestion Control Principles", BCP 41,
+              RFC 2914, DOI 10.17487/RFC2914, September 2000,
+              <https://www.rfc-editor.org/rfc/rfc2914>.
+
    [DCCP-UDPENCAP]
               Phelan, T., Fairhurst, G., and C. Perkins, "DCCP-UDP: A
               Datagram Congestion Control Protocol UDP Encapsulation for
@@ -477,6 +483,12 @@ Table of Contents
               Iyengar, "Architectural Guidelines for Multipath TCP
               Development", RFC 6182, DOI 10.17487/RFC6182, March 2011,
               <https://www.rfc-editor.org/rfc/rfc6182>.
+
+   [MTU-DISCOVERY]
+              Fairhurst, G., Jones, T., Tüxen, M., Rüngeler, I., and T.
+              Völker, "Packetization Layer Path MTU Discovery for
+              Datagram Transports", RFC 8899, DOI 10.17487/RFC8899,
+              September 2020, <https://www.rfc-editor.org/rfc/rfc8899>.
 
    [QUIC-RECOVERY]
               Iyengar, J., Ed. and I. Swett, Ed., "QUIC Loss Detection
@@ -498,24 +510,22 @@ Table of Contents
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/rfc/rfc2119>.
 
-   [RFC2914]  Floyd, S., "Congestion Control Principles", BCP 41,
-              RFC 2914, DOI 10.17487/RFC2914, September 2000,
-              <https://www.rfc-editor.org/rfc/rfc2914>.
-
-   [RFC8085]  Eggert, L., Fairhurst, G., and G. Shepherd, "UDP Usage
-              Guidelines", BCP 145, RFC 8085, DOI 10.17487/RFC8085,
-              March 2017, <https://www.rfc-editor.org/rfc/rfc8085>.
-
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
 
-   [RFC8899]  Fairhurst, G., Jones, T., Tüxen, M., Rüngeler, I., and T.
-              Völker, "Packetization Layer Path MTU Discovery for
-              Datagram Transports", RFC 8899, DOI 10.17487/RFC8899,
-              September 2020, <https://www.rfc-editor.org/rfc/rfc8899>.
+   [UDP-GUIDELINES]
+              Eggert, L., Fairhurst, G., and G. Shepherd, "UDP Usage
+              Guidelines", BCP 145, RFC 8085, DOI 10.17487/RFC8085,
+              March 2017, <https://www.rfc-editor.org/rfc/rfc8085>.
 
 9.2.  Informative References
+
+   [CC-MULTIPATH-TCP]
+              Raiciu, C., Handley, M., and D. Wischik, "Coupled
+              Congestion Control for Multipath Transport Protocols",
+              RFC 6356, DOI 10.17487/RFC6356, October 2011,
+              <https://www.rfc-editor.org/rfc/rfc6356>.
 
    [DMTP]     John, T. and T. Riechard, "Deadline Aware Streams in MP-
               QUIC", Work in Progress, Internet-Draft, draft-tjohn-quic-
@@ -529,6 +539,11 @@ Table of Contents
               international conference on Emerging networking
               experiments and technologies, ACM , 2012.
 
+   [PATH-VOCABULARY]
+              Enghardt, R. and C. Krähenbühl, "A Vocabulary of Path
+              Properties", RFC 9473, DOI 10.17487/RFC9473, September
+              2023, <https://www.rfc-editor.org/rfc/rfc9473>.
+
    [QUIC-ACKFREQUENCY]
               Iyengar, J., Swett, I., and M. Kühlewind, "QUIC
               Acknowledgment Frequency", Work in Progress, Internet-
@@ -541,15 +556,6 @@ Table of Contents
               in Progress, Internet-Draft, draft-ietf-quic-multipath-14,
               23 April 2025, <https://datatracker.ietf.org/doc/html/
               draft-ietf-quic-multipath-14>.
-
-   [RFC6356]  Raiciu, C., Handley, M., and D. Wischik, "Coupled
-              Congestion Control for Multipath Transport Protocols",
-              RFC 6356, DOI 10.17487/RFC6356, October 2011,
-              <https://www.rfc-editor.org/rfc/rfc6356>.
-
-   [RFC9473]  Enghardt, R. and C. Krähenbühl, "A Vocabulary of Path
-              Properties", RFC 9473, DOI 10.17487/RFC9473, September
-              2023, <https://www.rfc-editor.org/rfc/rfc9473>.
 
    [SCION-CP] de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
               Plane", Work in Progress, Internet-Draft, draft-dekater-

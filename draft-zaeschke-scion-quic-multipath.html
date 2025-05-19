@@ -1316,7 +1316,7 @@ clarifies on a case-by-case basis whether 'egress' or 'ingress'
 refers to the direction of travel of the SCION packet or to the
 direction of beaconing.<a href="#section-1.1-4" class="pilcrow">¶</a></p>
 <p id="section-1.1-5"><strong>Endpoint</strong>: An endpoint is the start or the end of a SCION path,
-as defined in <span>[<a href="#RFC9473" class="cite xref">RFC9473</a>]</span>.<a href="#section-1.1-5" class="pilcrow">¶</a></p>
+as defined in <span>[<a href="#PATH-VOCABULARY" class="cite xref">PATH-VOCABULARY</a>]</span>.<a href="#section-1.1-5" class="pilcrow">¶</a></p>
 <p id="section-1.1-6"><strong>Hop Field (HF)</strong>: As they traverse the network, path segment
 construction beacons (PCBs) accumulate cryptographically protected
 AS-level path information in the form of Hop Fields.  In the data
@@ -1479,13 +1479,14 @@ or possibly kept as backup paths for emergencies.<a href="#section-4.2-1" class=
 <a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-congestion-control" class="section-name selfRef">Congestion Control</a>
         </h3>
 <p id="section-4.3-1">General recommendations for congestion control are defined in
-Congestion Control Principles <span>[<a href="#RFC2914" class="cite xref">RFC2914</a>]</span>.
+Congestion Control Principles <span>[<a href="#CC-PRINCIPLES" class="cite xref">CC-PRINCIPLES</a>]</span>.
 Congestion control for QUIC is discussed in
 QUIC Loss Detection and Congestion Control <span>[<a href="#QUIC-RECOVERY" class="cite xref">QUIC-RECOVERY</a>]</span>.
 More generally, congestion control for UDP is discussed in the
-UDP Usage Guidelines <span>[<a href="#RFC8085" class="cite xref">RFC8085</a>]</span>. UDUp MTU discovery is further
-developed in <span>[<a href="#RFC8899" class="cite xref">RFC8899</a>]</span>.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
-<p id="section-4.3-2">Congestion control is also discussed for TCP in <span>[<a href="#RFC6356" class="cite xref">RFC6356</a>]</span>.<a href="#section-4.3-2" class="pilcrow">¶</a></p>
+UDP Usage Guidelines <span>[<a href="#UDP-GUIDELINES" class="cite xref">UDP-GUIDELINES</a>]</span>. UDP MTU discovery is further
+developed in <span>[<a href="#MTU-DISCOVERY" class="cite xref">MTU-DISCOVERY</a>]</span>.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<p id="section-4.3-2">Multipath congestion control is also discussed for TCP in
+<span>[<a href="#CC-MULTIPATH-TCP" class="cite xref">CC-MULTIPATH-TCP</a>]</span>.<a href="#section-4.3-2" class="pilcrow">¶</a></p>
 <p id="section-4.3-3">There are several congestion control algorithms proposed in literature,
 e.g. LIA, OLIA, BALIA and RSF.  These combine congestion control with
 path selection algorithms.
@@ -1709,6 +1710,10 @@ Additionally, the number of polled paths should vary.<a href="#section-7.1-1" cl
 <a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
+<dt id="CC-PRINCIPLES">[CC-PRINCIPLES]</dt>
+        <dd>
+<span class="refAuthor">Floyd, S.</span>, <span class="refTitle">"Congestion Control Principles"</span>, <span class="seriesInfo">BCP 41</span>, <span class="seriesInfo">RFC 2914</span>, <span class="seriesInfo">DOI 10.17487/RFC2914</span>, <time datetime="2000-09" class="refDate">September 2000</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2914">https://www.rfc-editor.org/rfc/rfc2914</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="DCCP-UDPENCAP">[DCCP-UDPENCAP]</dt>
         <dd>
 <span class="refAuthor">Phelan, T.</span>, <span class="refAuthor">Fairhurst, G.</span>, and <span class="refAuthor">C. Perkins</span>, <span class="refTitle">"DCCP-UDP: A Datagram Congestion Control Protocol UDP Encapsulation for NAT Traversal"</span>, <span class="seriesInfo">RFC 6773</span>, <span class="seriesInfo">DOI 10.17487/RFC6773</span>, <time datetime="2012-11" class="refDate">November 2012</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6773">https://www.rfc-editor.org/rfc/rfc6773</a>&gt;</span>. </dd>
@@ -1716,6 +1721,10 @@ Additionally, the number of polled paths should vary.<a href="#section-7.1-1" cl
 <dt id="MPTCP-ARCHITECTURE">[MPTCP-ARCHITECTURE]</dt>
         <dd>
 <span class="refAuthor">Ford, A.</span>, <span class="refAuthor">Raiciu, C.</span>, <span class="refAuthor">Handley, M.</span>, <span class="refAuthor">Barre, S.</span>, and <span class="refAuthor">J. Iyengar</span>, <span class="refTitle">"Architectural Guidelines for Multipath TCP Development"</span>, <span class="seriesInfo">RFC 6182</span>, <span class="seriesInfo">DOI 10.17487/RFC6182</span>, <time datetime="2011-03" class="refDate">March 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6182">https://www.rfc-editor.org/rfc/rfc6182</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="MTU-DISCOVERY">[MTU-DISCOVERY]</dt>
+        <dd>
+<span class="refAuthor">Fairhurst, G.</span>, <span class="refAuthor">Jones, T.</span>, <span class="refAuthor">Tüxen, M.</span>, <span class="refAuthor">Rüngeler, I.</span>, and <span class="refAuthor">T. Völker</span>, <span class="refTitle">"Packetization Layer Path MTU Discovery for Datagram Transports"</span>, <span class="seriesInfo">RFC 8899</span>, <span class="seriesInfo">DOI 10.17487/RFC8899</span>, <time datetime="2020-09" class="refDate">September 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8899">https://www.rfc-editor.org/rfc/rfc8899</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="QUIC-RECOVERY">[QUIC-RECOVERY]</dt>
         <dd>
@@ -1733,21 +1742,13 @@ Additionally, the number of polled paths should vary.<a href="#section-7.1-1" cl
         <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC2914">[RFC2914]</dt>
-        <dd>
-<span class="refAuthor">Floyd, S.</span>, <span class="refTitle">"Congestion Control Principles"</span>, <span class="seriesInfo">BCP 41</span>, <span class="seriesInfo">RFC 2914</span>, <span class="seriesInfo">DOI 10.17487/RFC2914</span>, <time datetime="2000-09" class="refDate">September 2000</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2914">https://www.rfc-editor.org/rfc/rfc2914</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC8085">[RFC8085]</dt>
-        <dd>
-<span class="refAuthor">Eggert, L.</span>, <span class="refAuthor">Fairhurst, G.</span>, and <span class="refAuthor">G. Shepherd</span>, <span class="refTitle">"UDP Usage Guidelines"</span>, <span class="seriesInfo">BCP 145</span>, <span class="seriesInfo">RFC 8085</span>, <span class="seriesInfo">DOI 10.17487/RFC8085</span>, <time datetime="2017-03" class="refDate">March 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8085">https://www.rfc-editor.org/rfc/rfc8085</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
         <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC8899">[RFC8899]</dt>
+<dt id="UDP-GUIDELINES">[UDP-GUIDELINES]</dt>
       <dd>
-<span class="refAuthor">Fairhurst, G.</span>, <span class="refAuthor">Jones, T.</span>, <span class="refAuthor">Tüxen, M.</span>, <span class="refAuthor">Rüngeler, I.</span>, and <span class="refAuthor">T. Völker</span>, <span class="refTitle">"Packetization Layer Path MTU Discovery for Datagram Transports"</span>, <span class="seriesInfo">RFC 8899</span>, <span class="seriesInfo">DOI 10.17487/RFC8899</span>, <time datetime="2020-09" class="refDate">September 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8899">https://www.rfc-editor.org/rfc/rfc8899</a>&gt;</span>. </dd>
+<span class="refAuthor">Eggert, L.</span>, <span class="refAuthor">Fairhurst, G.</span>, and <span class="refAuthor">G. Shepherd</span>, <span class="refTitle">"UDP Usage Guidelines"</span>, <span class="seriesInfo">BCP 145</span>, <span class="seriesInfo">RFC 8085</span>, <span class="seriesInfo">DOI 10.17487/RFC8085</span>, <time datetime="2017-03" class="refDate">March 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8085">https://www.rfc-editor.org/rfc/rfc8085</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -1758,6 +1759,10 @@ Additionally, the number of polled paths should vary.<a href="#section-7.1-1" cl
 <a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
+<dt id="CC-MULTIPATH-TCP">[CC-MULTIPATH-TCP]</dt>
+        <dd>
+<span class="refAuthor">Raiciu, C.</span>, <span class="refAuthor">Handley, M.</span>, and <span class="refAuthor">D. Wischik</span>, <span class="refTitle">"Coupled Congestion Control for Multipath Transport Protocols"</span>, <span class="seriesInfo">RFC 6356</span>, <span class="seriesInfo">DOI 10.17487/RFC6356</span>, <time datetime="2011-10" class="refDate">October 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6356">https://www.rfc-editor.org/rfc/rfc6356</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="DMTP">[DMTP]</dt>
         <dd>
 <span class="refAuthor">John, T.</span> and <span class="refAuthor">T. Riechard</span>, <span class="refTitle">"Deadline Aware Streams in MP-QUIC"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-tjohn-quic-multipath-dmtp-00</span>, <time datetime="2025-03-03" class="refDate">3 March 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-tjohn-quic-multipath-dmtp-00">https://datatracker.ietf.org/doc/html/draft-tjohn-quic-multipath-dmtp-00</a>&gt;</span>. </dd>
@@ -1766,6 +1771,10 @@ Additionally, the number of polled paths should vary.<a href="#section-7.1-1" cl
         <dd>
 <span class="refAuthor">Khalili, R.</span>, <span class="refAuthor">Gast, N.</span>, <span class="refAuthor">Popovic, M.</span>, <span class="refAuthor">Upadhyay, U.</span>, and <span class="refAuthor">J. Le Boudec</span>, <span class="refTitle">"MPTCP is not pareto-optimal: performance issues and a possible solution"</span>, <span class="seriesInfo">Proceedings of the 8th international conference on Emerging networking experiments and technologies, ACM </span>, <time datetime="2012" class="refDate">2012</time>. </dd>
 <dd class="break"></dd>
+<dt id="PATH-VOCABULARY">[PATH-VOCABULARY]</dt>
+        <dd>
+<span class="refAuthor">Enghardt, R.</span> and <span class="refAuthor">C. Krähenbühl</span>, <span class="refTitle">"A Vocabulary of Path Properties"</span>, <span class="seriesInfo">RFC 9473</span>, <span class="seriesInfo">DOI 10.17487/RFC9473</span>, <time datetime="2023-09" class="refDate">September 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9473">https://www.rfc-editor.org/rfc/rfc9473</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="QUIC-ACKFREQUENCY">[QUIC-ACKFREQUENCY]</dt>
         <dd>
 <span class="refAuthor">Iyengar, J.</span>, <span class="refAuthor">Swett, I.</span>, and <span class="refAuthor">M. Kühlewind</span>, <span class="refTitle">"QUIC Acknowledgment Frequency"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-quic-ack-frequency-11</span>, <time datetime="2025-02-28" class="refDate">28 February 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-ack-frequency-11">https://datatracker.ietf.org/doc/html/draft-ietf-quic-ack-frequency-11</a>&gt;</span>. </dd>
@@ -1773,14 +1782,6 @@ Additionally, the number of polled paths should vary.<a href="#section-7.1-1" cl
 <dt id="QUIC-MP">[QUIC-MP]</dt>
         <dd>
 <span class="refAuthor">Liu, Y.</span>, <span class="refAuthor">Ma, Y.</span>, <span class="refAuthor">De Coninck, Q.</span>, <span class="refAuthor">Bonaventure, O.</span>, <span class="refAuthor">Huitema, C.</span>, and <span class="refAuthor">M. Kühlewind</span>, <span class="refTitle">"Multipath Extension for QUIC"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-quic-multipath-14</span>, <time datetime="2025-04-23" class="refDate">23 April 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14">https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC6356">[RFC6356]</dt>
-        <dd>
-<span class="refAuthor">Raiciu, C.</span>, <span class="refAuthor">Handley, M.</span>, and <span class="refAuthor">D. Wischik</span>, <span class="refTitle">"Coupled Congestion Control for Multipath Transport Protocols"</span>, <span class="seriesInfo">RFC 6356</span>, <span class="seriesInfo">DOI 10.17487/RFC6356</span>, <time datetime="2011-10" class="refDate">October 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6356">https://www.rfc-editor.org/rfc/rfc6356</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC9473">[RFC9473]</dt>
-        <dd>
-<span class="refAuthor">Enghardt, R.</span> and <span class="refAuthor">C. Krähenbühl</span>, <span class="refTitle">"A Vocabulary of Path Properties"</span>, <span class="seriesInfo">RFC 9473</span>, <span class="seriesInfo">DOI 10.17487/RFC9473</span>, <time datetime="2023-09" class="refDate">September 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9473">https://www.rfc-editor.org/rfc/rfc9473</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="SCION-CP">[SCION-CP]</dt>
         <dd>
