@@ -1488,7 +1488,7 @@ UDP Usage Guidelines <span>[<a href="#RFC8085" class="cite xref">RFC8085</a>]</s
 developed in <span>[<a href="#RFC8899" class="cite xref">RFC8899</a>]</span>.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
 <p id="section-4.3-2">Congestion control is also discussed for TCP in <span>[<a href="#RFC6356" class="cite xref">RFC6356</a>]</span>.<a href="#section-4.3-2" class="pilcrow">¶</a></p>
 <p id="section-4.3-3">There are several congestion control algorithms proposed in literature,
-e.g. LIA, OLIA, BALIA and RSF.  These cobine congestion control with
+e.g. LIA, OLIA, BALIA and RSF.  These combine congestion control with
 path selection algorithms.
 For simplicity, we suggest separating concerns in terms of
 congestion control and path selection. This allows us to better
@@ -1613,8 +1613,10 @@ may expose stream identity.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
 <p id="section-5.4-2">As mitigation, a sender could start sending on a new path for a
 while before stopping sending on the old path. The sender could send
 redundant data or random data at a suitable bandwidth.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
-<p id="section-5.4-3"><strong>TODO</strong> Should we really recommend bandwidth usage.
-<strong>TODO</strong> Is this SCION specific?<a href="#section-5.4-3" class="pilcrow">¶</a></p>
+<p id="section-5.4-3"><strong>TODO</strong> Should we really recommend bandwidth usage.<a href="#section-5.4-3" class="pilcrow">¶</a></p>
+<p id="section-5.4-4"><strong>TODO</strong> Is this SCION specific?
+SCION allows for choosing paths based on trusted or untrusted ASes,
+but this is not specific to multipathing...<a href="#section-5.4-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
