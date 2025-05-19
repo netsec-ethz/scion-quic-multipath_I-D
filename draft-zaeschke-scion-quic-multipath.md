@@ -59,16 +59,16 @@ normative:
   QUIC-TRANSPORT: rfc9000
   QUIC-TLS: rfc9001
   QUIC-RECOVERY: rfc9002
-  RFC2914:
-  RFC8085:
-  RFC8899:
+  CC-PRINCIPLES: RFC2914
+  UDP-GUIDELINES: RFC8085
+  MTU-DISCOVERY: RFC8899
 
 informative:
   DMTP: I-D.draft-tjohn-quic-multipath-dmtp
   QUIC-ACKFREQUENCY: I-D.draft-ietf-quic-ack-frequency
   QUIC-MP: I-D.draft-ietf-quic-multipath
-  RFC6356:
-  RFC9473:
+  CC-MULTIPATH-TCP: RFC6356
+  PATH-VOCABULARY: RFC9473
   SCION-OVERVIEW: I-D.draft-dekater-panrg-scion-overview
   SCION-CP: I-D.draft-dekater-scion-controlplane
   OLIA:
@@ -152,7 +152,7 @@ refers to the direction of travel of the SCION packet or to the
 direction of beaconing.
 
 **Endpoint**: An endpoint is the start or the end of a SCION path,
-as defined in {{RFC9473}}.
+as defined in {{PATH-VOCABULARY}}.
 
 **Hop Field (HF)**: As they traverse the network, path segment
 construction beacons (PCBs) accumulate cryptographically protected
@@ -295,14 +295,15 @@ or possibly kept as backup paths for emergencies.
 ## Congestion Control {#concon}
 
 General recommendations for congestion control are defined in
-Congestion Control Principles {{RFC2914}}.
+Congestion Control Principles {{CC-PRINCIPLES}}.
 Congestion control for QUIC is discussed in
 QUIC Loss Detection and Congestion Control {{QUIC-RECOVERY}}.
 More generally, congestion control for UDP is discussed in the
-UDP Usage Guidelines {{RFC8085}}. UDUp MTU discovery is further
-developed in {{RFC8899}}.
+UDP Usage Guidelines {{UDP-GUIDELINES}}. UDP MTU discovery is further
+developed in {{MTU-DISCOVERY}}.
 
-Congestion control is also discussed for TCP in {{RFC6356}}.
+Multipath congestion control is also discussed for TCP in
+{{CC-MULTIPATH-TCP}}.
 
 There are several congestion control algorithms proposed in literature,
 e.g. LIA, OLIA, BALIA and RSF.  These combine congestion control with
