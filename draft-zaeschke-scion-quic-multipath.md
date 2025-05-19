@@ -378,7 +378,7 @@ developed in {{RFC8899}}.
 Congestion control is also discussed for TCP in {{RFC6356}}.
 
 There are several congestion control algorithms proposed in literature,
-e.g. LIA, OLIA, BALIA and RSF.  These cobine congestion control with
+e.g. LIA, OLIA, BALIA and RSF.  These combine congestion control with
 path selection algorithms.
 For simplicity, we suggest separating concerns in terms of
 congestion control and path selection. This allows us to better
@@ -487,8 +487,10 @@ while before stopping sending on the old path. The sender could send
 redundant data or random data at a suitable bandwidth.
 
 **TODO** Should we really recommend bandwidth usage.
-**TODO** Is this SCION specific?
 
+**TODO** Is this SCION specific?
+SCION allows for choosing paths based on trusted or untrusted ASes,
+but this is not specific to multipathing...
 
 
 # API Design consideration
