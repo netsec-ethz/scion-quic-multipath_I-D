@@ -10,10 +10,13 @@
 <meta content="
        This document gives general recommendations when using the Multipath
 Extension for QUIC   with SCION
- .  The recommendations
-concern algorithms for congestion control and path selection, as
-well as general considerations for API design and applications that use
+ .  The recommendations concern
+algorithms for congestion control and path selection, as well as
+general considerations for API design and applications that use
 multipath QUIC over SCION. 
+       This document discusses multipathing mainly in the sense of multiple
+paths per 4-tuple (client IP/port + server IP/port). Multipathing over
+multiple interfaces is mentioned but not discussed in detail. 
     " name="description">
 <meta content="xml2rfc 3.28.1" name="generator">
 <meta content="SCION" name="keyword">
@@ -28,7 +31,7 @@ multipath QUIC over SCION.
     intervaltree 3.1.0
     Jinja2 3.1.6
     lxml 5.3.0
-    platformdirs 4.3.7
+    platformdirs 4.3.8
     pycountry 24.6.1
     PyYAML 6.0.2
     requests 2.32.3
@@ -1094,10 +1097,13 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">This document gives general recommendations when using the Multipath
 Extension for QUIC <span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> with SCION
-<span>[<a href="#I-D.rustignoli-scion-overview" class="cite xref">I-D.rustignoli-scion-overview</a>]</span>.  The recommendations
-concern algorithms for congestion control and path selection, as
-well as general considerations for API design and applications that use
+<span>[<a href="#I-D.rustignoli-scion-overview" class="cite xref">I-D.rustignoli-scion-overview</a>]</span>.  The recommendations concern
+algorithms for congestion control and path selection, as well as
+general considerations for API design and applications that use
 multipath QUIC over SCION.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">This document discusses multipathing mainly in the sense of multiple
+paths per 4-tuple (client IP/port + server IP/port). Multipathing over
+multiple interfaces is mentioned but not discussed in detail.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1377,7 +1383,7 @@ multiple paths.<a href="#section-3-2.1.1" class="pilcrow">¶</a></p>
 multiple paths and using the one with the lowest latency.<a href="#section-3-2.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-3-2.3">
-          <p id="section-3-2.3.1">Minimum latencythrouh redundancy (MinLatRed): Optimizing latency
+          <p id="section-3-2.3.1">Minimum latency throuh redundancy (MinLatRed): Optimizing latency
 by parallel transmission on multiple path.<a href="#section-3-2.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-3-2.4">
@@ -1385,6 +1391,11 @@ by parallel transmission on multiple path.<a href="#section-3-2.3.1" class="pilc
 parallel transfer on multiple paths.<a href="#section-3-2.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
+<p id="section-3-3">The disciussions of these scenarios are written with multiple paths
+per interface in mind (i.e. multiple paths per 4-tuple).  However, they
+can usually be generalized to multipathing over multiple interfaces.<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-4"><strong>TODO</strong> "Usually" should be replaced with "Unless noted otherwise" or
+possibly "cannot be generalized, unless noted otherwise". Let's see.<a href="#section-3-4" class="pilcrow">¶</a></p>
 <div id="disjunctness">
 <section id="section-3.1">
         <h3 id="name-disjunctness">
@@ -1457,6 +1468,18 @@ QUIC Loss Detection and Congestion Control <span>[<a href="#QUIC-RECOVERY" class
 UDP Usage Guidelines <span>[<a href="#RFC8085" class="cite xref">RFC8085</a>]</span>. UDUp MTU discovery is further
 developed in <span>[<a href="#RFC8899" class="cite xref">RFC8899</a>]</span>.<a href="#section-4.3-3" class="pilcrow">¶</a></p>
 <p id="section-4.3-4">Congestion control is also discussed for TCP in <span>[<a href="#RFC6356" class="cite xref">RFC6356</a>]</span>.<a href="#section-4.3-4" class="pilcrow">¶</a></p>
+<p id="section-4.3-5">There are several congestion control algorithms proposed in literature,
+e.g. LIA, OLIA, BALIA and RSF.  These cobine congestion control with
+path selection algorithms.
+For simplicity, we suggest separating concerns in terms of
+congestion control and path selection. This allows us to better
+tailor the solutions to the different scenarios discussed in
+(SCENARIOS).
+The proposition is to use standard congestion control per path (LIST
+HERE), tailored for each use case (max bandwidth / low latency) and
+on top of that separately use path selection (load distribution)
+algorithms.<a href="#section-4.3-5" class="pilcrow">¶</a></p>
+<p id="section-4.3-6"><strong>TODO</strong> Terminology: path selection vs load distribution?<a href="#section-4.3-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="patsel">
@@ -1489,14 +1512,52 @@ following the guidlines discussed in <a href="#datra" class="auto internal xref"
 <section id="section-5.1">
         <h3 id="name-data-transfer">
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-data-transfer" class="section-name selfRef">Data Transfer</a>
-      </h3>
+        </h3>
+<p id="section-5.1-1">The aim of a data transfer application is to maximize throughput,
+regardless of latency, jitter or packet loss.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-2">The solution here is to identify multiple paths that are either
+disjunct, or where the non-disjunct links allow higher throughput than
+other pinks on the same paths (i.e. high enough to prevent the
+link from being a bottleneck).<a href="#section-5.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="lola">
 <section id="section-5.2">
         <h3 id="name-low-latency">
 <a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-low-latency" class="section-name selfRef">Low Latency</a>
-      </h3>
+        </h3>
+<p id="section-5.2-1">There are multiple approaches to transfer traffic with the lowest
+possible latency.  For example:<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2-2">1) With separate latency measurents. Latency measurments run in
+  parallel to data traffic. This allows performing measurements at a
+  different frequency and over many more paths than payload traffic.
+  This can be useful if payload packets are large and sending them
+  reduntantly over multiple links is to costly or considered to invasive
+  with respect to other network users.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.2-3">Low frequency measurements may be combined with traffic prediction
+  algorithms in order to identify best paths between measurements.
+  Due to low bandwidth overhead, this may be the most cost efficient
+  approach.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+<p id="section-5.2-4">It may be possible to do this with SCION SCMP packets, either with
+  ECHO packets or possibly with traceroute if the AS internal latency
+  of the destination AS is negligible (because it may be small of it may
+  be almost the same for all border routersthat are on interesting
+  paths).<a href="#section-5.2-4" class="pilcrow">¶</a></p>
+<p id="section-5.2-5">2) With implicit measurements through QUIC ACK frames.
+  <span><a href="https://rfc-editor.org/rfc/rfc9000#section-13.2" class="relref">Section 13.2</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> recommends sending an ACK frame
+  after receiving at least two ack-eliciting packets or after a delay.
+  If the application sends data on multiple paths in parallel, this may
+  be sufficient for some low latency applications.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
+<p id="section-5.2-6"><span>[<a href="#QUIC-ACKFREQUENCY" class="cite xref">QUIC-ACKFREQUENCY</a>]</span> proposes an extension that allows more control
+  over how often and when ACK-FRAMES are sent.<a href="#section-5.2-6" class="pilcrow">¶</a></p>
+<p id="section-5.2-7">This approach can be useful if <span>[<a href="#QUIC-ACKFREQUENCY" class="cite xref">QUIC-ACKFREQUENCY</a>]</span> is
+  available or if the ACK behavior of the standard QUIC server is
+  sufficient.<a href="#section-5.2-7" class="pilcrow">¶</a></p>
+<p id="section-5.2-8">3) With implicit measurements through application specific ACKs.
+This is useful if the application can sensibly be adapted to have its
+own ACK protocol.<a href="#section-5.2-8" class="pilcrow">¶</a></p>
+<p id="section-5.2-9">Network analysis can be used to identify, and subsequenlty avoid, links
+with high or unreliable latency.<a href="#section-5.2-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="redu">
@@ -1613,6 +1674,10 @@ to allow implementation of custom algorithms.<a href="#section-6-2" class="pilcr
 <dt id="OLIA">[OLIA]</dt>
         <dd>
 <span class="refAuthor">Khalili, R.</span>, <span class="refAuthor">Gast, N.</span>, <span class="refAuthor">Popovic, M.</span>, <span class="refAuthor">Upadhyay, U.</span>, and <span class="refAuthor">J. Le Boudec</span>, <span class="refTitle">"MPTCP is not pareto-optimal: performance issues and a possible solution"</span>, <span class="seriesInfo">Proceedings of the 8th international conference on Emerging networking experiments and technologies, ACM </span>, <time datetime="2012" class="refDate">2012</time>. </dd>
+<dd class="break"></dd>
+<dt id="QUIC-ACKFREQUENCY">[QUIC-ACKFREQUENCY]</dt>
+        <dd>
+<span class="refAuthor">Iyengar, J.</span>, <span class="refAuthor">Swett, I.</span>, and <span class="refAuthor">M. Kühlewind</span>, <span class="refTitle">"QUIC Acknowledgment Frequency"</span>, <time datetime="2025" class="refDate">2025</time>. </dd>
 <dd class="break"></dd>
 <dt id="QUIC-MP">[QUIC-MP]</dt>
         <dd>
