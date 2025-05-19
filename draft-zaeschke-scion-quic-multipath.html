@@ -1464,14 +1464,14 @@ or possibly kept as backup paths for emergencies.<a href="#section-4.2-1" class=
 <a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-congestion-control" class="section-name selfRef">Congestion Control</a>
         </h3>
 <p id="section-4.3-1">General recommendations for congestion control are defined in
-Congestion Control Principles <span>[<a href="#RFC2914" class="cite xref">RFC2914</a>]</span>.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
-<p id="section-4.3-2">Congestion control for QUIC is discussed in
-QUIC Loss Detection and Congestion Control <span>[<a href="#QUIC-RECOVERY" class="cite xref">QUIC-RECOVERY</a>]</span>.<a href="#section-4.3-2" class="pilcrow">¶</a></p>
-<p id="section-4.3-3">More generally, congestion control for UDP is discussed in the
+Congestion Control Principles <span>[<a href="#RFC2914" class="cite xref">RFC2914</a>]</span>.
+Congestion control for QUIC is discussed in
+QUIC Loss Detection and Congestion Control <span>[<a href="#QUIC-RECOVERY" class="cite xref">QUIC-RECOVERY</a>]</span>.
+More generally, congestion control for UDP is discussed in the
 UDP Usage Guidelines <span>[<a href="#RFC8085" class="cite xref">RFC8085</a>]</span>. UDUp MTU discovery is further
-developed in <span>[<a href="#RFC8899" class="cite xref">RFC8899</a>]</span>.<a href="#section-4.3-3" class="pilcrow">¶</a></p>
-<p id="section-4.3-4">Congestion control is also discussed for TCP in <span>[<a href="#RFC6356" class="cite xref">RFC6356</a>]</span>.<a href="#section-4.3-4" class="pilcrow">¶</a></p>
-<p id="section-4.3-5">There are several congestion control algorithms proposed in literature,
+developed in <span>[<a href="#RFC8899" class="cite xref">RFC8899</a>]</span>.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<p id="section-4.3-2">Congestion control is also discussed for TCP in <span>[<a href="#RFC6356" class="cite xref">RFC6356</a>]</span>.<a href="#section-4.3-2" class="pilcrow">¶</a></p>
+<p id="section-4.3-3">There are several congestion control algorithms proposed in literature,
 e.g. LIA, OLIA, BALIA and RSF.  These cobine congestion control with
 path selection algorithms.
 For simplicity, we suggest separating concerns in terms of
@@ -1481,8 +1481,8 @@ tailor the solutions to the different scenarios discussed in
 The proposition is to use standard congestion control per path (LIST
 HERE), tailored for each use case (max bandwidth / low latency) and
 on top of that separately use path selection (load distribution)
-algorithms.<a href="#section-4.3-5" class="pilcrow">¶</a></p>
-<p id="section-4.3-6"><strong>TODO</strong> Terminology: path selection vs load distribution?<a href="#section-4.3-6" class="pilcrow">¶</a></p>
+algorithms.<a href="#section-4.3-3" class="pilcrow">¶</a></p>
+<p id="section-4.3-4"><strong>TODO</strong> Terminology: path selection vs load distribution?<a href="#section-4.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="patsel">

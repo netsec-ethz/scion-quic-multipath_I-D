@@ -294,14 +294,11 @@ Table of Contents
 4.3.  Congestion Control
 
    General recommendations for congestion control are defined in
-   Congestion Control Principles [RFC2914].
-
-   Congestion control for QUIC is discussed in QUIC Loss Detection and
-   Congestion Control [QUIC-RECOVERY].
-
-   More generally, congestion control for UDP is discussed in the UDP
-   Usage Guidelines [RFC8085].  UDUp MTU discovery is further developed
-   in [RFC8899].
+   Congestion Control Principles [RFC2914].  Congestion control for QUIC
+   is discussed in QUIC Loss Detection and Congestion Control
+   [QUIC-RECOVERY].  More generally, congestion control for UDP is
+   discussed in the UDP Usage Guidelines [RFC8085].  UDUp MTU discovery
+   is further developed in [RFC8899].
 
    Congestion control is also discussed for TCP in [RFC6356].
 
