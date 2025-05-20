@@ -93,14 +93,20 @@ Emerging networking experiments and technologies, ACM"
 --- abstract
 
 This document provides guidelines for using the Multipath Extension
-for QUIC {{QUIC-MP}} with SCION {{SCION-OVERVIEW}}.
-The recommendations concern algorithms for congestion control and
-path selection, as well as general considerations for API design and
-applications that use multipath QUIC over SCION.
+for QUIC {{QUIC-MP}} with SCION {{SCION-OVERVIEW}}. SCION provides
+many details about available paths and allows selecting paths on the
+level of individual router interfaces. This provide many opportunities
+for improving congestion control and other algorithms. They also
+avoid some problems that gave rise to current algorithms.
+
+The guidlines in this document concern algorithms for congestion
+control, lload distribution and path selection, as well as general
+considerations for API design and applications that use multipath
+QUIC over SCION.
 
 This document discusses multipathing mainly in the sense of multiple
-paths per 4-tuple (client IP/port + server IP/port). Multipathing over
-multiple interfaces is mentioned but not discussed in detail.
+paths per 4-tuple. Multipathing over multiple interfaces is
+mentioned but not discussed in detail.
 
 --- middle
 
@@ -338,6 +344,19 @@ algorithms.
 
 **TODO** Terminology: path selection vs load distribution?
 
+## Load Distribution
+
+Load distribution algorithms are mainly useful for high bandwidth
+(HBW) scenarios. They halp distribution the transfer load efficiently
+over multiple path.
+
+.. many things
+
+Last not least there is a relation to receiver buffer sizes. The
+buffers are required to put packets back in order. The available buffer
+size puts a hard limit on how different tha latency/jitter on
+the different paths are and how much large packet loss can be allowed
+before a buffer overrun will degrade performance.
 
 ## Path Selection {#patsel}
 
