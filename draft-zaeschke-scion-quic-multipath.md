@@ -120,8 +120,9 @@ such as MTU, bandwidth, latency, AS internal hopcount, or geolocation
 information.
 
 In the context of multipathing, this path information can be useful
-for algorithms that select paths (see {{patsel}}) and perform
-congestion control (see {{concon}}).
+for algorithms that select paths (see {{patsel}}) perform
+congestion control (see {{concon}}) and distribute load over all
+selected path {{loaddist}}.
 
 In order to facilitate these algorithms, this documents contains
 suggestions for API design and general use in applications.
@@ -344,7 +345,7 @@ algorithms.
 
 **TODO** Terminology: path selection vs load distribution?
 
-## Load Distribution
+## Load Distribution {#loaddist}
 
 Load distribution algorithms are mainly useful for high bandwidth
 (HBW) scenarios. They halp distribution the transfer load efficiently
