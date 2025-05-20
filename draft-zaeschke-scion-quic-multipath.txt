@@ -118,8 +118,9 @@ Table of Contents
    information.
 
    In the context of multipathing, this path information can be useful
-   for algorithms that select paths (see Section 4.5) and perform
-   congestion control (see Section 4.3).
+   for algorithms that select paths (see Section 4.5) perform congestion
+   control (see Section 4.3) and distribute load over all selected path
+   Section 4.4.
 
    In order to facilitate these algorithms, this documents contains
    suggestions for API design and general use in applications.
