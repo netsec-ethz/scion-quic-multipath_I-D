@@ -14,14 +14,20 @@ Expires: 8 November 2025                                      7 May 2025
 Abstract
 
    This document provides guidelines for using the Multipath Extension
-   for QUIC [QUIC-MP] with SCION [SCION-OVERVIEW].  The recommendations
-   concern algorithms for congestion control and path selection, as well
-   as general considerations for API design and applications that use
-   multipath QUIC over SCION.
+   for QUIC [QUIC-MP] with SCION [SCION-OVERVIEW].  SCION provides many
+   details about available paths and allows selecting paths on the level
+   of individual router interfaces.  This provide many opportunities for
+   improving congestion control and other algorithms.  They also avoid
+   some problems that gave rise to current algorithms.
+
+   The guidlines in this document concern algorithms for congestion
+   control, lload distribution and path selection, as well as general
+   considerations for API design and applications that use multipath
+   QUIC over SCION.
 
    This document discusses multipathing mainly in the sense of multiple
-   paths per 4-tuple (client IP/port + server IP/port).  Multipathing
-   over multiple interfaces is mentioned but not discussed in detail.
+   paths per 4-tuple.  Multipathing over multiple interfaces is
+   mentioned but not discussed in detail.
 
 About This Document
 
@@ -81,8 +87,9 @@ Table of Contents
      4.1.  MTU
      4.2.  Detecting Byzantine ASes and Links
      4.3.  Congestion Control
-     4.4.  Path Selection
-       4.4.1.  Hybrid approach
+     4.4.  Load Distribution
+     4.5.  Path Selection
+       4.5.1.  Hybrid approach
    5.  Applications (#apps}
      5.1.  Data Transfer
      5.2.  Low Latency
@@ -111,7 +118,7 @@ Table of Contents
    information.
 
    In the context of multipathing, this path information can be useful
-   for algorithms that select paths (see Section 4.4) and perform
+   for algorithms that select paths (see Section 4.5) and perform
    congestion control (see Section 4.3).
 
    In order to facilitate these algorithms, this documents contains
@@ -335,9 +342,23 @@ Table of Contents
 
    *TODO* Terminology: path selection vs load distribution?
 
-4.4.  Path Selection
+4.4.  Load Distribution
 
-4.4.1.  Hybrid approach
+   Load distribution algorithms are mainly useful for high bandwidth
+   (HBW) scenarios.  They halp distribution the transfer load
+   efficiently over multiple path.
+
+   .. many things
+
+   Last not least there is a relation to receiver buffer sizes.  The
+   buffers are required to put packets back in order.  The available
+   buffer size puts a hard limit on how different tha latency/jitter on
+   the different paths are and how much large packet loss can be allowed
+   before a buffer overrun will degrade performance.
+
+4.5.  Path Selection
+
+4.5.1.  Hybrid approach
 
    A hybrid approach could start with using low latency paths.  If the
    connection appears to be long lasting (e.g. at least 1 second
@@ -436,7 +457,7 @@ Table of Contents
 
    Applications will have very different requirements on a multipath
    API.  A comprehensive API should therefore allow for mostly automatic
-   selection of Section 4.4 Path Selection and Congestion Control
+   selection of Section 4.5 Path Selection and Congestion Control
    algorithms Section 4.3.
 
    At the same time it should give access to SCION paths and their

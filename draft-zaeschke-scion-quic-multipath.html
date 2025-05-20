@@ -9,13 +9,18 @@
 <meta content="Tilmann Zaeschke" name="author">
 <meta content="
        This document provides guidelines for using the Multipath Extension
-for QUIC   with SCION  .
-The recommendations concern algorithms for congestion control and
-path selection, as well as general considerations for API design and
-applications that use multipath QUIC over SCION. 
+for QUIC   with SCION  . SCION provides
+many details about available paths and allows selecting paths on the
+level of individual router interfaces. This provide many opportunities
+for improving congestion control and other algorithms. They also
+avoid some problems that gave rise to current algorithms. 
+       The guidlines in this document concern algorithms for congestion
+control, lload distribution and path selection, as well as general
+considerations for API design and applications that use multipath
+QUIC over SCION. 
        This document discusses multipathing mainly in the sense of multiple
-paths per 4-tuple (client IP/port + server IP/port). Multipathing over
-multiple interfaces is mentioned but not discussed in detail. 
+paths per 4-tuple. Multipathing over multiple interfaces is
+mentioned but not discussed in detail. 
     " name="description">
 <meta content="xml2rfc 3.28.1" name="generator">
 <meta content="SCION" name="keyword">
@@ -1095,13 +1100,18 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">This document provides guidelines for using the Multipath Extension
-for QUIC <span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> with SCION <span>[<a href="#SCION-OVERVIEW" class="cite xref">SCION-OVERVIEW</a>]</span>.
-The recommendations concern algorithms for congestion control and
-path selection, as well as general considerations for API design and
-applications that use multipath QUIC over SCION.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
-<p id="section-abstract-2">This document discusses multipathing mainly in the sense of multiple
-paths per 4-tuple (client IP/port + server IP/port). Multipathing over
-multiple interfaces is mentioned but not discussed in detail.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+for QUIC <span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> with SCION <span>[<a href="#SCION-OVERVIEW" class="cite xref">SCION-OVERVIEW</a>]</span>. SCION provides
+many details about available paths and allows selecting paths on the
+level of individual router interfaces. This provide many opportunities
+for improving congestion control and other algorithms. They also
+avoid some problems that gave rise to current algorithms.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">The guidlines in this document concern algorithms for congestion
+control, lload distribution and path selection, as well as general
+considerations for API design and applications that use multipath
+QUIC over SCION.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-3">This document discusses multipathing mainly in the sense of multiple
+paths per 4-tuple. Multipathing over multiple interfaces is
+mentioned but not discussed in detail.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1199,10 +1209,13 @@ multiple interfaces is mentioned but not discussed in detail.<a href="#section-a
                 <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="auto internal xref">4.3</a>.  <a href="#name-congestion-control" class="internal xref">Congestion Control</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.4">
-                <p id="section-toc.1-1.4.2.4.1"><a href="#section-4.4" class="auto internal xref">4.4</a>.  <a href="#name-path-selection" class="internal xref">Path Selection</a></p>
+                <p id="section-toc.1-1.4.2.4.1"><a href="#section-4.4" class="auto internal xref">4.4</a>.  <a href="#name-load-distribution" class="internal xref">Load Distribution</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.5">
+                <p id="section-toc.1-1.4.2.5.1"><a href="#section-4.5" class="auto internal xref">4.5</a>.  <a href="#name-path-selection" class="internal xref">Path Selection</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.4.2.1">
-                    <p id="section-toc.1-1.4.2.4.2.1.1"><a href="#section-4.4.1" class="auto internal xref">4.4.1</a>.  <a href="#name-hybrid-approach" class="internal xref">Hybrid approach</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.5.2.1">
+                    <p id="section-toc.1-1.4.2.5.2.1.1"><a href="#section-4.5.1" class="auto internal xref">4.5.1</a>.  <a href="#name-hybrid-approach" class="internal xref">Hybrid approach</a></p>
 </li>
                 </ul>
 </li>
@@ -1283,7 +1296,7 @@ respective links between ASes, as well as metadata about ASes and links,
 such as MTU, bandwidth, latency, AS internal hopcount, or geolocation
 information.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">In the context of multipathing, this path information can be useful
-for algorithms that select paths (see <a href="#patsel" class="auto internal xref">Section 4.4</a>) and perform
+for algorithms that select paths (see <a href="#patsel" class="auto internal xref">Section 4.5</a>) and perform
 congestion control (see <a href="#concon" class="auto internal xref">Section 4.3</a>).<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">In order to facilitate these algorithms, this documents contains
 suggestions for API design and general use in applications.<a href="#section-1-3" class="pilcrow">¶</a></p>
@@ -1515,21 +1528,37 @@ algorithms.<a href="#section-4.3-5" class="pilcrow">¶</a></p>
 <p id="section-4.3-6"><strong>TODO</strong> Terminology: path selection vs load distribution?<a href="#section-4.3-6" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="patsel">
+<div id="load-distribution">
 <section id="section-4.4">
+        <h3 id="name-load-distribution">
+<a href="#section-4.4" class="section-number selfRef">4.4. </a><a href="#name-load-distribution" class="section-name selfRef">Load Distribution</a>
+        </h3>
+<p id="section-4.4-1">Load distribution algorithms are mainly useful for high bandwidth
+(HBW) scenarios. They halp distribution the transfer load efficiently
+over multiple path.<a href="#section-4.4-1" class="pilcrow">¶</a></p>
+<p id="section-4.4-2">.. many things<a href="#section-4.4-2" class="pilcrow">¶</a></p>
+<p id="section-4.4-3">Last not least there is a relation to receiver buffer sizes. The
+buffers are required to put packets back in order. The available buffer
+size puts a hard limit on how different tha latency/jitter on
+the different paths are and how much large packet loss can be allowed
+before a buffer overrun will degrade performance.<a href="#section-4.4-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="patsel">
+<section id="section-4.5">
         <h3 id="name-path-selection">
-<a href="#section-4.4" class="section-number selfRef">4.4. </a><a href="#name-path-selection" class="section-name selfRef">Path Selection</a>
+<a href="#section-4.5" class="section-number selfRef">4.5. </a><a href="#name-path-selection" class="section-name selfRef">Path Selection</a>
         </h3>
 <div id="hybrid-approach">
-<section id="section-4.4.1">
+<section id="section-4.5.1">
           <h4 id="name-hybrid-approach">
-<a href="#section-4.4.1" class="section-number selfRef">4.4.1. </a><a href="#name-hybrid-approach" class="section-name selfRef">Hybrid approach</a>
+<a href="#section-4.5.1" class="section-number selfRef">4.5.1. </a><a href="#name-hybrid-approach" class="section-name selfRef">Hybrid approach</a>
           </h4>
-<p id="section-4.4.1-1">A hybrid approach could start with using low latency paths. If the
+<p id="section-4.5.1-1">A hybrid approach could start with using low latency paths. If the
 connection appears to be long lasting (e.g. at least 1 second duration
 and 1MB of traffic) it could start adding additional paths and see
 whether the traffic increases. Additional paths can be chosen
-following the guidelines discussed in <a href="#datra" class="auto internal xref">Section 5.1</a>.<a href="#section-4.4.1-1" class="pilcrow">¶</a></p>
+following the guidelines discussed in <a href="#datra" class="auto internal xref">Section 5.1</a>.<a href="#section-4.5.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1647,7 +1676,7 @@ but this is not specific to multipathing...<a href="#section-5.4-4" class="pilcr
         </h3>
 <p id="section-6.1-1">Applications will have very different requirements on a multipath API.
 A comprehensive API should therefore allow for mostly automatic
-selection of <a href="#patsel" class="auto internal xref">Section 4.4</a> Path Selection and Congestion Control
+selection of <a href="#patsel" class="auto internal xref">Section 4.5</a> Path Selection and Congestion Control
 algorithms <a href="#concon" class="auto internal xref">Section 4.3</a>.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.1-2">At the same time it should give access to SCION paths and their metadata
 to allow implementation of custom algorithms.<a href="#section-6.1-2" class="pilcrow">¶</a></p>
