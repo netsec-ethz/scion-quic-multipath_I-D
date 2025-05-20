@@ -187,9 +187,9 @@ downstream ASes.
 ASes.
 
 **Intra AS link**: A direct link between twi internal interfaces of
-a single AS. A direct link may contains serveral internal hops.
+a single AS. A direct link may contains several internal hops.
 
-**Link**: General term that refers to "inter AS links" and "intra AS
+**Link**: General term that refers to "inter-AS links" and "intra-AS
 links".
 
 **MAC**: Message Authentication Code.  In the rest of this document,
@@ -229,14 +229,14 @@ This document distinguishes the following usage scenarios:
 
 * High bandwidth (HBW): Optimizing bandwidth by parallel transfer on
   multiple paths.
-* Minimum latency (MinLat): Optimizing latency by regualrily checking
+* Minimum latency (MinLat): Optimizing latency by regularly checking
   multiple paths and using the one with the lowest latency.
-* Minimum latency throuh redundancy (MinLatRed): Optimizing latency
+* Minimum latency through redundancy (MinLatRed): Optimizing latency
   by parallel transmission on multiple path.
 * Failure tolerance (FT): Optimizing for failure tolerance by
   parallel transfer on multiple paths.
 
-The disciussions of these scenarios are written with multiple paths
+The discussions of these scenarios are written with multiple paths
 per interface in mind (i.e. multiple paths per 4-tuple).  However, they
 can usually be generalized to multipathing over multiple interfaces.
 
@@ -246,11 +246,13 @@ possibly "cannot be generalized, unless noted otherwise". Let's see.
 
 ## Disjunctness
 
-For FT, paths are only interesting if they are disjuct.
+For FT, paths are only interesting if they are disjunct.
 For HWB, paths should mostly be disjunct, but overlap is
 acceptable if the overlapping links have high BW available.
 
 For MinLat and MinLatRed, path disjunctness is mostly irrelevant.
+
+**TODO** Discuss link level, router level and AS level path disjunctness.
 
 ## Path Metadata
 
@@ -262,9 +264,9 @@ Path metadata may also be incomplete, ASes are not required to provide
 or regularly update the data.
 
 Users of path metadata must keep in mind that the data is mostly not
-verifyable but depends on the diligence and trusworthyness of the
+verifiable but depends on the diligence and trustworthiness of the
 link owners.
-However, once disseminated by a link owner, the patgh metadata is
+However, once disseminated by a link owner, the path metadata is
 authenticated an cannot be changed by other parties.
 
 Due to the inherent unreliability, users should implement sanity
@@ -278,15 +280,15 @@ checks the verify that a link holds up to the promised capabilities.
 SCION provides MTU information for every AS-level link on a path.
 
 
-## Detecting Bad ASes and Links
+## Detecting Byzantine ASes and Links
 
-By comparing performance (latency, bandwidth, packet droprate, link
+By comparing performance (latency, bandwidth, packet drop rate, link
 errors, MTU) of multiple paths, we can (with some accuracy) detect
 unreliable links and ASes.
 These can be blacklisted and excluded from further path selection,
 or possibly kept as backup paths for emergencies.
 
-**TODO** Add reference to ressearch.
+**TODO** Add reference to research.
 
 **TODO** Move to Path Metadata section?
 
@@ -344,7 +346,7 @@ A hybrid approach could start with using low latency paths. If the
 connection appears to be long lasting (e.g. at least 1 second duration
 and 1MB of traffic) it could start adding additional paths and see
 whether the traffic increases. Additional paths can be chosen
-following the guidlines discussed in {{datra}}.
+following the guidelines discussed in {{datra}}.
 
 
 
@@ -357,7 +359,7 @@ regardless of latency, jitter or packet loss.
 
 The solution here is to identify multiple paths that are either
 disjunct, or where the non-disjunct links allow higher throughput than
-other pinks on the same paths (i.e. high enough to prevent the
+other links on the same paths (i.e. high enough to prevent the
 link from being a bottleneck).
 
 ## Low Latency {#lola}
@@ -365,11 +367,11 @@ link from being a bottleneck).
 There are multiple approaches to transfer traffic with the lowest
 possible latency.  For example:
 
-  1) With separate latency measurents. Latency measurments run in
+  1) With separate latency measurements. Latency measurements run in
   parallel to data traffic. This allows performing measurements at a
   different frequency and over many more paths than payload traffic.
   This can be useful if payload packets are large and sending them
-  reduntantly over multiple links is to costly or considered to invasive
+  redundantly over multiple links is to costly or considered to invasive
   with respect to other network users.
   Low frequency measurements may be combined with traffic prediction
   algorithms in order to identify best paths between measurements.
@@ -377,8 +379,8 @@ possible latency.  For example:
   approach.
   It may be possible to do this with SCION SCMP packets, either with
   ECHO packets or possibly with traceroute if the AS internal latency
-  of the destination AS is negligible (because it may be small of it may
-  be almost the same for all border routersthat are on interesting
+  of the destination AS is negligible (because it may be small or it may
+  be almost the same for all border routers that are on interesting
   paths).
 
   2) With implicit measurements through QUIC ACK frames.
@@ -397,14 +399,14 @@ possible latency.  For example:
   own ACK protocol.
 
 
-Network analysis can be used to identify, and subsequenlty avoid, links
+Network analysis can be used to identify, and subsequently avoid, links
 with high or unreliable latency.
 
 ## High Availability / Redundancy {#redu}
 
-A approach to high availability is to send data on multiple paths in
+An approach to high availability is to send data on multiple paths in
 parallel. A tradeoff here is that sending on all available paths is
-probably infeasibale. Depending on cost factors, and to avoid
+probably infeasible. Depending on cost factors, and to avoid
 overloading the network, any algorithms should keep redundant
 sending to a minimum.
 
@@ -412,14 +414,14 @@ Path analysis can be used to identify multiple paths that are mostly
 or completely (using multiple interfaces) disjunct, but that still
 satisfy latency, bandwidth, and other constraints.
 
-Additional polling with SCMP or with additikonal QUIC stream may be
+Additional polling with SCMP or with additional QUIC stream may be
 used to regularly measure packet drop rates or latency variations.
 
 ## Multipathing for Anonymity {#anon}
 
 Multipathing could also be used for anonymity, e.g. by switching
-paths at random intervalls.
-With a continuous datastream, care should be taken that new
+paths at random intervals.
+With a continuous data stream, care should be taken that new
 paths are not just switched over from one to the next, otherwise
 traffic characteristics may be used to identify paths.
 For example, paths could be identified by packet frequency, packet
@@ -442,7 +444,7 @@ but this is not specific to multipathing...
 
 ## Multipathing for Applications
 
-Applications will have very different requirments on a multipath API.
+Applications will have very different requirements on a multipath API.
 A comprehensive API should therefore allow for mostly automatic
 selection of {{patsel}} Path Selection and Congestion Control
 algorithms {{concon}}.
@@ -459,7 +461,7 @@ measurements.
 
 Congestion control algorithms and path selection algorithms should
 try to hide parallel transfer and measurement streams from the
-application.  This may also depend on API designer to such
+application.  This may also depend on API designer to provide such
 transparent  multipathing with additional code on the application level.
 
 
@@ -467,19 +469,19 @@ transparent  multipathing with additional code on the application level.
 
 This document has no security considerations.
 
-May sending data on multiple paths in parallel, or at reguklar
-intervballs, expose information about data streams? E.g. can streams
+May sending data on multiple paths in parallel, or at regular
+intervals, expose information about data streams? E.g. can streams
 be associated with users such that a change in connection ID does
 not help anonymity?
 
 ## Latency Polling
 
 If a user sends latency measurements on 10 paths in parallel
-every 5 seconds, then these 10 paths can (with some probablility)
+every 5 seconds, then these 10 paths can (with some probability)
 be attributed to the same user.
 Solution: do not send all probes at the same time.
 To prevent patterns (1. after 0.1s, 2. after 0.3s, 3. after 0.35s, ...)
-the intervall between packets on each path should also vary.
+the interval between packets on each path should also vary.
 Additionally, the number of polled paths should vary.
 
 ## More ?
