@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-05-20T00:29:23.991716+00:00",
+  "timestamp": "2025-05-22T00:28:26.709694+00:00",
   "repo": "netsec-ethz/scion-quic-multipath_I-D",
   "labels": [
     {
@@ -56,24 +56,28 @@
       "id": "PR_kwDOOmGiIc6WwCqz",
       "title": "Revision",
       "url": "https://github.com/netsec-ethz/scion-quic-multipath_I-D/pull/1",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "FR4NK-W",
-      "authorAssociation": "NONE",
-      "assignees": [],
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "tzaeschke"
+      ],
       "labels": [],
       "body": "Mention different levels of disjointness",
       "createdAt": "2025-05-19T16:00:14Z",
-      "updatedAt": "2025-05-19T16:00:24Z",
+      "updatedAt": "2025-05-20T08:47:43Z",
       "baseRepository": "netsec-ethz/scion-quic-multipath_I-D",
       "baseRefName": "main",
       "baseRefOid": "eebafc4362ef2dcf913d84a7f2295f2b1c309534",
       "headRepository": "netsec-ethz/scion-quic-multipath_I-D",
       "headRefName": "revision1",
       "headRefOid": "048f01b4b39f4df6c6dc2d1fc6735a9c78d419e1",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-05-20T08:47:38Z",
+      "mergedAt": "2025-05-20T08:47:38Z",
+      "mergedBy": "tzaeschke",
+      "mergeCommit": {
+        "oid": "f79ff2294fa4f87773ab418459422308d0e7be22"
+      },
       "comments": [],
       "reviews": []
     }
