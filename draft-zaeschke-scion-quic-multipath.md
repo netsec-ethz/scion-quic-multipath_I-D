@@ -102,8 +102,8 @@ for path selection or congestion control.
 
 The guidelines in this document mostly concern algorithms for
 path selecxtion. However, it also comments on congestion control and
-load distribution, as well as general considerations for API design and
-applications that use multipath QUIC over SCION.
+load distribution (scheduling), as well as general considerations for
+API design and applications that use multipath QUIC over SCION.
 
 **TODO**
 
@@ -154,7 +154,7 @@ information.
 In the context of multipathing, this path information can be useful
 for algorithms that select paths (see {{patsel}}) perform
 congestion control (see {{concon}}) and distribute load over all
-selected path {{loaddist}}.
+selected paths (scheduling) {{loaddist}}.
 
 In order to facilitate these algorithms, this documents contains
 suggestions for API design and general use in applications.
