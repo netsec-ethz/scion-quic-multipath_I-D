@@ -17,8 +17,8 @@ This offers opportunities for new or improved algorithms, such as
 for path selection or congestion control. 
        The guidelines in this document mostly concern algorithms for
 path selecxtion. However, it also comments on congestion control and
-load distribution, as well as general considerations for API design and
-applications that use multipath QUIC over SCION. 
+load distribution (scheduling), as well as general considerations for
+API design and applications that use multipath QUIC over SCION. 
        TODO 
        
          
@@ -1118,8 +1118,8 @@ This offers opportunities for new or improved algorithms, such as
 for path selection or congestion control.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 <p id="section-abstract-2">The guidelines in this document mostly concern algorithms for
 path selecxtion. However, it also comments on congestion control and
-load distribution, as well as general considerations for API design and
-applications that use multipath QUIC over SCION.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+load distribution (scheduling), as well as general considerations for
+API design and applications that use multipath QUIC over SCION.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 <p id="section-abstract-3"><strong>TODO</strong><a href="#section-abstract-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-abstract-4.1">
@@ -1372,7 +1372,7 @@ information.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
 <p id="section-1.1-3">In the context of multipathing, this path information can be useful
 for algorithms that select paths (see <a href="#patsel" class="auto internal xref">Section 5.5</a>) perform
 congestion control (see <a href="#concon" class="auto internal xref">Section 5.3</a>) and distribute load over all
-selected path <a href="#loaddist" class="auto internal xref">Section 5.4</a>.<a href="#section-1.1-3" class="pilcrow">¶</a></p>
+selected paths (scheduling) <a href="#loaddist" class="auto internal xref">Section 5.4</a>.<a href="#section-1.1-3" class="pilcrow">¶</a></p>
 <p id="section-1.1-4">In order to facilitate these algorithms, this documents contains
 suggestions for API design and general use in applications.<a href="#section-1.1-4" class="pilcrow">¶</a></p>
 <p id="section-1.1-5">Multipath usage profiles are categorized into data transfer <a href="#datra" class="auto internal xref">Section 6.1</a>,

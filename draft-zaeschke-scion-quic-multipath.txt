@@ -22,8 +22,8 @@ Abstract
 
    The guidelines in this document mostly concern algorithms for path
    selecxtion.  However, it also comments on congestion control and load
-   distribution, as well as general considerations for API design and
-   applications that use multipath QUIC over SCION.
+   distribution (scheduling), as well as general considerations for API
+   design and applications that use multipath QUIC over SCION.
 
    *TODO*
 
@@ -160,8 +160,8 @@ Table of Contents
 
    In the context of multipathing, this path information can be useful
    for algorithms that select paths (see Section 5.5) perform congestion
-   control (see Section 5.3) and distribute load over all selected path
-   Section 5.4.
+   control (see Section 5.3) and distribute load over all selected paths
+   (scheduling) Section 5.4.
 
    In order to facilitate these algorithms, this documents contains
    suggestions for API design and general use in applications.
