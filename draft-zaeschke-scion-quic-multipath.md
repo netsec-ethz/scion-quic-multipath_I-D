@@ -1,5 +1,5 @@
 ---
-title: "Guidelines for QUIC Multipath over SCION"
+title: "Guidelines for QUIC Multipath over Path Aware Networks"
 
 abbrev: "SCION-QUIC-MP"
 
@@ -69,8 +69,8 @@ informative:
   QUIC-MP: I-D.draft-ietf-quic-multipath
   CC-MULTIPATH-TCP: RFC6356
   PATH-VOCABULARY: RFC9473
-  SCION-OVERVIEW: I-D.draft-dekater-panrg-scion-overview
   SCION-CP: I-D.draft-dekater-scion-controlplane
+  SCION-DP: I-D.draft-dekater-scion-dataplane
   OLIA:
     title: "MPTCP is not pareto-optimal: performance issues and
 a possible solution"
@@ -93,24 +93,56 @@ Emerging networking experiments and technologies, ACM"
 --- abstract
 
 This document provides guidelines for using the Multipath Extension
-for QUIC {{QUIC-MP}} with SCION {{SCION-OVERVIEW}}. SCION provides
-many details about available paths and allows selecting paths on the
-level of individual router interfaces. This provide many opportunities
-for improving congestion control and other algorithms. They also
-avoid some problems that gave rise to current algorithms.
+for QUIC {{QUIC-MP}} with path aware networks (PAN) such as SCION
+{{SCION-CP}}, {{SCION-DP}}. PANs may provide a selection 100s of paths
+between endpoint, including detailed path information to make an
+informed selection.
+This offers opportunities for new or improved algorithms, such as
+for path selection or congestion control.
 
-The guidlines in this document concern algorithms for congestion
-control, lload distribution and path selection, as well as general
-considerations for API design and applications that use multipath
-QUIC over SCION.
+The guidelines in this document mostly concern algorithms for
+path selecxtion. However, it also comments on congestion control and
+load distribution, as well as general considerations for API design and
+applications that use multipath QUIC over SCION.
 
-This document discusses multipathing mainly in the sense of multiple
-paths per 4-tuple. Multipathing over multiple interfaces is
-mentioned but not discussed in detail.
+**TODO**
+
+- Remove SCION from abstract
+- start writing sections on "Path Selection"
+- Section on QUIC-specific advantages.
 
 --- middle
 
 # Introduction
+
+Path aware networks (PAN) can provide many details (metadata) about
+available paths and allow selecting paths expliocitly based on this
+metadata.
+
+Even when just one path is used, this allows selecting the
+best path based on metadata about latency, bandwidth,
+geographic location, legal authoroties, hardware, fees, or many
+other properties.
+
+In addition, in the case of multipathing, detailed metadata provides
+information about links where different paths overlap and about the
+properties of these links.
+
+This is useful for developing or improving network related algorithms,
+for example for path selection, or more informed algorithms for
+congestion control.
+
+This dosument identifies and categorizes multipath usage scenarios,
+discusses guidlines for path selection algorithms and finally
+suggests how these may be applicable to congestion control algorithms.
+
+## SCION
+
+One example of a PAN is SCION {{SCION-CP}}, {{SCION-DP}}.
+SCION is an interdomain routing protocol that provides path metada
+on the level of individual router interfaces. This provide many
+opportunities for improving congestion control and other algorithms.
+They also avoid some problems that gave rise to current algorithms.
 
 The SCION protocol makes detailed path information available to
 endpoints. Besides the 4-tuple of address/IP at each endpoint, the
@@ -229,6 +261,50 @@ Message Protocol (ICMP).  This is described in {{SCION-CP}}.
 # Conventions and Definitions
 
 {::boilerplate bcp14-tagged}
+
+# Multipath Features
+
+This document discusses multipath features that are available in
+SCION {{SCION-CP}}, {{SCION-DP}}. However, the discussion is kept
+general and relevant to all PAN that support these features.
+
+## Features
+
+### Path Metadata Granularity
+
+We assume a protocol for inter-AS routing that provides path
+information per AS, more specifically per border router of an AS
+and per any link between any border routers (link may be internal
+or external to an AS).
+
+### Path Metadata Dimensions
+
+We assume a protocol a provides information on links and border
+routers, such as MTU, bandwidth, latency, geo-location, as well
+as identities (interface ID, port and IP) of border routers.
+We assume the data is static, wich means that bandwidth and latency
+reflect performance at minimum load rather than current or recent load.
+
+### Path Metadata Liveliness
+
+We assume that path metadata is updated at most every few hours.
+This should be more than sufficient since all values reflect
+hardware properties rather than current traffic load.
+
+### Path Metadata Reliability
+
+We assume that all values are correct. The metadata is
+cryptographically protected. It is signe by the data originator,
+which is the relevant AS owner. However, the data correctness is not
+verified, instead we rely on the AS onwer to be honest.
+
+### Multi-Inteface
+
+**TODO remove this?**
+This document discusses multipathing mainly in the sense of multiple
+paths per 4-tuple. Multipathing over multiple interfaces is not
+discussed in detail.
+
 
 # Multipath Scenarios
 
