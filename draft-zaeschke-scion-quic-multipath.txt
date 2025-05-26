@@ -15,9 +15,9 @@ Abstract
 
    This document provides guidelines for using the Multipath Extension
    for QUIC [QUIC-MP] with path aware networks (PAN).  PANs may provide
-   100s of paths between endpoint, including detailed path metadata that
-   facilitates an informed selection.  This offers opportunities for new
-   or improved algorithms for multipath networking.
+   hundreds of paths between endpoint, including detailed path metadata
+   that facilitates an informed selection.  This offers opportunities
+   for new or improved algorithms for multipath networking.
 
    This document discusses mostly algorithms for path selection.
    However, it also comments on congestion control and load distribution
@@ -26,9 +26,7 @@ Abstract
 
    *TODO*
 
-   *  start writing sections on "Path Selection"
-
-   *  Section on QUIC-specific advantages.
+   *  Section on QUIC-specific advantages?
 
 About This Document
 
@@ -89,16 +87,17 @@ Table of Contents
        3.1.3.  Path Metadata Liveliness
        3.1.4.  Path Metadata Reliability
        3.1.5.  Multi-Inteface
-   4.  Multipath Scenarios
+   4.  Multipath Categorization
      4.1.  Disjunctness
      4.2.  Path Metadata
    5.  Algorithms
-     5.1.  MTU
-     5.2.  Detecting Byzantine ASes and Links
-     5.3.  Congestion Control
-     5.4.  Load Distribution
-     5.5.  Path Selection
-       5.5.1.  Hybrid approach
+     5.1.  Path Selection
+       5.1.1.  Hybrid approach
+     5.2.  MTU
+     5.3.  Detecting Byzantine ASes and Links
+     5.4.  DMTP
+     5.5.  Congestion Control
+     5.6.  Load Distribution
    6.  Applications (#apps}
      6.1.  Data Transfer
      6.2.  Low Latency
@@ -120,8 +119,8 @@ Table of Contents
 1.  Introduction
 
    Path aware networks (PAN) can provide many detailed metadata about
-   available paths, such as geographic location, legal authoroties,
-   hardware, fees, or many other properties.
+   available paths, such as latency, bandwidth, MTU, geographic
+   location, or many other properties.
 
    Even when just one path is used, this allows selecting the best path
    for each use case while providing a suitable backup paths if the
@@ -130,20 +129,19 @@ Table of Contents
    In the case of concurrent multipathing, detailed metadata provides
    information about any links where different paths overlap and about
    the properties of these links.  This allows, for example, choosing
-   paths such that they don't share low low bandwidth links.
+   paths such that they don't share low bandwidth links.
 
    This is useful for developing or improving network related
    algorithms, for example for path selection, or more informed
    algorithms for congestion control.
 
-   This dosument identifies and categorizes multipath usage scenarios,
-   discusses guidelines for path selection algorithms and finally
-   suggests how these may be applicable to congestion control
-   algorithms.
-
-   Other algorithms, such as for congestion control, are not discussed
-   in detail but possible benefits of detailed path metadata are
-   indicated.
+   This document first identifies and categorizes multipath usage
+   scenarios (Section 4), then discusses guidelines for path selection
+   algorithms and suggests how these may be applicable to congestion
+   control algorithms, without discussing the later in detail
+   (Section 5).  Finally, in order to facilitate these algorithms, this
+   documents contains suggestions for API design and general use in
+   applications (Section 7).
 
    As a practical example of a PAN and how path metadata can be made
    available and path selection and routing can be implemented, we refer
@@ -160,23 +158,9 @@ Table of Contents
    The SCION protocol makes detailed path information available to
    endpoints.  Besides the 4-tuple of address/IP at each endpoint, the
    information includes a list of all traversed ASes and respective
-   links between ASes, as well as metadata about ASes and links, such as
-   MTU, bandwidth, latency, AS internal hopcount, or geolocation
-   information.
-
-   In the context of multipathing, this path information can be useful
-   for algorithms that select paths (see Section 5.5) perform congestion
-   control (see Section 5.3) and distribute load over all selected paths
-   (scheduling) Section 5.4.
-
-   In order to facilitate these algorithms, this documents contains
-   suggestions for API design and general use in applications.
-
-   Multipath usage profiles are categorized into data transfer
-   Section 6.1, low latency Section 6.2 and high availability /
-   redundancy Section 6.3.
-
-   One example of an application / algorithm is discussed in [DMTP].
+   links between ASes, as well as metadata about ASes and links,
+   including MTU, bandwidth, latency, AS internal hopcount, or
+   geolocation information.
 
 1.2.  Terminology
 
@@ -260,9 +244,9 @@ Table of Contents
    the sense of multiple paths per 4-tuple.  Multipathing over multiple
    interfaces is not discussed in detail.
 
-4.  Multipath Scenarios
+4.  Multipath Categorization
 
-   This document distinguishes the following usage scenarios:
+   This document distinguishes the following usage categories:
 
    *  High bandwidth (HBW): Optimizing bandwidth by parallel transfer on
       multiple paths.
@@ -276,7 +260,9 @@ Table of Contents
    *  Failure tolerance (FT): Optimizing for failure tolerance by
       parallel transfer on multiple paths.
 
-   The discussions of these scenarios are written with multiple paths
+   *  Evasion (EVA): Avoid certain links or ASes.
+
+   The discussions of these categories are written with multiple paths
    per interface in mind (i.e. multiple paths per 4-tuple).  However,
    they can usually be generalized to multipathing over multiple
    interfaces.
@@ -314,11 +300,21 @@ Table of Contents
 
 5.  Algorithms
 
-5.1.  MTU
+5.1.  Path Selection
+
+5.1.1.  Hybrid approach
+
+   A hybrid approach could start with using low latency paths.  If the
+   connection appears to be long lasting (e.g. at least 1 second
+   duration and 1MB of traffic) it could start adding additional paths
+   and see whether the traffic increases.  Additional paths can be
+   chosen following the guidelines discussed in Section 6.1.
+
+5.2.  MTU
 
    SCION provides MTU information for every AS-level link on a path.
 
-5.2.  Detecting Byzantine ASes and Links
+5.3.  Detecting Byzantine ASes and Links
 
    By comparing performance (latency, bandwidth, packet drop rate, link
    errors, MTU) of multiple paths, we can (with some accuracy) detect
@@ -330,7 +326,11 @@ Table of Contents
 
    *TODO* Move to Path Metadata section?
 
-5.3.  Congestion Control
+5.4.  DMTP
+
+   One example of an application / algorithm is discussed in [DMTP].
+
+5.5.  Congestion Control
 
    General recommendations for congestion control are defined in
    Congestion Control Principles [CC-PRINCIPLES].  Congestion control
@@ -369,7 +369,7 @@ Table of Contents
 
    *TODO* Terminology: path selection vs load distribution?
 
-5.4.  Load Distribution
+5.6.  Load Distribution
 
    Load distribution algorithms are mainly useful for high bandwidth
    (HBW) scenarios.  They halp distribution the transfer load
@@ -382,16 +382,6 @@ Table of Contents
    buffer size puts a hard limit on how different tha latency/jitter on
    the different paths are and how much large packet loss can be allowed
    before a buffer overrun will degrade performance.
-
-5.5.  Path Selection
-
-5.5.1.  Hybrid approach
-
-   A hybrid approach could start with using low latency paths.  If the
-   connection appears to be long lasting (e.g. at least 1 second
-   duration and 1MB of traffic) it could start adding additional paths
-   and see whether the traffic increases.  Additional paths can be
-   chosen following the guidelines discussed in Section 6.1.
 
 6.  Applications (#apps}
 
@@ -484,8 +474,8 @@ Table of Contents
 
    Applications will have very different requirements on a multipath
    API.  A comprehensive API should therefore allow for mostly automatic
-   selection of Section 5.5 Path Selection and Congestion Control
-   algorithms Section 5.3.
+   selection of Section 5.1 Path Selection and Congestion Control
+   algorithms Section 5.5.
 
    At the same time it should give access to SCION paths and their
    metadata to allow implementation of custom algorithms.
