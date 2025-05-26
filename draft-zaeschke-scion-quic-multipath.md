@@ -94,9 +94,8 @@ Emerging networking experiments and technologies, ACM"
 
 This document provides guidelines for using the Multipath Extension
 for QUIC {{QUIC-MP}} with path aware networks (PAN).
-PANs may provide 100s of paths between
-endpoint, including detailed path metadata that facilitates an
-informed selection.
+PANs may provide hundreds of paths between endpoint, including
+detailed path metadata that facilitates an informed selection.
 This offers opportunities for new or improved algorithms for
 multipath networking.
 
@@ -107,16 +106,15 @@ API design and applications that use multipath QUIC over SCION.
 
 **TODO**
 
-- start writing sections on "Path Selection"
-- Section on QUIC-specific advantages.
+- Section on QUIC-specific advantages?
 
 --- middle
 
 # Introduction
 
 Path aware networks (PAN) can provide many detailed metadata about
-available paths, such as geographic location, legal authoroties,
-hardware, fees, or many other properties.
+available paths, such as latency, bandwidth, MTU, geographic location,
+or many other properties.
 
 Even when just one path is used, this allows selecting the
 best path for each use case while providing a suitable backup
@@ -125,23 +123,25 @@ paths if the first paths fails or becomes unatractive.
 In the case of concurrent multipathing, detailed metadata provides
 information about any links where different paths overlap and about the
 properties of these links. This allows, for example, choosing paths
-such that they don't share low low bandwidth links.
+such that they don't share low bandwidth links.
 
 This is useful for developing or improving network related algorithms,
 for example for path selection, or more informed algorithms for
 congestion control.
 
-This dosument identifies and categorizes multipath usage scenarios,
-discusses guidelines for path selection algorithms and finally
-suggests how these may be applicable to congestion control algorithms.
-
-Other algorithms, such as for congestion control, are not discussed
-in detail but possible benefits of detailed path metadata
-are indicated.
+This document first identifies and categorizes multipath usage
+scenarios ({{categories}}), then discusses guidelines for path selection
+algorithms and suggests how these may be applicable to congestion
+control algorithms, without discussing the later in detail
+({{algorithms}}).
+Finally, in order to facilitate these algorithms, this documents
+contains suggestions for API design and general use in
+applications ({{api}}).
 
 As a practical example of a PAN and how path metadata
 can be made available and path selection and routing can be
 implemented, we refer to the SCION {{SCION-CP}}, {{SCION-DP}}.
+
 
 ## SCION
 
@@ -155,21 +155,8 @@ The SCION protocol makes detailed path information available to
 endpoints. Besides the 4-tuple of address/IP at each endpoint, the
 information includes a list of all traversed ASes and
 respective links between ASes, as well as metadata about ASes and links,
-such as MTU, bandwidth, latency, AS internal hopcount, or geolocation
-information.
-
-In the context of multipathing, this path information can be useful
-for algorithms that select paths (see {{patsel}}) perform
-congestion control (see {{concon}}) and distribute load over all
-selected paths (scheduling) {{loaddist}}.
-
-In order to facilitate these algorithms, this documents contains
-suggestions for API design and general use in applications.
-
-Multipath usage profiles are categorized into data transfer {{datra}},
-low latency {{lola}} and high availability / redundancy {{redu}}.
-
-One example of an application / algorithm is discussed in {{DMTP}}.
+including MTU, bandwidth, latency, AS internal hopcount, or
+geolocation information.
 
 
 ## Terminology {#terms}
@@ -252,9 +239,9 @@ paths per 4-tuple. Multipathing over multiple interfaces is not
 discussed in detail.
 
 
-# Multipath Scenarios
+# Multipath Categorization {#categories}
 
-This document distinguishes the following usage scenarios:
+This document distinguishes the following usage categories:
 
 * High bandwidth (HBW): Optimizing bandwidth by parallel transfer on
   multiple paths.
@@ -264,8 +251,9 @@ This document distinguishes the following usage scenarios:
   by parallel transmission on multiple path.
 * Failure tolerance (FT): Optimizing for failure tolerance by
   parallel transfer on multiple paths.
+* Evasion (EVA): Avoid certain links or ASes.
 
-The discussions of these scenarios are written with multiple paths
+The discussions of these categories are written with multiple paths
 per interface in mind (i.e. multiple paths per 4-tuple).  However, they
 can usually be generalized to multipathing over multiple interfaces.
 
@@ -302,7 +290,17 @@ Due to the inherent unreliability, users should implement sanity
 checks the verify that a link holds up to the promised capabilities.
 
 
-# Algorithms
+# Algorithms {#algorithms}
+
+## Path Selection {#patsel}
+
+### Hybrid approach
+A hybrid approach could start with using low latency paths. If the
+connection appears to be long lasting (e.g. at least 1 second duration
+and 1MB of traffic) it could start adding additional paths and see
+whether the traffic increases. Additional paths can be chosen
+following the guidelines discussed in {{datra}}.
+
 
 ## MTU
 
@@ -320,6 +318,11 @@ or possibly kept as backup paths for emergencies.
 **TODO** Add reference to research.
 
 **TODO** Move to Path Metadata section?
+
+
+## DMTP
+
+One example of an application / algorithm is discussed in {{DMTP}}.
 
 
 ## Congestion Control {#concon}
@@ -381,14 +384,6 @@ size puts a hard limit on how different tha latency/jitter on
 the different paths are and how much large packet loss can be allowed
 before a buffer overrun will degrade performance.
 
-## Path Selection {#patsel}
-
-### Hybrid approach
-A hybrid approach could start with using low latency paths. If the
-connection appears to be long lasting (e.g. at least 1 second duration
-and 1MB of traffic) it could start adding additional paths and see
-whether the traffic increases. Additional paths can be chosen
-following the guidelines discussed in {{datra}}.
 
 
 
@@ -482,7 +477,7 @@ SCION allows for choosing paths based on trusted or untrusted ASes,
 but this is not specific to multipathing...
 
 
-# API Design consideration
+# API Design consideration {#api}
 
 ## Multipathing for Applications
 
