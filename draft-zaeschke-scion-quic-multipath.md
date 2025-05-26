@@ -93,21 +93,20 @@ Emerging networking experiments and technologies, ACM"
 --- abstract
 
 This document provides guidelines for using the Multipath Extension
-for QUIC {{QUIC-MP}} with path aware networks (PAN) such as SCION
-{{SCION-CP}}, {{SCION-DP}}. PANs may provide a selection 100s of paths
-between endpoint, including detailed path information to make an
+for QUIC {{QUIC-MP}} with path aware networks (PAN).
+PANs may provide 100s of paths between
+endpoint, including detailed path metadata that facilitates an
 informed selection.
-This offers opportunities for new or improved algorithms, such as
-for path selection or congestion control.
+This offers opportunities for new or improved algorithms for
+multipath networking.
 
-The guidelines in this document mostly concern algorithms for
-path selecxtion. However, it also comments on congestion control and
-load distribution (scheduling), as well as general considerations for
+This document discusses mostly algorithms for path selection.
+However, it also comments on congestion control and load distribution
+(scheduling), as well as general considerations for
 API design and applications that use multipath QUIC over SCION.
 
 **TODO**
 
-- Remove SCION from abstract
 - start writing sections on "Path Selection"
 - Section on QUIC-specific advantages.
 
@@ -115,26 +114,34 @@ API design and applications that use multipath QUIC over SCION.
 
 # Introduction
 
-Path aware networks (PAN) can provide many details (metadata) about
-available paths and allow selecting paths expliocitly based on this
-metadata.
+Path aware networks (PAN) can provide many detailed metadata about
+available paths, such as geographic location, legal authoroties,
+hardware, fees, or many other properties.
 
 Even when just one path is used, this allows selecting the
-best path based on metadata about latency, bandwidth,
-geographic location, legal authoroties, hardware, fees, or many
-other properties.
+best path for each use case while providing a suitable backup
+paths if the first paths fails or becomes unatractive.
 
-In addition, in the case of multipathing, detailed metadata provides
-information about links where different paths overlap and about the
-properties of these links.
+In the case of concurrent multipathing, detailed metadata provides
+information about any links where different paths overlap and about the
+properties of these links. This allows, for example, choosing paths
+such that they don't share low low bandwidth links.
 
 This is useful for developing or improving network related algorithms,
 for example for path selection, or more informed algorithms for
 congestion control.
 
 This dosument identifies and categorizes multipath usage scenarios,
-discusses guidlines for path selection algorithms and finally
+discusses guidelines for path selection algorithms and finally
 suggests how these may be applicable to congestion control algorithms.
+
+Other algorithms, such as for congestion control, are not discussed
+in detail but possible benefits of detailed path metadata
+are indicated.
+
+As a practical example of a PAN and how path metadata
+can be made available and path selection and routing can be
+implemented, we refer to the SCION {{SCION-CP}}, {{SCION-DP}}.
 
 ## SCION
 
@@ -171,56 +178,8 @@ One example of an application / algorithm is discussed in {{DMTP}}.
 a common administrative control.  For example, the network of an
 Internet service provider or organization can constitute an AS.
 
-**Core AS**: Each SCION isolation domain (ISD) is administered by a
-set of distinguished autonomous systems (ASes) called core ASes,
-which are responsible for initiating the path discovery and path
-construction process (in SCION called "beaconing").
-
-**Data Plane**: The data plane (sometimes also referred to as the
-forwarding plane) is responsible for forwarding data packets that
-endpoints have injected into the network.  After routing information
-has been disseminated by the control plane, packets are forwarded
-by the data plane in accordance with such information.
-
-**Egress/Ingress**: refers to the direction of travel.  In SCION,
-path construction with beaconing happens in one direction, while
-actual traffic might follow the opposite direction.  This document
-clarifies on a case-by-case basis whether 'egress' or 'ingress'
-refers to the direction of travel of the SCION packet or to the
-direction of beaconing.
-
-**Endpoint**: An endpoint is the start or the end of a SCION path,
+**Endpoint**: An endpoint is the start or the end of a path,
 as defined in {{PATH-VOCABULARY}}.
-
-**Hop Field (HF)**: As they traverse the network, path segment
-construction beacons (PCBs) accumulate cryptographically protected
-AS-level path information in the form of Hop Fields.  In the data
-plane, Hop Fields are used for packet forwarding: they contain the
-incoming and outgoing interface IDs of the ASes on the forwarding path.
-
-**Info Field (INF)**: Each path segment construction beacon (PCB)
-contains a single Info field, which provides basic information
-about the PCB.  Together with Hop Fields (HFs), these are used to
-create forwarding paths.
-
-**Interface Identifier (Interface ID)**: A 16-bit identifier that
-designates a SCION interface at the end of a link connecting two
-SCION ASes, with each interface belonging to one border router. Hop
-fields describe the traversal of an AS by a pair of interface IDs
-called `ConsIngress` and `ConsEgress`, as they refer to the ingress
-and egress interfaces in the direction of path construction
-(beaconing). The Interface ID MUST be unique within each AS.
-Interface ID 0 is not a valid identifier as implementations MAY use
-it as the "unspecified" value.
-
-**Isolation Domain (ISD)**: In SCION, Autonomous Systems (ASes) are
-organized into logical groups called Isolation Domains or ISDs.
-Each ISD consists of ASes that span an area with a uniform trust
-environment (e.g. a common jurisdiction).  A possible model is for
-ISDs to be formed along national boundaries or federations of nations.
-
-**Leaf AS**: An AS at the "edge" of an ISD, with no other
-downstream ASes.
 
 **Inter AS link**: A direct link between two external interfaces of two
 ASes.
@@ -231,29 +190,16 @@ a single AS. A direct link may contains several internal hops.
 **Link**: General term that refers to "inter-AS links" and "intra-AS
 links".
 
-**MAC**: Message Authentication Code.  In the rest of this document,
-"MAC" always refers to "Message Authentication Code" and never to
-"Medium Access Control".  When "Medium Access Control address" is
-implied, the phrase "Link Layer Address" is used.
-
-**Path Authorization**: A requirement for the data plane is that
-endpoints can only use paths that were constructed and authorized
-by ASes in the control plane.  This property is called path
-authorization.  The goal of path authorization is to prevent
-endpoints from crafting Hop Fields (HFs) themselves, modifying HFs
-in authorized path segments, or combining HFs of different path
-segments.
-
-**Path**: Besides the 4-tuple of address/IP at each endpoint, the
-information includes a list of all traversed ASes and
-respective links between ASes, as well as metadata about ASes and links,
-such as MTU, bandwidth, latency, AS internal hopcount, or geolocation
-information.
+**Path**: Consists of a 4-tuple of address/IP at each endpoint, a list
+of all traversed ASes, and links inside and between ASes, including
+interface IDs on border routers of each AS.
 
 **Path metadata**: Path metadata is additional data that is available to
 clients when they request a selection of paths to a destination.
 Path metadata is authenticated wrt to owner of each link, but
 otherwise not verified.
+Path metadata includes data about ASes and links, such as MTU,
+bandwidth, latency, AS internal hopcount, or geolocation information.
 
 **SCMP**: A signaling protocol analogous to the Internet Control
 Message Protocol (ICMP).  This is described in {{SCION-CP}}.
