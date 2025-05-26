@@ -1392,7 +1392,11 @@ clients when they request a selection of paths to a destination.
 Path metadata is authenticated wrt to owner of each link, but
 otherwise not verified.
 Path metadata includes data about ASes and links, such as MTU,
-bandwidth, latency, AS internal hopcount, or geolocation information.<a href="#section-1.2-7" class="pilcrow">¶</a></p>
+bandwidth, latency, AS internal hopcount, or geolocation information.
+Path metadata is stable, e.i. it is updated infrequently, probably at
+most once per hour. Properties such as bandwidth and latency
+therefore represent hardware properties rather than live traffic
+information.<a href="#section-1.2-7" class="pilcrow">¶</a></p>
 <p id="section-1.2-8"><strong>SCMP</strong>: A signaling protocol analogous to the Internet Control
 Message Protocol (ICMP).  This is described in <span>[<a href="#SCION-CP" class="cite xref">SCION-CP</a>]</span>.<a href="#section-1.2-8" class="pilcrow">¶</a></p>
 </section>
@@ -1494,26 +1498,25 @@ discussed in detail.<a href="#section-3.1.5-1" class="pilcrow">¶</a></p>
 multiple paths.<a href="#section-4-2.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-4-2.2">
-          <p id="section-4-2.2.1">Minimum latency (MinLat): Optimizing latency by regularly checking
-multiple paths and using the one with the lowest latency.<a href="#section-4-2.2.1" class="pilcrow">¶</a></p>
+          <p id="section-4-2.2.1">Minimum latency (LAT): Optimizing latency for low latency.
+This can be achieved by regularly checking multiple paths and using
+the one with the lowest latency or by parallel transmission over
+multiple path.<a href="#section-4-2.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-4-2.3">
-          <p id="section-4-2.3.1">Minimum latency through redundancy (MinLatRed): Optimizing latency
-by parallel transmission on multiple path.<a href="#section-4-2.3.1" class="pilcrow">¶</a></p>
+          <p id="section-4-2.3.1">Failure tolerance (FT): Optimizing for failure tolerance by
+parallel transfer on multiple paths.<a href="#section-4-2.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-4-2.4">
-          <p id="section-4-2.4.1">Failure tolerance (FT): Optimizing for failure tolerance by
-parallel transfer on multiple paths.<a href="#section-4-2.4.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-4-2.5">
-          <p id="section-4-2.5.1">Evasion (EVA): Avoid certain links or ASes.<a href="#section-4-2.5.1" class="pilcrow">¶</a></p>
+          <p id="section-4-2.4.1">Evasion (EVA): Avoid certain links or ASes.<a href="#section-4-2.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="section-4-3">The discussions of these categories are written with multiple paths
 per interface in mind (i.e. multiple paths per 4-tuple).  However, they
 can usually be generalized to multipathing over multiple interfaces.<a href="#section-4-3" class="pilcrow">¶</a></p>
-<p id="section-4-4"><strong>TODO</strong> "Usually" should be replaced with "Unless noted otherwise" or
-possibly "cannot be generalized, unless noted otherwise". Let's see.<a href="#section-4-4" class="pilcrow">¶</a></p>
+<p id="section-4-4">These categories can be combined, for example LAT and FT may often be
+combined and EVA can be can be useful in combination with any other
+category.<a href="#section-4-4" class="pilcrow">¶</a></p>
 <div id="disjunctness">
 <section id="section-4.1">
         <h3 id="name-disjunctness">
