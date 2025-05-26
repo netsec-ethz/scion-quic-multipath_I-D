@@ -1237,7 +1237,7 @@ API design and applications that use multipath QUIC over SCION.<a href="#section
                 <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-path-selection" class="internal xref">Path Selection</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.1">
-                    <p id="section-toc.1-1.5.2.1.2.1.1"><a href="#section-5.1.1" class="auto internal xref">5.1.1</a>.  <a href="#name-hybrid-approach" class="internal xref">Hybrid approach</a></p>
+                    <p id="section-toc.1-1.5.2.1.2.1.1"><a href="#section-5.1.1" class="auto internal xref">5.1.1</a>.  <a href="#name-dynamic-approach" class="internal xref">Dynamic Approach</a></p>
 </li>
                 </ul>
 </li>
@@ -1560,12 +1560,12 @@ checks as to whether a link holds up to the promised capabilities.<a href="#sect
         <h3 id="name-path-selection">
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-path-selection" class="section-name selfRef">Path Selection</a>
         </h3>
-<div id="hybrid-approach">
+<div id="dynamic-approach">
 <section id="section-5.1.1">
-          <h4 id="name-hybrid-approach">
-<a href="#section-5.1.1" class="section-number selfRef">5.1.1. </a><a href="#name-hybrid-approach" class="section-name selfRef">Hybrid approach</a>
+          <h4 id="name-dynamic-approach">
+<a href="#section-5.1.1" class="section-number selfRef">5.1.1. </a><a href="#name-dynamic-approach" class="section-name selfRef">Dynamic Approach</a>
           </h4>
-<p id="section-5.1.1-1">A hybrid approach could start with using low latency paths. If the
+<p id="section-5.1.1-1">A dynamic approach could start with using low latency paths. If the
 connection appears to be long lasting (e.g. at least 1 second duration
 and 1MB of traffic) it could start adding additional paths and see
 whether the traffic increases. Additional paths can be chosen

@@ -92,7 +92,7 @@ Table of Contents
      4.2.  Path Metadata
    5.  Algorithms
      5.1.  Path Selection
-       5.1.1.  Hybrid approach
+       5.1.1.  Dynamic Approach
      5.2.  MTU
      5.3.  Detecting Byzantine ASes and Links
      5.4.  DMTP
@@ -305,9 +305,9 @@ Table of Contents
 
 5.1.  Path Selection
 
-5.1.1.  Hybrid approach
+5.1.1.  Dynamic Approach
 
-   A hybrid approach could start with using low latency paths.  If the
+   A dynamic approach could start with using low latency paths.  If the
    connection appears to be long lasting (e.g. at least 1 second
    duration and 1MB of traffic) it could start adding additional paths
    and see whether the traffic increases.  Additional paths can be
