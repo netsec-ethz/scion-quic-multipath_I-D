@@ -1244,9 +1244,6 @@ API design and applications that use multipath QUIC over SCION.<a href="#section
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.1">
                     <p id="section-toc.1-1.5.2.1.2.1.1"><a href="#section-5.1.1" class="auto internal xref">5.1.1</a>.  <a href="#name-dynamic-approach" class="internal xref">Dynamic Approach</a></p>
 </li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.2">
-                    <p id="section-toc.1-1.5.2.1.2.2.1"><a href="#section-5.1.2" class="auto internal xref">5.1.2</a>.  <a href="#name-reordering-and-scheduling-l" class="internal xref">Reordering and Scheduling (Load Distribution)</a></p>
-</li>
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
@@ -1262,7 +1259,7 @@ API design and applications that use multipath QUIC over SCION.<a href="#section
                 <p id="section-toc.1-1.5.2.5.1"><a href="#section-5.5" class="auto internal xref">5.5</a>.  <a href="#name-congestion-control" class="internal xref">Congestion Control</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.6">
-                <p id="section-toc.1-1.5.2.6.1"><a href="#section-5.6" class="auto internal xref">5.6</a>.  <a href="#name-load-distribution" class="internal xref">Load Distribution</a></p>
+                <p id="section-toc.1-1.5.2.6.1"><a href="#section-5.6" class="auto internal xref">5.6</a>.  <a href="#name-load-distribution-schedulin" class="internal xref">Load Distribution (Scheduling)</a></p>
 </li>
             </ul>
 </li>
@@ -1581,33 +1578,6 @@ whether the traffic increases. Additional paths can be chosen
 following the guidelines discussed in <a href="#datra" class="auto internal xref">Section 6.1</a>.<a href="#section-5.1.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="reordering-and-scheduling-load-distribution">
-<section id="section-5.1.2">
-          <h4 id="name-reordering-and-scheduling-l">
-<a href="#section-5.1.2" class="section-number selfRef">5.1.2. </a><a href="#name-reordering-and-scheduling-l" class="section-name selfRef">Reordering and Scheduling (Load Distribution)</a>
-          </h4>
-<p id="section-5.1.2-1">Sending data stream over multiple paths in parallel will usually
-result in packets arriving out of order at the receiver.<a href="#section-5.1.2-1" class="pilcrow">¶</a></p>
-<p id="section-5.1.2-2">This should be avoided because:<a href="#section-5.1.2-2" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-5.1.2-3.1">
-              <p id="section-5.1.2-3.1.1">Reordering requires larger buffers on the receiver side.<a href="#section-5.1.2-3.1.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-5.1.2-3.2">
-              <p id="section-5.1.2-3.2.1">Head of line blocking (HOLB): the latency of the slowest packet
-determines the effective latency of the stream. This may be
-ignored for data transfers where latency is irrelevant.<a href="#section-5.1.2-3.2.1" class="pilcrow">¶</a></p>
-</li>
-          </ul>
-<p id="section-5.1.2-4">These problems can be mitigated, but it is difficult to do so for both
-problems at the same time.<a href="#section-5.1.2-4" class="pilcrow">¶</a></p>
-<p id="section-5.1.2-5">Reordering can be reduced by:
-<strong>TODO</strong> describe algorithm  ----------------------------------------------------------<a href="#section-5.1.2-5" class="pilcrow">¶</a></p>
-<p id="section-5.1.2-6">HOLB can be reduced by simply avoiding (see EVA) high latency path.
-HOLB is implicitly reduced by measures proposed for reducing reordering.<a href="#section-5.1.2-6" class="pilcrow">¶</a></p>
-<p id="section-5.1.2-7"><strong>TODO</strong> Can we facilitate QUIC streams for this?<a href="#section-5.1.2-7" class="pilcrow">¶</a></p>
-</section>
-</div>
 </section>
 </div>
 <div id="mtu">
@@ -1685,18 +1655,39 @@ algorithms.<a href="#section-5.5-5" class="pilcrow">¶</a></p>
 </div>
 <div id="loaddist">
 <section id="section-5.6">
-        <h3 id="name-load-distribution">
-<a href="#section-5.6" class="section-number selfRef">5.6. </a><a href="#name-load-distribution" class="section-name selfRef">Load Distribution</a>
+        <h3 id="name-load-distribution-schedulin">
+<a href="#section-5.6" class="section-number selfRef">5.6. </a><a href="#name-load-distribution-schedulin" class="section-name selfRef">Load Distribution (Scheduling)</a>
         </h3>
 <p id="section-5.6-1">Load distribution algorithms are mainly useful for high bandwidth
-(HBW) scenarios. They halp distribution the transfer load efficiently
-over multiple path.<a href="#section-5.6-1" class="pilcrow">¶</a></p>
-<p id="section-5.6-2">.. many things<a href="#section-5.6-2" class="pilcrow">¶</a></p>
-<p id="section-5.6-3">Last not least there is a relation to receiver buffer sizes. The
-buffers are required to put packets back in order. The available buffer
-size puts a hard limit on how different tha latency/jitter on
-the different paths are and how much large packet loss can be allowed
-before a buffer overrun will degrade performance.<a href="#section-5.6-3" class="pilcrow">¶</a></p>
+(HBW) scenarios. Latency may still be relevant though, for example
+for high definition video streams. Scheduling halps distributing
+the transfer load efficiently over multiple path.<a href="#section-5.6-1" class="pilcrow">¶</a></p>
+<p id="section-5.6-2">However, sending data stream over multiple paths in parallel will
+usually result in packets arriving out of order at the receiver.
+This should be avoided because:<a href="#section-5.6-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.6-3.1">
+            <p id="section-5.6-3.1.1">Packet reordering requires larger buffers on the receiver side which
+are used to put packets back in order. Latency, jitter and
+drop rate on different paths directly affect the required buffer
+size.<a href="#section-5.6-3.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.6-3.2">
+            <p id="section-5.6-3.2.1">Head of line blocking (HOLB): the latency of the slowest packet
+determines the effective latency of the stream. This may be
+ignored for data transfers where latency is irrelevant.<a href="#section-5.6-3.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-5.6-4">These problems can be mitigated, but it is difficult to do so for both
+problems at the same time.
+A simple way to mitigate these problem is to select multiple paths
+with similar latency.<a href="#section-5.6-4" class="pilcrow">¶</a></p>
+<p id="section-5.6-5">Another way to mitigate these problems is to schedule packets on
+different paths such that they are likely to arrive in (more or less)
+the correct order. Care should be taken to avoid requiring an
+equally large buffer on the sender side.<a href="#section-5.6-5" class="pilcrow">¶</a></p>
+<p id="section-5.6-6"><strong>TODO</strong> Check which existing algorithms do that.<a href="#section-5.6-6" class="pilcrow">¶</a></p>
+<p id="section-5.6-7"><strong>TODO</strong> Can we facilitate QUIC streams for this?<a href="#section-5.6-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
