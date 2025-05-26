@@ -187,6 +187,10 @@ Path metadata is authenticated wrt to owner of each link, but
 otherwise not verified.
 Path metadata includes data about ASes and links, such as MTU,
 bandwidth, latency, AS internal hopcount, or geolocation information.
+Path metadata is stable, e.i. it is updated infrequently, probably at
+most once per hour. Properties such as bandwidth and latency
+therefore represent hardware properties rather than live traffic
+information.
 
 **SCMP**: A signaling protocol analogous to the Internet Control
 Message Protocol (ICMP).  This is described in {{SCION-CP}}.
@@ -245,10 +249,10 @@ This document distinguishes the following usage categories:
 
 * High bandwidth (HBW): Optimizing bandwidth by parallel transfer on
   multiple paths.
-* Minimum latency (MinLat): Optimizing latency by regularly checking
-  multiple paths and using the one with the lowest latency.
-* Minimum latency through redundancy (MinLatRed): Optimizing latency
-  by parallel transmission on multiple path.
+* Minimum latency (LAT): Optimizing latency for low latency.
+  This can be achieved by regularly checking multiple paths and using
+  the one with the lowest latency or by parallel transmission over
+  multiple path.
 * Failure tolerance (FT): Optimizing for failure tolerance by
   parallel transfer on multiple paths.
 * Evasion (EVA): Avoid certain links or ASes.
@@ -257,8 +261,9 @@ The discussions of these categories are written with multiple paths
 per interface in mind (i.e. multiple paths per 4-tuple).  However, they
 can usually be generalized to multipathing over multiple interfaces.
 
-**TODO** "Usually" should be replaced with "Unless noted otherwise" or
-possibly "cannot be generalized, unless noted otherwise". Let's see.
+These categories can be combined, for example LAT and FT may often be
+combined and EVA can be can be useful in combination with any other
+category.
 
 
 ## Disjunctness
