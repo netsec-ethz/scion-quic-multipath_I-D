@@ -98,7 +98,7 @@ Table of Contents
      5.4.  DMTP
      5.5.  Congestion Control
      5.6.  Load Distribution
-   6.  Applications (#apps}
+   6.  Applications
      6.1.  Data Transfer
      6.2.  Low Latency
      6.3.  High Availability / Redundancy
@@ -251,7 +251,7 @@ Table of Contents
 
    This document distinguishes the following usage categories:
 
-   *  High bandwidth (HBW): Optimizing bandwidth by parallel transfer on
+   *  High bandwidth (BW): Optimizing bandwidth by parallel transfer on
       multiple paths.
 
    *  Minimum latency (LAT): Optimizing latency for low latency.  This
@@ -275,11 +275,11 @@ Table of Contents
 
 4.1.  Disjunctness
 
-   For FT, paths are only interesting if they are disjunct.  For HWB,
+   For FT, paths are only interesting if they are disjunct.  For BW,
    paths should mostly be disjunct, but overlap is acceptable if the
    overlapping links have high BW available.
 
-   For MinLat and MinLatRed, path disjunctness is mostly irrelevant.
+   For LAT, path disjunctness is mostly irrelevant.
 
    *TODO* Discuss link level, router level and AS level path
    disjunctness.
@@ -299,7 +299,7 @@ Table of Contents
    metadata is authenticated an cannot be changed by other parties.
 
    Due to the inherent unreliability, users should implement sanity
-   checks the verify that a link holds up to the promised capabilities.
+   checks as to whether a link holds up to the promised capabilities.
 
 5.  Algorithms
 
@@ -386,7 +386,7 @@ Table of Contents
    the different paths are and how much large packet loss can be allowed
    before a buffer overrun will degrade performance.
 
-6.  Applications (#apps}
+6.  Applications
 
 6.1.  Data Transfer
 
