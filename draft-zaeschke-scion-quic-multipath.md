@@ -299,8 +299,8 @@ checks as to whether a link holds up to the promised capabilities.
 
 ## Path Selection {#patsel}
 
-### Hybrid approach
-A hybrid approach could start with using low latency paths. If the
+### Dynamic Approach
+A dynamic approach could start with using low latency paths. If the
 connection appears to be long lasting (e.g. at least 1 second duration
 and 1MB of traffic) it could start adding additional paths and see
 whether the traffic increases. Additional paths can be chosen
