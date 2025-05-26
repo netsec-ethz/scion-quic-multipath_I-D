@@ -247,7 +247,7 @@ discussed in detail.
 
 This document distinguishes the following usage categories:
 
-* High bandwidth (HBW): Optimizing bandwidth by parallel transfer on
+* High bandwidth (BW): Optimizing bandwidth by parallel transfer on
   multiple paths.
 * Minimum latency (LAT): Optimizing latency for low latency.
   This can be achieved by regularly checking multiple paths and using
@@ -269,10 +269,10 @@ category.
 ## Disjunctness
 
 For FT, paths are only interesting if they are disjunct.
-For HWB, paths should mostly be disjunct, but overlap is
+For BW, paths should mostly be disjunct, but overlap is
 acceptable if the overlapping links have high BW available.
 
-For MinLat and MinLatRed, path disjunctness is mostly irrelevant.
+For LAT, path disjunctness is mostly irrelevant.
 
 **TODO** Discuss link level, router level and AS level path disjunctness.
 
@@ -292,7 +292,7 @@ However, once disseminated by a link owner, the path metadata is
 authenticated an cannot be changed by other parties.
 
 Due to the inherent unreliability, users should implement sanity
-checks the verify that a link holds up to the promised capabilities.
+checks as to whether a link holds up to the promised capabilities.
 
 
 # Algorithms {#algorithms}
@@ -392,7 +392,7 @@ before a buffer overrun will degrade performance.
 
 
 
-# Applications (#apps}
+# Applications {#apps}
 
 ## Data Transfer {#datra}
 
