@@ -313,33 +313,6 @@ and 1MB of traffic) it could start adding additional paths and see
 whether the traffic increases. Additional paths can be chosen
 following the guidelines discussed in {{datra}}.
 
-### Reordering and Scheduling (Load Distribution)
-
-Sending data stream over multiple paths in parallel will usually
-result in packets arriving out of order at the receiver.
-
-This should be avoided because:
-
-* Reordering requires larger buffers on the receiver side.
-* Head of line blocking (HOLB): the latency of the slowest packet
-  determines the effective latency of the stream. This may be
-  ignored for data transfers where latency is irrelevant.
-
-These problems can be mitigated, but it is difficult to do so for both
-problems at the same time.
-
-Reordering can be reduced by:
-**TODO** describe algorithm  ----------------------------------------------------------
-
-
-HOLB can be reduced by simply avoiding (see EVA) high latency path.
-HOLB is implicitly reduced by measures proposed for reducing reordering.
-
-
-
-
-
-**TODO** Can we facilitate QUIC streams for this?
 
 
 ## MTU
@@ -410,21 +383,38 @@ algorithms.
 
 **TODO** Terminology: path selection vs load distribution?
 
-## Load Distribution {#loaddist}
+## Load Distribution (Scheduling) {#loaddist}
 
 Load distribution algorithms are mainly useful for high bandwidth
-(HBW) scenarios. They halp distribution the transfer load efficiently
-over multiple path.
+(HBW) scenarios. Latency may still be relevant though, for example
+for high definition video streams. Scheduling halps distributing
+the transfer load efficiently over multiple path.
 
-.. many things
+However, sending data stream over multiple paths in parallel will
+usually result in packets arriving out of order at the receiver.
+This should be avoided because:
 
-Last not least there is a relation to receiver buffer sizes. The
-buffers are required to put packets back in order. The available buffer
-size puts a hard limit on how different tha latency/jitter on
-the different paths are and how much large packet loss can be allowed
-before a buffer overrun will degrade performance.
+* Packet reordering requires larger buffers on the receiver side which
+  are used to put packets back in order. Latency, jitter and
+  drop rate on different paths directly affect the required buffer
+  size.
+* Head of line blocking (HOLB): the latency of the slowest packet
+  determines the effective latency of the stream. This may be
+  ignored for data transfers where latency is irrelevant.
 
+These problems can be mitigated, but it is difficult to do so for both
+problems at the same time.
+A simple way to mitigate these problem is to select multiple paths
+with similar latency.
 
+Another way to mitigate these problems is to schedule packets on
+different paths such that they are likely to arrive in (more or less)
+the correct order. Care should be taken to avoid requiring an
+equally large buffer on the sender side.
+
+**TODO** Check which existing algorithms do that.
+
+**TODO** Can we facilitate QUIC streams for this?
 
 
 # Applications {#apps}
