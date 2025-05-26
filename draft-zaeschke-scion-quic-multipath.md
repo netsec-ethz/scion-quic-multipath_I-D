@@ -47,6 +47,11 @@ author:
     org: ETH Zurich
     email: "jelte.vanbommel@inf.ethz.ch"
  -
+    ins: F. Wirz
+    name: Francois Wirz
+    org: ETH Zurich
+    email: "wirzf@inf.ethz.ch"
+ -
     ins: T. Zaeschke
     name: Tilmann Zaeschke
     role: editor
