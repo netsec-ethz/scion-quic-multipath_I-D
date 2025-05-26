@@ -260,7 +260,8 @@ This document distinguishes the following usage categories:
   multiple path.
 * Failure tolerance (FT): Optimizing for failure tolerance by
   parallel transfer on multiple paths.
-* Evasion (EVA): Avoid certain links or ASes.
+* Evasion (EVA): Avoid certain links or ASes, for example based on MTU,
+  geolocation or AS number.
 
 The discussions of these categories are written with multiple paths
 per interface in mind (i.e. multiple paths per 4-tuple).  However, they
@@ -277,7 +278,7 @@ For FT, paths are only interesting if they are disjunct.
 For BW, paths should mostly be disjunct, but overlap is
 acceptable if the overlapping links have high BW available.
 
-For LAT, path disjunctness is mostly irrelevant.
+For LAT and EVA, path disjunctness is mostly irrelevant.
 
 **TODO** Discuss link level, router level and AS level path disjunctness.
 
@@ -305,11 +306,40 @@ checks as to whether a link holds up to the promised capabilities.
 ## Path Selection {#patsel}
 
 ### Dynamic Approach
+
 A dynamic approach could start with using low latency paths. If the
 connection appears to be long lasting (e.g. at least 1 second duration
 and 1MB of traffic) it could start adding additional paths and see
 whether the traffic increases. Additional paths can be chosen
 following the guidelines discussed in {{datra}}.
+
+### Reordering and Scheduling (Load Distribution)
+
+Sending data stream over multiple paths in parallel will usually
+result in packets arriving out of order at the receiver.
+
+This should be avoided because:
+
+* Reordering requires larger buffers on the receiver side.
+* Head of line blocking (HOLB): the latency of the slowest packet
+  determines the effective latency of the stream. This may be
+  ignored for data transfers where latency is irrelevant.
+
+These problems can be mitigated, but it is difficult to do so for both
+problems at the same time.
+
+Reordering can be reduced by:
+**TODO** describe algorithm  ----------------------------------------------------------
+
+
+HOLB can be reduced by simply avoiding (see EVA) high latency path.
+HOLB is implicitly reduced by measures proposed for reducing reordering.
+
+
+
+
+
+**TODO** Can we facilitate QUIC streams for this?
 
 
 ## MTU
