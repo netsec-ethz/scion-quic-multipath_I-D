@@ -1244,6 +1244,9 @@ API design and applications that use multipath QUIC over SCION.<a href="#section
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.1">
                     <p id="section-toc.1-1.5.2.1.2.1.1"><a href="#section-5.1.1" class="auto internal xref">5.1.1</a>.  <a href="#name-dynamic-approach" class="internal xref">Dynamic Approach</a></p>
 </li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.2">
+                    <p id="section-toc.1-1.5.2.1.2.2.1"><a href="#section-5.1.2" class="auto internal xref">5.1.2</a>.  <a href="#name-reordering-and-scheduling-l" class="internal xref">Reordering and Scheduling (Load Distribution)</a></p>
+</li>
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
@@ -1513,7 +1516,8 @@ multiple path.<a href="#section-4-2.2.1" class="pilcrow">¶</a></p>
 parallel transfer on multiple paths.<a href="#section-4-2.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-4-2.4">
-          <p id="section-4-2.4.1">Evasion (EVA): Avoid certain links or ASes.<a href="#section-4-2.4.1" class="pilcrow">¶</a></p>
+          <p id="section-4-2.4.1">Evasion (EVA): Avoid certain links or ASes, for example based on MTU,
+geolocation or AS number.<a href="#section-4-2.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="section-4-3">The discussions of these categories are written with multiple paths
@@ -1530,7 +1534,7 @@ category.<a href="#section-4-4" class="pilcrow">¶</a></p>
 <p id="section-4.1-1">For FT, paths are only interesting if they are disjunct.
 For BW, paths should mostly be disjunct, but overlap is
 acceptable if the overlapping links have high BW available.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
-<p id="section-4.1-2">For LAT, path disjunctness is mostly irrelevant.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.1-2">For LAT and EVA, path disjunctness is mostly irrelevant.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
 <p id="section-4.1-3"><strong>TODO</strong> Discuss link level, router level and AS level path disjunctness.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1575,6 +1579,33 @@ connection appears to be long lasting (e.g. at least 1 second duration
 and 1MB of traffic) it could start adding additional paths and see
 whether the traffic increases. Additional paths can be chosen
 following the guidelines discussed in <a href="#datra" class="auto internal xref">Section 6.1</a>.<a href="#section-5.1.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="reordering-and-scheduling-load-distribution">
+<section id="section-5.1.2">
+          <h4 id="name-reordering-and-scheduling-l">
+<a href="#section-5.1.2" class="section-number selfRef">5.1.2. </a><a href="#name-reordering-and-scheduling-l" class="section-name selfRef">Reordering and Scheduling (Load Distribution)</a>
+          </h4>
+<p id="section-5.1.2-1">Sending data stream over multiple paths in parallel will usually
+result in packets arriving out of order at the receiver.<a href="#section-5.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.1.2-2">This should be avoided because:<a href="#section-5.1.2-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.1.2-3.1">
+              <p id="section-5.1.2-3.1.1">Reordering requires larger buffers on the receiver side.<a href="#section-5.1.2-3.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-5.1.2-3.2">
+              <p id="section-5.1.2-3.2.1">Head of line blocking (HOLB): the latency of the slowest packet
+determines the effective latency of the stream. This may be
+ignored for data transfers where latency is irrelevant.<a href="#section-5.1.2-3.2.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+<p id="section-5.1.2-4">These problems can be mitigated, but it is difficult to do so for both
+problems at the same time.<a href="#section-5.1.2-4" class="pilcrow">¶</a></p>
+<p id="section-5.1.2-5">Reordering can be reduced by:
+<strong>TODO</strong> describe algorithm  ----------------------------------------------------------<a href="#section-5.1.2-5" class="pilcrow">¶</a></p>
+<p id="section-5.1.2-6">HOLB can be reduced by simply avoiding (see EVA) high latency path.
+HOLB is implicitly reduced by measures proposed for reducing reordering.<a href="#section-5.1.2-6" class="pilcrow">¶</a></p>
+<p id="section-5.1.2-7"><strong>TODO</strong> Can we facilitate QUIC streams for this?<a href="#section-5.1.2-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
