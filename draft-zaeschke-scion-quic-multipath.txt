@@ -3,9 +3,10 @@
 
 
 PANRG                                                      J. van Bommel
-Internet-Draft                                          T. Zaeschke, Ed.
-Intended status: Informational                                ETH Zurich
-Expires: 8 November 2025                                      7 May 2025
+Internet-Draft                                                   F. Wirz
+Intended status: Informational                          T. Zaeschke, Ed.
+Expires: 8 November 2025                                      ETH Zurich
+                                                              7 May 2025
 
 
          Guidelines for QUIC Multipath over Path Aware Networks
@@ -638,6 +639,11 @@ Authors' Addresses
    Jelte van Bommel
    ETH Zurich
    Email: jelte.vanbommel@inf.ethz.ch
+
+
+   Francois Wirz
+   ETH Zurich
+   Email: wirzf@inf.ethz.ch
 
 
    Tilmann Zaeschke (editor)
