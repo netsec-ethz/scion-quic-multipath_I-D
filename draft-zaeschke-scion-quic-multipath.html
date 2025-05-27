@@ -1591,8 +1591,11 @@ following the guidelines discussed in <a href="#datra" class="auto internal xref
 can help to identify linkks that should be avoided. In PAN this can
 be done using approaches such as <span>[<a href="#UMCC" class="cite xref">UMCC</a>]</span>.<a href="#section-5.1.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.1.2-2">One alternative is to use two SCMP <code>traceroute</code> commands that measure
-latency between two consecutive AS border routers. This can be used
-as an indication for high traffic.<a href="#section-5.1.2-2" class="pilcrow">¶</a></p>
+latency between two consecutive AS border routers. The measured
+latency can be compared to earlier measurements or to the latency
+given in the path metadata. Discrepancies can be an indication for
+high traffic and queueing problem on the measured link.<a href="#section-5.1.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.1.2-3"><strong>TODO</strong> Should we discourage this? It creates unnecessary traffic...<a href="#section-5.1.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>

@@ -323,8 +323,12 @@ Table of Contents
    done using approaches such as [UMCC].
 
    One alternative is to use two SCMP traceroute commands that measure
-   latency between two consecutive AS border routers.  This can be used
-   as an indication for high traffic.
+   latency between two consecutive AS border routers.  The measured
+   latency can be compared to earlier measurements or to the latency
+   given in the path metadata.  Discrepancies can be an indication for
+   high traffic and queueing problem on the measured link.
+
+   *TODO* Should we discourage this?  It creates unnecessary traffic...
 
 5.2.  MTU
 
