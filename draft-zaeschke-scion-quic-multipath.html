@@ -1218,7 +1218,7 @@ API design and applications that use multipath QUIC over SCION.<a href="#section
                     <p id="section-toc.1-1.3.2.1.2.4.1"><a href="#section-3.1.4" class="auto internal xref">3.1.4</a>.  <a href="#name-path-metadata-reliability" class="internal xref">Path Metadata Reliability</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.5">
-                    <p id="section-toc.1-1.3.2.1.2.5.1"><a href="#section-3.1.5" class="auto internal xref">3.1.5</a>.  <a href="#name-multi-inteface" class="internal xref">Multi-Inteface</a></p>
+                    <p id="section-toc.1-1.3.2.1.2.5.1"><a href="#section-3.1.5" class="auto internal xref">3.1.5</a>.  <a href="#name-multi-interface" class="internal xref">Multi-Interface</a></p>
 </li>
                 </ul>
 </li>
@@ -1301,7 +1301,10 @@ API design and applications that use multipath QUIC over SCION.<a href="#section
                 <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-latency-polling" class="internal xref">Latency Polling</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
-                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-more" class="internal xref">More ?</a></p>
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-path-validation" class="internal xref">Path Validation</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.3">
+                <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="auto internal xref">8.3</a>.  <a href="#name-more" class="internal xref">More ?</a></p>
 </li>
             </ul>
 </li>
@@ -1479,10 +1482,10 @@ which is the relevant AS owner. However, the data correctness is not
 verified, instead we rely on the AS onwer to be honest.<a href="#section-3.1.4-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="multi-inteface">
+<div id="multi-interface">
 <section id="section-3.1.5">
-          <h4 id="name-multi-inteface">
-<a href="#section-3.1.5" class="section-number selfRef">3.1.5. </a><a href="#name-multi-inteface" class="section-name selfRef">Multi-Inteface</a>
+          <h4 id="name-multi-interface">
+<a href="#section-3.1.5" class="section-number selfRef">3.1.5. </a><a href="#name-multi-interface" class="section-name selfRef">Multi-Interface</a>
           </h4>
 <p id="section-3.1.5-1"><strong>TODO remove this?</strong>
 This document discusses multipathing mainly in the sense of multiple
@@ -1870,13 +1873,75 @@ the interval between packets on each path should also vary.
 Additionally, the number of polled paths should vary.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="more-">
+<div id="path-validation">
 <section id="section-8.2">
-        <h3 id="name-more">
-<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-more" class="section-name selfRef">More ?</a>
+        <h3 id="name-path-validation">
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-path-validation" class="section-name selfRef">Path Validation</a>
         </h3>
-<p id="section-8.2-1">See <a href="#anon" class="auto internal xref">Section 6.4</a>.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
-<p id="section-8.2-2"><strong>TODO</strong><a href="#section-8.2-2" class="pilcrow">¶</a></p>
+<p id="section-8.2-1">Following <span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> (Section 5.1) and <span>[<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> (Section 9),
+endpoints <span class="bcp14">MUST</span> drop a connection or perform path validation when the
+4-tuple changes:<a href="#section-8.2-1" class="pilcrow">¶</a></p>
+<p id="section-8.2-2"><code>
+"Not all changes of peer address are intentional, or active,
+migrations. The peer could experience NAT rebinding: a change of
+address due to a middlebox, usually a NAT, allocating a new outgoing
+port or even a new outgoing IP address for a flow. An endpoint MUST
+perform path validation (Section 8.2) if it detects any change to a
+peer's address, unless it has previously validated that address."
+</code><a href="#section-8.2-2" class="pilcrow">¶</a></p>
+<p id="section-8.2-3">With SCION, endpoints may use private IPs, say 192.168.0.1. These IPs
+are obviously not unique. Two paths with an identical 4-tuple may
+therefor connect to two different machines if the machines are in
+different ASes but use the same IP/port.<a href="#section-8.2-3" class="pilcrow">¶</a></p>
+<p id="section-8.2-4">In short, an attacker can impersonate a client by using an identical
+IP/port to connect a server. The server would probably just reverse
+the path and answer to the client without triggering a path validation.<a href="#section-8.2-4" class="pilcrow">¶</a></p>
+<p id="section-8.2-5"><strong>TODO</strong> What is the implication of this?<a href="#section-8.2-5" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8.2-6.1">
+            <p id="section-8.2-6.1.1">Can an attacker, without having being able to encrypt/decrypt data,
+cause any harm? Can they redurect traffic to themselves? To prevent
+this, the server SCION stack should accept a new path only if the
+QUIC stack also accepts it! This means we need to trigger a path
+validation and somehow learn whether it worked. Or we use our own
+validation process. Or we don't allow the path to change and require
+a new QUIC connection (with a new SCION connection)?
+SOLUTION: The SCION layer <span class="bcp14">MUST NOT</span> cache paths locally, instead paths
+must be accepted by the QUIC layer before being used.<a href="#section-8.2-6.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-8.2-7">Examples:
+* Java over DatagramChannel:
+  * Comparing ResponsePath objects <span class="bcp14">MUST</span> return <code>false</code> if the
+paths differ.
+  * The QUIC layer <span class="bcp14">MUST</span> use only those addresses for sending data that
+    have previously been accepted. If an attacker sends a packet, it
+    should be identified as malicious, be rejected, and the path should
+    not be used.
+    Why would an attacker packet be accepted? Replay should be
+    impossible (there are apcket sequence IDs?), and any other
+    requests should be cryptographically protected.
+    Can this attack be successful with spoofed IPs???
+* Java over DatagramSocket: Problematic, it cahces the paths...
+* C + Rust: How exactly do we map PathID to paths? How are paths
+  updated?<a href="#section-8.2-7" class="pilcrow">¶</a></p>
+<p id="section-8.2-8">To restore the behavior intended by QUIC, we must therefore extend
+the 4-tuple to a 6-tuple of ISD-AS + IP + port on both endpoints.<a href="#section-8.2-8" class="pilcrow">¶</a></p>
+<p id="section-8.2-9"><strong>TODO</strong>
+This does not require any change in the QUIC layer but can probably
+be handled in the SCION ayer (the QUIC layer does not know about the
+ISD/AS code).<a href="#section-8.2-9" class="pilcrow">¶</a></p>
+<p id="section-8.2-10">It seems with SCION we can insert arbitrary IP addresses into the
+stack before handing incoming packets up to the QUIC layer...?<a href="#section-8.2-10" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="more-">
+<section id="section-8.3">
+        <h3 id="name-more">
+<a href="#section-8.3" class="section-number selfRef">8.3. </a><a href="#name-more" class="section-name selfRef">More ?</a>
+        </h3>
+<p id="section-8.3-1">See <a href="#anon" class="auto internal xref">Section 6.4</a>.<a href="#section-8.3-1" class="pilcrow">¶</a></p>
+<p id="section-8.3-2"><strong>TODO</strong><a href="#section-8.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
