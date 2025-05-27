@@ -94,6 +94,7 @@ Table of Contents
    5.  Algorithms
      5.1.  Path Selection
        5.1.1.  Dynamic Approach
+       5.1.2.  Bottleneck Detection
      5.2.  MTU
      5.3.  Detecting Byzantine ASes and Links
      5.4.  DMTP
@@ -279,7 +280,7 @@ Table of Contents
 
    For FT, paths are only interesting if they are disjunct.  For BW,
    paths should mostly be disjunct, but overlap is acceptable if the
-   overlapping links have high BW available.
+   overlapping links have high BW available (see Section 5.1.2).
 
    For LAT and EVA, path disjunctness is mostly irrelevant.
 
@@ -314,6 +315,16 @@ Table of Contents
    duration and 1MB of traffic) it could start adding additional paths
    and see whether the traffic increases.  Additional paths can be
    chosen following the guidelines discussed in Section 6.1.
+
+5.1.2.  Bottleneck Detection
+
+   If no live traffic information is available, bottleneck detection can
+   help to identify linkks that should be avoided.  In PAN this can be
+   done using approaches such as [UMCC].
+
+   One alternative is to use two SCMP traceroute commands that measure
+   latency between two consecutive AS border routers.  This can be used
+   as an indication for high traffic.
 
 5.2.  MTU
 
@@ -649,6 +660,11 @@ Table of Contents
               draft-dekater-scion-dataplane-05, 3 March 2025,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
               scion-dataplane-05>.
+
+   [UMCC]     Gartner, M. and D. Hausheer, "UMCC: Uncoupling Multipath
+              Congestion Control through Shared Bottleneck Detection in
+              Path-Aware Networks", Proceedings of the IEEE 49th
+              Conference on Local Computer Networks (LCN) , 2024.
 
 Acknowledgments
 
