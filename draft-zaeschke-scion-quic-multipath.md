@@ -41,18 +41,15 @@ stand_alone: yes
 pi: [toc, sortrefs, symrefs]
 
 author:
- -
-    ins: J. van Bommel
+ -  ins: J. van Bommel
     name: Jelte van Bommel
     org: ETH Zurich
     email: "jelte.vanbommel@inf.ethz.ch"
- -
-    ins: F. Wirz
+ -  ins: F. Wirz
     name: Francois Wirz
     org: ETH Zurich
     email: "wirzf@inf.ethz.ch"
- -
-    ins: T. Zaeschke
+ -  ins: T. Zaeschke
     name: Tilmann Zaeschke
     role: editor
     org: ETH Zurich
@@ -83,17 +80,20 @@ a possible solution"
     seriesinfo: "Proceedings of the 8th international conference on
 Emerging networking experiments and technologies, ACM"
     author:
-    -
-      ins: R. Khalili
-    -
-      ins: N. Gast
-    -
-      ins: M. Popovic
-    -
-      ins: U. Upadhyay
-    -
-      ins: J.-Y. Le Boudec
-
+    - ins: R. Khalili
+    - ins: N. Gast
+    - ins: M. Popovic
+    - ins: U. Upadhyay
+    - ins: J.-Y. Le Boudec
+  UMCC:
+    title: "UMCC: Uncoupling Multipath Congestion Control through
+Shared Bottleneck Detection in Path-Aware Networks"
+    date: "2024"
+    seriesinfo: "Proceedings of the IEEE 49th Conference on Local
+Computer Networks (LCN)"
+    author:
+    - ins: M. Gartner
+    - ins: D. Hausheer
 
 --- abstract
 
@@ -276,7 +276,8 @@ category.
 
 For FT, paths are only interesting if they are disjunct.
 For BW, paths should mostly be disjunct, but overlap is
-acceptable if the overlapping links have high BW available.
+acceptable if the overlapping links have high BW available (see
+{{bottleneck}}).
 
 For LAT and EVA, path disjunctness is mostly irrelevant.
 
@@ -313,6 +314,15 @@ and 1MB of traffic) it could start adding additional paths and see
 whether the traffic increases. Additional paths can be chosen
 following the guidelines discussed in {{datra}}.
 
+### Bottleneck Detection {#bottleneck}
+
+If no live traffic information is available, bottleneck detection
+can help to identify linkks that should be avoided. In PAN this can
+be done using approaches such as {{UMCC}}.
+
+One alternative is to use two SCMP `traceroute` commands that measure
+latency between two consecutive AS border routers. This can be used
+as an indication for high traffic.
 
 
 ## MTU
