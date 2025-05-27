@@ -240,7 +240,7 @@ cryptographically protected. It is signe by the data originator,
 which is the relevant AS owner. However, the data correctness is not
 verified, instead we rely on the AS onwer to be honest.
 
-### Multi-Inteface
+### Multi-Interface
 
 **TODO remove this?**
 This document discusses multipathing mainly in the sense of multiple
@@ -564,6 +564,72 @@ Solution: do not send all probes at the same time.
 To prevent patterns (1. after 0.1s, 2. after 0.3s, 3. after 0.35s, ...)
 the interval between packets on each path should also vary.
 Additionally, the number of polled paths should vary.
+
+## Path Validation
+
+Following {{QUIC-MP}} (Section 5.1) and {{QUIC-TRANSPORT}} (Section 9),
+endpoints MUST drop a connection or perform path validation when the
+4-tuple changes:
+
+```
+"Not all changes of peer address are intentional, or active,
+migrations. The peer could experience NAT rebinding: a change of
+address due to a middlebox, usually a NAT, allocating a new outgoing
+port or even a new outgoing IP address for a flow. An endpoint MUST
+perform path validation (Section 8.2) if it detects any change to a
+peer's address, unless it has previously validated that address."
+```
+
+With SCION, endpoints may use private IPs, say 192.168.0.1. These IPs
+are obviously not unique. Two paths with an identical 4-tuple may
+therefor connect to two different machines if the machines are in
+different ASes but use the same IP/port.
+
+In short, an attacker can impersonate a client by using an identical
+IP/port to connect a server. The server would probably just reverse
+the path and answer to the client without triggering a path validation.
+
+**TODO** What is the implication of this?
+
+* Can an attacker, without having being able to encrypt/decrypt data,
+cause any harm? Can they redurect traffic to themselves? To prevent
+this, the server SCION stack should accept a new path only if the
+QUIC stack also accepts it! This means we need to trigger a path
+validation and somehow learn whether it worked. Or we use our own
+validation process. Or we don't allow the path to change and require
+a new QUIC connection (with a new SCION connection)?
+SOLUTION: The SCION layer MUST NOT cache paths locally, instead paths
+must be accepted by the QUIC layer before being used.
+
+Examples:
+* Java over DatagramChannel:
+  * Comparing ResponsePath objects MUST return `false` if the
+paths differ.
+  * The QUIC layer MUST use only those addresses for sending data that
+    have previously been accepted. If an attacker sends a packet, it
+    should be identified as malicious, be rejected, and the path should
+    not be used.
+    Why would an attacker packet be accepted? Replay should be
+    impossible (there are apcket sequence IDs?), and any other
+    requests should be cryptographically protected.
+    Can this attack be successful with spoofed IPs???
+* Java over DatagramSocket: Problematic, it cahces the paths...
+* C + Rust: How exactly do we map PathID to paths? How are paths
+  updated?
+
+To restore the behavior intended by QUIC, we must therefore extend
+the 4-tuple to a 6-tuple of ISD-AS + IP + port on both endpoints.
+
+**TODO**
+This does not require any change in the QUIC layer but can probably
+be handled in the SCION ayer (the QUIC layer does not know about the
+ISD/AS code).
+
+It seems with SCION we can insert arbitrary IP addresses into the
+stack before handing incoming packets up to the QUIC layer...?
+
+
+
 
 ## More ?
 
