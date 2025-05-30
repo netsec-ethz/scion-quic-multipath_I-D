@@ -205,7 +205,7 @@ Message Protocol (ICMP).  This is described in {{SCION-CP}}.
 {::boilerplate bcp14-tagged}
 
 
-# API Recommendations
+# API Recommendations {#apirec}
 
 - Expose Path ID
 - Expose API for custom congestion control algorithms
@@ -214,7 +214,7 @@ Message Protocol (ICMP).  This is described in {{SCION-CP}}.
   useful if API works with IP/port only.
 
 
-# QUIC implementation Considerations
+# QUIC implementation Considerations {#imprec}
 
 - Allow to detect path changes while 4-tuple stays the same
   - Port mangling?
@@ -237,7 +237,7 @@ carry additional routing information.
 **TODO** Measure SCION path header!
 
 
-# Algorithm Recommendations
+# Algorithm Recommendations {#algrec}
 
 What has changed:
 - Much better MPU
@@ -266,7 +266,7 @@ We need to ensure on some level that no path change or probing occurs.
 
 
 
-# Multipath Features
+# Multipath Features {#mpfeatures}
 
 This document discusses multipath features that are available in
 SCION {{SCION-CP}}, {{SCION-DP}}. However, the discussion is kept
@@ -374,7 +374,7 @@ Due to the inherent unreliability, users should implement sanity
 checks as to whether a link holds up to the promised capabilities.
 
 
-# Algorithms {#algorithms}
+# Algorithms {#algorithmsold}
 
 ## Path Selection {#patsel}
 
