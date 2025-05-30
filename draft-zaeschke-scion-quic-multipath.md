@@ -136,13 +136,13 @@ for example for path selection, or more informed algorithms for
 congestion control.
 
 This document first identifies and categorizes multipath usage
-scenarios ({{categories}}), then discusses guidelines for path selection
-algorithms and suggests how these may be applicable to congestion
-control algorithms, without discussing the later in detail
-({{algorithms}}).
+scenarios ({{categories}}), then discusses guidelines for some
+algorithms such as congestion control algorithms ({{algcon}}),
+and suggestions for implementations of PAN libraries and
+QUIC-MP libraries ({{impcon}}).
 Finally, in order to facilitate these algorithms, this documents
 contains suggestions for API design and general use in
-applications ({{api}}).
+applications ({{apicon}}).
 
 As a practical example of a PAN and how path metadata
 can be made available and path selection and routing can be
@@ -206,6 +206,86 @@ Message Protocol (ICMP).  This is described in {{SCION-CP}}.
 {::boilerplate bcp14-tagged}
 
 
+
+# Multipath Features {#mpfeatures}
+
+This document discusses multipath features that are available in
+SCION {{SCION-CP}}, {{SCION-DP}}. However, the discussion is kept
+general and relevant to all PAN that support these features.
+
+
+## Path Metadata {#metadata}
+
+We assume that path metadata is reflects hardware properties rather
+than live traffic information (especially for bandwidth and latency).
+One should not expect path metadata is updated to be more than once
+every hour. Path metadata is disseminated together with paths, so its
+freshness depends on the path livetime, wgich can be several hours.
+
+### Path Metadata Granularity
+
+We assume a protocol for inter-AS routing that provides path
+information per AS, more specifically per border router of an AS
+and per any link between any border routers (link may be internal
+or external to an AS).
+
+That means, if we compare multiple paths, we can see where they
+overlap and what the hardware characteristics of the overlapping
+parts are.
+
+### Path Metadata Dimensions
+
+We assume a protocol a provides information on links and border
+routers, such as MTU, bandwidth, latency, geo-location, as well
+as identities (interface ID, port and IP) of border routers.
+We assume the data is static, which means that bandwidth and latency
+reflect hardware characteristics rather than current or recent load.
+
+### Path Metadata Liveliness
+
+We assume that path metadata is updated at most every few hours.
+This should be more than sufficient since all values reflect
+hardware properties rather than current traffic load.
+
+### Path Metadata Reliability
+
+We assume that all values are correct. The metadata is
+cryptographically protected. It is signed by the data originator,
+which is the relevant AS owner. However, the data correctness is not
+verified, instead we rely on the AS owner to be honest.
+
+## Path Selection
+
+We assume that a PAN protocol allows selecting paths explicitly, based,
+for example, on path metadata. Paths can be added and removed from a
+connection. Paths may have a best-before data and may expire, after
+which they are invalid.
+
+
+# Multipath Categorization {#categories}
+
+This document distinguishes the following usage categories:
+
+* High bandwidth (BW): Optimizing bandwidth by parallel transfer on
+  multiple paths.
+* Minimum latency (LAT): Optimizing latency for low latency.
+  This can be achieved by regularly checking multiple paths and using
+  the one with the lowest latency or by parallel transmission over
+  multiple path.
+* Failure tolerance (FT): Optimizing for failure tolerance by
+  parallel transfer on multiple paths.
+* Evasion (EVA): Avoid certain links or ASes, for example based on MTU,
+  geolocation or AS number.
+
+The discussions of these categories are written with multiple paths
+per interface in mind (i.e. multiple paths per 4-tuple).  However, they
+can usually be generalized to multipathing over multiple interfaces.
+
+These categories can be combined, for example LAT and FT may often be
+combined and EVA can be can be useful in combination with any other
+category.
+
+
 # API Coinsiderations {#apicon}
 
 - Expose Path ID
@@ -213,6 +293,10 @@ Message Protocol (ICMP).  This is described in {{SCION-CP}}.
 - Expose callback for QUIC-MP path abandon (REFERENCE!!!)
 - Expose API for name resolution (only of library does that), not
   useful if API works with IP/port only.
+- Expose API for usage profile.  Applications will have very
+  different requirements on a multipath API, see {{categories}}.
+  A comprehensive API should therefore allow for mostly automatic
+  selection of Path Selection and Congestion Control algorithms.
 
 
 # QUIC implementation Considerations {#impcon}
@@ -377,121 +461,9 @@ traversed only by one poll packet). Traceroute also allows to identify
   links with high variance or generally hogh latency.
 
 
-# Multipath Features {#mpfeatures}
-
-This document discusses multipath features that are available in
-SCION {{SCION-CP}}, {{SCION-DP}}. However, the discussion is kept
-general and relevant to all PAN that support these features.
-
-
-## Path Metadata {#metadata}
-
-We assume that path metadata is reflects hardware properties rather
-than live traffic information (especially for bandwidth and latency).
-One should not expect path metadata is updated to be more than once
-every hour. Path metadata is disseminated together with paths, so its
-freshness depends on the path livetime, wgich can be several hours.
-
-### Path Metadata Granularity
-
-We assume a protocol for inter-AS routing that provides path
-information per AS, more specifically per border router of an AS
-and per any link between any border routers (link may be internal
-or external to an AS).
-
-That means, if we compare multiple paths, we can see where they
-overlap and what the hardware characteristics of the overlapping
-parts are.
-
-### Path Metadata Dimensions
-
-We assume a protocol a provides information on links and border
-routers, such as MTU, bandwidth, latency, geo-location, as well
-as identities (interface ID, port and IP) of border routers.
-We assume the data is static, which means that bandwidth and latency
-reflect hardware characteristics rather than current or recent load.
-
-### Path Metadata Liveliness
-
-We assume that path metadata is updated at most every few hours.
-This should be more than sufficient since all values reflect
-hardware properties rather than current traffic load.
-
-### Path Metadata Reliability
-
-We assume that all values are correct. The metadata is
-cryptographically protected. It is signed by the data originator,
-which is the relevant AS owner. However, the data correctness is not
-verified, instead we rely on the AS owner to be honest.
-
-## Path Selection
-
-We assume that a PAN protocol allows selecting paths explicitly, based,
-for example, on path metadata. Paths can be added and removed from a
-connection. Paths may have a best-before data and may expire, after
-which they are invalid.
-
-
-
-
-
 # OLD PART BELOW - IGNORE
 
-# Multipath Categorization {#categories}
-
-This document distinguishes the following usage categories:
-
-* High bandwidth (BW): Optimizing bandwidth by parallel transfer on
-  multiple paths.
-* Minimum latency (LAT): Optimizing latency for low latency.
-  This can be achieved by regularly checking multiple paths and using
-  the one with the lowest latency or by parallel transmission over
-  multiple path.
-* Failure tolerance (FT): Optimizing for failure tolerance by
-  parallel transfer on multiple paths.
-* Evasion (EVA): Avoid certain links or ASes, for example based on MTU,
-  geolocation or AS number.
-
-The discussions of these categories are written with multiple paths
-per interface in mind (i.e. multiple paths per 4-tuple).  However, they
-can usually be generalized to multipathing over multiple interfaces.
-
-These categories can be combined, for example LAT and FT may often be
-combined and EVA can be can be useful in combination with any other
-category.
-
-
-## Disjunctness
-
-For FT, paths are only interesting if they are disjunct.
-For BW, paths should mostly be disjunct, but overlap is
-acceptable if the overlapping links have high BW available (see
-{{bottleneck}}).
-
-For LAT and EVA, path disjunctness is mostly irrelevant.
-
-**TODO** Discuss link level, router level and AS level path disjunctness.
-
-## Path Metadata
-
-SCION paths have associated metadata with latency and bandwidth
-information. The values represent best case values and tend to be
-updated rarely, for example once a day.
-
-Path metadata may also be incomplete, ASes are not required to provide
-or regularly update the data.
-
-Users of path metadata must keep in mind that the data is mostly not
-verifiable but depends on the diligence and trustworthiness of the
-link owners.
-However, once disseminated by a link owner, the path metadata is
-authenticated an cannot be changed by other parties.
-
-Due to the inherent unreliability, users should implement sanity
-checks as to whether a link holds up to the promised capabilities.
-
-
-# Algorithms {#algorithmsold}
+# OLD - Algorithms {#algorithmsold}
 
 ## Path Selection {#patsel}
 
@@ -620,7 +592,7 @@ equally large buffer on the sender side.
 **TODO** Can we facilitate QUIC streams for this?
 
 
-# Applications {#apps}
+# OLD - Applications {#apps}
 
 ## Data Transfer {#datra}
 
@@ -710,31 +682,6 @@ SCION allows for choosing paths based on trusted or untrusted ASes,
 but this is not specific to multipathing...
 
 
-# API Design consideration {#api}
-
-## Multipathing for Applications
-
-Applications will have very different requirements on a multipath API.
-A comprehensive API should therefore allow for mostly automatic
-selection of {{patsel}} Path Selection and Congestion Control
-algorithms {{concon}}.
-
-At the same time it should give access to SCION paths and their metadata
-to allow implementation of custom algorithms.
-
-## Algorithm Integration
-
-Several proposals in {{lola}} and {{redu}} suggest sending data
-redundantly in parallel on multiple paths.
-Similarly, some proposals suggest sending packets purely for latency
-measurements.
-
-Congestion control algorithms and path selection algorithms should
-try to hide parallel transfer and measurement streams from the
-application.  This may also depend on API designer to provide such
-transparent  multipathing with additional code on the application level.
-
-
 # Security Considerations
 
 This document has no security considerations.
@@ -767,6 +714,11 @@ This would negatively affect performance of endhosts, especially if
 the links are manipulated to drop all packets (break link) or drop
 many packets (high drop rate).
 See {{Section 7.2.4 of SCION-CP}}.
+
+Mitigation: Due to the inherent unreliability, users should
+implement sanity checks as to whether a link holds up to the
+promised capabilities.
+
 
 ## More ?
 
