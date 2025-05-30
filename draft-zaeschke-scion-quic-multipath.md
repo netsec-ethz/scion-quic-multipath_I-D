@@ -64,6 +64,7 @@ normative:
   CC-PRINCIPLES: RFC2914
   UDP-GUIDELINES: RFC8085
   MTU-DISCOVERY: RFC8899
+  CC-ALGORITHMS: RFC9743
 
 informative:
   DMTP: I-D.draft-tjohn-quic-multipath-dmtp
@@ -135,13 +136,13 @@ for example for path selection, or more informed algorithms for
 congestion control.
 
 This document first identifies and categorizes multipath usage
-scenarios ({{categories}}), then discusses guidelines for path selection
-algorithms and suggests how these may be applicable to congestion
-control algorithms, without discussing the later in detail
-({{algorithms}}).
+scenarios ({{categories}}), then discusses guidelines for some
+algorithms such as congestion control algorithms ({{algcon}}),
+and suggestions for implementations of PAN libraries and
+QUIC-MP libraries ({{impcon}}).
 Finally, in order to facilitate these algorithms, this documents
 contains suggestions for API design and general use in
-applications ({{api}}).
+applications ({{apicon}}).
 
 As a practical example of a PAN and how path metadata
 can be made available and path selection and routing can be
@@ -204,13 +205,22 @@ Message Protocol (ICMP).  This is described in {{SCION-CP}}.
 
 {::boilerplate bcp14-tagged}
 
-# Multipath Features
+
+
+# Multipath Features {#mpfeatures}
 
 This document discusses multipath features that are available in
 SCION {{SCION-CP}}, {{SCION-DP}}. However, the discussion is kept
 general and relevant to all PAN that support these features.
 
-## Features
+
+## Path Metadata {#metadata}
+
+We assume that path metadata is reflects hardware properties rather
+than live traffic information (especially for bandwidth and latency).
+One should not expect path metadata is updated to be more than once
+every hour. Path metadata is disseminated together with paths, so its
+freshness depends on the path livetime, wgich can be several hours.
 
 ### Path Metadata Granularity
 
@@ -219,13 +229,17 @@ information per AS, more specifically per border router of an AS
 and per any link between any border routers (link may be internal
 or external to an AS).
 
+That means, if we compare multiple paths, we can see where they
+overlap and what the hardware characteristics of the overlapping
+parts are.
+
 ### Path Metadata Dimensions
 
 We assume a protocol a provides information on links and border
 routers, such as MTU, bandwidth, latency, geo-location, as well
 as identities (interface ID, port and IP) of border routers.
-We assume the data is static, wich means that bandwidth and latency
-reflect performance at minimum load rather than current or recent load.
+We assume the data is static, which means that bandwidth and latency
+reflect hardware characteristics rather than current or recent load.
 
 ### Path Metadata Liveliness
 
@@ -236,16 +250,16 @@ hardware properties rather than current traffic load.
 ### Path Metadata Reliability
 
 We assume that all values are correct. The metadata is
-cryptographically protected. It is signe by the data originator,
+cryptographically protected. It is signed by the data originator,
 which is the relevant AS owner. However, the data correctness is not
-verified, instead we rely on the AS onwer to be honest.
+verified, instead we rely on the AS owner to be honest.
 
-### Multi-Interface
+## Path Selection
 
-**TODO remove this?**
-This document discusses multipathing mainly in the sense of multiple
-paths per 4-tuple. Multipathing over multiple interfaces is not
-discussed in detail.
+We assume that a PAN protocol allows selecting paths explicitly, based,
+for example, on path metadata. Paths can be added and removed from a
+connection. Paths may have a best-before data and may expire, after
+which they are invalid.
 
 
 # Multipath Categorization {#categories}
@@ -272,37 +286,184 @@ combined and EVA can be can be useful in combination with any other
 category.
 
 
-## Disjunctness
+# API Coinsiderations {#apicon}
 
-For FT, paths are only interesting if they are disjunct.
-For BW, paths should mostly be disjunct, but overlap is
-acceptable if the overlapping links have high BW available (see
-{{bottleneck}}).
-
-For LAT and EVA, path disjunctness is mostly irrelevant.
-
-**TODO** Discuss link level, router level and AS level path disjunctness.
-
-## Path Metadata
-
-SCION paths have associated metadata with latency and bandwidth
-information. The values represent best case values and tend to be
-updated rarely, for example once a day.
-
-Path metadata may also be incomplete, ASes are not required to provide
-or regularly update the data.
-
-Users of path metadata must keep in mind that the data is mostly not
-verifiable but depends on the diligence and trustworthiness of the
-link owners.
-However, once disseminated by a link owner, the path metadata is
-authenticated an cannot be changed by other parties.
-
-Due to the inherent unreliability, users should implement sanity
-checks as to whether a link holds up to the promised capabilities.
+- Expose Path ID
+- Expose API for custom congestion control algorithms
+- Expose callback for QUIC-MP path abandon (REFERENCE!!!)
+- Expose API for name resolution (only of library does that), not
+  useful if API works with IP/port only.
+- Expose API for usage profile.  Applications will have very
+  different requirements on a multipath API, see {{categories}}.
+  A comprehensive API should therefore allow for mostly automatic
+  selection of Path Selection and Congestion Control algorithms.
 
 
-# Algorithms {#algorithms}
+# QUIC implementation Considerations {#impcon}
+
+**TODO READ:**
+See also "Implementation Considerations" in {{Section 5 of QUIC-MP}}.
+
+## Path Change Detection - Path Validation {#pathchange-validation}
+
+### Problem
+
+Following {{Section 5.1 of QUIC-MP}} and {{Section 9 of
+QUIC-TRANSPORT}}, endpoints MUST drop a connection or perform path
+validation when the 4-tuple changes:
+
+> "Not all changes of peer address are intentional, or active,
+  migrations. The peer could experience NAT rebinding: a change of
+  address due to a middlebox, usually a NAT, allocating a new outgoing
+  port or even a new outgoing IP address for a flow. An endpoint MUST
+  perform path validation ({{Section 8.2 of QUIC-TRANSPORT}}) if it
+  detects any change to a
+  peer's address, unless it has previously validated that address."
+
+With SCION, endpoints may use private IPs that are not globally unique,
+such as 192.168.0.1. Two paths with an identical 4-tuple may
+therefore connect to two different machines if the machines are in
+different ASes but use the same IP/port.
+
+**TODO remove the following, it is probably wrong.**
+
+In short, an attacker can impersonate a client by using an identical
+IP/port to connect a server. The server would probably just reverse
+the path and answer to the client without triggering a path validation.
+
+**TODO** What is the implication of this?
+
+### Implication
+
+Path change detection is important for:
+- triggering a reset of congestion control and RTT estimation
+algorithms, see {{Section 9.4 of QUIC-MP}}
+- triggering path validation, see {{Section 9 of QUIC-TRANSPORT}}.
+  **TODO Better understand the impact of this**
+
+
+### Mitigation
+
+- Allow to detect path changes while 4-tuple stays the same
+  - Port mangling?
+  - Change PATH-ID (SCION would need to know about QUIC...!!)
+  - Is PATH ID encrypted? Then attacker cannot know it (but use, it,
+    see replay, which is not possible due to sequence numbers??)
+    ... so what?
+  - SCION could just drop packets where 4-tuple is the same but
+    remote AS has changed.
+  - SCION could trigger a "double" path validation by changing
+    the port/IP to a made up value and back to the original value.
+    This would trigger two path validations. However, at
+    least eventually, the QUIC layer will know the correct
+    remote IP/port.
+
+
+## Path Change Detection - Path Injection {#pathchange-injection}
+
+### Problem
+
+**TODO check SCION IRTF draft for this attack:**
+
+An attacker can send a spoofed packet to a server. The packet contains
+a new path (for example broken or with high latency).
+The server accepts the packet and stores the path for being used
+for all futur communication with the client. The next packet sent to
+the client will take the injected malicious path and will fail (or
+at least be redirected).
+This happens even if th epacket is rejectd by the QUIC(-MP) layer
+because the SCION layer will never learn about the packet being
+rejected.
+
+
+### Mitigation
+- Authenticate packets on SCION level....
+  There could still be a replay:
+  - Client uses path P1 (P1 could be injected with wormhole attack).
+  - Attacker captures packet with P1 path
+  - Attacker breaks P1 and forces migration to P2
+  - Attacker can no replay the original packet to get server to
+    keep responding on the broken P1 path.
+- Don't allow paths to change (for 4-tuple??) and require
+  proper path migration (how?) or even a reconnect
+- SOLUTION: The SCION layer MUST NOT cache paths locally, instead
+  paths must be accepted by the QUIC layer before being used.
+
+Examples:
+* Java over DatagramChannel:
+  * Comparing ResponsePath objects MUST return `false` if the
+paths differ.
+  * The QUIC layer MUST use only those addresses for sending data that
+    have previously been accepted. If an attacker sends a packet, it
+    should be identified as malicious, be rejected, and the path should
+    not be used.
+    Why would an attacker packet be accepted? Replay should be
+    impossible (there are apcket sequence IDs?), and any other
+    requests should be cryptographically protected.
+    Can this attack be successful with spoofed IPs???
+* Java over DatagramSocket: Problematic, it caches the paths...
+* C + Rust: How exactly do we map PathID to paths? How are paths
+  updated?
+
+
+## Padding
+From {{Section 8.1 of QUIC-TRANSPORT}}: "Clients MUST ensure that
+UDP datagrams containing Initial packets have UDP payloads of at
+least 1200 bytes, adding PADDING frames as necessary."
+
+PAN packets may be bigger than traditional packets because they may
+carry additional routing information.
+
+**TODO** Measure SCION path header!
+
+
+# Algorithm Considerations {#algcon}
+
+What has changed:
+- Much better MPU
+- Knowledge about shared links/routers between paths
+- indication of latency+bandwidth limits.
+- (Potentially live traffic info: Avoid "pulsing" -> Simon Scherer?)
+
+
+## General
+{{QUIC-TRANSPORT}} requires that there is no connection migration
+during the initial handshake, and that there are no other packets
+send (including probing packets) during the initial handshake, see
+{{Section 9 of QUIC-TRANSPORT}}, paragraphs 2 and 3.
+
+We need to ensure on some level that no path change or probing occurs.
+
+**TODO** Read {{QUIC-MP}} on 4-tuple change / path validation.
+-> Section 9 in RFC 9000
+
+## Algorithms
+
+- MPU detection algorithm can be removed/replaced with metadata query
+- Congestion control algorithms:
+  - Must reset on path change (how?).
+  - Should benefit from knowledge about path overlaps.
+  - Follow BCP 133, see {{Section 7.10 of CC-ALGORITHMS}}.
+- Roundtrip time estimator.
+  - Must reset on path change (how?). See also from {{Section 5.1 of
+    QUIC-MP}}:
+    "If path validation process succeeds, the endpoints set the path's
+    congestion controller and round-trip time estimator according to
+    {{Section 9.4 of QUIC-TRANSPORT}}."
+  - Should benefit from knowledge about minimum latency expected on
+    a path.
+- Path selections algorithms
+
+- Latency polling
+  - How bad is latency polling?
+  - Traceroute can help to reduce polling (ideally, every links is
+traversed only by one poll packet). Traceroute also allows to identify
+  links with high variance or generally hogh latency.
+
+
+# OLD PART BELOW - IGNORE
+
+# OLD - Algorithms {#algorithmsold}
 
 ## Path Selection {#patsel}
 
@@ -431,7 +592,7 @@ equally large buffer on the sender side.
 **TODO** Can we facilitate QUIC streams for this?
 
 
-# Applications {#apps}
+# OLD - Applications {#apps}
 
 ## Data Transfer {#datra}
 
@@ -521,31 +682,6 @@ SCION allows for choosing paths based on trusted or untrusted ASes,
 but this is not specific to multipathing...
 
 
-# API Design consideration {#api}
-
-## Multipathing for Applications
-
-Applications will have very different requirements on a multipath API.
-A comprehensive API should therefore allow for mostly automatic
-selection of {{patsel}} Path Selection and Congestion Control
-algorithms {{concon}}.
-
-At the same time it should give access to SCION paths and their metadata
-to allow implementation of custom algorithms.
-
-## Algorithm Integration
-
-Several proposals in {{lola}} and {{redu}} suggest sending data
-redundantly in parallel on multiple paths.
-Similarly, some proposals suggest sending packets purely for latency
-measurements.
-
-Congestion control algorithms and path selection algorithms should
-try to hide parallel transfer and measurement streams from the
-application.  This may also depend on API designer to provide such
-transparent  multipathing with additional code on the application level.
-
-
 # Security Considerations
 
 This document has no security considerations.
@@ -567,73 +703,28 @@ Additionally, the number of polled paths should vary.
 
 ## Path Validation
 
-Following {{QUIC-MP}} (Section 5.1) and {{QUIC-TRANSPORT}} (Section 9),
-endpoints MUST drop a connection or perform path validation when the
-4-tuple changes:
+See {{pathchange-validation}} and {{pathchange-injection}}.
 
-```
-"Not all changes of peer address are intentional, or active,
-migrations. The peer could experience NAT rebinding: a change of
-address due to a middlebox, usually a NAT, allocating a new outgoing
-port or even a new outgoing IP address for a flow. An endpoint MUST
-perform path validation (Section 8.2) if it detects any change to a
-peer's address, unless it has previously validated that address."
-```
+## Wormhole Attack
 
-With SCION, endpoints may use private IPs, say 192.168.0.1. These IPs
-are obviously not unique. Two paths with an identical 4-tuple may
-therefor connect to two different machines if the machines are in
-different ASes but use the same IP/port.
+An attacking AS can manipulate metadata of its links and routers to
+announce a very attractive route that would then be the first choice of
+many route selection algorithms.
+This would negatively affect performance of endhosts, especially if
+the links are manipulated to drop all packets (break link) or drop
+many packets (high drop rate).
+See {{Section 7.2.4 of SCION-CP}}.
 
-In short, an attacker can impersonate a client by using an identical
-IP/port to connect a server. The server would probably just reverse
-the path and answer to the client without triggering a path validation.
-
-**TODO** What is the implication of this?
-
-* Can an attacker, without having being able to encrypt/decrypt data,
-cause any harm? Can they redurect traffic to themselves? To prevent
-this, the server SCION stack should accept a new path only if the
-QUIC stack also accepts it! This means we need to trigger a path
-validation and somehow learn whether it worked. Or we use our own
-validation process. Or we don't allow the path to change and require
-a new QUIC connection (with a new SCION connection)?
-SOLUTION: The SCION layer MUST NOT cache paths locally, instead paths
-must be accepted by the QUIC layer before being used.
-
-Examples:
-* Java over DatagramChannel:
-  * Comparing ResponsePath objects MUST return `false` if the
-paths differ.
-  * The QUIC layer MUST use only those addresses for sending data that
-    have previously been accepted. If an attacker sends a packet, it
-    should be identified as malicious, be rejected, and the path should
-    not be used.
-    Why would an attacker packet be accepted? Replay should be
-    impossible (there are apcket sequence IDs?), and any other
-    requests should be cryptographically protected.
-    Can this attack be successful with spoofed IPs???
-* Java over DatagramSocket: Problematic, it cahces the paths...
-* C + Rust: How exactly do we map PathID to paths? How are paths
-  updated?
-
-To restore the behavior intended by QUIC, we must therefore extend
-the 4-tuple to a 6-tuple of ISD-AS + IP + port on both endpoints.
-
-**TODO**
-This does not require any change in the QUIC layer but can probably
-be handled in the SCION ayer (the QUIC layer does not know about the
-ISD/AS code).
-
-It seems with SCION we can insert arbitrary IP addresses into the
-stack before handing incoming packets up to the QUIC layer...?
-
-
+Mitigation: Due to the inherent unreliability, users should
+implement sanity checks as to whether a link holds up to the
+promised capabilities.
 
 
 ## More ?
 
 See {{anon}}.
+
+See other attacks in {{Section 7.2.4 of SCION-CP}}?
 
 **TODO**
 
