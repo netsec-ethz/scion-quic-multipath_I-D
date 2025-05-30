@@ -64,6 +64,7 @@ normative:
   CC-PRINCIPLES: RFC2914
   UDP-GUIDELINES: RFC8085
   MTU-DISCOVERY: RFC8899
+  CC-ALGORITHMS: RFC9743
 
 informative:
   DMTP: I-D.draft-tjohn-quic-multipath-dmtp
@@ -219,7 +220,7 @@ Message Protocol (ICMP).  This is described in {{SCION-CP}}.
 **TODO READ:**
 See also "Implementation Considerations" in {{Section 5 of QUIC-MP}}.
 
-## Path Change Detection {#pathchangedetection}
+## Path Change Detection - Path Validation {#pathchange-validation}
 
 ### Problem
 
@@ -248,35 +249,6 @@ the path and answer to the client without triggering a path validation.
 
 **TODO** What is the implication of this?
 
-Redicrection attack:
-
-* Can an attacker, without having being able to encrypt/decrypt data,
-cause any harm? Can they redurect traffic to themselves? To prevent
-this, the server SCION stack should accept a new path only if the
-QUIC stack also accepts it! This means we need to trigger a path
-validation and somehow learn whether it worked. Or we use our own
-validation process. Or we don't allow the path to change and require
-a new QUIC connection (with a new SCION connection)?
-SOLUTION: The SCION layer MUST NOT cache paths locally, instead paths
-must be accepted by the QUIC layer before being used.
-
-Examples:
-* Java over DatagramChannel:
-  * Comparing ResponsePath objects MUST return `false` if the
-paths differ.
-  * The QUIC layer MUST use only those addresses for sending data that
-    have previously been accepted. If an attacker sends a packet, it
-    should be identified as malicious, be rejected, and the path should
-    not be used.
-    Why would an attacker packet be accepted? Replay should be
-    impossible (there are apcket sequence IDs?), and any other
-    requests should be cryptographically protected.
-    Can this attack be successful with spoofed IPs???
-* Java over DatagramSocket: Problematic, it caches the paths...
-* C + Rust: How exactly do we map PathID to paths? How are paths
-  updated?
-
-
 ### Implication
 
 Path change detection is important for:
@@ -301,6 +273,53 @@ algorithms, see {{Section 9.4 of QUIC-MP}}
     This would trigger two path validations. However, at
     least eventually, the QUIC layer will know the correct
     remote IP/port.
+
+
+## Path Change Detection - Path Injection {#pathchange-injection}
+
+### Problem
+
+**TODO check SCION IRTF draft for this attack:**
+
+An attacker can send a spoofed packet to a server. The packet contains
+a new path (for example broken or with high latency).
+The server accepts the packet and stores the path for being used
+for all futur communication with the client. The next packet sent to
+the client will take the injected malicious path and will fail (or
+at least be redirected).
+This happens even if th epacket is rejectd by the QUIC(-MP) layer
+because the SCION layer will never learn about the packet being
+rejected.
+
+
+### Mitigation
+- Authenticate packets on SCION level....
+  There could still be a replay:
+  - Client uses path P1 (P1 could be injected with wormhole attack).
+  - Attacker captures packet with P1 path
+  - Attacker breaks P1 and forces migration to P2
+  - Attacker can no replay the original packet to get server to
+    keep responding on the broken P1 path.
+- Don't allow paths to change (for 4-tuple??) and require
+  proper path migration (how?) or even a reconnect
+- SOLUTION: The SCION layer MUST NOT cache paths locally, instead
+  paths must be accepted by the QUIC layer before being used.
+
+Examples:
+* Java over DatagramChannel:
+  * Comparing ResponsePath objects MUST return `false` if the
+paths differ.
+  * The QUIC layer MUST use only those addresses for sending data that
+    have previously been accepted. If an attacker sends a packet, it
+    should be identified as malicious, be rejected, and the path should
+    not be used.
+    Why would an attacker packet be accepted? Replay should be
+    impossible (there are apcket sequence IDs?), and any other
+    requests should be cryptographically protected.
+    Can this attack be successful with spoofed IPs???
+* Java over DatagramSocket: Problematic, it caches the paths...
+* C + Rust: How exactly do we map PathID to paths? How are paths
+  updated?
 
 
 ## Padding
@@ -340,6 +359,7 @@ We need to ensure on some level that no path change or probing occurs.
 - Congestion control algorithms:
   - Must reset on path change (how?).
   - Should benefit from knowledge about path overlaps.
+  - Follow BCP 133, see {{Section 7.10 of CC-ALGORITHMS}}.
 - Roundtrip time estimator.
   - Must reset on path change (how?). See also from {{Section 5.1 of
     QUIC-MP}}:
@@ -736,13 +756,23 @@ Additionally, the number of polled paths should vary.
 
 ## Path Validation
 
-See {{pathchangedetection}}.
+See {{pathchange-validation}} and {{pathchange-injection}}.
 
+## Wormhole Attack
 
+An attacking AS can manipulate metadata of its links and routers to
+announce a very attractive route that would then be the first choice of
+many route selection algorithms.
+This would negatively affect performance of endhosts, especially if
+the links are manipulated to drop all packets (break link) or drop
+many packets (high drop rate).
+See {{Section 7.2.4 of SCION-CP}}.
 
 ## More ?
 
 See {{anon}}.
+
+See other attacks in {{Section 7.2.4 of SCION-CP}}?
 
 **TODO**
 
