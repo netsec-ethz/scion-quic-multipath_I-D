@@ -205,7 +205,7 @@ Message Protocol (ICMP).  This is described in {{SCION-CP}}.
 {::boilerplate bcp14-tagged}
 
 
-# API Recommendations {#apirec}
+# API Coinsiderations {#apicon}
 
 - Expose Path ID
 - Expose API for custom congestion control algorithms
@@ -214,7 +214,28 @@ Message Protocol (ICMP).  This is described in {{SCION-CP}}.
   useful if API works with IP/port only.
 
 
-# QUIC implementation Considerations {#imprec}
+# QUIC implementation Considerations {#impcon}
+
+**TODO READ:**
+See also "Implementation Considerations" in {{Section 5 of QUIC-MP}}.
+
+## Path Change Detection
+
+### Problem
+
+Path change without 4-tuple change
+...dddddd
+
+### Implication
+
+Path change detection is important for:
+- triggering a reset of congestion control and RTT estimation
+algorithms, see {{Section 9.4 of QUIC-MP}}
+- triggering path validation, see {{Section 9 of QUIC-TRANSPORT}}.
+  **TODO Better understand the impact of this**
+
+
+### Mitigation
 
 - Allow to detect path changes while 4-tuple stays the same
   - Port mangling?
@@ -224,6 +245,11 @@ Message Protocol (ICMP).  This is described in {{SCION-CP}}.
     ... so what?
   - SCION could just drop packets where 4-tuple is the same but
     remote AS has changed.
+  - SCION could trigger a "double" path validation by changing
+    the port/IP to a made up value and back to the original value.
+    This would trigger two path validations. However, at
+    least eventually, the QUIC layer will know the correct
+    remote IP/port.
 
 
 ## Padding
@@ -237,7 +263,7 @@ carry additional routing information.
 **TODO** Measure SCION path header!
 
 
-# Algorithm Recommendations {#algrec}
+# Algorithm Considerations {#algcon}
 
 What has changed:
 - Much better MPU
@@ -250,7 +276,7 @@ What has changed:
 {{QUIC-TRANSPORT}} requires that there is no connection migration
 during the initial handshake, and that there are no other packets
 send (including probing packets) during the initial handshake, see
-{{QUIC-TRANSPORT}} Section 9, paragraphs 2 and 3.
+{{Section 9 of QUIC-TRANSPORT}}, paragraphs 2 and 3.
 
 We need to ensure on some level that no path change or probing occurs.
 
@@ -261,9 +287,16 @@ We need to ensure on some level that no path change or probing occurs.
 
 - MPU detection algorithm can be removed/replaced with metadata query
 - Congestion control algorithms
+- Roundtrip time estimator. See also from {{Section 5.1 of QUIC-MP}}:
+"If path validation process succeeds, the endpoints set the path's
+congestion controller and round-trip time estimator according to
+{{Section 9.4 of QUIC-TRANSPORT}}."
 - Path selections algorithms
 
-
+- How bad is latency polling?
+  Traceroute can help to reduce polling (ideally, every links is
+traversed only by one poll packet). Traceroute also allows to identify
+  links with high variance or generally hogh latency.
 
 
 # Multipath Features {#mpfeatures}
@@ -273,7 +306,13 @@ SCION {{SCION-CP}}, {{SCION-DP}}. However, the discussion is kept
 general and relevant to all PAN that support these features.
 
 
-## Path Metadata
+## Path Metadata {#metadata}
+
+We assume that path metadata is reflects hardware properties rather
+than live traffic information (especially for bandwidth and latency).
+One should not expect path metadata is updated to be more than once
+every hour. Path metadata is disseminated together with paths, so its
+freshness depends on the path livetime, wgich can be several hours.
 
 ### Path Metadata Granularity
 
@@ -291,7 +330,7 @@ parts are.
 We assume a protocol a provides information on links and border
 routers, such as MTU, bandwidth, latency, geo-location, as well
 as identities (interface ID, port and IP) of border routers.
-We assume the data is static, wich means that bandwidth and latency
+We assume the data is static, which means that bandwidth and latency
 reflect hardware characteristics rather than current or recent load.
 
 ### Path Metadata Liveliness
@@ -305,7 +344,7 @@ hardware properties rather than current traffic load.
 We assume that all values are correct. The metadata is
 cryptographically protected. It is signed by the data originator,
 which is the relevant AS owner. However, the data correctness is not
-verified, instead we rely on the AS onwer to be honest.
+verified, instead we rely on the AS owner to be honest.
 
 ## Path Selection
 
@@ -654,7 +693,7 @@ peer's address, unless it has previously validated that address."
 
 With SCION, endpoints may use private IPs, say 192.168.0.1. These IPs
 are obviously not unique. Two paths with an identical 4-tuple may
-therefor connect to two different machines if the machines are in
+therefore connect to two different machines if the machines are in
 different ASes but use the same IP/port.
 
 In short, an attacker can impersonate a client by using an identical
@@ -685,7 +724,7 @@ paths differ.
     impossible (there are apcket sequence IDs?), and any other
     requests should be cryptographically protected.
     Can this attack be successful with spoofed IPs???
-* Java over DatagramSocket: Problematic, it cahces the paths...
+* Java over DatagramSocket: Problematic, it caches the paths...
 * C + Rust: How exactly do we map PathID to paths? How are paths
   updated?
 
