@@ -1493,7 +1493,7 @@ useful if API works with IP/port only.<a href="#section-3-1.4.1" class="pilcrow"
       </h2>
 <p id="section-4-1"><strong>TODO READ:</strong>
 See also "Implementation Considerations" in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5" class="relref">Section 5</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-4-1" class="pilcrow">¶</a></p>
-<div id="path-change-detection">
+<div id="pathchangedetection">
 <section id="section-4.1">
         <h3 id="name-path-change-detection">
 <a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-path-change-detection" class="section-name selfRef">Path Change Detection</a>
@@ -1503,8 +1503,57 @@ See also "Implementation Considerations" in <span><a href="https://datatracker.i
           <h4 id="name-problem">
 <a href="#section-4.1.1" class="section-number selfRef">4.1.1. </a><a href="#name-problem" class="section-name selfRef">Problem</a>
           </h4>
-<p id="section-4.1.1-1">Path change without 4-tuple change
-...dddddd<a href="#section-4.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1.1-1">Following <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.1" class="relref">Section 5.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> and <span><a href="https://rfc-editor.org/rfc/rfc9000#section-9" class="relref">Section 9</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>, endpoints <span class="bcp14">MUST</span> drop a connection or perform path
+validation when the 4-tuple changes:<a href="#section-4.1.1-1" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="section-4.1.1-2.1">
+              <p id="section-4.1.1-2.1.1">"Not all changes of peer address are intentional, or active,
+  migrations. The peer could experience NAT rebinding: a change of
+  address due to a middlebox, usually a NAT, allocating a new outgoing
+  port or even a new outgoing IP address for a flow. An endpoint <span class="bcp14">MUST</span>
+  perform path validation (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-8.2" class="relref">Section 8.2</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>) if it
+  detects any change to a
+  peer's address, unless it has previously validated that address."<a href="#section-4.1.1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+<p id="section-4.1.1-3">With SCION, endpoints may use private IPs that are not globally unique,
+such as 192.168.0.1. Two paths with an identical 4-tuple may
+therefore connect to two different machines if the machines are in
+different ASes but use the same IP/port.<a href="#section-4.1.1-3" class="pilcrow">¶</a></p>
+<p id="section-4.1.1-4"><strong>TODO remove the following, it is probably wrong.</strong><a href="#section-4.1.1-4" class="pilcrow">¶</a></p>
+<p id="section-4.1.1-5">In short, an attacker can impersonate a client by using an identical
+IP/port to connect a server. The server would probably just reverse
+the path and answer to the client without triggering a path validation.<a href="#section-4.1.1-5" class="pilcrow">¶</a></p>
+<p id="section-4.1.1-6"><strong>TODO</strong> What is the implication of this?<a href="#section-4.1.1-6" class="pilcrow">¶</a></p>
+<p id="section-4.1.1-7">Redicrection attack:<a href="#section-4.1.1-7" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.1.1-8.1">
+              <p id="section-4.1.1-8.1.1">Can an attacker, without having being able to encrypt/decrypt data,
+cause any harm? Can they redurect traffic to themselves? To prevent
+this, the server SCION stack should accept a new path only if the
+QUIC stack also accepts it! This means we need to trigger a path
+validation and somehow learn whether it worked. Or we use our own
+validation process. Or we don't allow the path to change and require
+a new QUIC connection (with a new SCION connection)?
+SOLUTION: The SCION layer <span class="bcp14">MUST NOT</span> cache paths locally, instead paths
+must be accepted by the QUIC layer before being used.<a href="#section-4.1.1-8.1.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+<p id="section-4.1.1-9">Examples:
+* Java over DatagramChannel:
+  * Comparing ResponsePath objects <span class="bcp14">MUST</span> return <code>false</code> if the
+paths differ.
+  * The QUIC layer <span class="bcp14">MUST</span> use only those addresses for sending data that
+    have previously been accepted. If an attacker sends a packet, it
+    should be identified as malicious, be rejected, and the path should
+    not be used.
+    Why would an attacker packet be accepted? Replay should be
+    impossible (there are apcket sequence IDs?), and any other
+    requests should be cryptographically protected.
+    Can this attack be successful with spoofed IPs???
+* Java over DatagramSocket: Problematic, it caches the paths...
+* C + Rust: How exactly do we map PathID to paths? How are paths
+  updated?<a href="#section-4.1.1-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="implication">
@@ -1562,7 +1611,7 @@ remote IP/port.<a href="#section-4.1.3-1.1.2.5.1" class="pilcrow">¶</a></p>
         <h3 id="name-padding">
 <a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-padding" class="section-name selfRef">Padding</a>
         </h3>
-<p id="section-4.2-1">From Section 8.1 of <span>[<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>: "Clients <span class="bcp14">MUST</span> ensure that
+<p id="section-4.2-1">From <span><a href="https://rfc-editor.org/rfc/rfc9000#section-8.1" class="relref">Section 8.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>: "Clients <span class="bcp14">MUST</span> ensure that
 UDP datagrams containing Initial packets have UDP payloads of at
 least 1200 bytes, adding PADDING frames as necessary."<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 <p id="section-4.2-2">PAN packets may be bigger than traditional packets because they may
@@ -1593,7 +1642,7 @@ send (including probing packets) during the initial handshake, see
 <span><a href="https://rfc-editor.org/rfc/rfc9000#section-9" class="relref">Section 9</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>, paragraphs 2 and 3.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 <p id="section-5.1-2">We need to ensure on some level that no path change or probing occurs.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
 <p id="section-5.1-3"><strong>TODO</strong> Read <span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> on 4-tuple change / path validation.
--&gt; Sexction 9 in RFC 9000<a href="#section-5.1-3" class="pilcrow">¶</a></p>
+-&gt; Section 9 in RFC 9000<a href="#section-5.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="algorithms">
@@ -1606,22 +1655,46 @@ send (including probing packets) during the initial handshake, see
             <p id="section-5.2-1.1.1">MPU detection algorithm can be removed/replaced with metadata query<a href="#section-5.2-1.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.2-1.2">
-            <p id="section-5.2-1.2.1">Congestion control algorithms<a href="#section-5.2-1.2.1" class="pilcrow">¶</a></p>
+            <p id="section-5.2-1.2.1">Congestion control algorithms:<a href="#section-5.2-1.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.2-1.2.2.1">
+                <p id="section-5.2-1.2.2.1.1">Must reset on path change (how?).<a href="#section-5.2-1.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-5.2-1.2.2.2">
+                <p id="section-5.2-1.2.2.2.1">Should benefit from knowledge about path overlaps.<a href="#section-5.2-1.2.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
 </li>
           <li class="normal" id="section-5.2-1.3">
-            <p id="section-5.2-1.3.1">Roundtrip time estimator. See also from <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.1" class="relref">Section 5.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>:
+            <p id="section-5.2-1.3.1">Roundtrip time estimator.<a href="#section-5.2-1.3.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.2-1.3.2.1">
+                <p id="section-5.2-1.3.2.1.1">Must reset on path change (how?). See also from <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.1" class="relref">Section 5.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>:
 "If path validation process succeeds, the endpoints set the path's
 congestion controller and round-trip time estimator according to
-<span><a href="https://rfc-editor.org/rfc/rfc9000#section-9.4" class="relref">Section 9.4</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>."<a href="#section-5.2-1.3.1" class="pilcrow">¶</a></p>
+<span><a href="https://rfc-editor.org/rfc/rfc9000#section-9.4" class="relref">Section 9.4</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>."<a href="#section-5.2-1.3.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-5.2-1.3.2.2">
+                <p id="section-5.2-1.3.2.2.1">Should benefit from knowledge about minimum latency expected on
+a path.<a href="#section-5.2-1.3.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
 </li>
           <li class="normal" id="section-5.2-1.4">
             <p id="section-5.2-1.4.1">Path selections algorithms<a href="#section-5.2-1.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.2-1.5">
-            <p id="section-5.2-1.5.1">How bad is latency polling?
-Traceroute can help to reduce polling (ideally, every links is
+            <p id="section-5.2-1.5.1">Latency polling<a href="#section-5.2-1.5.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.2-1.5.2.1">
+                <p id="section-5.2-1.5.2.1.1">How bad is latency polling?<a href="#section-5.2-1.5.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-5.2-1.5.2.2">
+                <p id="section-5.2-1.5.2.2.1">Traceroute can help to reduce polling (ideally, every links is
 traversed only by one poll packet). Traceroute also allows to identify
-links with high variance or generally hogh latency.<a href="#section-5.2-1.5.1" class="pilcrow">¶</a></p>
+links with high variance or generally hogh latency.<a href="#section-5.2-1.5.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
 </li>
         </ul>
 </section>
@@ -2096,61 +2169,7 @@ Additionally, the number of polled paths should vary.<a href="#section-12.1-1" c
         <h3 id="name-path-validation">
 <a href="#section-12.2" class="section-number selfRef">12.2. </a><a href="#name-path-validation" class="section-name selfRef">Path Validation</a>
         </h3>
-<p id="section-12.2-1">Following <span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> (Section 5.1) and <span>[<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> (Section 9),
-endpoints <span class="bcp14">MUST</span> drop a connection or perform path validation when the
-4-tuple changes:<a href="#section-12.2-1" class="pilcrow">¶</a></p>
-<p id="section-12.2-2"><code>
-"Not all changes of peer address are intentional, or active,
-migrations. The peer could experience NAT rebinding: a change of
-address due to a middlebox, usually a NAT, allocating a new outgoing
-port or even a new outgoing IP address for a flow. An endpoint MUST
-perform path validation (Section 8.2) if it detects any change to a
-peer's address, unless it has previously validated that address."
-</code><a href="#section-12.2-2" class="pilcrow">¶</a></p>
-<p id="section-12.2-3">With SCION, endpoints may use private IPs, say 192.168.0.1. These IPs
-are obviously not unique. Two paths with an identical 4-tuple may
-therefore connect to two different machines if the machines are in
-different ASes but use the same IP/port.<a href="#section-12.2-3" class="pilcrow">¶</a></p>
-<p id="section-12.2-4">In short, an attacker can impersonate a client by using an identical
-IP/port to connect a server. The server would probably just reverse
-the path and answer to the client without triggering a path validation.<a href="#section-12.2-4" class="pilcrow">¶</a></p>
-<p id="section-12.2-5"><strong>TODO</strong> What is the implication of this?<a href="#section-12.2-5" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-12.2-6.1">
-            <p id="section-12.2-6.1.1">Can an attacker, without having being able to encrypt/decrypt data,
-cause any harm? Can they redurect traffic to themselves? To prevent
-this, the server SCION stack should accept a new path only if the
-QUIC stack also accepts it! This means we need to trigger a path
-validation and somehow learn whether it worked. Or we use our own
-validation process. Or we don't allow the path to change and require
-a new QUIC connection (with a new SCION connection)?
-SOLUTION: The SCION layer <span class="bcp14">MUST NOT</span> cache paths locally, instead paths
-must be accepted by the QUIC layer before being used.<a href="#section-12.2-6.1.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<p id="section-12.2-7">Examples:
-* Java over DatagramChannel:
-  * Comparing ResponsePath objects <span class="bcp14">MUST</span> return <code>false</code> if the
-paths differ.
-  * The QUIC layer <span class="bcp14">MUST</span> use only those addresses for sending data that
-    have previously been accepted. If an attacker sends a packet, it
-    should be identified as malicious, be rejected, and the path should
-    not be used.
-    Why would an attacker packet be accepted? Replay should be
-    impossible (there are apcket sequence IDs?), and any other
-    requests should be cryptographically protected.
-    Can this attack be successful with spoofed IPs???
-* Java over DatagramSocket: Problematic, it caches the paths...
-* C + Rust: How exactly do we map PathID to paths? How are paths
-  updated?<a href="#section-12.2-7" class="pilcrow">¶</a></p>
-<p id="section-12.2-8">To restore the behavior intended by QUIC, we must therefore extend
-the 4-tuple to a 6-tuple of ISD-AS + IP + port on both endpoints.<a href="#section-12.2-8" class="pilcrow">¶</a></p>
-<p id="section-12.2-9"><strong>TODO</strong>
-This does not require any change in the QUIC layer but can probably
-be handled in the SCION ayer (the QUIC layer does not know about the
-ISD/AS code).<a href="#section-12.2-9" class="pilcrow">¶</a></p>
-<p id="section-12.2-10">It seems with SCION we can insert arbitrary IP addresses into the
-stack before handing incoming packets up to the QUIC layer...?<a href="#section-12.2-10" class="pilcrow">¶</a></p>
+<p id="section-12.2-1">See <a href="#pathchangedetection" class="auto internal xref">Section 4.1</a>.<a href="#section-12.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="more-">
