@@ -227,7 +227,7 @@ Message Protocol (ICMP).  This is described in {{SCION-CP}}.
 
 
 ## Padding
-From Section 8.1 of {{QUIC-TRANSPAORT}}: "Clients MUST ensure that
+From Section 8.1 of {{QUIC-TRANSPORT}}: "Clients MUST ensure that
 UDP datagrams containing Initial packets have UDP payloads of at
 least 1200 bytes, adding PADDING frames as necessary."
 
