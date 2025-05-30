@@ -1200,93 +1200,85 @@ API design and applications that use multipath QUIC over SCION.<a href="#section
             <p id="section-toc.1-1.2.1"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-api-coinsiderations" class="internal xref">API Coinsiderations</a></p>
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-multipath-features" class="internal xref">Multipath Features</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
+                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-path-metadata" class="internal xref">Path Metadata</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.1">
+                    <p id="section-toc.1-1.3.2.1.2.1.1"><a href="#section-3.1.1" class="auto internal xref">3.1.1</a>.  <a href="#name-path-metadata-granularity" class="internal xref">Path Metadata Granularity</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.2">
+                    <p id="section-toc.1-1.3.2.1.2.2.1"><a href="#section-3.1.2" class="auto internal xref">3.1.2</a>.  <a href="#name-path-metadata-dimensions" class="internal xref">Path Metadata Dimensions</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.3">
+                    <p id="section-toc.1-1.3.2.1.2.3.1"><a href="#section-3.1.3" class="auto internal xref">3.1.3</a>.  <a href="#name-path-metadata-liveliness" class="internal xref">Path Metadata Liveliness</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.4">
+                    <p id="section-toc.1-1.3.2.1.2.4.1"><a href="#section-3.1.4" class="auto internal xref">3.1.4</a>.  <a href="#name-path-metadata-reliability" class="internal xref">Path Metadata Reliability</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-path-selection" class="internal xref">Path Selection</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-quic-implementation-conside" class="internal xref">QUIC implementation Considerations</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
-                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-path-change-detection-path-" class="internal xref">Path Change Detection - Path Validation</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1.2.1">
-                    <p id="section-toc.1-1.4.2.1.2.1.1"><a href="#section-4.1.1" class="auto internal xref">4.1.1</a>.  <a href="#name-problem" class="internal xref">Problem</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1.2.2">
-                    <p id="section-toc.1-1.4.2.1.2.2.1"><a href="#section-4.1.2" class="auto internal xref">4.1.2</a>.  <a href="#name-implication" class="internal xref">Implication</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1.2.3">
-                    <p id="section-toc.1-1.4.2.1.2.3.1"><a href="#section-4.1.3" class="auto internal xref">4.1.3</a>.  <a href="#name-mitigation" class="internal xref">Mitigation</a></p>
-</li>
-                </ul>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
-                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-path-change-detection-path-i" class="internal xref">Path Change Detection - Path Injection</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2.2.1">
-                    <p id="section-toc.1-1.4.2.2.2.1.1"><a href="#section-4.2.1" class="auto internal xref">4.2.1</a>.  <a href="#name-problem-2" class="internal xref">Problem</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2.2.2">
-                    <p id="section-toc.1-1.4.2.2.2.2.1"><a href="#section-4.2.2" class="auto internal xref">4.2.2</a>.  <a href="#name-mitigation-2" class="internal xref">Mitigation</a></p>
-</li>
-                </ul>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
-                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="auto internal xref">4.3</a>.  <a href="#name-padding" class="internal xref">Padding</a></p>
-</li>
-            </ul>
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-multipath-categorization" class="internal xref">Multipath Categorization</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-algorithm-considerations" class="internal xref">Algorithm Considerations</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
-                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-general" class="internal xref">General</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
-                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-algorithms" class="internal xref">Algorithms</a></p>
-</li>
-            </ul>
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-api-coinsiderations" class="internal xref">API Coinsiderations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-multipath-features" class="internal xref">Multipath Features</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-quic-implementation-conside" class="internal xref">QUIC implementation Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
-                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-path-metadata" class="internal xref">Path Metadata</a></p>
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-path-change-detection-path-" class="internal xref">Path Change Detection - Path Validation</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1.2.1">
-                    <p id="section-toc.1-1.6.2.1.2.1.1"><a href="#section-6.1.1" class="auto internal xref">6.1.1</a>.  <a href="#name-path-metadata-granularity" class="internal xref">Path Metadata Granularity</a></p>
+                    <p id="section-toc.1-1.6.2.1.2.1.1"><a href="#section-6.1.1" class="auto internal xref">6.1.1</a>.  <a href="#name-problem" class="internal xref">Problem</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1.2.2">
-                    <p id="section-toc.1-1.6.2.1.2.2.1"><a href="#section-6.1.2" class="auto internal xref">6.1.2</a>.  <a href="#name-path-metadata-dimensions" class="internal xref">Path Metadata Dimensions</a></p>
+                    <p id="section-toc.1-1.6.2.1.2.2.1"><a href="#section-6.1.2" class="auto internal xref">6.1.2</a>.  <a href="#name-implication" class="internal xref">Implication</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1.2.3">
-                    <p id="section-toc.1-1.6.2.1.2.3.1"><a href="#section-6.1.3" class="auto internal xref">6.1.3</a>.  <a href="#name-path-metadata-liveliness" class="internal xref">Path Metadata Liveliness</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1.2.4">
-                    <p id="section-toc.1-1.6.2.1.2.4.1"><a href="#section-6.1.4" class="auto internal xref">6.1.4</a>.  <a href="#name-path-metadata-reliability" class="internal xref">Path Metadata Reliability</a></p>
+                    <p id="section-toc.1-1.6.2.1.2.3.1"><a href="#section-6.1.3" class="auto internal xref">6.1.3</a>.  <a href="#name-mitigation" class="internal xref">Mitigation</a></p>
 </li>
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
-                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-path-selection" class="internal xref">Path Selection</a></p>
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-path-change-detection-path-i" class="internal xref">Path Change Detection - Path Injection</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2.2.1">
+                    <p id="section-toc.1-1.6.2.2.2.1.1"><a href="#section-6.2.1" class="auto internal xref">6.2.1</a>.  <a href="#name-problem-2" class="internal xref">Problem</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2.2.2">
+                    <p id="section-toc.1-1.6.2.2.2.2.1"><a href="#section-6.2.2" class="auto internal xref">6.2.2</a>.  <a href="#name-mitigation-2" class="internal xref">Mitigation</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.3">
+                <p id="section-toc.1-1.6.2.3.1"><a href="#section-6.3" class="auto internal xref">6.3</a>.  <a href="#name-padding" class="internal xref">Padding</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-old-part-below-ignore" class="internal xref">OLD PART BELOW - IGNORE</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-multipath-categorization" class="internal xref">Multipath Categorization</a></p>
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-algorithm-considerations" class="internal xref">Algorithm Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
-                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-disjunctness" class="internal xref">Disjunctness</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-general" class="internal xref">General</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
-                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-path-metadata-2" class="internal xref">Path Metadata</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-algorithms" class="internal xref">Algorithms</a></p>
 </li>
             </ul>
 </li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-old-part-below-ignore" class="internal xref">OLD PART BELOW - IGNORE</a></p>
+</li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-algorithms-2" class="internal xref">Algorithms</a></p>
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-old-algorithms" class="internal xref">OLD - Algorithms</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
                 <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-path-selection-2" class="internal xref">Path Selection</a></p>
@@ -1317,7 +1309,7 @@ API design and applications that use multipath QUIC over SCION.<a href="#section
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-applications" class="internal xref">Applications</a></p>
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-old-applications" class="internal xref">OLD - Applications</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
                 <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref">10.1</a>.  <a href="#name-data-transfer" class="internal xref">Data Transfer</a></p>
@@ -1334,52 +1326,41 @@ API design and applications that use multipath QUIC over SCION.<a href="#section
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-api-design-consideration" class="internal xref">API Design consideration</a></p>
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.1">
-                <p id="section-toc.1-1.11.2.1.1"><a href="#section-11.1" class="auto internal xref">11.1</a>.  <a href="#name-multipathing-for-applicatio" class="internal xref">Multipathing for Applications</a></p>
+                <p id="section-toc.1-1.11.2.1.1"><a href="#section-11.1" class="auto internal xref">11.1</a>.  <a href="#name-latency-polling" class="internal xref">Latency Polling</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.2">
-                <p id="section-toc.1-1.11.2.2.1"><a href="#section-11.2" class="auto internal xref">11.2</a>.  <a href="#name-algorithm-integration" class="internal xref">Algorithm Integration</a></p>
+                <p id="section-toc.1-1.11.2.2.1"><a href="#section-11.2" class="auto internal xref">11.2</a>.  <a href="#name-path-validation" class="internal xref">Path Validation</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.3">
+                <p id="section-toc.1-1.11.2.3.1"><a href="#section-11.3" class="auto internal xref">11.3</a>.  <a href="#name-wormhole-attack" class="internal xref">Wormhole Attack</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.4">
+                <p id="section-toc.1-1.11.2.4.1"><a href="#section-11.4" class="auto internal xref">11.4</a>.  <a href="#name-more" class="internal xref">More ?</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
-            <p id="section-toc.1-1.12.1"><a href="#section-12" class="auto internal xref">12</a>. <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.1">
-                <p id="section-toc.1-1.12.2.1.1"><a href="#section-12.1" class="auto internal xref">12.1</a>.  <a href="#name-latency-polling" class="internal xref">Latency Polling</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.2">
-                <p id="section-toc.1-1.12.2.2.1"><a href="#section-12.2" class="auto internal xref">12.2</a>.  <a href="#name-path-validation" class="internal xref">Path Validation</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.3">
-                <p id="section-toc.1-1.12.2.3.1"><a href="#section-12.3" class="auto internal xref">12.3</a>.  <a href="#name-wormhole-attack" class="internal xref">Wormhole Attack</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.4">
-                <p id="section-toc.1-1.12.2.4.1"><a href="#section-12.4" class="auto internal xref">12.4</a>.  <a href="#name-more" class="internal xref">More ?</a></p>
-</li>
-            </ul>
+            <p id="section-toc.1-1.12.1"><a href="#section-12" class="auto internal xref">12</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
-            <p id="section-toc.1-1.13.1"><a href="#section-13" class="auto internal xref">13</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
-            <p id="section-toc.1-1.14.1"><a href="#section-14" class="auto internal xref">14</a>. <a href="#name-references" class="internal xref">References</a></p>
+            <p id="section-toc.1-1.13.1"><a href="#section-13" class="auto internal xref">13</a>. <a href="#name-references" class="internal xref">References</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14.2.1">
-                <p id="section-toc.1-1.14.2.1.1"><a href="#section-14.1" class="auto internal xref">14.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.1">
+                <p id="section-toc.1-1.13.2.1.1"><a href="#section-13.1" class="auto internal xref">13.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14.2.2">
-                <p id="section-toc.1-1.14.2.2.1"><a href="#section-14.2" class="auto internal xref">14.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.2">
+                <p id="section-toc.1-1.13.2.2.1"><a href="#section-13.2" class="auto internal xref">13.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15">
-            <p id="section-toc.1-1.15.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
+            <p id="section-toc.1-1.14.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
 </li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16">
-            <p id="section-toc.1-1.16.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15">
+            <p id="section-toc.1-1.15.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1404,13 +1385,13 @@ such that they don't share low bandwidth links.<a href="#section-1-3" class="pil
 for example for path selection, or more informed algorithms for
 congestion control.<a href="#section-1-4" class="pilcrow">¶</a></p>
 <p id="section-1-5">This document first identifies and categorizes multipath usage
-scenarios (<a href="#categories" class="auto internal xref">Section 8</a>), then discusses guidelines for path selection
-algorithms and suggests how these may be applicable to congestion
-control algorithms, without discussing the later in detail
-(<a href="#algorithms" class="auto internal xref">Section 5.2</a>).
+scenarios (<a href="#categories" class="auto internal xref">Section 4</a>), then discusses guidelines for some
+algorithms such as congestion control algorithms (<a href="#algcon" class="auto internal xref">Section 7</a>),
+and suggestions for implementations of PAN libraries and
+QUIC-MP libraries (<a href="#impcon" class="auto internal xref">Section 6</a>).
 Finally, in order to facilitate these algorithms, this documents
 contains suggestions for API design and general use in
-applications (<a href="#api" class="auto internal xref">Section 11</a>).<a href="#section-1-5" class="pilcrow">¶</a></p>
+applications (<a href="#apicon" class="auto internal xref">Section 5</a>).<a href="#section-1-5" class="pilcrow">¶</a></p>
 <p id="section-1-6">As a practical example of a PAN and how path metadata
 can be made available and path selection and routing can be
 implemented, we refer to the SCION <span>[<a href="#SCION-CP" class="cite xref">SCION-CP</a>]</span>, <span>[<a href="#SCION-DP" class="cite xref">SCION-DP</a>]</span>.<a href="#section-1-6" class="pilcrow">¶</a></p>
@@ -1478,111 +1459,231 @@ described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</s
 appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="apicon">
+<div id="mpfeatures">
 <section id="section-3">
+      <h2 id="name-multipath-features">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-multipath-features" class="section-name selfRef">Multipath Features</a>
+      </h2>
+<p id="section-3-1">This document discusses multipath features that are available in
+SCION <span>[<a href="#SCION-CP" class="cite xref">SCION-CP</a>]</span>, <span>[<a href="#SCION-DP" class="cite xref">SCION-DP</a>]</span>. However, the discussion is kept
+general and relevant to all PAN that support these features.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<div id="metadata">
+<section id="section-3.1">
+        <h3 id="name-path-metadata">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-path-metadata" class="section-name selfRef">Path Metadata</a>
+        </h3>
+<p id="section-3.1-1">We assume that path metadata is reflects hardware properties rather
+than live traffic information (especially for bandwidth and latency).
+One should not expect path metadata is updated to be more than once
+every hour. Path metadata is disseminated together with paths, so its
+freshness depends on the path livetime, wgich can be several hours.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<div id="path-metadata-granularity">
+<section id="section-3.1.1">
+          <h4 id="name-path-metadata-granularity">
+<a href="#section-3.1.1" class="section-number selfRef">3.1.1. </a><a href="#name-path-metadata-granularity" class="section-name selfRef">Path Metadata Granularity</a>
+          </h4>
+<p id="section-3.1.1-1">We assume a protocol for inter-AS routing that provides path
+information per AS, more specifically per border router of an AS
+and per any link between any border routers (link may be internal
+or external to an AS).<a href="#section-3.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.1-2">That means, if we compare multiple paths, we can see where they
+overlap and what the hardware characteristics of the overlapping
+parts are.<a href="#section-3.1.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="path-metadata-dimensions">
+<section id="section-3.1.2">
+          <h4 id="name-path-metadata-dimensions">
+<a href="#section-3.1.2" class="section-number selfRef">3.1.2. </a><a href="#name-path-metadata-dimensions" class="section-name selfRef">Path Metadata Dimensions</a>
+          </h4>
+<p id="section-3.1.2-1">We assume a protocol a provides information on links and border
+routers, such as MTU, bandwidth, latency, geo-location, as well
+as identities (interface ID, port and IP) of border routers.
+We assume the data is static, which means that bandwidth and latency
+reflect hardware characteristics rather than current or recent load.<a href="#section-3.1.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="path-metadata-liveliness">
+<section id="section-3.1.3">
+          <h4 id="name-path-metadata-liveliness">
+<a href="#section-3.1.3" class="section-number selfRef">3.1.3. </a><a href="#name-path-metadata-liveliness" class="section-name selfRef">Path Metadata Liveliness</a>
+          </h4>
+<p id="section-3.1.3-1">We assume that path metadata is updated at most every few hours.
+This should be more than sufficient since all values reflect
+hardware properties rather than current traffic load.<a href="#section-3.1.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="path-metadata-reliability">
+<section id="section-3.1.4">
+          <h4 id="name-path-metadata-reliability">
+<a href="#section-3.1.4" class="section-number selfRef">3.1.4. </a><a href="#name-path-metadata-reliability" class="section-name selfRef">Path Metadata Reliability</a>
+          </h4>
+<p id="section-3.1.4-1">We assume that all values are correct. The metadata is
+cryptographically protected. It is signed by the data originator,
+which is the relevant AS owner. However, the data correctness is not
+verified, instead we rely on the AS owner to be honest.<a href="#section-3.1.4-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="path-selection">
+<section id="section-3.2">
+        <h3 id="name-path-selection">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-path-selection" class="section-name selfRef">Path Selection</a>
+        </h3>
+<p id="section-3.2-1">We assume that a PAN protocol allows selecting paths explicitly, based,
+for example, on path metadata. Paths can be added and removed from a
+connection. Paths may have a best-before data and may expire, after
+which they are invalid.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="categories">
+<section id="section-4">
+      <h2 id="name-multipath-categorization">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-multipath-categorization" class="section-name selfRef">Multipath Categorization</a>
+      </h2>
+<p id="section-4-1">This document distinguishes the following usage categories:<a href="#section-4-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4-2.1">
+          <p id="section-4-2.1.1">High bandwidth (BW): Optimizing bandwidth by parallel transfer on
+multiple paths.<a href="#section-4-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-4-2.2">
+          <p id="section-4-2.2.1">Minimum latency (LAT): Optimizing latency for low latency.
+This can be achieved by regularly checking multiple paths and using
+the one with the lowest latency or by parallel transmission over
+multiple path.<a href="#section-4-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-4-2.3">
+          <p id="section-4-2.3.1">Failure tolerance (FT): Optimizing for failure tolerance by
+parallel transfer on multiple paths.<a href="#section-4-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-4-2.4">
+          <p id="section-4-2.4.1">Evasion (EVA): Avoid certain links or ASes, for example based on MTU,
+geolocation or AS number.<a href="#section-4-2.4.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-4-3">The discussions of these categories are written with multiple paths
+per interface in mind (i.e. multiple paths per 4-tuple).  However, they
+can usually be generalized to multipathing over multiple interfaces.<a href="#section-4-3" class="pilcrow">¶</a></p>
+<p id="section-4-4">These categories can be combined, for example LAT and FT may often be
+combined and EVA can be can be useful in combination with any other
+category.<a href="#section-4-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="apicon">
+<section id="section-5">
       <h2 id="name-api-coinsiderations">
-<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-api-coinsiderations" class="section-name selfRef">API Coinsiderations</a>
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-api-coinsiderations" class="section-name selfRef">API Coinsiderations</a>
       </h2>
 <ul class="normal">
-<li class="normal" id="section-3-1.1">
-          <p id="section-3-1.1.1">Expose Path ID<a href="#section-3-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-5-1.1">
+          <p id="section-5-1.1.1">Expose Path ID<a href="#section-5-1.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-3-1.2">
-          <p id="section-3-1.2.1">Expose API for custom congestion control algorithms<a href="#section-3-1.2.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-5-1.2">
+          <p id="section-5-1.2.1">Expose API for custom congestion control algorithms<a href="#section-5-1.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-3-1.3">
-          <p id="section-3-1.3.1">Expose callback for QUIC-MP path abandon (REFERENCE!!!)<a href="#section-3-1.3.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-5-1.3">
+          <p id="section-5-1.3.1">Expose callback for QUIC-MP path abandon (REFERENCE!!!)<a href="#section-5-1.3.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-3-1.4">
-          <p id="section-3-1.4.1">Expose API for name resolution (only of library does that), not
-useful if API works with IP/port only.<a href="#section-3-1.4.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-5-1.4">
+          <p id="section-5-1.4.1">Expose API for name resolution (only of library does that), not
+useful if API works with IP/port only.<a href="#section-5-1.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-5-1.5">
+          <p id="section-5-1.5.1">Expose API for usage profile.  Applications will have very
+different requirements on a multipath API, see <a href="#categories" class="auto internal xref">Section 4</a>.
+A comprehensive API should therefore allow for mostly automatic
+selection of Path Selection and Congestion Control algorithms.<a href="#section-5-1.5.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 </section>
 </div>
 <div id="impcon">
-<section id="section-4">
+<section id="section-6">
       <h2 id="name-quic-implementation-conside">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-quic-implementation-conside" class="section-name selfRef">QUIC implementation Considerations</a>
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-quic-implementation-conside" class="section-name selfRef">QUIC implementation Considerations</a>
       </h2>
-<p id="section-4-1"><strong>TODO READ:</strong>
-See also "Implementation Considerations" in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5" class="relref">Section 5</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-6-1"><strong>TODO READ:</strong>
+See also "Implementation Considerations" in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5" class="relref">Section 5</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <div id="pathchange-validation">
-<section id="section-4.1">
+<section id="section-6.1">
         <h3 id="name-path-change-detection-path-">
-<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-path-change-detection-path-" class="section-name selfRef">Path Change Detection - Path Validation</a>
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-path-change-detection-path-" class="section-name selfRef">Path Change Detection - Path Validation</a>
         </h3>
 <div id="problem">
-<section id="section-4.1.1">
+<section id="section-6.1.1">
           <h4 id="name-problem">
-<a href="#section-4.1.1" class="section-number selfRef">4.1.1. </a><a href="#name-problem" class="section-name selfRef">Problem</a>
+<a href="#section-6.1.1" class="section-number selfRef">6.1.1. </a><a href="#name-problem" class="section-name selfRef">Problem</a>
           </h4>
-<p id="section-4.1.1-1">Following <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.1" class="relref">Section 5.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> and <span><a href="https://rfc-editor.org/rfc/rfc9000#section-9" class="relref">Section 9</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>, endpoints <span class="bcp14">MUST</span> drop a connection or perform path
-validation when the 4-tuple changes:<a href="#section-4.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1.1-1">Following <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.1" class="relref">Section 5.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> and <span><a href="https://rfc-editor.org/rfc/rfc9000#section-9" class="relref">Section 9</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>, endpoints <span class="bcp14">MUST</span> drop a connection or perform path
+validation when the 4-tuple changes:<a href="#section-6.1.1-1" class="pilcrow">¶</a></p>
 <ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="section-4.1.1-2.1">
-              <p id="section-4.1.1-2.1.1">"Not all changes of peer address are intentional, or active,
+<li class="normal ulEmpty" id="section-6.1.1-2.1">
+              <p id="section-6.1.1-2.1.1">"Not all changes of peer address are intentional, or active,
   migrations. The peer could experience NAT rebinding: a change of
   address due to a middlebox, usually a NAT, allocating a new outgoing
   port or even a new outgoing IP address for a flow. An endpoint <span class="bcp14">MUST</span>
   perform path validation (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-8.2" class="relref">Section 8.2</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>) if it
   detects any change to a
-  peer's address, unless it has previously validated that address."<a href="#section-4.1.1-2.1.1" class="pilcrow">¶</a></p>
+  peer's address, unless it has previously validated that address."<a href="#section-6.1.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-4.1.1-3">With SCION, endpoints may use private IPs that are not globally unique,
+<p id="section-6.1.1-3">With SCION, endpoints may use private IPs that are not globally unique,
 such as 192.168.0.1. Two paths with an identical 4-tuple may
 therefore connect to two different machines if the machines are in
-different ASes but use the same IP/port.<a href="#section-4.1.1-3" class="pilcrow">¶</a></p>
-<p id="section-4.1.1-4"><strong>TODO remove the following, it is probably wrong.</strong><a href="#section-4.1.1-4" class="pilcrow">¶</a></p>
-<p id="section-4.1.1-5">In short, an attacker can impersonate a client by using an identical
+different ASes but use the same IP/port.<a href="#section-6.1.1-3" class="pilcrow">¶</a></p>
+<p id="section-6.1.1-4"><strong>TODO remove the following, it is probably wrong.</strong><a href="#section-6.1.1-4" class="pilcrow">¶</a></p>
+<p id="section-6.1.1-5">In short, an attacker can impersonate a client by using an identical
 IP/port to connect a server. The server would probably just reverse
-the path and answer to the client without triggering a path validation.<a href="#section-4.1.1-5" class="pilcrow">¶</a></p>
-<p id="section-4.1.1-6"><strong>TODO</strong> What is the implication of this?<a href="#section-4.1.1-6" class="pilcrow">¶</a></p>
+the path and answer to the client without triggering a path validation.<a href="#section-6.1.1-5" class="pilcrow">¶</a></p>
+<p id="section-6.1.1-6"><strong>TODO</strong> What is the implication of this?<a href="#section-6.1.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="implication">
-<section id="section-4.1.2">
+<section id="section-6.1.2">
           <h4 id="name-implication">
-<a href="#section-4.1.2" class="section-number selfRef">4.1.2. </a><a href="#name-implication" class="section-name selfRef">Implication</a>
+<a href="#section-6.1.2" class="section-number selfRef">6.1.2. </a><a href="#name-implication" class="section-name selfRef">Implication</a>
           </h4>
-<p id="section-4.1.2-1">Path change detection is important for:
+<p id="section-6.1.2-1">Path change detection is important for:
 - triggering a reset of congestion control and RTT estimation
 algorithms, see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-9.4" class="relref">Section 9.4</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>
 - triggering path validation, see <span><a href="https://rfc-editor.org/rfc/rfc9000#section-9" class="relref">Section 9</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>.
-  <strong>TODO Better understand the impact of this</strong><a href="#section-4.1.2-1" class="pilcrow">¶</a></p>
+  <strong>TODO Better understand the impact of this</strong><a href="#section-6.1.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="mitigation">
-<section id="section-4.1.3">
+<section id="section-6.1.3">
           <h4 id="name-mitigation">
-<a href="#section-4.1.3" class="section-number selfRef">4.1.3. </a><a href="#name-mitigation" class="section-name selfRef">Mitigation</a>
+<a href="#section-6.1.3" class="section-number selfRef">6.1.3. </a><a href="#name-mitigation" class="section-name selfRef">Mitigation</a>
           </h4>
 <ul class="normal">
-<li class="normal" id="section-4.1.3-1.1">
-              <p id="section-4.1.3-1.1.1">Allow to detect path changes while 4-tuple stays the same<a href="#section-4.1.3-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.1.3-1.1">
+              <p id="section-6.1.3-1.1.1">Allow to detect path changes while 4-tuple stays the same<a href="#section-6.1.3-1.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-4.1.3-1.1.2.1">
-                  <p id="section-4.1.3-1.1.2.1.1">Port mangling?<a href="#section-4.1.3-1.1.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.1.3-1.1.2.1">
+                  <p id="section-6.1.3-1.1.2.1.1">Port mangling?<a href="#section-6.1.3-1.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-4.1.3-1.1.2.2">
-                  <p id="section-4.1.3-1.1.2.2.1">Change PATH-ID (SCION would need to know about QUIC...!!)<a href="#section-4.1.3-1.1.2.2.1" class="pilcrow">¶</a></p>
+                <li class="normal" id="section-6.1.3-1.1.2.2">
+                  <p id="section-6.1.3-1.1.2.2.1">Change PATH-ID (SCION would need to know about QUIC...!!)<a href="#section-6.1.3-1.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-4.1.3-1.1.2.3">
-                  <p id="section-4.1.3-1.1.2.3.1">Is PATH ID encrypted? Then attacker cannot know it (but use, it,
+                <li class="normal" id="section-6.1.3-1.1.2.3">
+                  <p id="section-6.1.3-1.1.2.3.1">Is PATH ID encrypted? Then attacker cannot know it (but use, it,
 see replay, which is not possible due to sequence numbers??)
-... so what?<a href="#section-4.1.3-1.1.2.3.1" class="pilcrow">¶</a></p>
+... so what?<a href="#section-6.1.3-1.1.2.3.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-4.1.3-1.1.2.4">
-                  <p id="section-4.1.3-1.1.2.4.1">SCION could just drop packets where 4-tuple is the same but
-remote AS has changed.<a href="#section-4.1.3-1.1.2.4.1" class="pilcrow">¶</a></p>
+                <li class="normal" id="section-6.1.3-1.1.2.4">
+                  <p id="section-6.1.3-1.1.2.4.1">SCION could just drop packets where 4-tuple is the same but
+remote AS has changed.<a href="#section-6.1.3-1.1.2.4.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-4.1.3-1.1.2.5">
-                  <p id="section-4.1.3-1.1.2.5.1">SCION could trigger a "double" path validation by changing
+                <li class="normal" id="section-6.1.3-1.1.2.5">
+                  <p id="section-6.1.3-1.1.2.5.1">SCION could trigger a "double" path validation by changing
 the port/IP to a made up value and back to the original value.
 This would trigger two path validations. However, at
 least eventually, the QUIC layer will know the correct
-remote IP/port.<a href="#section-4.1.3-1.1.2.5.1" class="pilcrow">¶</a></p>
+remote IP/port.<a href="#section-6.1.3-1.1.2.5.1" class="pilcrow">¶</a></p>
 </li>
               </ul>
 </li>
@@ -1592,17 +1693,17 @@ remote IP/port.<a href="#section-4.1.3-1.1.2.5.1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="pathchange-injection">
-<section id="section-4.2">
+<section id="section-6.2">
         <h3 id="name-path-change-detection-path-i">
-<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-path-change-detection-path-i" class="section-name selfRef">Path Change Detection - Path Injection</a>
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-path-change-detection-path-i" class="section-name selfRef">Path Change Detection - Path Injection</a>
         </h3>
 <div id="problem-1">
-<section id="section-4.2.1">
+<section id="section-6.2.1">
           <h4 id="name-problem-2">
-<a href="#section-4.2.1" class="section-number selfRef">4.2.1. </a><a href="#name-problem-2" class="section-name selfRef">Problem</a>
+<a href="#section-6.2.1" class="section-number selfRef">6.2.1. </a><a href="#name-problem-2" class="section-name selfRef">Problem</a>
           </h4>
-<p id="section-4.2.1-1"><strong>TODO check SCION IRTF draft for this attack:</strong><a href="#section-4.2.1-1" class="pilcrow">¶</a></p>
-<p id="section-4.2.1-2">An attacker can send a spoofed packet to a server. The packet contains
+<p id="section-6.2.1-1"><strong>TODO check SCION IRTF draft for this attack:</strong><a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-2">An attacker can send a spoofed packet to a server. The packet contains
 a new path (for example broken or with high latency).
 The server accepts the packet and stores the path for being used
 for all futur communication with the client. The next packet sent to
@@ -1610,44 +1711,44 @@ the client will take the injected malicious path and will fail (or
 at least be redirected).
 This happens even if th epacket is rejectd by the QUIC(-MP) layer
 because the SCION layer will never learn about the packet being
-rejected.<a href="#section-4.2.1-2" class="pilcrow">¶</a></p>
+rejected.<a href="#section-6.2.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="mitigation-1">
-<section id="section-4.2.2">
+<section id="section-6.2.2">
           <h4 id="name-mitigation-2">
-<a href="#section-4.2.2" class="section-number selfRef">4.2.2. </a><a href="#name-mitigation-2" class="section-name selfRef">Mitigation</a>
+<a href="#section-6.2.2" class="section-number selfRef">6.2.2. </a><a href="#name-mitigation-2" class="section-name selfRef">Mitigation</a>
           </h4>
 <ul class="normal">
-<li class="normal" id="section-4.2.2-1.1">
-              <p id="section-4.2.2-1.1.1">Authenticate packets on SCION level....
-There could still be a replay:<a href="#section-4.2.2-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.2.2-1.1">
+              <p id="section-6.2.2-1.1.1">Authenticate packets on SCION level....
+There could still be a replay:<a href="#section-6.2.2-1.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-4.2.2-1.1.2.1">
-                  <p id="section-4.2.2-1.1.2.1.1">Client uses path P1 (P1 could be injected with wormhole attack).<a href="#section-4.2.2-1.1.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.2.2-1.1.2.1">
+                  <p id="section-6.2.2-1.1.2.1.1">Client uses path P1 (P1 could be injected with wormhole attack).<a href="#section-6.2.2-1.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-4.2.2-1.1.2.2">
-                  <p id="section-4.2.2-1.1.2.2.1">Attacker captures packet with P1 path<a href="#section-4.2.2-1.1.2.2.1" class="pilcrow">¶</a></p>
+                <li class="normal" id="section-6.2.2-1.1.2.2">
+                  <p id="section-6.2.2-1.1.2.2.1">Attacker captures packet with P1 path<a href="#section-6.2.2-1.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-4.2.2-1.1.2.3">
-                  <p id="section-4.2.2-1.1.2.3.1">Attacker breaks P1 and forces migration to P2<a href="#section-4.2.2-1.1.2.3.1" class="pilcrow">¶</a></p>
+                <li class="normal" id="section-6.2.2-1.1.2.3">
+                  <p id="section-6.2.2-1.1.2.3.1">Attacker breaks P1 and forces migration to P2<a href="#section-6.2.2-1.1.2.3.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-4.2.2-1.1.2.4">
-                  <p id="section-4.2.2-1.1.2.4.1">Attacker can no replay the original packet to get server to
-keep responding on the broken P1 path.<a href="#section-4.2.2-1.1.2.4.1" class="pilcrow">¶</a></p>
+                <li class="normal" id="section-6.2.2-1.1.2.4">
+                  <p id="section-6.2.2-1.1.2.4.1">Attacker can no replay the original packet to get server to
+keep responding on the broken P1 path.<a href="#section-6.2.2-1.1.2.4.1" class="pilcrow">¶</a></p>
 </li>
               </ul>
 </li>
-            <li class="normal" id="section-4.2.2-1.2">
-              <p id="section-4.2.2-1.2.1">Don't allow paths to change (for 4-tuple??) and require
-proper path migration (how?) or even a reconnect<a href="#section-4.2.2-1.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-6.2.2-1.2">
+              <p id="section-6.2.2-1.2.1">Don't allow paths to change (for 4-tuple??) and require
+proper path migration (how?) or even a reconnect<a href="#section-6.2.2-1.2.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-4.2.2-1.3">
-              <p id="section-4.2.2-1.3.1">SOLUTION: The SCION layer <span class="bcp14">MUST NOT</span> cache paths locally, instead
-paths must be accepted by the QUIC layer before being used.<a href="#section-4.2.2-1.3.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-6.2.2-1.3">
+              <p id="section-6.2.2-1.3.1">SOLUTION: The SCION layer <span class="bcp14">MUST NOT</span> cache paths locally, instead
+paths must be accepted by the QUIC layer before being used.<a href="#section-6.2.2-1.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-4.2.2-2">Examples:
+<p id="section-6.2.2-2">Examples:
 * Java over DatagramChannel:
   * Comparing ResponsePath objects <span class="bcp14">MUST</span> return <code>false</code> if the
 paths differ.
@@ -1661,101 +1762,101 @@ paths differ.
     Can this attack be successful with spoofed IPs???
 * Java over DatagramSocket: Problematic, it caches the paths...
 * C + Rust: How exactly do we map PathID to paths? How are paths
-  updated?<a href="#section-4.2.2-2" class="pilcrow">¶</a></p>
+  updated?<a href="#section-6.2.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="padding">
-<section id="section-4.3">
+<section id="section-6.3">
         <h3 id="name-padding">
-<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-padding" class="section-name selfRef">Padding</a>
+<a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-padding" class="section-name selfRef">Padding</a>
         </h3>
-<p id="section-4.3-1">From <span><a href="https://rfc-editor.org/rfc/rfc9000#section-8.1" class="relref">Section 8.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>: "Clients <span class="bcp14">MUST</span> ensure that
+<p id="section-6.3-1">From <span><a href="https://rfc-editor.org/rfc/rfc9000#section-8.1" class="relref">Section 8.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>: "Clients <span class="bcp14">MUST</span> ensure that
 UDP datagrams containing Initial packets have UDP payloads of at
-least 1200 bytes, adding PADDING frames as necessary."<a href="#section-4.3-1" class="pilcrow">¶</a></p>
-<p id="section-4.3-2">PAN packets may be bigger than traditional packets because they may
-carry additional routing information.<a href="#section-4.3-2" class="pilcrow">¶</a></p>
-<p id="section-4.3-3"><strong>TODO</strong> Measure SCION path header!<a href="#section-4.3-3" class="pilcrow">¶</a></p>
+least 1200 bytes, adding PADDING frames as necessary."<a href="#section-6.3-1" class="pilcrow">¶</a></p>
+<p id="section-6.3-2">PAN packets may be bigger than traditional packets because they may
+carry additional routing information.<a href="#section-6.3-2" class="pilcrow">¶</a></p>
+<p id="section-6.3-3"><strong>TODO</strong> Measure SCION path header!<a href="#section-6.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="algcon">
-<section id="section-5">
+<section id="section-7">
       <h2 id="name-algorithm-considerations">
-<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-algorithm-considerations" class="section-name selfRef">Algorithm Considerations</a>
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-algorithm-considerations" class="section-name selfRef">Algorithm Considerations</a>
       </h2>
-<p id="section-5-1">What has changed:
+<p id="section-7-1">What has changed:
 - Much better MPU
 - Knowledge about shared links/routers between paths
 - indication of latency+bandwidth limits.
-- (Potentially live traffic info: Avoid "pulsing" -&gt; Simon Scherer?)<a href="#section-5-1" class="pilcrow">¶</a></p>
+- (Potentially live traffic info: Avoid "pulsing" -&gt; Simon Scherer?)<a href="#section-7-1" class="pilcrow">¶</a></p>
 <div id="general">
-<section id="section-5.1">
+<section id="section-7.1">
         <h3 id="name-general">
-<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-general" class="section-name selfRef">General</a>
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-general" class="section-name selfRef">General</a>
         </h3>
-<p id="section-5.1-1"><span>[<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> requires that there is no connection migration
+<p id="section-7.1-1"><span>[<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> requires that there is no connection migration
 during the initial handshake, and that there are no other packets
 send (including probing packets) during the initial handshake, see
-<span><a href="https://rfc-editor.org/rfc/rfc9000#section-9" class="relref">Section 9</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>, paragraphs 2 and 3.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.1-2">We need to ensure on some level that no path change or probing occurs.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
-<p id="section-5.1-3"><strong>TODO</strong> Read <span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> on 4-tuple change / path validation.
--&gt; Section 9 in RFC 9000<a href="#section-5.1-3" class="pilcrow">¶</a></p>
+<span><a href="https://rfc-editor.org/rfc/rfc9000#section-9" class="relref">Section 9</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>, paragraphs 2 and 3.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.1-2">We need to ensure on some level that no path change or probing occurs.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
+<p id="section-7.1-3"><strong>TODO</strong> Read <span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> on 4-tuple change / path validation.
+-&gt; Section 9 in RFC 9000<a href="#section-7.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="algorithms">
-<section id="section-5.2">
+<section id="section-7.2">
         <h3 id="name-algorithms">
-<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-algorithms" class="section-name selfRef">Algorithms</a>
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-algorithms" class="section-name selfRef">Algorithms</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="section-5.2-1.1">
-            <p id="section-5.2-1.1.1">MPU detection algorithm can be removed/replaced with metadata query<a href="#section-5.2-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-7.2-1.1">
+            <p id="section-7.2-1.1.1">MPU detection algorithm can be removed/replaced with metadata query<a href="#section-7.2-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-5.2-1.2">
-            <p id="section-5.2-1.2.1">Congestion control algorithms:<a href="#section-5.2-1.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-7.2-1.2">
+            <p id="section-7.2-1.2.1">Congestion control algorithms:<a href="#section-7.2-1.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.2-1.2.2.1">
-                <p id="section-5.2-1.2.2.1.1">Must reset on path change (how?).<a href="#section-5.2-1.2.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-7.2-1.2.2.1">
+                <p id="section-7.2-1.2.2.1.1">Must reset on path change (how?).<a href="#section-7.2-1.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-5.2-1.2.2.2">
-                <p id="section-5.2-1.2.2.2.1">Should benefit from knowledge about path overlaps.<a href="#section-5.2-1.2.2.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-7.2-1.2.2.2">
+                <p id="section-7.2-1.2.2.2.1">Should benefit from knowledge about path overlaps.<a href="#section-7.2-1.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-5.2-1.2.2.3">
-                <p id="section-5.2-1.2.2.3.1">Follow BCP 133, see <span><a href="https://rfc-editor.org/rfc/rfc9743#section-7.10" class="relref">Section 7.10</a> of [<a href="#CC-ALGORITHMS" class="cite xref">CC-ALGORITHMS</a>]</span>.<a href="#section-5.2-1.2.2.3.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-7.2-1.2.2.3">
+                <p id="section-7.2-1.2.2.3.1">Follow BCP 133, see <span><a href="https://rfc-editor.org/rfc/rfc9743#section-7.10" class="relref">Section 7.10</a> of [<a href="#CC-ALGORITHMS" class="cite xref">CC-ALGORITHMS</a>]</span>.<a href="#section-7.2-1.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="normal" id="section-5.2-1.3">
-            <p id="section-5.2-1.3.1">Roundtrip time estimator.<a href="#section-5.2-1.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-7.2-1.3">
+            <p id="section-7.2-1.3.1">Roundtrip time estimator.<a href="#section-7.2-1.3.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.2-1.3.2.1">
-                <p id="section-5.2-1.3.2.1.1">Must reset on path change (how?). See also from <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.1" class="relref">Section 5.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>:
+<li class="normal" id="section-7.2-1.3.2.1">
+                <p id="section-7.2-1.3.2.1.1">Must reset on path change (how?). See also from <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.1" class="relref">Section 5.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>:
 "If path validation process succeeds, the endpoints set the path's
 congestion controller and round-trip time estimator according to
-<span><a href="https://rfc-editor.org/rfc/rfc9000#section-9.4" class="relref">Section 9.4</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>."<a href="#section-5.2-1.3.2.1.1" class="pilcrow">¶</a></p>
+<span><a href="https://rfc-editor.org/rfc/rfc9000#section-9.4" class="relref">Section 9.4</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>."<a href="#section-7.2-1.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-5.2-1.3.2.2">
-                <p id="section-5.2-1.3.2.2.1">Should benefit from knowledge about minimum latency expected on
-a path.<a href="#section-5.2-1.3.2.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-7.2-1.3.2.2">
+                <p id="section-7.2-1.3.2.2.1">Should benefit from knowledge about minimum latency expected on
+a path.<a href="#section-7.2-1.3.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="normal" id="section-5.2-1.4">
-            <p id="section-5.2-1.4.1">Path selections algorithms<a href="#section-5.2-1.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-7.2-1.4">
+            <p id="section-7.2-1.4.1">Path selections algorithms<a href="#section-7.2-1.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-5.2-1.5">
-            <p id="section-5.2-1.5.1">Latency polling<a href="#section-5.2-1.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-7.2-1.5">
+            <p id="section-7.2-1.5.1">Latency polling<a href="#section-7.2-1.5.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.2-1.5.2.1">
-                <p id="section-5.2-1.5.2.1.1">How bad is latency polling?<a href="#section-5.2-1.5.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-7.2-1.5.2.1">
+                <p id="section-7.2-1.5.2.1.1">How bad is latency polling?<a href="#section-7.2-1.5.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-5.2-1.5.2.2">
-                <p id="section-5.2-1.5.2.2.1">Traceroute can help to reduce polling (ideally, every links is
+              <li class="normal" id="section-7.2-1.5.2.2">
+                <p id="section-7.2-1.5.2.2.1">Traceroute can help to reduce polling (ideally, every links is
 traversed only by one poll packet). Traceroute also allows to identify
-links with high variance or generally hogh latency.<a href="#section-5.2-1.5.2.2.1" class="pilcrow">¶</a></p>
+links with high variance or generally hogh latency.<a href="#section-7.2-1.5.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
@@ -1764,163 +1865,17 @@ links with high variance or generally hogh latency.<a href="#section-5.2-1.5.2.2
 </div>
 </section>
 </div>
-<div id="mpfeatures">
-<section id="section-6">
-      <h2 id="name-multipath-features">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-multipath-features" class="section-name selfRef">Multipath Features</a>
-      </h2>
-<p id="section-6-1">This document discusses multipath features that are available in
-SCION <span>[<a href="#SCION-CP" class="cite xref">SCION-CP</a>]</span>, <span>[<a href="#SCION-DP" class="cite xref">SCION-DP</a>]</span>. However, the discussion is kept
-general and relevant to all PAN that support these features.<a href="#section-6-1" class="pilcrow">¶</a></p>
-<div id="metadata">
-<section id="section-6.1">
-        <h3 id="name-path-metadata">
-<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-path-metadata" class="section-name selfRef">Path Metadata</a>
-        </h3>
-<p id="section-6.1-1">We assume that path metadata is reflects hardware properties rather
-than live traffic information (especially for bandwidth and latency).
-One should not expect path metadata is updated to be more than once
-every hour. Path metadata is disseminated together with paths, so its
-freshness depends on the path livetime, wgich can be several hours.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
-<div id="path-metadata-granularity">
-<section id="section-6.1.1">
-          <h4 id="name-path-metadata-granularity">
-<a href="#section-6.1.1" class="section-number selfRef">6.1.1. </a><a href="#name-path-metadata-granularity" class="section-name selfRef">Path Metadata Granularity</a>
-          </h4>
-<p id="section-6.1.1-1">We assume a protocol for inter-AS routing that provides path
-information per AS, more specifically per border router of an AS
-and per any link between any border routers (link may be internal
-or external to an AS).<a href="#section-6.1.1-1" class="pilcrow">¶</a></p>
-<p id="section-6.1.1-2">That means, if we compare multiple paths, we can see where they
-overlap and what the hardware characteristics of the overlapping
-parts are.<a href="#section-6.1.1-2" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="path-metadata-dimensions">
-<section id="section-6.1.2">
-          <h4 id="name-path-metadata-dimensions">
-<a href="#section-6.1.2" class="section-number selfRef">6.1.2. </a><a href="#name-path-metadata-dimensions" class="section-name selfRef">Path Metadata Dimensions</a>
-          </h4>
-<p id="section-6.1.2-1">We assume a protocol a provides information on links and border
-routers, such as MTU, bandwidth, latency, geo-location, as well
-as identities (interface ID, port and IP) of border routers.
-We assume the data is static, which means that bandwidth and latency
-reflect hardware characteristics rather than current or recent load.<a href="#section-6.1.2-1" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="path-metadata-liveliness">
-<section id="section-6.1.3">
-          <h4 id="name-path-metadata-liveliness">
-<a href="#section-6.1.3" class="section-number selfRef">6.1.3. </a><a href="#name-path-metadata-liveliness" class="section-name selfRef">Path Metadata Liveliness</a>
-          </h4>
-<p id="section-6.1.3-1">We assume that path metadata is updated at most every few hours.
-This should be more than sufficient since all values reflect
-hardware properties rather than current traffic load.<a href="#section-6.1.3-1" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="path-metadata-reliability">
-<section id="section-6.1.4">
-          <h4 id="name-path-metadata-reliability">
-<a href="#section-6.1.4" class="section-number selfRef">6.1.4. </a><a href="#name-path-metadata-reliability" class="section-name selfRef">Path Metadata Reliability</a>
-          </h4>
-<p id="section-6.1.4-1">We assume that all values are correct. The metadata is
-cryptographically protected. It is signed by the data originator,
-which is the relevant AS owner. However, the data correctness is not
-verified, instead we rely on the AS owner to be honest.<a href="#section-6.1.4-1" class="pilcrow">¶</a></p>
-</section>
-</div>
-</section>
-</div>
-<div id="path-selection">
-<section id="section-6.2">
-        <h3 id="name-path-selection">
-<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-path-selection" class="section-name selfRef">Path Selection</a>
-        </h3>
-<p id="section-6.2-1">We assume that a PAN protocol allows selecting paths explicitly, based,
-for example, on path metadata. Paths can be added and removed from a
-connection. Paths may have a best-before data and may expire, after
-which they are invalid.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
-</section>
-</div>
-</section>
-</div>
 <div id="old-part-below-ignore">
-<section id="section-7">
-      <h2 id="name-old-part-below-ignore">
-<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-old-part-below-ignore" class="section-name selfRef">OLD PART BELOW - IGNORE</a>
-    </h2>
-</section>
-</div>
-<div id="categories">
 <section id="section-8">
-      <h2 id="name-multipath-categorization">
-<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-multipath-categorization" class="section-name selfRef">Multipath Categorization</a>
-      </h2>
-<p id="section-8-1">This document distinguishes the following usage categories:<a href="#section-8-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-8-2.1">
-          <p id="section-8-2.1.1">High bandwidth (BW): Optimizing bandwidth by parallel transfer on
-multiple paths.<a href="#section-8-2.1.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-8-2.2">
-          <p id="section-8-2.2.1">Minimum latency (LAT): Optimizing latency for low latency.
-This can be achieved by regularly checking multiple paths and using
-the one with the lowest latency or by parallel transmission over
-multiple path.<a href="#section-8-2.2.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-8-2.3">
-          <p id="section-8-2.3.1">Failure tolerance (FT): Optimizing for failure tolerance by
-parallel transfer on multiple paths.<a href="#section-8-2.3.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-8-2.4">
-          <p id="section-8-2.4.1">Evasion (EVA): Avoid certain links or ASes, for example based on MTU,
-geolocation or AS number.<a href="#section-8-2.4.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
-<p id="section-8-3">The discussions of these categories are written with multiple paths
-per interface in mind (i.e. multiple paths per 4-tuple).  However, they
-can usually be generalized to multipathing over multiple interfaces.<a href="#section-8-3" class="pilcrow">¶</a></p>
-<p id="section-8-4">These categories can be combined, for example LAT and FT may often be
-combined and EVA can be can be useful in combination with any other
-category.<a href="#section-8-4" class="pilcrow">¶</a></p>
-<div id="disjunctness">
-<section id="section-8.1">
-        <h3 id="name-disjunctness">
-<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-disjunctness" class="section-name selfRef">Disjunctness</a>
-        </h3>
-<p id="section-8.1-1">For FT, paths are only interesting if they are disjunct.
-For BW, paths should mostly be disjunct, but overlap is
-acceptable if the overlapping links have high BW available (see
-<a href="#bottleneck" class="auto internal xref">Section 9.1.2</a>).<a href="#section-8.1-1" class="pilcrow">¶</a></p>
-<p id="section-8.1-2">For LAT and EVA, path disjunctness is mostly irrelevant.<a href="#section-8.1-2" class="pilcrow">¶</a></p>
-<p id="section-8.1-3"><strong>TODO</strong> Discuss link level, router level and AS level path disjunctness.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="path-metadata">
-<section id="section-8.2">
-        <h3 id="name-path-metadata-2">
-<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-path-metadata-2" class="section-name selfRef">Path Metadata</a>
-        </h3>
-<p id="section-8.2-1">SCION paths have associated metadata with latency and bandwidth
-information. The values represent best case values and tend to be
-updated rarely, for example once a day.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
-<p id="section-8.2-2">Path metadata may also be incomplete, ASes are not required to provide
-or regularly update the data.<a href="#section-8.2-2" class="pilcrow">¶</a></p>
-<p id="section-8.2-3">Users of path metadata must keep in mind that the data is mostly not
-verifiable but depends on the diligence and trustworthiness of the
-link owners.
-However, once disseminated by a link owner, the path metadata is
-authenticated an cannot be changed by other parties.<a href="#section-8.2-3" class="pilcrow">¶</a></p>
-<p id="section-8.2-4">Due to the inherent unreliability, users should implement sanity
-checks as to whether a link holds up to the promised capabilities.<a href="#section-8.2-4" class="pilcrow">¶</a></p>
-</section>
-</div>
+      <h2 id="name-old-part-below-ignore">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-old-part-below-ignore" class="section-name selfRef">OLD PART BELOW - IGNORE</a>
+    </h2>
 </section>
 </div>
 <div id="algorithmsold">
 <section id="section-9">
-      <h2 id="name-algorithms-2">
-<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-algorithms-2" class="section-name selfRef">Algorithms</a>
+      <h2 id="name-old-algorithms">
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-old-algorithms" class="section-name selfRef">OLD - Algorithms</a>
       </h2>
 <div id="patsel">
 <section id="section-9.1">
@@ -2071,8 +2026,8 @@ equally large buffer on the sender side.<a href="#section-9.6-5" class="pilcrow"
 </div>
 <div id="apps">
 <section id="section-10">
-      <h2 id="name-applications">
-<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-applications" class="section-name selfRef">Applications</a>
+      <h2 id="name-old-applications">
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-old-applications" class="section-name selfRef">OLD - Applications</a>
       </h2>
 <div id="datra">
 <section id="section-10.1">
@@ -2168,116 +2123,84 @@ but this is not specific to multipathing...<a href="#section-10.4-4" class="pilc
 </div>
 </section>
 </div>
-<div id="api">
-<section id="section-11">
-      <h2 id="name-api-design-consideration">
-<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-api-design-consideration" class="section-name selfRef">API Design consideration</a>
-      </h2>
-<div id="multipathing-for-applications">
-<section id="section-11.1">
-        <h3 id="name-multipathing-for-applicatio">
-<a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-multipathing-for-applicatio" class="section-name selfRef">Multipathing for Applications</a>
-        </h3>
-<p id="section-11.1-1">Applications will have very different requirements on a multipath API.
-A comprehensive API should therefore allow for mostly automatic
-selection of <a href="#patsel" class="auto internal xref">Section 9.1</a> Path Selection and Congestion Control
-algorithms <a href="#concon" class="auto internal xref">Section 9.5</a>.<a href="#section-11.1-1" class="pilcrow">¶</a></p>
-<p id="section-11.1-2">At the same time it should give access to SCION paths and their metadata
-to allow implementation of custom algorithms.<a href="#section-11.1-2" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="algorithm-integration">
-<section id="section-11.2">
-        <h3 id="name-algorithm-integration">
-<a href="#section-11.2" class="section-number selfRef">11.2. </a><a href="#name-algorithm-integration" class="section-name selfRef">Algorithm Integration</a>
-        </h3>
-<p id="section-11.2-1">Several proposals in <a href="#lola" class="auto internal xref">Section 10.2</a> and <a href="#redu" class="auto internal xref">Section 10.3</a> suggest sending data
-redundantly in parallel on multiple paths.
-Similarly, some proposals suggest sending packets purely for latency
-measurements.<a href="#section-11.2-1" class="pilcrow">¶</a></p>
-<p id="section-11.2-2">Congestion control algorithms and path selection algorithms should
-try to hide parallel transfer and measurement streams from the
-application.  This may also depend on API designer to provide such
-transparent  multipathing with additional code on the application level.<a href="#section-11.2-2" class="pilcrow">¶</a></p>
-</section>
-</div>
-</section>
-</div>
 <div id="security-considerations">
-<section id="section-12">
+<section id="section-11">
       <h2 id="name-security-considerations">
-<a href="#section-12" class="section-number selfRef">12. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-12-1">This document has no security considerations.<a href="#section-12-1" class="pilcrow">¶</a></p>
-<p id="section-12-2">May sending data on multiple paths in parallel, or at regular
+<p id="section-11-1">This document has no security considerations.<a href="#section-11-1" class="pilcrow">¶</a></p>
+<p id="section-11-2">May sending data on multiple paths in parallel, or at regular
 intervals, expose information about data streams? E.g. can streams
 be associated with users such that a change in connection ID does
-not help anonymity?<a href="#section-12-2" class="pilcrow">¶</a></p>
+not help anonymity?<a href="#section-11-2" class="pilcrow">¶</a></p>
 <div id="latency-polling">
-<section id="section-12.1">
+<section id="section-11.1">
         <h3 id="name-latency-polling">
-<a href="#section-12.1" class="section-number selfRef">12.1. </a><a href="#name-latency-polling" class="section-name selfRef">Latency Polling</a>
+<a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-latency-polling" class="section-name selfRef">Latency Polling</a>
         </h3>
-<p id="section-12.1-1">If a user sends latency measurements on 10 paths in parallel
+<p id="section-11.1-1">If a user sends latency measurements on 10 paths in parallel
 every 5 seconds, then these 10 paths can (with some probability)
 be attributed to the same user.
 Solution: do not send all probes at the same time.
 To prevent patterns (1. after 0.1s, 2. after 0.3s, 3. after 0.35s, ...)
 the interval between packets on each path should also vary.
-Additionally, the number of polled paths should vary.<a href="#section-12.1-1" class="pilcrow">¶</a></p>
+Additionally, the number of polled paths should vary.<a href="#section-11.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="path-validation">
-<section id="section-12.2">
+<section id="section-11.2">
         <h3 id="name-path-validation">
-<a href="#section-12.2" class="section-number selfRef">12.2. </a><a href="#name-path-validation" class="section-name selfRef">Path Validation</a>
+<a href="#section-11.2" class="section-number selfRef">11.2. </a><a href="#name-path-validation" class="section-name selfRef">Path Validation</a>
         </h3>
-<p id="section-12.2-1">See <a href="#pathchange-validation" class="auto internal xref">Section 4.1</a> and <a href="#pathchange-injection" class="auto internal xref">Section 4.2</a>.<a href="#section-12.2-1" class="pilcrow">¶</a></p>
+<p id="section-11.2-1">See <a href="#pathchange-validation" class="auto internal xref">Section 6.1</a> and <a href="#pathchange-injection" class="auto internal xref">Section 6.2</a>.<a href="#section-11.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="wormhole-attack">
-<section id="section-12.3">
+<section id="section-11.3">
         <h3 id="name-wormhole-attack">
-<a href="#section-12.3" class="section-number selfRef">12.3. </a><a href="#name-wormhole-attack" class="section-name selfRef">Wormhole Attack</a>
+<a href="#section-11.3" class="section-number selfRef">11.3. </a><a href="#name-wormhole-attack" class="section-name selfRef">Wormhole Attack</a>
         </h3>
-<p id="section-12.3-1">An attacking AS can manipulate metadata of its links and routers to
+<p id="section-11.3-1">An attacking AS can manipulate metadata of its links and routers to
 announce a very attractive route that would then be the first choice of
 many route selection algorithms.
 This would negatively affect performance of endhosts, especially if
 the links are manipulated to drop all packets (break link) or drop
 many packets (high drop rate).
-See <span><a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-controlplane-08#section-7.2.4" class="relref">Section 7.2.4</a> of [<a href="#SCION-CP" class="cite xref">SCION-CP</a>]</span>.<a href="#section-12.3-1" class="pilcrow">¶</a></p>
+See <span><a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-controlplane-08#section-7.2.4" class="relref">Section 7.2.4</a> of [<a href="#SCION-CP" class="cite xref">SCION-CP</a>]</span>.<a href="#section-11.3-1" class="pilcrow">¶</a></p>
+<p id="section-11.3-2">Mitigation: Due to the inherent unreliability, users should
+implement sanity checks as to whether a link holds up to the
+promised capabilities.<a href="#section-11.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="more-">
-<section id="section-12.4">
+<section id="section-11.4">
         <h3 id="name-more">
-<a href="#section-12.4" class="section-number selfRef">12.4. </a><a href="#name-more" class="section-name selfRef">More ?</a>
+<a href="#section-11.4" class="section-number selfRef">11.4. </a><a href="#name-more" class="section-name selfRef">More ?</a>
         </h3>
-<p id="section-12.4-1">See <a href="#anon" class="auto internal xref">Section 10.4</a>.<a href="#section-12.4-1" class="pilcrow">¶</a></p>
-<p id="section-12.4-2">See other attacks in <span><a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-controlplane-08#section-7.2.4" class="relref">Section 7.2.4</a> of [<a href="#SCION-CP" class="cite xref">SCION-CP</a>]</span>?<a href="#section-12.4-2" class="pilcrow">¶</a></p>
-<p id="section-12.4-3"><strong>TODO</strong><a href="#section-12.4-3" class="pilcrow">¶</a></p>
+<p id="section-11.4-1">See <a href="#anon" class="auto internal xref">Section 10.4</a>.<a href="#section-11.4-1" class="pilcrow">¶</a></p>
+<p id="section-11.4-2">See other attacks in <span><a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-controlplane-08#section-7.2.4" class="relref">Section 7.2.4</a> of [<a href="#SCION-CP" class="cite xref">SCION-CP</a>]</span>?<a href="#section-11.4-2" class="pilcrow">¶</a></p>
+<p id="section-11.4-3"><strong>TODO</strong><a href="#section-11.4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="iana-considerations">
-<section id="section-13">
+<section id="section-12">
       <h2 id="name-iana-considerations">
-<a href="#section-13" class="section-number selfRef">13. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-12" class="section-number selfRef">12. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-13-1">This document has no IANA actions.<a href="#section-13-1" class="pilcrow">¶</a></p>
+<p id="section-12-1">This document has no IANA actions.<a href="#section-12-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-combined-references">
-<section id="section-14">
+<section id="section-13">
       <h2 id="name-references">
-<a href="#section-14" class="section-number selfRef">14. </a><a href="#name-references" class="section-name selfRef">References</a>
+<a href="#section-13" class="section-number selfRef">13. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
 <div id="sec-normative-references">
-<section id="section-14.1">
+<section id="section-13.1">
         <h3 id="name-normative-references">
-<a href="#section-14.1" class="section-number selfRef">14.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<a href="#section-13.1" class="section-number selfRef">13.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
 <dt id="CC-ALGORITHMS">[CC-ALGORITHMS]</dt>
@@ -2328,9 +2251,9 @@ See <span><a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-con
 </section>
 </div>
 <div id="sec-informative-references">
-<section id="section-14.2">
+<section id="section-13.2">
         <h3 id="name-informative-references">
-<a href="#section-14.2" class="section-number selfRef">14.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+<a href="#section-13.2" class="section-number selfRef">13.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
 <dt id="CC-MULTIPATH-TCP">[CC-MULTIPATH-TCP]</dt>
