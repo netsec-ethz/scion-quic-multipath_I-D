@@ -204,13 +204,76 @@ Message Protocol (ICMP).  This is described in {{SCION-CP}}.
 
 {::boilerplate bcp14-tagged}
 
+
+# API Recommendations
+
+- Expose Path ID
+- Expose API for custom congestion control algorithms
+- Expose callback for QUIC-MP path abandon (REFERENCE!!!)
+- Expose API for name resolution (only of library does that), not
+  useful if API works with IP/port only.
+
+
+# QUIC implementation Considerations
+
+- Allow to detect path changes while 4-tuple stays the same
+  - Port mangling?
+  - Change PATH-ID (SCION would need to know about QUIC...!!)
+  - Is PATH ID encrypted? Then attacker cannot know it (but use, it,
+    see replay, which is not possible due to sequence numbers??)
+    ... so what?
+  - SCION could just drop packets where 4-tuple is the same but
+    remote AS has changed.
+
+
+## Padding
+From Section 8.1 of {{QUIC-TRANSPAORT}}: "Clients MUST ensure that
+UDP datagrams containing Initial packets have UDP payloads of at
+least 1200 bytes, adding PADDING frames as necessary."
+
+PAN packets may be bigger than traditional packets because they may
+carry additional routing information.
+
+**TODO** Measure SCION path header!
+
+
+# Algorithm Recommendations
+
+What has changed:
+- Much better MPU
+- Knowledge about shared links/routers between paths
+- indication of latency+bandwidth limits.
+- (Potentially live traffic info: Avoid "pulsing" -> Simon Scherer?)
+
+
+## General
+{{QUIC-TRANSPORT}} requires that there is no connection migration
+during the initial handshake, and that there are no other packets
+send (including probing packets) during the initial handshake, see
+{{QUIC-TRANSPORT}} Section 9, paragraphs 2 and 3.
+
+We need to ensure on some level that no path change or probing occurs.
+
+**TODO** Read {{QUIC-MP}} on 4-tuple change / path validation.
+-> Sexction 9 in RFC 9000
+
+## Algorithms
+
+- MPU detection algorithm can be removed/replaced with metadata query
+- Congestion control algorithms
+- Path selections algorithms
+
+
+
+
 # Multipath Features
 
 This document discusses multipath features that are available in
 SCION {{SCION-CP}}, {{SCION-DP}}. However, the discussion is kept
 general and relevant to all PAN that support these features.
 
-## Features
+
+## Path Metadata
 
 ### Path Metadata Granularity
 
@@ -219,13 +282,17 @@ information per AS, more specifically per border router of an AS
 and per any link between any border routers (link may be internal
 or external to an AS).
 
+That means, if we compare multiple paths, we can see where they
+overlap and what the hardware characteristics of the overlapping
+parts are.
+
 ### Path Metadata Dimensions
 
 We assume a protocol a provides information on links and border
 routers, such as MTU, bandwidth, latency, geo-location, as well
 as identities (interface ID, port and IP) of border routers.
 We assume the data is static, wich means that bandwidth and latency
-reflect performance at minimum load rather than current or recent load.
+reflect hardware characteristics rather than current or recent load.
 
 ### Path Metadata Liveliness
 
@@ -236,17 +303,22 @@ hardware properties rather than current traffic load.
 ### Path Metadata Reliability
 
 We assume that all values are correct. The metadata is
-cryptographically protected. It is signe by the data originator,
+cryptographically protected. It is signed by the data originator,
 which is the relevant AS owner. However, the data correctness is not
 verified, instead we rely on the AS onwer to be honest.
 
-### Multi-Interface
+## Path Selection
 
-**TODO remove this?**
-This document discusses multipathing mainly in the sense of multiple
-paths per 4-tuple. Multipathing over multiple interfaces is not
-discussed in detail.
+We assume that a PAN protocol allows selecting paths explicitly, based,
+for example, on path metadata. Paths can be added and removed from a
+connection. Paths may have a best-before data and may expire, after
+which they are invalid.
 
+
+
+
+
+# OLD PART BELOW - IGNORE
 
 # Multipath Categorization {#categories}
 
