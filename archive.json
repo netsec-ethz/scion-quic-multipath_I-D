@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-05-29T00:28:49.607117+00:00",
+  "timestamp": "2025-06-01T00:36:03.765611+00:00",
   "repo": "netsec-ethz/scion-quic-multipath_I-D",
   "labels": [
     {
@@ -77,6 +77,36 @@
       "mergedBy": "tzaeschke",
       "mergeCommit": {
         "oid": "f79ff2294fa4f87773ab418459422308d0e7be22"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 2,
+      "id": "PR_kwDOOmGiIc6YQ4_w",
+      "title": "Rewrite 1",
+      "url": "https://github.com/netsec-ethz/scion-quic-multipath_I-D/pull/2",
+      "state": "MERGED",
+      "author": "tzaeschke",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "tzaeschke"
+      ],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-05-30T11:55:25Z",
+      "updatedAt": "2025-05-30T16:21:28Z",
+      "baseRepository": "netsec-ethz/scion-quic-multipath_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "0cb21f150785c83fb0c06ae9e441f68d28564d2e",
+      "headRepository": "netsec-ethz/scion-quic-multipath_I-D",
+      "headRefName": "rewrite-1",
+      "headRefOid": "88577a44ebe4d35b1d775af6abb59dca7d22111b",
+      "closedAt": "2025-05-30T16:21:21Z",
+      "mergedAt": "2025-05-30T16:21:21Z",
+      "mergedBy": "tzaeschke",
+      "mergeCommit": {
+        "oid": "5cf65f5c695e6fb81b64c04628628b2fd4c97557"
       },
       "comments": [],
       "reviews": []
