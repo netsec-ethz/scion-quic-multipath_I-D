@@ -16,18 +16,16 @@ Abstract
 
    This document provides guidelines for using the Multipath Extension
    for QUIC [QUIC-MP] with path aware networks (PAN).  PANs may provide
-   hundreds of paths between endpoint, including detailed path metadata
-   that facilitates an informed selection.  This offers opportunities
-   for new or improved algorithms for multipath networking.
+   hundreds of paths between endpoint, each path including detailed path
+   metadata that facilitates informed path selection.
 
-   This document discusses mostly algorithms for path selection.
-   However, it also comments on congestion control and load distribution
-   (scheduling), as well as general considerations for API design and
-   applications that use multipath QUIC over SCION.
+   Using the QUIC Multipath Extension over PAN creates pitfalls as well
+   as opportunities for associated algorithms, such as for path
+   selection, congestion control, and scheduling.  This document also
+   gives general considerations for API design and applications that use
+   multipath QUIC over SCION.
 
-   *TODO*
-
-   *  Section on QUIC-specific advantages?
+   This memo looks speciafically at PANs for inter domain routing.
 
 About This Document
 
@@ -112,61 +110,60 @@ Table of Contents
      9.4.  DMTP
      9.5.  Congestion Control
      9.6.  Load Distribution (Scheduling)
-   10. OLD - Applications
-     10.1.  Data Transfer
-     10.2.  Low Latency
-     10.3.  High Availability / Redundancy
-     10.4.  Multipathing for Anonymity
-   11. Security Considerations
-     11.1.  Latency Polling
-     11.2.  Path Validation
-     11.3.  Wormhole Attack
-     11.4.  More ?
-   12. IANA Considerations
-   13. References
-     13.1.  Normative References
-     13.2.  Informative References
+   10. QUIC-specific advantages?
+   11. OLD - Applications
+     11.1.  Data Transfer
+     11.2.  Low Latency
+     11.3.  High Availability / Redundancy
+     11.4.  Multipathing for Anonymity
+   12. Security Considerations
+     12.1.  Latency Polling
+     12.2.  Path Validation
+     12.3.  Wormhole Attack
+     12.4.  More ?
+   13. IANA Considerations
+   14. References
+     14.1.  Normative References
+     14.2.  Informative References
    Acknowledgments
    Authors' Addresses
 
 1.  Introduction
 
-   Path aware networks (PAN) can provide many detailed metadata about
-   available paths, such as latency, bandwidth, MTU, geographic
-   location, or many other properties.
+   Path aware networks (PAN) may provide a large selection of available
+   path, each path with detailed path metadata.  Path metadata may
+   contain path properties such as latency, bandwidth, MTU, or
+   geographic location, potentially with granularity down to individual
+   links and router interfaces.
 
-   Even when just one path is used, this allows selecting the best path
-   for each use case while providing a suitable backup paths if the
-   first paths fails or becomes unatractive.
+   When only one path is used, metadata and path selection capabilities
+   allow identifying the best path for each use case while providing a
+   suitable backup paths if the first paths degrades or others paths
+   become comparatively better.
 
-   In the case of concurrent multipathing, detailed metadata provides
-   information about any links where different paths overlap and about
-   the properties of these links.  This allows, for example, choosing
-   paths such that they don't share low bandwidth links.
+   When data is transferred over multiple paths in parallel, detailed
+   metadata provides information about any links where different paths
+   overlap and about the properties of these links.  This allows, for
+   example, avoiding bottlenecks by choosing paths such that they don't
+   share links that have low bandwidth capacity.  This is useful for
+   developing or improving algorithms, for example for path selection,
+   or more informed algorithms for congestion control.
 
-   This is useful for developing or improving network related
-   algorithms, for example for path selection, or more informed
-   algorithms for congestion control.
+   The recommendations in this document as categorized into
+   recommendations for API design (Section 5), library implementations
+   (Section 6) and algorithm design (Section 7).
 
-   This document first identifies and categorizes multipath usage
-   scenarios (Section 4), then discusses guidelines for some algorithms
-   such as congestion control algorithms (Section 7), and suggestions
-   for implementations of PAN libraries and QUIC-MP libraries
-   (Section 6).  Finally, in order to facilitate these algorithms, this
-   documents contains suggestions for API design and general use in
-   applications (Section 5).
-
-   As a practical example of a PAN and how path metadata can be made
-   available and path selection and routing can be implemented, we refer
-   to the SCION [SCION-CP], [SCION-DP].
+   As a practical example of an inter-domain PAN with multipathing
+   capability, we refer to the SCION [SCION-CP], [SCION-DP].
 
 1.1.  SCION
 
    One example of a PAN is SCION [SCION-CP], [SCION-DP].  SCION is an
-   interdomain routing protocol that provides path metada on the level
-   of individual router interfaces.  This provide many opportunities for
-   improving congestion control and other algorithms.  They also avoid
-   some problems that gave rise to current algorithms.
+   inter-domain routing protocol that provides path metadata on the
+   level of individual router interfaces.  This path metadata provides
+   many opportunities for improving congestion control and other
+   algorithms.  It also avoids some problems that gave rise to current
+   algorithms.
 
    The SCION protocol makes detailed path information available to
    endpoints.  Besides the 4-tuple of address/IP at each endpoint, the
@@ -501,7 +498,7 @@ Table of Contents
    connection appears to be long lasting (e.g. at least 1 second
    duration and 1MB of traffic) it could start adding additional paths
    and see whether the traffic increases.  Additional paths can be
-   chosen following the guidelines discussed in Section 10.1.
+   chosen following the guidelines discussed in Section 11.1.
 
 9.1.2.  Bottleneck Detection
 
@@ -609,9 +606,13 @@ Table of Contents
 
    *TODO* Can we facilitate QUIC streams for this?
 
-10.  OLD - Applications
+10.  QUIC-specific advantages?
 
-10.1.  Data Transfer
+   *TODO* ?
+
+11.  OLD - Applications
+
+11.1.  Data Transfer
 
    The aim of a data transfer application is to maximize throughput,
    regardless of latency, jitter or packet loss.
@@ -621,7 +622,7 @@ Table of Contents
    than other links on the same paths (i.e. high enough to prevent the
    link from being a bottleneck).
 
-10.2.  Low Latency
+11.2.  Low Latency
 
    There are multiple approaches to transfer traffic with the lowest
    possible latency.  For example:
@@ -658,7 +659,7 @@ Table of Contents
    Network analysis can be used to identify, and subsequently avoid,
    links with high or unreliable latency.
 
-10.3.  High Availability / Redundancy
+11.3.  High Availability / Redundancy
 
    An approach to high availability is to send data on multiple paths in
    parallel.  A tradeoff here is that sending on all available paths is
@@ -673,7 +674,7 @@ Table of Contents
    Additional polling with SCMP or with additional QUIC stream may be
    used to regularly measure packet drop rates or latency variations.
 
-10.4.  Multipathing for Anonymity
+11.4.  Multipathing for Anonymity
 
    Multipathing could also be used for anonymity, e.g. by switching
    paths at random intervals.  With a continuous data stream, care
@@ -694,7 +695,7 @@ Table of Contents
    on trusted or untrusted ASes, but this is not specific to
    multipathing...
 
-11.  Security Considerations
+12.  Security Considerations
 
    This document has no security considerations.
 
@@ -703,7 +704,7 @@ Table of Contents
    be associated with users such that a change in connection ID does not
    help anonymity?
 
-11.1.  Latency Polling
+12.1.  Latency Polling
 
    If a user sends latency measurements on 10 paths in parallel every 5
    seconds, then these 10 paths can (with some probability) be
@@ -712,11 +713,11 @@ Table of Contents
    after 0.35s, ...) the interval between packets on each path should
    also vary.  Additionally, the number of polled paths should vary.
 
-11.2.  Path Validation
+12.2.  Path Validation
 
    See Section 6.1 and Section 6.2.
 
-11.3.  Wormhole Attack
+12.3.  Wormhole Attack
 
    An attacking AS can manipulate metadata of its links and routers to
    announce a very attractive route that would then be the first choice
@@ -729,21 +730,21 @@ Table of Contents
    sanity checks as to whether a link holds up to the promised
    capabilities.
 
-11.4.  More ?
+12.4.  More ?
 
-   See Section 10.4.
+   See Section 11.4.
 
    See other attacks in Section 7.2.4 of [SCION-CP]?
 
    *TODO*
 
-12.  IANA Considerations
+13.  IANA Considerations
 
    This document has no IANA actions.
 
-13.  References
+14.  References
 
-13.1.  Normative References
+14.1.  Normative References
 
    [CC-ALGORITHMS]
               Duke, M., Ed. and G. Fairhurst, Ed., "Specifying New
@@ -803,7 +804,7 @@ Table of Contents
               Guidelines", BCP 145, RFC 8085, DOI 10.17487/RFC8085,
               March 2017, <https://www.rfc-editor.org/rfc/rfc8085>.
 
-13.2.  Informative References
+14.2.  Informative References
 
    [CC-MULTIPATH-TCP]
               Raiciu, C., Handley, M., and D. Wischik, "Coupled
