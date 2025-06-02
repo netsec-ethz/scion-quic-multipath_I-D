@@ -100,62 +100,56 @@ Computer Networks (LCN)"
 
 This document provides guidelines for using the Multipath Extension
 for QUIC {{QUIC-MP}} with path aware networks (PAN).
-PANs may provide hundreds of paths between endpoint, including
-detailed path metadata that facilitates an informed selection.
-This offers opportunities for new or improved algorithms for
-multipath networking.
+PANs may provide hundreds of paths between endpoint, each path including
+detailed path metadata that facilitates informed path selection.
 
-This document discusses mostly algorithms for path selection.
-However, it also comments on congestion control and load distribution
-(scheduling), as well as general considerations for
-API design and applications that use multipath QUIC over SCION.
+Using the QUIC Multipath Extension over PAN creates pitfalls as well as
+opportunities for associated algorithms, such as for path selection,
+congestion control, and scheduling.
+This document also gives general considerations for API design and
+applications that use multipath QUIC over SCION.
 
-**TODO**
-
-- Section on QUIC-specific advantages?
+This memo looks speciafically at PANs for inter domain routing.
 
 --- middle
 
 # Introduction
 
-Path aware networks (PAN) can provide many detailed metadata about
-available paths, such as latency, bandwidth, MTU, geographic location,
-or many other properties.
+Path aware networks (PAN) may provide a large selection of
+available path, each path with detailed path metadata. Path metadata
+may contain path properties such as latency, bandwidth, MTU,
+or geographic location, potentially with granularity down to individual
+links and router interfaces.
 
-Even when just one path is used, this allows selecting the
-best path for each use case while providing a suitable backup
-paths if the first paths fails or becomes unatractive.
+When only one path is used, metadata and path selection
+capabilities allow identifying the best path for each use case while
+providing a suitable backup paths if the first paths degrades or others
+paths become comparatively better.
 
-In the case of concurrent multipathing, detailed metadata provides
-information about any links where different paths overlap and about the
-properties of these links. This allows, for example, choosing paths
-such that they don't share low bandwidth links.
+When data is transferred over multiple paths in parallel, detailed
+metadata provides information about any links where different paths
+overlap and about the properties of these links.
+This allows, for example, avoiding bottlenecks by choosing paths
+such that they don't share links that have low bandwidth capacity.
+This is useful for developing or improving algorithms, for example
+for path selection, or more informed algorithms for congestion control.
 
-This is useful for developing or improving network related algorithms,
-for example for path selection, or more informed algorithms for
-congestion control.
+The recommendations in this document as categorized into
+recommendations for API design ({{apicon}}), library implementations
+({{impcon}}) and algorithm design ({{algcon}}).
 
-This document first identifies and categorizes multipath usage
-scenarios ({{categories}}), then discusses guidelines for some
-algorithms such as congestion control algorithms ({{algcon}}),
-and suggestions for implementations of PAN libraries and
-QUIC-MP libraries ({{impcon}}).
-Finally, in order to facilitate these algorithms, this documents
-contains suggestions for API design and general use in
-applications ({{apicon}}).
-
-As a practical example of a PAN and how path metadata
-can be made available and path selection and routing can be
-implemented, we refer to the SCION {{SCION-CP}}, {{SCION-DP}}.
+As a practical example of an inter-domain PAN with multipathing
+capability, we refer to the SCION {{SCION-CP}}, {{SCION-DP}}.
 
 
 ## SCION
 
 One example of a PAN is SCION {{SCION-CP}}, {{SCION-DP}}.
-SCION is an interdomain routing protocol that provides path metada
-on the level of individual router interfaces. This provide many
-opportunities for improving congestion control and other algorithms.
-They also avoid some problems that gave rise to current algorithms.
+SCION is an inter-domain routing protocol that provides path metadata
+on the level of individual router interfaces. This path metadata
+provides many opportunities for improving congestion control and other
+algorithms. It also avoids some problems that gave rise to current
+algorithms.
 
 The SCION protocol makes detailed path information available to
 endpoints. Besides the 4-tuple of address/IP at each endpoint, the
@@ -590,6 +584,14 @@ equally large buffer on the sender side.
 **TODO** Check which existing algorithms do that.
 
 **TODO** Can we facilitate QUIC streams for this?
+
+
+
+
+# QUIC-specific advantages?
+
+**TODO** ?
+
 
 
 # OLD - Applications {#apps}
