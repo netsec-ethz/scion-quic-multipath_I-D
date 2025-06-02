@@ -161,6 +161,11 @@ geolocation information.
 
 ## Terminology {#terms}
 
+This document draws on the terminology of SCION {{SCION-CP}},
+{{SCION-DP}}.  For ease of reference, we have included some
+definitions here, but refer the reader to the references above for
+complete specifications of the relevant terminiology:
+
 **Autonomous System (AS)**: An autonomous system is a network under
 a common administrative control.  For example, the network of an
 Internet service provider or organization can constitute an AS.
@@ -278,6 +283,36 @@ can usually be generalized to multipathing over multiple interfaces.
 These categories can be combined, for example LAT and FT may often be
 combined and EVA can be can be useful in combination with any other
 category.
+
+
+# Issues -- WIP
+
+
+## Path Selection
+
+QUIC(-MP) implementation:
+Users SHOULD be able to inject or implement algorithms for
+congestion control, RTT estimation, scheduling, and general path
+selection (base don user input or policies).
+These algorithms SHOULD have access to the path ID when receiving or
+sending data and SHOULD be able to initiate path creation
+and paths migration.
+
+**TODO explain?**
+- Path migration initiation: When a better path is available, we need
+  to be able to use it. This needs to involve a path migration or path
+  creation event ..?
+  **TODO** We want to change the path ID, but path migration does
+  not do that (or does it, -> check). And Path creation will interrupt
+  streams, which is also not desirable.
+  We should keep these things out of the QUIC layer...
+
+## Path Change Detection
+
+
+
+## Path validaton
+
 
 
 # API Coinsiderations {#apicon}
@@ -434,6 +469,8 @@ We need to ensure on some level that no path change or probing occurs.
 ## Algorithms
 
 - MPU detection algorithm can be removed/replaced with metadata query
+  See Path MTU Discovery in {{Section 14.3 of QUIC-TRANSPORT}} and
+  {{Section 5.8 of QUIC-MP}}.
 - Congestion control algorithms:
   - Must reset on path change (how?).
   - Should benefit from knowledge about path overlaps.
