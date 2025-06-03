@@ -5,8 +5,8 @@
 PANRG                                                      J. van Bommel
 Internet-Draft                                                   F. Wirz
 Intended status: Informational                          T. Zaeschke, Ed.
-Expires: 8 November 2025                                      ETH Zurich
-                                                              7 May 2025
+Expires: 5 December 2025                                      ETH Zurich
+                                                             3 June 2025
 
 
          Guidelines for QUIC Multipath over Path Aware Networks
@@ -60,7 +60,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 November 2025.
+   This Internet-Draft will expire on 5 December 2025.
 
 Copyright Notice
 
