@@ -128,7 +128,7 @@ such that they don't share links that have low bandwidth capacity.
 This is useful for developing or improving algorithms, for example
 for path selection, or more informed algorithms for congestion control.
 
-The recommendations in this document as categorized into
+The recommendations in this document are categorized into
 recommendations for API design ({{apicon}}), library implementations
 ({{impcon}}) and algorithm design ({{algcon}}).
 
@@ -186,10 +186,9 @@ Path metadata is authenticated wrt to owner of each link, but
 otherwise not verified.
 Path metadata includes data about ASes and links, such as MTU,
 bandwidth, latency, AS internal hopcount, or geolocation information.
-Path metadata is stable, e.i. it is updated infrequently, probably at
-most once per hour. Properties such as bandwidth and latency
-therefore represent hardware properties rather than live traffic
-information.
+Path metadata is updated infrequently, probably at most once per
+hour. Properties such as bandwidth and latency represent hardware
+properties rather than live traffic information.
 
 **SCMP**: A signaling protocol analogous to the Internet Control
 Message Protocol (ICMP).  This is described in {{SCION-CP}}.
@@ -279,37 +278,72 @@ combined and EVA can be can be useful in combination with any other
 category.
 
 
-# Issues -- WIP
+# Potential Problems -- WIP
+
+## 4-tuple changes
+
+If the 4-tuple changes, {{QUIC-MP}} and {{QUIC-TRANSPORT}} require
+several actions, including resetting congestion control and RTT
+estimation algorithms, and initiating path validation.
+
+Using path aware networks affects this in two ways:
+
+1. Path aware networks are more aware of the actual path taken by
+the packet. Hence path changes can be detected much more reliably.
+This can affect algorithm design because they need to be less resilient
+against undetected path changes (diffserv, BGP route changes, ...)
+and can rely more on the path being consistent, at least to the
+granualrity offered by the PAN layer.
+
+2. PANs, such as SCION, extend the network address with path, AS code
+and ISD code. This means IP addresses do not need to be unique this
+would allow a man-in-the-middle attacker to change the destination
+of a connection without changing the destination port/IP. This could
+be used to avoid path validation when coaxing a machine to send traffic
+to a new destination. This attack is still not easy to execute
+because it requires the attacker to have control over an AS that lies
+en-route between server and client.
+
+**TODO** Illustration.
 
 
-## Path Selection
 
-QUIC(-MP) implementation:
-Users SHOULD be able to inject or implement algorithms for
-congestion control, RTT estimation, scheduling, and general path
-selection (base don user input or policies).
-These algorithms SHOULD have access to the path ID when receiving or
-sending data and SHOULD be able to initiate path creation
-and paths migration.
+# API Considerations {#apicon}
 
-**TODO explain?**
-- Path migration initiation: When a better path is available, we need
-  to be able to use it. This needs to involve a path migration or path
-  creation event ..?
-  **TODO** We want to change the path ID, but path migration does
-  not do that (or does it, -> check). And Path creation will interrupt
-  streams, which is also not desirable.
-  We should keep these things out of the QUIC layer...
+## Initialization
 
-## Path Change Detection
+When a QUIC(-MP) socket is created, it can be useful (depending on
+the programming language) to allow injection of a custom UDP underlay.
+
+- Custom DNS resolver (if the library resolves URLs)
+- Custom Congestion control and RTT estimation algorithms
+- Custom Packet scheduling algorithm
+- PAN exclusive: path selection algorithms
 
 
+## Network Address and Path
 
-## Path validaton
+Generally, it can be useful if any API of a QUIC-MP library uses
+not only IP/port for addressing local/remote peers, but uses a network
+address (IP + port + other identifiers, such as AS number) and a
+network path.
+
+Note that network path is different from QUIC-MP path ID. There is
+usually a 1:1 mapping from network pagth to path ID, but the
+network path may change while the path ID stays the same.
+For example, a PAN library may have paths that can expire and
+it may have a configuration option that expiring paths should be
+renewed automatically. However, this works only for paths that are
+otherwise (except for the expiration date) identical.
 
 
 
-# API Coinsiderations {#apicon}
+## General API...?
+
+The API of a QUIC-MP implementation that works with PAN should
+probably provide interfaces for
+
+The API of a QUIC-MP implementation that works with PAN should:
 
 - Expose Path ID
 - Expose API for custom congestion control algorithms
