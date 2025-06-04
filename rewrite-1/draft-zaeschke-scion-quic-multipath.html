@@ -1216,21 +1216,26 @@ applications that use multipath QUIC over SCION.<a href="#section-abstract-2" cl
             <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-multipath-categorization" class="internal xref">Multipath Categorization</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-issues-wip" class="internal xref">Issues -- WIP</a></p>
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-potential-problems-wip" class="internal xref">Potential Problems -- WIP</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
-                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-path-selection-2" class="internal xref">Path Selection</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
-                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-path-change-detection" class="internal xref">Path Change Detection</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3">
-                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="auto internal xref">5.3</a>.  <a href="#name-path-validaton" class="internal xref">Path validaton</a></p>
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-4-tuple-changes" class="internal xref">4-tuple changes</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-api-coinsiderations" class="internal xref">API Coinsiderations</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-api-considerations" class="internal xref">API Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-initialization" class="internal xref">Initialization</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-network-address-and-path" class="internal xref">Network Address and Path</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.3">
+                <p id="section-toc.1-1.6.2.3.1"><a href="#section-6.3" class="auto internal xref">6.3</a>.  <a href="#name-general-api" class="internal xref">General API...?</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
             <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-quic-implementation-conside" class="internal xref">QUIC implementation Considerations</a></p>
@@ -1283,7 +1288,7 @@ applications that use multipath QUIC over SCION.<a href="#section-abstract-2" cl
             <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-old-algorithms" class="internal xref">OLD - Algorithms</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
-                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref">10.1</a>.  <a href="#name-path-selection-3" class="internal xref">Path Selection</a></p>
+                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref">10.1</a>.  <a href="#name-path-selection-2" class="internal xref">Path Selection</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1.2.1">
                     <p id="section-toc.1-1.10.2.1.2.1.1"><a href="#section-10.1.1" class="auto internal xref">10.1.1</a>.  <a href="#name-dynamic-approach" class="internal xref">Dynamic Approach</a></p>
@@ -1392,7 +1397,7 @@ This allows, for example, avoiding bottlenecks by choosing paths
 such that they don't share links that have low bandwidth capacity.
 This is useful for developing or improving algorithms, for example
 for path selection, or more informed algorithms for congestion control.<a href="#section-1-3" class="pilcrow">¶</a></p>
-<p id="section-1-4">The recommendations in this document as categorized into
+<p id="section-1-4">The recommendations in this document are categorized into
 recommendations for API design (<a href="#apicon" class="auto internal xref">Section 6</a>), library implementations
 (<a href="#impcon" class="auto internal xref">Section 7</a>) and algorithm design (<a href="#algcon" class="auto internal xref">Section 8</a>).<a href="#section-1-4" class="pilcrow">¶</a></p>
 <p id="section-1-5">As a practical example of an inter-domain PAN with multipathing
@@ -1445,10 +1450,9 @@ Path metadata is authenticated wrt to owner of each link, but
 otherwise not verified.
 Path metadata includes data about ASes and links, such as MTU,
 bandwidth, latency, AS internal hopcount, or geolocation information.
-Path metadata is stable, e.i. it is updated infrequently, probably at
-most once per hour. Properties such as bandwidth and latency
-therefore represent hardware properties rather than live traffic
-information.<a href="#section-1.2-8" class="pilcrow">¶</a></p>
+Path metadata is updated infrequently, probably at most once per
+hour. Properties such as bandwidth and latency represent hardware
+properties rather than live traffic information.<a href="#section-1.2-8" class="pilcrow">¶</a></p>
 <p id="section-1.2-9"><strong>SCMP</strong>: A signaling protocol analogous to the Internet Control
 Message Protocol (ICMP).  This is described in <span>[<a href="#SCION-CP" class="cite xref">SCION-CP</a>]</span>.<a href="#section-1.2-9" class="pilcrow">¶</a></p>
 </section>
@@ -1580,75 +1584,122 @@ combined and EVA can be can be useful in combination with any other
 category.<a href="#section-4-4" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="issues-wip">
+<div id="potential-problems-wip">
 <section id="section-5">
-      <h2 id="name-issues-wip">
-<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-issues-wip" class="section-name selfRef">Issues -- WIP</a>
+      <h2 id="name-potential-problems-wip">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-potential-problems-wip" class="section-name selfRef">Potential Problems -- WIP</a>
       </h2>
-<div id="path-selection-1">
+<div id="tuple-changes">
 <section id="section-5.1">
-        <h3 id="name-path-selection-2">
-<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-path-selection-2" class="section-name selfRef">Path Selection</a>
+        <h3 id="name-4-tuple-changes">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-4-tuple-changes" class="section-name selfRef">4-tuple changes</a>
         </h3>
-<p id="section-5.1-1">QUIC(-MP) implementation:
-Users <span class="bcp14">SHOULD</span> be able to inject or implement algorithms for
-congestion control, RTT estimation, scheduling, and general path
-selection (base don user input or policies).
-These algorithms <span class="bcp14">SHOULD</span> have access to the path ID when receiving or
-sending data and <span class="bcp14">SHOULD</span> be able to initiate path creation
-and paths migration.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.1-2"><strong>TODO explain?</strong>
-- Path migration initiation: When a better path is available, we need
-  to be able to use it. This needs to involve a path migration or path
-  creation event ..?
-  <strong>TODO</strong> We want to change the path ID, but path migration does
-  not do that (or does it, -&gt; check). And Path creation will interrupt
-  streams, which is also not desirable.
-  We should keep these things out of the QUIC layer...<a href="#section-5.1-2" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="path-change-detection">
-<section id="section-5.2">
-        <h3 id="name-path-change-detection">
-<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-path-change-detection" class="section-name selfRef">Path Change Detection</a>
-      </h3>
-</section>
-</div>
-<div id="path-validaton">
-<section id="section-5.3">
-        <h3 id="name-path-validaton">
-<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-path-validaton" class="section-name selfRef">Path validaton</a>
-      </h3>
+<p id="section-5.1-1">If the 4-tuple changes, <span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> and <span>[<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> require
+several actions, including resetting congestion control and RTT
+estimation algorithms, and initiating path validation.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-2">Using path aware networks affects this in two ways:<a href="#section-5.1-2" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-5.1-3">
+<li id="section-5.1-3.1">
+            <p id="section-5.1-3.1.1">Path aware networks are more aware of the actual path taken by
+the packet. Hence path changes can be detected much more reliably.
+This can affect algorithm design because they need to be less resilient
+against undetected path changes (diffserv, BGP route changes, ...)
+and can rely more on the path being consistent, at least to the
+granualrity offered by the PAN layer.<a href="#section-5.1-3.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-5.1-3.2">
+            <p id="section-5.1-3.2.1">PANs, such as SCION, extend the network address with path, AS code
+and ISD code. This means IP addresses do not need to be unique this
+would allow a man-in-the-middle attacker to change the destination
+of a connection without changing the destination port/IP. This could
+be used to avoid path validation when coaxing a machine to send traffic
+to a new destination. This attack is still not easy to execute
+because it requires the attacker to have control over an AS that lies
+en-route between server and client.<a href="#section-5.1-3.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ol>
+<p id="section-5.1-4"><strong>TODO</strong> Illustration.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="apicon">
 <section id="section-6">
-      <h2 id="name-api-coinsiderations">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-api-coinsiderations" class="section-name selfRef">API Coinsiderations</a>
+      <h2 id="name-api-considerations">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-api-considerations" class="section-name selfRef">API Considerations</a>
       </h2>
+<div id="initialization">
+<section id="section-6.1">
+        <h3 id="name-initialization">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-initialization" class="section-name selfRef">Initialization</a>
+        </h3>
+<p id="section-6.1-1">When a QUIC(-MP) socket is created, it can be useful (depending on
+the programming language) to allow injection of a custom UDP underlay.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6-1.1">
-          <p id="section-6-1.1.1">Expose Path ID<a href="#section-6-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.1-2.1">
+            <p id="section-6.1-2.1.1">Custom DNS resolver (if the library resolves URLs)<a href="#section-6.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-6-1.2">
-          <p id="section-6-1.2.1">Expose API for custom congestion control algorithms<a href="#section-6-1.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-6.1-2.2">
+            <p id="section-6.1-2.2.1">Custom Congestion control and RTT estimation algorithms<a href="#section-6.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-6-1.3">
-          <p id="section-6-1.3.1">Expose callback for QUIC-MP path abandon (REFERENCE!!!)<a href="#section-6-1.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-6.1-2.3">
+            <p id="section-6.1-2.3.1">Custom Packet scheduling algorithm<a href="#section-6.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-6-1.4">
-          <p id="section-6-1.4.1">Expose API for name resolution (only of library does that), not
-useful if API works with IP/port only.<a href="#section-6-1.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-6.1-2.4">
+            <p id="section-6.1-2.4.1">PAN exclusive: path selection algorithms<a href="#section-6.1-2.4.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-6-1.5">
-          <p id="section-6-1.5.1">Expose API for usage profile.  Applications will have very
+        </ul>
+</section>
+</div>
+<div id="network-address-and-path">
+<section id="section-6.2">
+        <h3 id="name-network-address-and-path">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-network-address-and-path" class="section-name selfRef">Network Address and Path</a>
+        </h3>
+<p id="section-6.2-1">Generally, it can be useful if any API of a QUIC-MP library uses
+not only IP/port for addressing local/remote peers, but uses a network
+address (IP + port + other identifiers, such as AS number) and a
+network path.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.2-2">Note that network path is different from QUIC-MP path ID. There is
+usually a 1:1 mapping from network pagth to path ID, but the
+network path may change while the path ID stays the same.
+For example, a PAN library may have paths that can expire and
+it may have a configuration option that expiring paths should be
+renewed automatically. However, this works only for paths that are
+otherwise (except for the expiration date) identical.<a href="#section-6.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="general-api">
+<section id="section-6.3">
+        <h3 id="name-general-api">
+<a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-general-api" class="section-name selfRef">General API...?</a>
+        </h3>
+<p id="section-6.3-1">The API of a QUIC-MP implementation that works with PAN should
+probably provide interfaces for<a href="#section-6.3-1" class="pilcrow">¶</a></p>
+<p id="section-6.3-2">The API of a QUIC-MP implementation that works with PAN should:<a href="#section-6.3-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.3-3.1">
+            <p id="section-6.3-3.1.1">Expose Path ID<a href="#section-6.3-3.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.3-3.2">
+            <p id="section-6.3-3.2.1">Expose API for custom congestion control algorithms<a href="#section-6.3-3.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.3-3.3">
+            <p id="section-6.3-3.3.1">Expose callback for QUIC-MP path abandon (REFERENCE!!!)<a href="#section-6.3-3.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.3-3.4">
+            <p id="section-6.3-3.4.1">Expose API for name resolution (only of library does that), not
+useful if API works with IP/port only.<a href="#section-6.3-3.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.3-3.5">
+            <p id="section-6.3-3.5.1">Expose API for usage profile.  Applications will have very
 different requirements on a multipath API, see <a href="#categories" class="auto internal xref">Section 4</a>.
 A comprehensive API should therefore allow for mostly automatic
-selection of Path Selection and Congestion Control algorithms.<a href="#section-6-1.5.1" class="pilcrow">¶</a></p>
+selection of Path Selection and Congestion Control algorithms.<a href="#section-6.3-3.5.1" class="pilcrow">¶</a></p>
 </li>
-      </ul>
+        </ul>
+</section>
+</div>
 </section>
 </div>
 <div id="impcon">
@@ -1931,8 +1982,8 @@ links with high variance or generally hogh latency.<a href="#section-8.2-1.5.2.2
       </h2>
 <div id="patsel">
 <section id="section-10.1">
-        <h3 id="name-path-selection-3">
-<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-path-selection-3" class="section-name selfRef">Path Selection</a>
+        <h3 id="name-path-selection-2">
+<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-path-selection-2" class="section-name selfRef">Path Selection</a>
         </h3>
 <div id="dynamic-approach">
 <section id="section-10.1.1">
