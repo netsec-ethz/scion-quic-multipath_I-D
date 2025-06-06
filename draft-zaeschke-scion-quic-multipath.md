@@ -394,10 +394,10 @@ See also "Implementation Considerations" in {{Section 5 of QUIC-MP}}.
 An attacker can send a spoofed packet to a server. The packet contains
 a new path (for example broken or with high latency).
 The server accepts the packet and stores the path for being used
-for all futur communication with the client. The next packet sent to
+for all future communication with the client. The next packet sent to
 the client will take the injected malicious path and will fail (or
 at least be redirected).
-This happens even if th epacket is rejectd by the QUIC(-MP) layer
+This happens even if the packet is rejectd by the QUIC(-MP) layer
 because the SCION layer will never learn about the packet being
 rejected.
 
@@ -430,18 +430,6 @@ paths differ.
 * Java over DatagramSocket: Problematic, it caches the paths...
 * C + Rust: How exactly do we map PathID to paths? How are paths
   updated?
-
-
-## Padding
-From {{Section 8.1 of QUIC-TRANSPORT}}: "Clients MUST ensure that
-UDP datagrams containing Initial packets have UDP payloads of at
-least 1200 bytes, adding PADDING frames as necessary."
-
-PAN packets may be bigger than traditional packets because they may
-carry additional routing information.
-
-**TODO** Measure SCION path header!
-
 
 # Algorithm Considerations {#algcon}
 
