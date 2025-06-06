@@ -291,9 +291,8 @@ estimation algorithms, and initiating path validation.
 
 Using path aware networks affects this in two ways:
 
-1. PANs provide Path aware networks are more aware of the actual path
-taken by
-the packet. Hence path changes can be detected much more reliably.
+1. PANs can provide detailed path information that can be used to
+detected path changes with high granularity.
 This can affect algorithm design because they need to be less resilient
 against undetected path changes (diffserv, BGP route changes, ...)
 and can rely more on the path being consistent, at least to the
