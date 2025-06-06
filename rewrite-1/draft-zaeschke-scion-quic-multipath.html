@@ -1590,9 +1590,10 @@ category.<a href="#section-4-4" class="pilcrow">¶</a></p>
         <h3 id="name-4-tuple-changes">
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-4-tuple-changes" class="section-name selfRef">4-tuple changes</a>
         </h3>
-<p id="section-5.1-1">If the 4-tuple changes, <span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> and <span>[<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> require
-several actions, including resetting congestion control and RTT
-estimation algorithms, and initiating path validation.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-1">If the 4-tuple (IP/port of local/remote endpoint) changes, <span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>
+and <span>[<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> require several actions, including resetting
+congestion control and RTT estimation algorithms, and initiating
+path validation.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 <p id="section-5.1-2">Using path aware networks affects this in two ways:<a href="#section-5.1-2" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-5.1-3">
 <li id="section-5.1-3.1">
@@ -1625,17 +1626,26 @@ that lies en-route between server and client.<a href="#section-5.1-3.2.1" class=
           </h4>
 <ul class="normal">
 <li class="normal" id="section-5.1.1-1.1">
-              <p id="section-5.1.1-1.1.1">Allow to detect path changes while 4-tuple stays the same<a href="#section-5.1.1-1.1.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-5.1.1-1.1.2.1">
-                  <p id="section-5.1.1-1.1.2.1.1">Port mangling / IP mangling? -&gt; That is what Anapaya does. <strong>TODO</strong><a href="#section-5.1.1-1.1.2.1.1" class="pilcrow">¶</a></p>
+              <p id="section-5.1.1-1.1.1">4-tuple is defined in <span>[<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> as IP/port of
+local/remote endpoint. However, <span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> does not clearly
+define it.
+If we assume it to mean network-address/port of local remote/endpoint
+(replacing IP with network-address) we can define it to include
+the AS number or any other relevant identifier. This would ensure
+that path validation is triggered whenever necessary.<a href="#section-5.1.1-1.1.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-5.1.1-1.1.2.2">
-                  <p id="section-5.1.1-1.1.2.2.1">SCION could trigger a "double" path validation by changing
+            <li class="normal" id="section-5.1.1-1.2">
+              <p id="section-5.1.1-1.2.1">Send a signal to the QUIC implementation that the path has changed:<a href="#section-5.1.1-1.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.1.1-1.2.2.1">
+                  <p id="section-5.1.1-1.2.2.1.1">Use port mangling / IP mangling to emulate a 4-tuple change? -&gt;
+That is what Anapaya does. <strong>TODO</strong><a href="#section-5.1.1-1.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-5.1.1-1.2.2.2">
+                  <p id="section-5.1.1-1.2.2.2.1">We could trigger a "double" path validation by changing
 the port/IP to a made up value and back to the original value.
-This would trigger two path validations. However, at
-least eventually, the QUIC layer will know the correct
-remote IP/port.<a href="#section-5.1.1-1.1.2.2.1" class="pilcrow">¶</a></p>
+This would trigger two path validations. At least eventually,
+the QUIC layer will know the correct remote IP/port.<a href="#section-5.1.1-1.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
               </ul>
 </li>
