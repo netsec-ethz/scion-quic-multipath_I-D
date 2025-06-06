@@ -187,6 +187,10 @@ links".
 endpoint, a list of all traversed ASes, and links inside and between
 ASes, including interface IDs on border routers of each AS.
 
+**Path ID**: The Path ID is defined in {{QUIC-MP}} . On the network
+layer, it is defined by a 4-tuple of IP/port of the local and remote
+endpoints.
+
 **Path Metadata**: Path metadata is additional data that is available to
 clients when they request a selection of paths to a destination.
 Path metadata is authenticated wrt to owner of each link, but
@@ -287,7 +291,8 @@ estimation algorithms, and initiating path validation.
 
 Using path aware networks affects this in two ways:
 
-1. Path aware networks are more aware of the actual path taken by
+1. PANs provide Path aware networks are more aware of the actual path
+taken by
 the packet. Hence path changes can be detected much more reliably.
 This can affect algorithm design because they need to be less resilient
 against undetected path changes (diffserv, BGP route changes, ...)
