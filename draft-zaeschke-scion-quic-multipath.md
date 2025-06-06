@@ -336,24 +336,29 @@ that lies en-route between server and client.
 ## Initialization
 
 When a QUIC(-MP) socket is created, it can be useful (depending on
-the programming language) to allow injection of a custom UDP underlay.
+the programming language) to allow injection of a custom modules:
 
+- Custom UDP underlay (for injecting a PAN, such as SCION).
 - Custom DNS resolver (if the library resolves URLs)
-- Custom Congestion control and RTT estimation algorithms
+- Custom congestion control and RTT estimation algorithms
 - Custom Packet scheduling algorithm
 - PAN exclusive: path selection algorithms
 
+Many available implementations already allow injecting most of these
+modules.
 
-## Network Address and Path
+
+## Network Address and Network Path
 
 Generally, it can be useful if any API of a QUIC-MP library uses
 not only IP/port for addressing local/remote peers, but uses a network
 address (IP + port + other identifiers, such as AS number) and a
 network path.
 
-Note that network path is different from QUIC-MP path ID. There is
-usually a 1:1 mapping from network pagth to path ID, but the
-network path may change while the path ID stays the same.
+Note that a "network path" is different from {{QUIC-MP}} path ID.
+There is usually a 1:1 mapping from network path to path ID, but the
+network path may change while the path ID stays the same,
+and .
 For example, a PAN library may have paths that can expire and
 it may have a configuration option that expiring paths should be
 renewed automatically. However, this works only for paths that are
