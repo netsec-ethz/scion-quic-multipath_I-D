@@ -1459,7 +1459,10 @@ links".<a href="#section-2.1-6" class="pilcrow">¶</a></p>
 <p id="section-2.1-7"><strong>Network Path</strong>: Consists of a 4-tuple of address/IP at each
 endpoint, a list of all traversed ASes, and links inside and between
 ASes, including interface IDs on border routers of each AS.<a href="#section-2.1-7" class="pilcrow">¶</a></p>
-<p id="section-2.1-8"><strong>Path Metadata</strong>: Path metadata is additional data that is available to
+<p id="section-2.1-8"><strong>Path ID</strong>: The Path ID is defined in <span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> . On the network
+layer, it is defined by a 4-tuple of IP/port of the local and remote
+endpoints.<a href="#section-2.1-8" class="pilcrow">¶</a></p>
+<p id="section-2.1-9"><strong>Path Metadata</strong>: Path metadata is additional data that is available to
 clients when they request a selection of paths to a destination.
 Path metadata is authenticated wrt to owner of each link, but
 otherwise not verified.
@@ -1467,7 +1470,7 @@ Path metadata includes data about ASes and links, such as MTU,
 bandwidth, latency, AS internal hopcount, or geolocation information.
 Path metadata is updated infrequently, probably at most once per
 hour. Properties such as bandwidth and latency represent hardware
-properties rather than live traffic information.<a href="#section-2.1-8" class="pilcrow">¶</a></p>
+properties rather than live traffic information.<a href="#section-2.1-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1602,7 +1605,8 @@ estimation algorithms, and initiating path validation.<a href="#section-5.1-1" c
 <p id="section-5.1-2">Using path aware networks affects this in two ways:<a href="#section-5.1-2" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-5.1-3">
 <li id="section-5.1-3.1">
-            <p id="section-5.1-3.1.1">Path aware networks are more aware of the actual path taken by
+            <p id="section-5.1-3.1.1">PANs provide Path aware networks are more aware of the actual path
+taken by
 the packet. Hence path changes can be detected much more reliably.
 This can affect algorithm design because they need to be less resilient
 against undetected path changes (diffserv, BGP route changes, ...)
