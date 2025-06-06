@@ -1258,9 +1258,6 @@ applications that use multipath QUIC over SCION.<a href="#section-abstract-2" cl
 </li>
                 </ul>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
-                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-padding" class="internal xref">Padding</a></p>
-</li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
@@ -1756,10 +1753,10 @@ See also "Implementation Considerations" in <span><a href="https://datatracker.i
 <p id="section-7.1.1-2">An attacker can send a spoofed packet to a server. The packet contains
 a new path (for example broken or with high latency).
 The server accepts the packet and stores the path for being used
-for all futur communication with the client. The next packet sent to
+for all future communication with the client. The next packet sent to
 the client will take the injected malicious path and will fail (or
 at least be redirected).
-This happens even if th epacket is rejectd by the QUIC(-MP) layer
+This happens even if the packet is rejectd by the QUIC(-MP) layer
 because the SCION layer will never learn about the packet being
 rejected.<a href="#section-7.1.1-2" class="pilcrow">¶</a></p>
 </section>
@@ -1815,19 +1812,6 @@ paths differ.
   updated?<a href="#section-7.1.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
-</section>
-</div>
-<div id="padding">
-<section id="section-7.2">
-        <h3 id="name-padding">
-<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-padding" class="section-name selfRef">Padding</a>
-        </h3>
-<p id="section-7.2-1">From <span><a href="https://rfc-editor.org/rfc/rfc9000#section-8.1" class="relref">Section 8.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>: "Clients <span class="bcp14">MUST</span> ensure that
-UDP datagrams containing Initial packets have UDP payloads of at
-least 1200 bytes, adding PADDING frames as necessary."<a href="#section-7.2-1" class="pilcrow">¶</a></p>
-<p id="section-7.2-2">PAN packets may be bigger than traditional packets because they may
-carry additional routing information.<a href="#section-7.2-2" class="pilcrow">¶</a></p>
-<p id="section-7.2-3"><strong>TODO</strong> Measure SCION path header!<a href="#section-7.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
