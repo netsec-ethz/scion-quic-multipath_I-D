@@ -285,9 +285,10 @@ category.
 
 ## 4-tuple changes {#four-tuple-changes}
 
-If the 4-tuple changes, {{QUIC-MP}} and {{QUIC-TRANSPORT}} require
-several actions, including resetting congestion control and RTT
-estimation algorithms, and initiating path validation.
+If the 4-tuple (IP/port of local/remote endpoint) changes, {{QUIC-MP}}
+and {{QUIC-TRANSPORT}} require several actions, including resetting
+congestion control and RTT estimation algorithms, and initiating
+path validation.
 
 Using path aware networks affects this in two ways:
 
@@ -314,13 +315,20 @@ that lies en-route between server and client.
 
 ### Mitigation
 
-- Allow to detect path changes while 4-tuple stays the same
-  - Port mangling / IP mangling? -> That is what Anapaya does. **TODO**
-  - SCION could trigger a "double" path validation by changing
+- 4-tuple is defined in {{QUIC-TRANSPORT}} as IP/port of
+  local/remote endpoint. However, {{QUIC-MP}} does not clearly
+  define it.
+  If we assume it to mean network-address/port of local remote/endpoint
+  (replacing IP with network-address) we can define it to include
+  the AS number or any other relevant identifier. This would ensure
+  that path validation is triggered whenever necessary.
+- Send a signal to the QUIC implementation that the path has changed:
+  - Use port mangling / IP mangling to emulate a 4-tuple change? ->
+    That is what Anapaya does. **TODO**
+  - We could trigger a "double" path validation by changing
     the port/IP to a made up value and back to the original value.
-    This would trigger two path validations. However, at
-    least eventually, the QUIC layer will know the correct
-    remote IP/port.
+    This would trigger two path validations. At least eventually,
+    the QUIC layer will know the correct remote IP/port.
 
 
 # API Considerations {#apicon}
