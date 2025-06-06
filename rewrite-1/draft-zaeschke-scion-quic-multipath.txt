@@ -421,6 +421,9 @@ Table of Contents
 
    *TODO check SCION IRTF draft for this attack:*
 
+   This requires the attacker to spoof IP adresses in an AS or fully
+   control an AS between the attacked endpoints.
+
    An attacker can send a spoofed packet to a server.  The packet
    contains a new path (for example broken or with high latency).  The
    server accepts the packet and stores the path for being used for all
@@ -429,6 +432,21 @@ Table of Contents
    least be redirected).  This happens even if the packet is rejectd by
    the QUIC(-MP) layer because the SCION layer will never learn about
    the packet being rejected.
+
+   In order to execute the attack, the attacker must send the forged
+   path from somewhere between the two attacked endoints.  Usually, a
+   border routers that forwards traffic to a neighbour AS will validate
+   the paths and check that traffic with a transit path originates from
+   another border router. *TODO* Verify SCION spec.  To avoid this
+   check, the attacker must either spoof the IP address to look like
+   another boirder router, or it must control the border router such
+   that it does not perform the check.
+
+   A variant of the attack happens when the attacker is located in the
+   same AS a the attacke client endpoint.  In that case it must only be
+   able to spoof the IP address to look like the attacked client's IP.
+   *TODO* Do border routers even check the underlay IP against the SCION
+   header IP?  They may not do that, see NAT...
 
 7.1.2.  Mitigation
 

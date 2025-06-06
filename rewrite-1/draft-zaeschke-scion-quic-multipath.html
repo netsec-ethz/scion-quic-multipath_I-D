@@ -1750,7 +1750,9 @@ See also "Implementation Considerations" in <span><a href="https://datatracker.i
 <a href="#section-7.1.1" class="section-number selfRef">7.1.1. </a><a href="#name-problem" class="section-name selfRef">Problem</a>
           </h4>
 <p id="section-7.1.1-1"><strong>TODO check SCION IRTF draft for this attack:</strong><a href="#section-7.1.1-1" class="pilcrow">¶</a></p>
-<p id="section-7.1.1-2">An attacker can send a spoofed packet to a server. The packet contains
+<p id="section-7.1.1-2">This requires the attacker to spoof IP adresses in an AS or fully
+control an AS between the attacked endpoints.<a href="#section-7.1.1-2" class="pilcrow">¶</a></p>
+<p id="section-7.1.1-3">An attacker can send a spoofed packet to a server. The packet contains
 a new path (for example broken or with high latency).
 The server accepts the packet and stores the path for being used
 for all future communication with the client. The next packet sent to
@@ -1758,7 +1760,21 @@ the client will take the injected malicious path and will fail (or
 at least be redirected).
 This happens even if the packet is rejectd by the QUIC(-MP) layer
 because the SCION layer will never learn about the packet being
-rejected.<a href="#section-7.1.1-2" class="pilcrow">¶</a></p>
+rejected.<a href="#section-7.1.1-3" class="pilcrow">¶</a></p>
+<p id="section-7.1.1-4">In order to execute the attack, the attacker must send the forged path
+from somewhere between the two attacked endoints. Usually, a border
+routers that forwards traffic to a neighbour AS will validate the paths
+and check that traffic with a transit path originates from another
+border router.
+<strong>TODO</strong> Verify SCION spec.
+To avoid this check, the attacker must either spoof the IP address to
+look like another boirder router, or it must control the border router
+such that it does not perform the check.<a href="#section-7.1.1-4" class="pilcrow">¶</a></p>
+<p id="section-7.1.1-5">A variant of the attack happens when the attacker is located in the
+same AS a the attacke client endpoint. In that case it must only be
+able to spoof the IP address to look like the attacked client's IP.
+<strong>TODO</strong> Do border routers even check the underlay IP against the SCION
+header IP? They may not do that, see NAT...<a href="#section-7.1.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="mitigation-1">
