@@ -153,12 +153,19 @@ including MTU, bandwidth, latency, AS internal hopcount, or
 geolocation information.
 
 
+
+# Conventions and Definitions
+
+{::boilerplate bcp14-tagged}
+
 ## Terminology {#terms}
 
-This document draws on the terminology of SCION {{SCION-CP}},
-{{SCION-DP}}.  For ease of reference, we have included some
-definitions here, but refer the reader to the references above for
-complete specifications of the relevant terminiology:
+We assume that the reader is familiar with the terminology used in
+{{QUIC-TRANSPORT}} and {{QUIC-MP}}. We also draws on the terminology
+of SCION ({{SCION-CP}}, {{SCION-DP}}).
+For ease of reference, we have included some definitions here, but
+refer the reader to the references above for complete specifications
+of the relevant terminiology:
 
 **Autonomous System (AS)**: An autonomous system is a network under
 a common administrative control.  For example, the network of an
@@ -167,20 +174,20 @@ Internet service provider or organization can constitute an AS.
 **Endpoint**: An endpoint is the start or the end of a path,
 as defined in {{PATH-VOCABULARY}}.
 
-**Inter AS link**: A direct link between two external interfaces of two
+**Inter-AS Link**: A direct link between two external interfaces of two
 ASes.
 
-**Intra AS link**: A direct link between twi internal interfaces of
+**Intra-AS Link**: A direct link between twi internal interfaces of
 a single AS. A direct link may contains several internal hops.
 
 **Link**: General term that refers to "inter-AS links" and "intra-AS
 links".
 
-**Path**: Consists of a 4-tuple of address/IP at each endpoint, a list
-of all traversed ASes, and links inside and between ASes, including
-interface IDs on border routers of each AS.
+**Network Path**: Consists of a 4-tuple of address/IP at each
+endpoint, a list of all traversed ASes, and links inside and between
+ASes, including interface IDs on border routers of each AS.
 
-**Path metadata**: Path metadata is additional data that is available to
+**Path Metadata**: Path metadata is additional data that is available to
 clients when they request a selection of paths to a destination.
 Path metadata is authenticated wrt to owner of each link, but
 otherwise not verified.
@@ -189,14 +196,6 @@ bandwidth, latency, AS internal hopcount, or geolocation information.
 Path metadata is updated infrequently, probably at most once per
 hour. Properties such as bandwidth and latency represent hardware
 properties rather than live traffic information.
-
-**SCMP**: A signaling protocol analogous to the Internet Control
-Message Protocol (ICMP).  This is described in {{SCION-CP}}.
-
-# Conventions and Definitions
-
-{::boilerplate bcp14-tagged}
-
 
 
 # Multipath Features {#mpfeatures}
