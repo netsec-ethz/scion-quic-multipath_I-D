@@ -357,13 +357,35 @@ network path.
 
 Note that a "network path" is different from {{QUIC-MP}} path ID.
 There is usually a 1:1 mapping from network path to path ID, but the
-network path may change while the path ID stays the same,
-and .
-For example, a PAN library may have paths that can expire and
-it may have a configuration option that expiring paths should be
-renewed automatically. However, this works only for paths that are
-otherwise (except for the expiration date) identical.
+network path may change while the path ID stays the same.
 
+For example:
+- During path migration (**TODO** ref), a path ID may be (loosely)
+associated with multiple network paths.
+- A PAN library may perform probing (latency, etc.) and switch to a
+new path that is deemed better.
+- A PAN library may have paths that can expire and that can be
+  renewed automatically. However, this is should usually result in an
+  identical path (except for the expiration date).
+
+### Recommendation
+
+PAN libraries should, as default, not automatically switch paths,
+except for renewing expired paths with identical otherwise paths.
+
+The PAN library may have a configuration option to automatically
+switch paths, potentially after probing, but this should happen
+only when explicitly configured and when the overlay libraries
+can detect or otherwise tolerate paths changes.
+
+QUIC(-MP) libraries should consider the possibility that paths may
+change. Typical algorithms for congestion control etc can tolerate
+this. Potential implications of skipping path validation need to be
+considered.
+
+See also:
+- resetting algorithms (**TODO** refs)
+- path validation considerations (**TODO** refs)
 
 
 ## General API...?
