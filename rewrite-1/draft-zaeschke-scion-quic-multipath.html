@@ -1237,7 +1237,12 @@ applications that use multipath QUIC over SCION.<a href="#section-abstract-2" cl
                 <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-initialization" class="internal xref">Initialization</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
-                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-network-address-and-path" class="internal xref">Network Address and Path</a></p>
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-network-address-and-network" class="internal xref">Network Address and Network Path</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2.2.1">
+                    <p id="section-toc.1-1.6.2.2.2.1.1"><a href="#section-6.2.1" class="auto internal xref">6.2.1</a>.  <a href="#name-recommendation" class="internal xref">Recommendation</a></p>
+</li>
+                </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.3">
                 <p id="section-toc.1-1.6.2.3.1"><a href="#section-6.3" class="auto internal xref">6.3</a>.  <a href="#name-general-api" class="internal xref">General API...?</a></p>
@@ -1664,39 +1669,68 @@ the QUIC layer will know the correct remote IP/port.<a href="#section-5.1.1-1.2.
 <a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-initialization" class="section-name selfRef">Initialization</a>
         </h3>
 <p id="section-6.1-1">When a QUIC(-MP) socket is created, it can be useful (depending on
-the programming language) to allow injection of a custom UDP underlay.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+the programming language) to allow injection of a custom modules:<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.1-2.1">
-            <p id="section-6.1-2.1.1">Custom DNS resolver (if the library resolves URLs)<a href="#section-6.1-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-6.1-2.1.1">Custom UDP underlay (for injecting a PAN, such as SCION).<a href="#section-6.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.1-2.2">
-            <p id="section-6.1-2.2.1">Custom Congestion control and RTT estimation algorithms<a href="#section-6.1-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-6.1-2.2.1">Custom DNS resolver (if the library resolves URLs)<a href="#section-6.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.1-2.3">
-            <p id="section-6.1-2.3.1">Custom Packet scheduling algorithm<a href="#section-6.1-2.3.1" class="pilcrow">¶</a></p>
+            <p id="section-6.1-2.3.1">Custom congestion control and RTT estimation algorithms<a href="#section-6.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.1-2.4">
-            <p id="section-6.1-2.4.1">PAN exclusive: path selection algorithms<a href="#section-6.1-2.4.1" class="pilcrow">¶</a></p>
+            <p id="section-6.1-2.4.1">Custom Packet scheduling algorithm<a href="#section-6.1-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.1-2.5">
+            <p id="section-6.1-2.5.1">PAN exclusive: path selection algorithms<a href="#section-6.1-2.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
+<p id="section-6.1-3">Many available implementations already allow injecting most of these
+modules.<a href="#section-6.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="network-address-and-path">
+<div id="network-address-and-network-path">
 <section id="section-6.2">
-        <h3 id="name-network-address-and-path">
-<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-network-address-and-path" class="section-name selfRef">Network Address and Path</a>
+        <h3 id="name-network-address-and-network">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-network-address-and-network" class="section-name selfRef">Network Address and Network Path</a>
         </h3>
 <p id="section-6.2-1">Generally, it can be useful if any API of a QUIC-MP library uses
 not only IP/port for addressing local/remote peers, but uses a network
 address (IP + port + other identifiers, such as AS number) and a
 network path.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
-<p id="section-6.2-2">Note that network path is different from QUIC-MP path ID. There is
-usually a 1:1 mapping from network pagth to path ID, but the
-network path may change while the path ID stays the same.
-For example, a PAN library may have paths that can expire and
-it may have a configuration option that expiring paths should be
-renewed automatically. However, this works only for paths that are
-otherwise (except for the expiration date) identical.<a href="#section-6.2-2" class="pilcrow">¶</a></p>
+<p id="section-6.2-2">Note that a "network path" is different from <span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> path ID.
+There is usually a 1:1 mapping from network path to path ID, but the
+network path may change while the path ID stays the same.<a href="#section-6.2-2" class="pilcrow">¶</a></p>
+<p id="section-6.2-3">For example:
+- During path migration (<strong>TODO</strong> ref), a path ID may be (loosely)
+associated with multiple network paths.
+- A PAN library may perform probing (latency, etc.) and switch to a
+new path that is deemed better.
+- A PAN library may have paths that can expire and that can be
+  renewed automatically. However, this is should usually result in an
+  identical path (except for the expiration date).<a href="#section-6.2-3" class="pilcrow">¶</a></p>
+<div id="recommendation">
+<section id="section-6.2.1">
+          <h4 id="name-recommendation">
+<a href="#section-6.2.1" class="section-number selfRef">6.2.1. </a><a href="#name-recommendation" class="section-name selfRef">Recommendation</a>
+          </h4>
+<p id="section-6.2.1-1">PAN libraries should, as default, not automatically switch paths,
+except for renewing expired paths with identical otherwise paths.<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-2">The PAN library may have a configuration option to automatically
+switch paths, potentially after probing, but this should happen
+only when explicitly configured and when the overlay libraries
+can detect or otherwise tolerate paths changes.<a href="#section-6.2.1-2" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-3">QUIC(-MP) libraries should consider the possibility that paths may
+change. Typical algorithms for congestion control etc can tolerate
+this. Potential implications of skipping path validation need to be
+considered.<a href="#section-6.2.1-3" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-4">See also:
+- resetting algorithms (<strong>TODO</strong> refs)
+- path validation considerations (<strong>TODO</strong> refs)<a href="#section-6.2.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="general-api">

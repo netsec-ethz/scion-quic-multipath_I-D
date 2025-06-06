@@ -92,7 +92,8 @@ Table of Contents
        5.1.1.  Mitigation
    6.  API Considerations
      6.1.  Initialization
-     6.2.  Network Address and Path
+     6.2.  Network Address and Network Path
+       6.2.1.  Recommendation
      6.3.  General API...?
    7.  QUIC implementation Considerations
      7.1.  Path Change Detection - Path Injection
@@ -363,31 +364,56 @@ Table of Contents
 6.1.  Initialization
 
    When a QUIC(-MP) socket is created, it can be useful (depending on
-   the programming language) to allow injection of a custom UDP
-   underlay.
+   the programming language) to allow injection of a custom modules:
+
+   *  Custom UDP underlay (for injecting a PAN, such as SCION).
 
    *  Custom DNS resolver (if the library resolves URLs)
 
-   *  Custom Congestion control and RTT estimation algorithms
+   *  Custom congestion control and RTT estimation algorithms
 
    *  Custom Packet scheduling algorithm
 
    *  PAN exclusive: path selection algorithms
 
-6.2.  Network Address and Path
+   Many available implementations already allow injecting most of these
+   modules.
+
+6.2.  Network Address and Network Path
 
    Generally, it can be useful if any API of a QUIC-MP library uses not
    only IP/port for addressing local/remote peers, but uses a network
    address (IP + port + other identifiers, such as AS number) and a
    network path.
 
-   Note that network path is different from QUIC-MP path ID.  There is
-   usually a 1:1 mapping from network pagth to path ID, but the network
-   path may change while the path ID stays the same.  For example, a PAN
-   library may have paths that can expire and it may have a
-   configuration option that expiring paths should be renewed
-   automatically.  However, this works only for paths that are otherwise
-   (except for the expiration date) identical.
+   Note that a "network path" is different from [QUIC-MP] path ID.
+   There is usually a 1:1 mapping from network path to path ID, but the
+   network path may change while the path ID stays the same.
+
+   For example: - During path migration (*TODO* ref), a path ID may be
+   (loosely) associated with multiple network paths. - A PAN library may
+   perform probing (latency, etc.) and switch to a new path that is
+   deemed better. - A PAN library may have paths that can expire and
+   that can be renewed automatically.  However, this is should usually
+   result in an identical path (except for the expiration date).
+
+6.2.1.  Recommendation
+
+   PAN libraries should, as default, not automatically switch paths,
+   except for renewing expired paths with identical otherwise paths.
+
+   The PAN library may have a configuration option to automatically
+   switch paths, potentially after probing, but this should happen only
+   when explicitly configured and when the overlay libraries can detect
+   or otherwise tolerate paths changes.
+
+   QUIC(-MP) libraries should consider the possibility that paths may
+   change.  Typical algorithms for congestion control etc can tolerate
+   this.  Potential implications of skipping path validation need to be
+   considered.
+
+   See also: - resetting algorithms (*TODO* refs) - path validation
+   considerations (*TODO* refs)
 
 6.3.  General API...?
 
