@@ -1179,13 +1179,15 @@ applications that use multipath QUIC over SCION.<a href="#section-abstract-2" cl
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.1">
                 <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="auto internal xref">1.1</a>.  <a href="#name-scion" class="internal xref">SCION</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.2">
-                <p id="section-toc.1-1.1.2.2.1" class="keepWithNext"><a href="#section-1.2" class="auto internal xref">1.2</a>.  <a href="#name-terminology" class="internal xref">Terminology</a></p>
-</li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
             <p id="section-toc.1-1.2.1"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1">
+                <p id="section-toc.1-1.2.2.1.1" class="keepWithNext"><a href="#section-2.1" class="auto internal xref">2.1</a>.  <a href="#name-terminology" class="internal xref">Terminology</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
             <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-multipath-features" class="internal xref">Multipath Features</a></p>
@@ -1421,42 +1423,6 @@ including MTU, bandwidth, latency, AS internal hopcount, or
 geolocation information.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="terms">
-<section id="section-1.2">
-        <h3 id="name-terminology">
-<a href="#section-1.2" class="section-number selfRef">1.2. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
-        </h3>
-<p id="section-1.2-1">This document draws on the terminology of SCION <span>[<a href="#SCION-CP" class="cite xref">SCION-CP</a>]</span>,
-<span>[<a href="#SCION-DP" class="cite xref">SCION-DP</a>]</span>.  For ease of reference, we have included some
-definitions here, but refer the reader to the references above for
-complete specifications of the relevant terminiology:<a href="#section-1.2-1" class="pilcrow">¶</a></p>
-<p id="section-1.2-2"><strong>Autonomous System (AS)</strong>: An autonomous system is a network under
-a common administrative control.  For example, the network of an
-Internet service provider or organization can constitute an AS.<a href="#section-1.2-2" class="pilcrow">¶</a></p>
-<p id="section-1.2-3"><strong>Endpoint</strong>: An endpoint is the start or the end of a path,
-as defined in <span>[<a href="#PATH-VOCABULARY" class="cite xref">PATH-VOCABULARY</a>]</span>.<a href="#section-1.2-3" class="pilcrow">¶</a></p>
-<p id="section-1.2-4"><strong>Inter AS link</strong>: A direct link between two external interfaces of two
-ASes.<a href="#section-1.2-4" class="pilcrow">¶</a></p>
-<p id="section-1.2-5"><strong>Intra AS link</strong>: A direct link between twi internal interfaces of
-a single AS. A direct link may contains several internal hops.<a href="#section-1.2-5" class="pilcrow">¶</a></p>
-<p id="section-1.2-6"><strong>Link</strong>: General term that refers to "inter-AS links" and "intra-AS
-links".<a href="#section-1.2-6" class="pilcrow">¶</a></p>
-<p id="section-1.2-7"><strong>Path</strong>: Consists of a 4-tuple of address/IP at each endpoint, a list
-of all traversed ASes, and links inside and between ASes, including
-interface IDs on border routers of each AS.<a href="#section-1.2-7" class="pilcrow">¶</a></p>
-<p id="section-1.2-8"><strong>Path metadata</strong>: Path metadata is additional data that is available to
-clients when they request a selection of paths to a destination.
-Path metadata is authenticated wrt to owner of each link, but
-otherwise not verified.
-Path metadata includes data about ASes and links, such as MTU,
-bandwidth, latency, AS internal hopcount, or geolocation information.
-Path metadata is updated infrequently, probably at most once per
-hour. Properties such as bandwidth and latency represent hardware
-properties rather than live traffic information.<a href="#section-1.2-8" class="pilcrow">¶</a></p>
-<p id="section-1.2-9"><strong>SCMP</strong>: A signaling protocol analogous to the Internet Control
-Message Protocol (ICMP).  This is described in <span>[<a href="#SCION-CP" class="cite xref">SCION-CP</a>]</span>.<a href="#section-1.2-9" class="pilcrow">¶</a></p>
-</section>
-</div>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1468,6 +1434,42 @@ Message Protocol (ICMP).  This is described in <span>[<a href="#SCION-CP" class=
 "<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
 described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
 appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<div id="terms">
+<section id="section-2.1">
+        <h3 id="name-terminology">
+<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
+        </h3>
+<p id="section-2.1-1">We assume that the reader is familiar with the terminology used in
+<span>[<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> and <span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>. We also draws on the terminology
+of SCION (<span>[<a href="#SCION-CP" class="cite xref">SCION-CP</a>]</span>, <span>[<a href="#SCION-DP" class="cite xref">SCION-DP</a>]</span>).
+For ease of reference, we have included some definitions here, but
+refer the reader to the references above for complete specifications
+of the relevant terminiology:<a href="#section-2.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.1-2"><strong>Autonomous System (AS)</strong>: An autonomous system is a network under
+a common administrative control.  For example, the network of an
+Internet service provider or organization can constitute an AS.<a href="#section-2.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.1-3"><strong>Endpoint</strong>: An endpoint is the start or the end of a path,
+as defined in <span>[<a href="#PATH-VOCABULARY" class="cite xref">PATH-VOCABULARY</a>]</span>.<a href="#section-2.1-3" class="pilcrow">¶</a></p>
+<p id="section-2.1-4"><strong>Inter-AS Link</strong>: A direct link between two external interfaces of two
+ASes.<a href="#section-2.1-4" class="pilcrow">¶</a></p>
+<p id="section-2.1-5"><strong>Intra-AS Link</strong>: A direct link between twi internal interfaces of
+a single AS. A direct link may contains several internal hops.<a href="#section-2.1-5" class="pilcrow">¶</a></p>
+<p id="section-2.1-6"><strong>Link</strong>: General term that refers to "inter-AS links" and "intra-AS
+links".<a href="#section-2.1-6" class="pilcrow">¶</a></p>
+<p id="section-2.1-7"><strong>Network Path</strong>: Consists of a 4-tuple of address/IP at each
+endpoint, a list of all traversed ASes, and links inside and between
+ASes, including interface IDs on border routers of each AS.<a href="#section-2.1-7" class="pilcrow">¶</a></p>
+<p id="section-2.1-8"><strong>Path Metadata</strong>: Path metadata is additional data that is available to
+clients when they request a selection of paths to a destination.
+Path metadata is authenticated wrt to owner of each link, but
+otherwise not verified.
+Path metadata includes data about ASes and links, such as MTU,
+bandwidth, latency, AS internal hopcount, or geolocation information.
+Path metadata is updated infrequently, probably at most once per
+hour. Properties such as bandwidth and latency represent hardware
+properties rather than live traffic information.<a href="#section-2.1-8" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="mpfeatures">
@@ -2373,7 +2375,7 @@ promised capabilities.<a href="#section-13.3-2" class="pilcrow">¶</a></p>
 <dd class="break"></dd>
 <dt id="DMTP">[DMTP]</dt>
         <dd>
-<span class="refAuthor">John, T.</span> and <span class="refAuthor">T. Riechard</span>, <span class="refTitle">"Deadline Aware Streams in MP-QUIC"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-tjohn-quic-multipath-dmtp-00</span>, <time datetime="2025-03-03" class="refDate">3 March 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-tjohn-quic-multipath-dmtp-00">https://datatracker.ietf.org/doc/html/draft-tjohn-quic-multipath-dmtp-00</a>&gt;</span>. </dd>
+<span class="refAuthor">John, T.</span> and <span class="refAuthor">T. Riechard</span>, <span class="refTitle">"Deadline Aware Streams in QUIC Multipath"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-tjohn-quic-multipath-dmtp-01</span>, <time datetime="2025-06-05" class="refDate">5 June 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-tjohn-quic-multipath-dmtp-01">https://datatracker.ietf.org/doc/html/draft-tjohn-quic-multipath-dmtp-01</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="OLIA">[OLIA]</dt>
         <dd>

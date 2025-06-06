@@ -77,8 +77,8 @@ Table of Contents
 
    1.  Introduction
      1.1.  SCION
-     1.2.  Terminology
    2.  Conventions and Definitions
+     2.1.  Terminology
    3.  Multipath Features
      3.1.  Path Metadata
        3.1.1.  Path Metadata Granularity
@@ -177,12 +177,22 @@ Table of Contents
    including MTU, bandwidth, latency, AS internal hopcount, or
    geolocation information.
 
-1.2.  Terminology
+2.  Conventions and Definitions
 
-   This document draws on the terminology of SCION [SCION-CP],
-   [SCION-DP].  For ease of reference, we have included some definitions
-   here, but refer the reader to the references above for complete
-   specifications of the relevant terminiology:
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+2.1.  Terminology
+
+   We assume that the reader is familiar with the terminology used in
+   [QUIC-TRANSPORT] and [QUIC-MP].  We also draws on the terminology of
+   SCION ([SCION-CP], [SCION-DP]).  For ease of reference, we have
+   included some definitions here, but refer the reader to the
+   references above for complete specifications of the relevant
+   terminiology:
 
    *Autonomous System (AS)*: An autonomous system is a network under a
    common administrative control.  For example, the network of an
@@ -191,20 +201,20 @@ Table of Contents
    *Endpoint*: An endpoint is the start or the end of a path, as defined
    in [PATH-VOCABULARY].
 
-   *Inter AS link*: A direct link between two external interfaces of two
+   *Inter-AS Link*: A direct link between two external interfaces of two
    ASes.
 
-   *Intra AS link*: A direct link between twi internal interfaces of a
+   *Intra-AS Link*: A direct link between twi internal interfaces of a
    single AS.  A direct link may contains several internal hops.
 
    *Link*: General term that refers to "inter-AS links" and "intra-AS
    links".
 
-   *Path*: Consists of a 4-tuple of address/IP at each endpoint, a list
-   of all traversed ASes, and links inside and between ASes, including
-   interface IDs on border routers of each AS.
+   *Network Path*: Consists of a 4-tuple of address/IP at each endpoint,
+   a list of all traversed ASes, and links inside and between ASes,
+   including interface IDs on border routers of each AS.
 
-   *Path metadata*: Path metadata is additional data that is available
+   *Path Metadata*: Path metadata is additional data that is available
    to clients when they request a selection of paths to a destination.
    Path metadata is authenticated wrt to owner of each link, but
    otherwise not verified.  Path metadata includes data about ASes and
@@ -213,17 +223,6 @@ Table of Contents
    probably at most once per hour.  Properties such as bandwidth and
    latency represent hardware properties rather than live traffic
    information.
-
-   *SCMP*: A signaling protocol analogous to the Internet Control
-   Message Protocol (ICMP).  This is described in [SCION-CP].
-
-2.  Conventions and Definitions
-
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in
-   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
 
 3.  Multipath Features
 
@@ -888,11 +887,11 @@ Table of Contents
               RFC 6356, DOI 10.17487/RFC6356, October 2011,
               <https://www.rfc-editor.org/rfc/rfc6356>.
 
-   [DMTP]     John, T. and T. Riechard, "Deadline Aware Streams in MP-
-              QUIC", Work in Progress, Internet-Draft, draft-tjohn-quic-
-              multipath-dmtp-00, 3 March 2025,
+   [DMTP]     John, T. and T. Riechard, "Deadline Aware Streams in QUIC
+              Multipath", Work in Progress, Internet-Draft, draft-tjohn-
+              quic-multipath-dmtp-01, 5 June 2025,
               <https://datatracker.ietf.org/doc/html/draft-tjohn-quic-
-              multipath-dmtp-00>.
+              multipath-dmtp-01>.
 
    [OLIA]     Khalili, R., Gast, N., Popovic, M., Upadhyay, U., and J.
               Le Boudec, "MPTCP is not pareto-optimal: performance
