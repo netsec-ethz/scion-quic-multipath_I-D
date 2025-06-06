@@ -311,7 +311,33 @@ send traffic to a new destination. This attack is still not easy to
 execute because it requires the attacker to have control over an AS
 that lies en-route between server and client.
 
-**TODO** Illustration.
+
+~~~~
+     AS #100               AS #200                   AS #300
+   +------------+        +----------------+        +----------------+
+   | Server     |        | Attacker       |        | Victim         |
+   | IP=1.2.3.4 | ------ | IP=192.168.0.1 | ------ | IP=192.168.0.1 |
+   | port = 42  |        | port= 12345    |        | port= 12345    |
+   +------------+        +----------------+        +----------------+
+
+    **TODO** use IPs from documentation range
+~~~~
+{: #fig-example-non-unique-ip title="Example of non-unique IPs"}
+
+~~~~
+   Attacker                                                Server
+   (Establish connection)
+   Path=[#200, #100] -->
+                                                <-- Path=[#100, #200]
+
+   (Change Path)
+   Path=[#300, #200, #100] -->
+                                          <-- Path=[#100, #200, #300]
+
+   Client: receives unwanted traffic
+~~~~
+{: #fig-example-new-path title="Example of traffic amplification
+attack"}
 
 ### Mitigation
 
@@ -329,6 +355,27 @@ that lies en-route between server and client.
     the port/IP to a made up value and back to the original value.
     This would trigger two path validations. At least eventually,
     the QUIC layer will know the correct remote IP/port.
+
+
+**TODO**
+This attack works regardless of path validation:
+The attacker can just intercept path validation requests and answer
+them!
+
+However, for that, the attacker really neds to be on-path (e.g.
+control a border router).
+
+This attack also works without PAN, e.g. with BGP, but with PAN
+it is more controlled, the attacker can use a wormhole to attract
+traffic and then ensure that traffic goes via their controlled AS.
+
+
+
+
+
+
+
+
 
 
 # API Considerations {#apicon}
@@ -420,6 +467,10 @@ See also "Implementation Considerations" in {{Section 5 of QUIC-MP}}.
 
 This requires the attacker to spoof IP adresses in an AS or fully
 control an AS between the attacked endpoints.
+The attacker also needs to learn of the port/IP that the client is
+using, either by probing the client or by reading traffic between
+client and server. (Instead of knowing the port, the attacker may flood
+the server with bad paths).
 
 An attacker can send a spoofed packet to a server. The packet contains
 a new path (for example broken or with high latency).
@@ -476,6 +527,28 @@ paths differ.
 * Java over DatagramSocket: Problematic, it caches the paths...
 * C + Rust: How exactly do we map PathID to paths? How are paths
   updated?
+
+### Variant
+
+Attack target: server / client.
+
+The attacker can flood the server with packet that contain
+slightly varying paths (maybe just client IP/port difference).
+The server may hold paths in a hashmap. This map will either run
+out of memory (server breaks down) or the map will start dropping
+paths (including the client's path -> connection disrupted).
+On the server, the SCION layer cannot easily drop paths because it
+doesn't know which packets are valid or invalid.
+
+Mitigation:
+- The SCION layer should avoid storing state (such as a hashmap
+with paths). If that cannot be avoided, it should monitor the size of
+the hashmap and stop accepting paths if it is too full. It is important
+that it does "stop accepting" rather than "cleaning out old", otherwise
+it may drop the valid connection to the valid client.
+
+**TODO** Check with scionproto
+
 
 # Algorithm Considerations {#algcon}
 
