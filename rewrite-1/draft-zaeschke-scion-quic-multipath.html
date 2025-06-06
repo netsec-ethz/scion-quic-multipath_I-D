@@ -1222,6 +1222,11 @@ applications that use multipath QUIC over SCION.<a href="#section-abstract-2" cl
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
                 <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-4-tuple-changes" class="internal xref">4-tuple changes</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.1">
+                    <p id="section-toc.1-1.5.2.1.2.1.1"><a href="#section-5.1.1" class="auto internal xref">5.1.1</a>.  <a href="#name-mitigation" class="internal xref">Mitigation</a></p>
+</li>
+                </ul>
 </li>
             </ul>
 </li>
@@ -1243,32 +1248,18 @@ applications that use multipath QUIC over SCION.<a href="#section-abstract-2" cl
             <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-quic-implementation-conside" class="internal xref">QUIC implementation Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
-                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-path-change-detection-path-" class="internal xref">Path Change Detection - Path Validation</a></p>
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-path-change-detection-path-" class="internal xref">Path Change Detection - Path Injection</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1.2.1">
                     <p id="section-toc.1-1.7.2.1.2.1.1"><a href="#section-7.1.1" class="auto internal xref">7.1.1</a>.  <a href="#name-problem" class="internal xref">Problem</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1.2.2">
-                    <p id="section-toc.1-1.7.2.1.2.2.1"><a href="#section-7.1.2" class="auto internal xref">7.1.2</a>.  <a href="#name-implication" class="internal xref">Implication</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1.2.3">
-                    <p id="section-toc.1-1.7.2.1.2.3.1"><a href="#section-7.1.3" class="auto internal xref">7.1.3</a>.  <a href="#name-mitigation" class="internal xref">Mitigation</a></p>
+                    <p id="section-toc.1-1.7.2.1.2.2.1"><a href="#section-7.1.2" class="auto internal xref">7.1.2</a>.  <a href="#name-mitigation-2" class="internal xref">Mitigation</a></p>
 </li>
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
-                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-path-change-detection-path-i" class="internal xref">Path Change Detection - Path Injection</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2.2.1">
-                    <p id="section-toc.1-1.7.2.2.2.1.1"><a href="#section-7.2.1" class="auto internal xref">7.2.1</a>.  <a href="#name-problem-2" class="internal xref">Problem</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2.2.2">
-                    <p id="section-toc.1-1.7.2.2.2.2.1"><a href="#section-7.2.2" class="auto internal xref">7.2.2</a>.  <a href="#name-mitigation-2" class="internal xref">Mitigation</a></p>
-</li>
-                </ul>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3">
-                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="auto internal xref">7.3</a>.  <a href="#name-padding" class="internal xref">Padding</a></p>
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-padding" class="internal xref">Padding</a></p>
 </li>
             </ul>
 </li>
@@ -1594,7 +1585,7 @@ category.<a href="#section-4-4" class="pilcrow">¶</a></p>
       <h2 id="name-potential-problems-wip">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-potential-problems-wip" class="section-name selfRef">Potential Problems -- WIP</a>
       </h2>
-<div id="tuple-changes">
+<div id="four-tuple-changes">
 <section id="section-5.1">
         <h3 id="name-4-tuple-changes">
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-4-tuple-changes" class="section-name selfRef">4-tuple changes</a>
@@ -1614,16 +1605,43 @@ granualrity offered by the PAN layer.<a href="#section-5.1-3.1.1" class="pilcrow
 </li>
           <li id="section-5.1-3.2">
             <p id="section-5.1-3.2.1">PANs, such as SCION, extend the network address with path, AS code
-and ISD code. This means IP addresses do not need to be unique this
-would allow a man-in-the-middle attacker to change the destination
-of a connection without changing the destination port/IP. This could
-be used to avoid path validation when coaxing a machine to send traffic
-to a new destination. This attack is still not easy to execute
-because it requires the attacker to have control over an AS that lies
-en-route between server and client.<a href="#section-5.1-3.2.1" class="pilcrow">¶</a></p>
+and ISD code. ASes may use private IP ranges with IPs that are
+globally not unique; This would allow a man-in-the-middle attacker to
+construct a scenarion where the IP/port of an attacked machine
+can be duplicated in a different AS. The attacker can then change the
+destination (i.e. routing to a different AS) of a connection without
+changing the destination port/IP.
+This could be used to avoid path validation when coaxing a machine to
+send traffic to a new destination. This attack is still not easy to
+execute because it requires the attacker to have control over an AS
+that lies en-route between server and client.<a href="#section-5.1-3.2.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
 <p id="section-5.1-4"><strong>TODO</strong> Illustration.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
+<div id="mitigation">
+<section id="section-5.1.1">
+          <h4 id="name-mitigation">
+<a href="#section-5.1.1" class="section-number selfRef">5.1.1. </a><a href="#name-mitigation" class="section-name selfRef">Mitigation</a>
+          </h4>
+<ul class="normal">
+<li class="normal" id="section-5.1.1-1.1">
+              <p id="section-5.1.1-1.1.1">Allow to detect path changes while 4-tuple stays the same<a href="#section-5.1.1-1.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.1.1-1.1.2.1">
+                  <p id="section-5.1.1-1.1.2.1.1">Port mangling / IP mangling? -&gt; That is what Anapaya does. <strong>TODO</strong><a href="#section-5.1.1-1.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-5.1.1-1.1.2.2">
+                  <p id="section-5.1.1-1.1.2.2.1">SCION could trigger a "double" path validation by changing
+the port/IP to a made up value and back to the original value.
+This would trigger two path validations. However, at
+least eventually, the QUIC layer will know the correct
+remote IP/port.<a href="#section-5.1.1-1.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+              </ul>
+</li>
+          </ul>
+</section>
+</div>
 </section>
 </div>
 </section>
@@ -1714,102 +1732,18 @@ selection of Path Selection and Congestion Control algorithms.<a href="#section-
       </h2>
 <p id="section-7-1"><strong>TODO READ:</strong>
 See also "Implementation Considerations" in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5" class="relref">Section 5</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-7-1" class="pilcrow">¶</a></p>
-<div id="pathchange-validation">
+<div id="pathchange-injection">
 <section id="section-7.1">
         <h3 id="name-path-change-detection-path-">
-<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-path-change-detection-path-" class="section-name selfRef">Path Change Detection - Path Validation</a>
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-path-change-detection-path-" class="section-name selfRef">Path Change Detection - Path Injection</a>
         </h3>
 <div id="problem">
 <section id="section-7.1.1">
           <h4 id="name-problem">
 <a href="#section-7.1.1" class="section-number selfRef">7.1.1. </a><a href="#name-problem" class="section-name selfRef">Problem</a>
           </h4>
-<p id="section-7.1.1-1">Following <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.1" class="relref">Section 5.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> and <span><a href="https://rfc-editor.org/rfc/rfc9000#section-9" class="relref">Section 9</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>, endpoints <span class="bcp14">MUST</span> drop a connection or perform path
-validation when the 4-tuple changes:<a href="#section-7.1.1-1" class="pilcrow">¶</a></p>
-<ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="section-7.1.1-2.1">
-              <p id="section-7.1.1-2.1.1">"Not all changes of peer address are intentional, or active,
-  migrations. The peer could experience NAT rebinding: a change of
-  address due to a middlebox, usually a NAT, allocating a new outgoing
-  port or even a new outgoing IP address for a flow. An endpoint <span class="bcp14">MUST</span>
-  perform path validation (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-8.2" class="relref">Section 8.2</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>) if it
-  detects any change to a
-  peer's address, unless it has previously validated that address."<a href="#section-7.1.1-2.1.1" class="pilcrow">¶</a></p>
-</li>
-          </ul>
-<p id="section-7.1.1-3">With SCION, endpoints may use private IPs that are not globally unique,
-such as 192.168.0.1. Two paths with an identical 4-tuple may
-therefore connect to two different machines if the machines are in
-different ASes but use the same IP/port.<a href="#section-7.1.1-3" class="pilcrow">¶</a></p>
-<p id="section-7.1.1-4"><strong>TODO remove the following, it is probably wrong.</strong><a href="#section-7.1.1-4" class="pilcrow">¶</a></p>
-<p id="section-7.1.1-5">In short, an attacker can impersonate a client by using an identical
-IP/port to connect a server. The server would probably just reverse
-the path and answer to the client without triggering a path validation.<a href="#section-7.1.1-5" class="pilcrow">¶</a></p>
-<p id="section-7.1.1-6"><strong>TODO</strong> What is the implication of this?<a href="#section-7.1.1-6" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="implication">
-<section id="section-7.1.2">
-          <h4 id="name-implication">
-<a href="#section-7.1.2" class="section-number selfRef">7.1.2. </a><a href="#name-implication" class="section-name selfRef">Implication</a>
-          </h4>
-<p id="section-7.1.2-1">Path change detection is important for:
-- triggering a reset of congestion control and RTT estimation
-algorithms, see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-9.4" class="relref">Section 9.4</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>
-- triggering path validation, see <span><a href="https://rfc-editor.org/rfc/rfc9000#section-9" class="relref">Section 9</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>.
-  <strong>TODO Better understand the impact of this</strong><a href="#section-7.1.2-1" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="mitigation">
-<section id="section-7.1.3">
-          <h4 id="name-mitigation">
-<a href="#section-7.1.3" class="section-number selfRef">7.1.3. </a><a href="#name-mitigation" class="section-name selfRef">Mitigation</a>
-          </h4>
-<ul class="normal">
-<li class="normal" id="section-7.1.3-1.1">
-              <p id="section-7.1.3-1.1.1">Allow to detect path changes while 4-tuple stays the same<a href="#section-7.1.3-1.1.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-7.1.3-1.1.2.1">
-                  <p id="section-7.1.3-1.1.2.1.1">Port mangling?<a href="#section-7.1.3-1.1.2.1.1" class="pilcrow">¶</a></p>
-</li>
-                <li class="normal" id="section-7.1.3-1.1.2.2">
-                  <p id="section-7.1.3-1.1.2.2.1">Change PATH-ID (SCION would need to know about QUIC...!!)<a href="#section-7.1.3-1.1.2.2.1" class="pilcrow">¶</a></p>
-</li>
-                <li class="normal" id="section-7.1.3-1.1.2.3">
-                  <p id="section-7.1.3-1.1.2.3.1">Is PATH ID encrypted? Then attacker cannot know it (but use, it,
-see replay, which is not possible due to sequence numbers??)
-... so what?<a href="#section-7.1.3-1.1.2.3.1" class="pilcrow">¶</a></p>
-</li>
-                <li class="normal" id="section-7.1.3-1.1.2.4">
-                  <p id="section-7.1.3-1.1.2.4.1">SCION could just drop packets where 4-tuple is the same but
-remote AS has changed.<a href="#section-7.1.3-1.1.2.4.1" class="pilcrow">¶</a></p>
-</li>
-                <li class="normal" id="section-7.1.3-1.1.2.5">
-                  <p id="section-7.1.3-1.1.2.5.1">SCION could trigger a "double" path validation by changing
-the port/IP to a made up value and back to the original value.
-This would trigger two path validations. However, at
-least eventually, the QUIC layer will know the correct
-remote IP/port.<a href="#section-7.1.3-1.1.2.5.1" class="pilcrow">¶</a></p>
-</li>
-              </ul>
-</li>
-          </ul>
-</section>
-</div>
-</section>
-</div>
-<div id="pathchange-injection">
-<section id="section-7.2">
-        <h3 id="name-path-change-detection-path-i">
-<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-path-change-detection-path-i" class="section-name selfRef">Path Change Detection - Path Injection</a>
-        </h3>
-<div id="problem-1">
-<section id="section-7.2.1">
-          <h4 id="name-problem-2">
-<a href="#section-7.2.1" class="section-number selfRef">7.2.1. </a><a href="#name-problem-2" class="section-name selfRef">Problem</a>
-          </h4>
-<p id="section-7.2.1-1"><strong>TODO check SCION IRTF draft for this attack:</strong><a href="#section-7.2.1-1" class="pilcrow">¶</a></p>
-<p id="section-7.2.1-2">An attacker can send a spoofed packet to a server. The packet contains
+<p id="section-7.1.1-1"><strong>TODO check SCION IRTF draft for this attack:</strong><a href="#section-7.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.1.1-2">An attacker can send a spoofed packet to a server. The packet contains
 a new path (for example broken or with high latency).
 The server accepts the packet and stores the path for being used
 for all futur communication with the client. The next packet sent to
@@ -1817,44 +1751,44 @@ the client will take the injected malicious path and will fail (or
 at least be redirected).
 This happens even if th epacket is rejectd by the QUIC(-MP) layer
 because the SCION layer will never learn about the packet being
-rejected.<a href="#section-7.2.1-2" class="pilcrow">¶</a></p>
+rejected.<a href="#section-7.1.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="mitigation-1">
-<section id="section-7.2.2">
+<section id="section-7.1.2">
           <h4 id="name-mitigation-2">
-<a href="#section-7.2.2" class="section-number selfRef">7.2.2. </a><a href="#name-mitigation-2" class="section-name selfRef">Mitigation</a>
+<a href="#section-7.1.2" class="section-number selfRef">7.1.2. </a><a href="#name-mitigation-2" class="section-name selfRef">Mitigation</a>
           </h4>
 <ul class="normal">
-<li class="normal" id="section-7.2.2-1.1">
-              <p id="section-7.2.2-1.1.1">Authenticate packets on SCION level....
-There could still be a replay:<a href="#section-7.2.2-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-7.1.2-1.1">
+              <p id="section-7.1.2-1.1.1">Authenticate packets on SCION level....
+There could still be a replay:<a href="#section-7.1.2-1.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-7.2.2-1.1.2.1">
-                  <p id="section-7.2.2-1.1.2.1.1">Client uses path P1 (P1 could be injected with wormhole attack).<a href="#section-7.2.2-1.1.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-7.1.2-1.1.2.1">
+                  <p id="section-7.1.2-1.1.2.1.1">Client uses path P1 (P1 could be injected with wormhole attack).<a href="#section-7.1.2-1.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-7.2.2-1.1.2.2">
-                  <p id="section-7.2.2-1.1.2.2.1">Attacker captures packet with P1 path<a href="#section-7.2.2-1.1.2.2.1" class="pilcrow">¶</a></p>
+                <li class="normal" id="section-7.1.2-1.1.2.2">
+                  <p id="section-7.1.2-1.1.2.2.1">Attacker captures packet with P1 path<a href="#section-7.1.2-1.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-7.2.2-1.1.2.3">
-                  <p id="section-7.2.2-1.1.2.3.1">Attacker breaks P1 and forces migration to P2<a href="#section-7.2.2-1.1.2.3.1" class="pilcrow">¶</a></p>
+                <li class="normal" id="section-7.1.2-1.1.2.3">
+                  <p id="section-7.1.2-1.1.2.3.1">Attacker breaks P1 and forces migration to P2<a href="#section-7.1.2-1.1.2.3.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-7.2.2-1.1.2.4">
-                  <p id="section-7.2.2-1.1.2.4.1">Attacker can no replay the original packet to get server to
-keep responding on the broken P1 path.<a href="#section-7.2.2-1.1.2.4.1" class="pilcrow">¶</a></p>
+                <li class="normal" id="section-7.1.2-1.1.2.4">
+                  <p id="section-7.1.2-1.1.2.4.1">Attacker can no replay the original packet to get server to
+keep responding on the broken P1 path.<a href="#section-7.1.2-1.1.2.4.1" class="pilcrow">¶</a></p>
 </li>
               </ul>
 </li>
-            <li class="normal" id="section-7.2.2-1.2">
-              <p id="section-7.2.2-1.2.1">Don't allow paths to change (for 4-tuple??) and require
-proper path migration (how?) or even a reconnect<a href="#section-7.2.2-1.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-7.1.2-1.2">
+              <p id="section-7.1.2-1.2.1">Don't allow paths to change (for 4-tuple??) and require
+proper path migration (how?) or even a reconnect<a href="#section-7.1.2-1.2.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-7.2.2-1.3">
-              <p id="section-7.2.2-1.3.1">SOLUTION: The SCION layer <span class="bcp14">MUST NOT</span> cache paths locally, instead
-paths must be accepted by the QUIC layer before being used.<a href="#section-7.2.2-1.3.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-7.1.2-1.3">
+              <p id="section-7.1.2-1.3.1">SOLUTION: The SCION layer <span class="bcp14">MUST NOT</span> cache paths locally, instead
+paths must be accepted by the QUIC layer before being used.<a href="#section-7.1.2-1.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-7.2.2-2">Examples:
+<p id="section-7.1.2-2">Examples:
 * Java over DatagramChannel:
   * Comparing ResponsePath objects <span class="bcp14">MUST</span> return <code>false</code> if the
 paths differ.
@@ -1868,22 +1802,22 @@ paths differ.
     Can this attack be successful with spoofed IPs???
 * Java over DatagramSocket: Problematic, it caches the paths...
 * C + Rust: How exactly do we map PathID to paths? How are paths
-  updated?<a href="#section-7.2.2-2" class="pilcrow">¶</a></p>
+  updated?<a href="#section-7.1.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="padding">
-<section id="section-7.3">
+<section id="section-7.2">
         <h3 id="name-padding">
-<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-padding" class="section-name selfRef">Padding</a>
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-padding" class="section-name selfRef">Padding</a>
         </h3>
-<p id="section-7.3-1">From <span><a href="https://rfc-editor.org/rfc/rfc9000#section-8.1" class="relref">Section 8.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>: "Clients <span class="bcp14">MUST</span> ensure that
+<p id="section-7.2-1">From <span><a href="https://rfc-editor.org/rfc/rfc9000#section-8.1" class="relref">Section 8.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>: "Clients <span class="bcp14">MUST</span> ensure that
 UDP datagrams containing Initial packets have UDP payloads of at
-least 1200 bytes, adding PADDING frames as necessary."<a href="#section-7.3-1" class="pilcrow">¶</a></p>
-<p id="section-7.3-2">PAN packets may be bigger than traditional packets because they may
-carry additional routing information.<a href="#section-7.3-2" class="pilcrow">¶</a></p>
-<p id="section-7.3-3"><strong>TODO</strong> Measure SCION path header!<a href="#section-7.3-3" class="pilcrow">¶</a></p>
+least 1200 bytes, adding PADDING frames as necessary."<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2-2">PAN packets may be bigger than traditional packets because they may
+carry additional routing information.<a href="#section-7.2-2" class="pilcrow">¶</a></p>
+<p id="section-7.2-3"><strong>TODO</strong> Measure SCION path header!<a href="#section-7.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2268,7 +2202,7 @@ Additionally, the number of polled paths should vary.<a href="#section-13.1-1" c
         <h3 id="name-path-validation">
 <a href="#section-13.2" class="section-number selfRef">13.2. </a><a href="#name-path-validation" class="section-name selfRef">Path Validation</a>
         </h3>
-<p id="section-13.2-1">See <a href="#pathchange-validation" class="auto internal xref">Section 7.1</a> and <a href="#pathchange-injection" class="auto internal xref">Section 7.2</a>.<a href="#section-13.2-1" class="pilcrow">¶</a></p>
+<p id="section-13.2-1">See <a href="#four-tuple-changes" class="auto internal xref">Section 5.1</a>.<a href="#section-13.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="wormhole-attack">
