@@ -283,7 +283,7 @@ category.
 
 # Potential Problems -- WIP
 
-## 4-tuple changes
+## 4-tuple changes {#four-tuple-changes}
 
 If the 4-tuple changes, {{QUIC-MP}} and {{QUIC-TRANSPORT}} require
 several actions, including resetting congestion control and RTT
@@ -299,16 +299,28 @@ and can rely more on the path being consistent, at least to the
 granualrity offered by the PAN layer.
 
 2. PANs, such as SCION, extend the network address with path, AS code
-and ISD code. This means IP addresses do not need to be unique this
-would allow a man-in-the-middle attacker to change the destination
-of a connection without changing the destination port/IP. This could
-be used to avoid path validation when coaxing a machine to send traffic
-to a new destination. This attack is still not easy to execute
-because it requires the attacker to have control over an AS that lies
-en-route between server and client.
+and ISD code. ASes may use private IP ranges with IPs that are
+globally not unique; This would allow a man-in-the-middle attacker to
+construct a scenarion where the IP/port of an attacked machine
+can be duplicated in a different AS. The attacker can then change the
+destination (i.e. routing to a different AS) of a connection without
+changing the destination port/IP.
+This could be used to avoid path validation when coaxing a machine to
+send traffic to a new destination. This attack is still not easy to
+execute because it requires the attacker to have control over an AS
+that lies en-route between server and client.
 
 **TODO** Illustration.
 
+### Mitigation
+
+- Allow to detect path changes while 4-tuple stays the same
+  - Port mangling / IP mangling? -> That is what Anapaya does. **TODO**
+  - SCION could trigger a "double" path validation by changing
+    the port/IP to a made up value and back to the original value.
+    This would trigger two path validations. However, at
+    least eventually, the QUIC layer will know the correct
+    remote IP/port.
 
 
 # API Considerations {#apicon}
@@ -363,60 +375,6 @@ The API of a QUIC-MP implementation that works with PAN should:
 
 **TODO READ:**
 See also "Implementation Considerations" in {{Section 5 of QUIC-MP}}.
-
-## Path Change Detection - Path Validation {#pathchange-validation}
-
-### Problem
-
-Following {{Section 5.1 of QUIC-MP}} and {{Section 9 of
-QUIC-TRANSPORT}}, endpoints MUST drop a connection or perform path
-validation when the 4-tuple changes:
-
-> "Not all changes of peer address are intentional, or active,
-  migrations. The peer could experience NAT rebinding: a change of
-  address due to a middlebox, usually a NAT, allocating a new outgoing
-  port or even a new outgoing IP address for a flow. An endpoint MUST
-  perform path validation ({{Section 8.2 of QUIC-TRANSPORT}}) if it
-  detects any change to a
-  peer's address, unless it has previously validated that address."
-
-With SCION, endpoints may use private IPs that are not globally unique,
-such as 192.168.0.1. Two paths with an identical 4-tuple may
-therefore connect to two different machines if the machines are in
-different ASes but use the same IP/port.
-
-**TODO remove the following, it is probably wrong.**
-
-In short, an attacker can impersonate a client by using an identical
-IP/port to connect a server. The server would probably just reverse
-the path and answer to the client without triggering a path validation.
-
-**TODO** What is the implication of this?
-
-### Implication
-
-Path change detection is important for:
-- triggering a reset of congestion control and RTT estimation
-algorithms, see {{Section 9.4 of QUIC-MP}}
-- triggering path validation, see {{Section 9 of QUIC-TRANSPORT}}.
-  **TODO Better understand the impact of this**
-
-
-### Mitigation
-
-- Allow to detect path changes while 4-tuple stays the same
-  - Port mangling?
-  - Change PATH-ID (SCION would need to know about QUIC...!!)
-  - Is PATH ID encrypted? Then attacker cannot know it (but use, it,
-    see replay, which is not possible due to sequence numbers??)
-    ... so what?
-  - SCION could just drop packets where 4-tuple is the same but
-    remote AS has changed.
-  - SCION could trigger a "double" path validation by changing
-    the port/IP to a made up value and back to the original value.
-    This would trigger two path validations. However, at
-    least eventually, the QUIC layer will know the correct
-    remote IP/port.
 
 
 ## Path Change Detection - Path Injection {#pathchange-injection}
@@ -773,7 +731,7 @@ Additionally, the number of polled paths should vary.
 
 ## Path Validation
 
-See {{pathchange-validation}} and {{pathchange-injection}}.
+See {{four-tuple-changes}}.
 
 ## Wormhole Attack
 
