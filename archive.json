@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-10T00:29:10.791305+00:00",
+  "timestamp": "2025-06-12T00:28:58.172250+00:00",
   "repo": "netsec-ethz/scion-quic-multipath_I-D",
   "labels": [
     {
@@ -107,6 +107,62 @@
       "mergedBy": "tzaeschke",
       "mergeCommit": {
         "oid": "5cf65f5c695e6fb81b64c04628628b2fd4c97557"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 3,
+      "id": "PR_kwDOOmGiIc6Z_ujF",
+      "title": "Rewrite 1",
+      "url": "https://github.com/netsec-ethz/scion-quic-multipath_I-D/pull/3",
+      "state": "CLOSED",
+      "author": "tzaeschke",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-06-11T09:26:34Z",
+      "updatedAt": "2025-06-11T11:56:28Z",
+      "baseRepository": "netsec-ethz/scion-quic-multipath_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "5cf65f5c695e6fb81b64c04628628b2fd4c97557",
+      "headRepository": "netsec-ethz/scion-quic-multipath_I-D",
+      "headRefName": "rewrite-1",
+      "headRefOid": "fe7522f543e4fc34ff7d93e47ef75e2f5370bde3",
+      "closedAt": "2025-06-11T11:56:28Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 4,
+      "id": "PR_kwDOOmGiIc6aBIDY",
+      "title": "Rewrite 2",
+      "url": "https://github.com/netsec-ethz/scion-quic-multipath_I-D/pull/4",
+      "state": "MERGED",
+      "author": "tzaeschke",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "tzaeschke"
+      ],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-06-11T11:48:03Z",
+      "updatedAt": "2025-06-11T11:56:19Z",
+      "baseRepository": "netsec-ethz/scion-quic-multipath_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "5cf65f5c695e6fb81b64c04628628b2fd4c97557",
+      "headRepository": "netsec-ethz/scion-quic-multipath_I-D",
+      "headRefName": "rewrite-2",
+      "headRefOid": "d3b8cdf23556c0c42af325e317e57a7ed513ddf3",
+      "closedAt": "2025-06-11T11:56:14Z",
+      "mergedAt": "2025-06-11T11:56:14Z",
+      "mergedBy": "tzaeschke",
+      "mergeCommit": {
+        "oid": "0929488b3659c5008b166e4412b1b7fae95ab3c9"
       },
       "comments": [],
       "reviews": []
