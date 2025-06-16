@@ -346,7 +346,8 @@ can be duplicated in a different AS. The attacker can then change the
 destination (i.e. routing to a different AS) of a connection without
 changing the destination port/IP.
 This could be used to avoid path validation when coaxing a machine to
-send traffic to a new destination. This attack is still not easy to
+send traffic to a new destination as described in {{Section 9.3.1 of
+QUIC-TRANSPORT}}. This attack is still not easy to
 execute because it requires the attacker to have control over an AS
 that lies en-route between server and client.
 
