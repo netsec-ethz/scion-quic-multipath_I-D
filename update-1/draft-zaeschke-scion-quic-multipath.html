@@ -1265,7 +1265,7 @@ applications that use multipath QUIC over SCION.<a href="#section-abstract-2" cl
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3">
-                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="auto internal xref">7.3</a>.  <a href="#name-general-api" class="internal xref">General API...?</a></p>
+                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="auto internal xref">7.3</a>.  <a href="#name-general-api" class="internal xref">General API</a></p>
 </li>
             </ul>
 </li>
@@ -1814,9 +1814,10 @@ traffic and then ensure that traffic goes via their controlled AS.<a href="#sect
 &gt; As specified in <span><a href="https://rfc-editor.org/rfc/rfc9000#section-9.3" class="relref">Section 9.3</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>, a server is
 &gt; expected to send a new address validation token to a client
 &gt; following the successful validation of a new client address.
-&gt; [...]
-&gt; It may be difficult for the client to pick the "right" token among
-&gt; multiple tokens obtained in a previous connection.
+&gt; The client will receive several tokens. When considering using a
+&gt; token for subsequent connections, it may be difficult for the
+&gt; client to pick the "right" token among multiple tokens obtained in
+&gt; a previous connection.
 &gt; The client is likely to fall back to the strategy specified in
 &gt; Section 8.1.3 of <span>[<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>, i.e., pick the last received
 &gt; token. To avoid issues when clients make the "wrong" choice, a
@@ -1834,8 +1835,9 @@ If we adopt an implementation to use the full nettwork address + path
 for identity, and if we use this to generate tokens, then we may end
 up generating many more or longer tokens.<a href="#section-6.2-5" class="pilcrow">¶</a></p>
 <p id="section-6.2-6">This needs to be considered carefully.<a href="#section-6.2-6" class="pilcrow">¶</a></p>
-<p id="section-6.2-7"><strong>TODO</strong> Move this section to <em>after</em> discussing network addresses<a href="#section-6.2-7" class="pilcrow">¶</a></p>
-<p id="section-6.2-8"><strong>TODO</strong> read the referenced sections and come up with recommendation.<a href="#section-6.2-8" class="pilcrow">¶</a></p>
+<p id="section-6.2-7">See also <span><a href="https://rfc-editor.org/rfc/rfc9000#section-21.3" class="relref">Section 21.3</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>.<a href="#section-6.2-7" class="pilcrow">¶</a></p>
+<p id="section-6.2-8"><strong>TODO</strong> Move this section to <em>after</em> discussing network addresses<a href="#section-6.2-8" class="pilcrow">¶</a></p>
+<p id="section-6.2-9"><strong>TODO</strong> read the referenced sections and come up with recommendation.<a href="#section-6.2-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1924,7 +1926,7 @@ considered.<a href="#section-7.2.1-3" class="pilcrow">¶</a></p>
 <div id="general-api">
 <section id="section-7.3">
         <h3 id="name-general-api">
-<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-general-api" class="section-name selfRef">General API...?</a>
+<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-general-api" class="section-name selfRef">General API</a>
         </h3>
 <p id="section-7.3-1">The API of a QUIC-MP implementation that works with PAN should:<a href="#section-7.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
