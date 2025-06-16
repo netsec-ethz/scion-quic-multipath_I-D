@@ -443,9 +443,10 @@ From {{QUIC-MP}} (adapted):
 > As specified in {{Section 9.3 of QUIC-TRANSPORT}}, a server is
 > expected to send a new address validation token to a client
 > following the successful validation of a new client address.
-> [...]
-> It may be difficult for the client to pick the "right" token among
-> multiple tokens obtained in a previous connection.
+> The client will receive several tokens. When considering using a
+> token for subsequent connections, it may be difficult for the
+> client to pick the "right" token among multiple tokens obtained in
+> a previous connection.
 > The client is likely to fall back to the strategy specified in
 > Section 8.1.3 of [QUIC-TRANSPORT], i.e., pick the last received
 > token. To avoid issues when clients make the "wrong" choice, a
@@ -467,6 +468,8 @@ for identity, and if we use this to generate tokens, then we may end
 up generating many more or longer tokens.
 
 This needs to be considered carefully.
+
+See also {{Section 21.3 of QUIC-TRANSPORT}}.
 
 **TODO** Move this section to _after_ discussing network addresses
 
@@ -538,7 +541,7 @@ See also:
 - path validation considerations (**TODO** refs)
 
 
-## General API...?
+## General API
 
 The API of a QUIC-MP implementation that works with PAN should:
 
