@@ -287,7 +287,8 @@ category.
 
 PANs may provide or require an extended definition of idenity.
 
-In a PAN such as {{scion}}, networks paths are known to the endpoints.
+In a PAN such as SCION ({{scion}}), networks paths are known to the
+endpoints.
 This can, and should, be used to detect changes even when the 4-tuple
 of local/remote IP/port (or equivalent) stays the same. Change
 detection can be useful to avoid unintended path changes or to trigger
