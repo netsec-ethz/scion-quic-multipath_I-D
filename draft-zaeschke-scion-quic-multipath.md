@@ -341,10 +341,9 @@ Based on path metadata ({{metadata-benefit}}) and algorithmic analysis
 paths. THis allows avoiding or abandoning paths for more paths with
 more suitable properties.
 
+
+
 # Some Pitfalls -- WIP
-
-
-
 
 ## 4-tuple changes {#four-tuple-changes}
 
