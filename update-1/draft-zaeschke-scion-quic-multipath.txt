@@ -494,6 +494,10 @@ Table of Contents
 
 7.  API Considerations
 
+   Concrete API design depends on many factors, such as the programming
+   language, intended use or simply personal preference.  We therefore
+   suggest only features, not concrete API designs.
+
 7.1.  Initialization
 
    When a QUIC(-MP) socket is created, it can be useful (depending on
@@ -507,7 +511,9 @@ Table of Contents
 
    *  Custom Packet scheduling algorithm
 
-   *  PAN exclusive: path selection algorithms
+   *  PAN exclusive: path selection algorithms.  This differs from
+      scheduling algorithms by determiniing which paths should be
+      allowed at all and which should be held as backup paths.
 
    Many available implementations already allow injecting most of these
    modules.
@@ -532,8 +538,9 @@ Table of Contents
 
 7.2.1.  Recommendation
 
-   PAN libraries should, as default, not automatically switch paths,
-   except for renewing expired paths with identical otherwise paths.
+   PAN libraries should, as default when used with QUIC, not
+   automatically switch paths, except when renewing expired paths with
+   otherwise identical paths.
 
    The PAN library may have a configuration option to automatically
    switch paths, potentially after probing, but this should happen only
@@ -549,9 +556,6 @@ Table of Contents
    considerations (*TODO* refs)
 
 7.3.  General API...?
-
-   The API of a QUIC-MP implementation that works with PAN should
-   probably provide interfaces for
 
    The API of a QUIC-MP implementation that works with PAN should:
 
