@@ -339,12 +339,12 @@ verify that a link holds up to the promised capabilities.
 
 Based on path metadata ({{metadata-benefit}}) and algorithmic analysis
 ({{disjointness}}), an endpoint can explicitly select paths or avoid
-paths. THis allows avoiding or abandoning paths for more paths with
+paths. This allows avoiding or abandoning paths for more paths with
 more suitable properties.
 
 
 
-# Some Pitfalls -- WIP
+# Some Pitfalls -- WIP -- Renema to Guidelines
 
 ## 4-tuple changes {#four-tuple-changes}
 
@@ -435,11 +435,11 @@ traffic and then ensure that traffic goes via their controlled AS.
 
 
 
-## TOKEN {#token}
+## Address Validation Token {#token}
 
 **TODO** See discussion in https://github.com/quicwg/multipath/issues/550
 
-From {{QUIC-MP}} (adapted):
+From {{Section 3.1.3 of QUIC-MP}}:
 > As specified in {{Section 9.3 of QUIC-TRANSPORT}}, a server is
 > expected to send a new address validation token to a client
 > following the successful validation of a new client address.
@@ -495,6 +495,11 @@ the programming language) to allow injection of a custom modules:
 - PAN exclusive: path selection algorithms. This differs from scheduling
   algorithms by determiniing which paths should be allowed at all and
   which should be held as backup paths.
+  Path selection algorithms should have access to
+`initial_max_path_id` ({{Section 2.1 of QUIC-MP}}) and MAX_PATH_ID
+frames ({{Section 4.6 of QUIC-MP}} in order to know when, and how many,
+paths can be created. Path selection must exclude paths that are too
+long to guarantee 1200 bytes MTU for QUIC packets.
 
 Many available implementations already allow injecting most of these
 modules.
