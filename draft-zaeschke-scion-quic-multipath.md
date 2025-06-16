@@ -136,7 +136,7 @@ As a practical example of an inter-domain PAN with multipathing
 capability, we refer to the SCION ({{SCION-CP}}, {{SCION-DP}}).
 
 
-## SCION
+## SCION {#scion}
 
 One example of a PAN is SCION {{SCION-CP}}, {{SCION-DP}}.
 SCION is an inter-domain routing protocol that provides path metadata
@@ -280,7 +280,29 @@ These categories can be combined, for example LAT and FT may often be
 combined and EVA can be can be useful in combination with any other
 category.
 
-# Benefits
+
+# Notable Differences and Benefits
+
+## Endpoint Identity and Path Identity {#identity}
+
+PANs may provide or require an extended definition of idenity.
+
+In a PAN such as {{scion}}, networks paths are known to the endpoints.
+This can, and should, be used to detect changes even when the 4-tuple
+of local/remote IP/port (or equivalent) stays the same. Change
+detection can be useful to avoid unintended path changes or to trigger
+actions, such as resetting congestion control or RTT estimation
+algorithms.
+
+Separately, PANs may use a network address beyond the 4-tuple of
+local/remote IP/port. For example, SCION ({{scion}}), allows IPs
+from the private IP ranges (e.g. 192.168.1.1/32). To uniquely identify
+endhosts globally, the AS (autonomous system) identifier is added
+to fully qualify a network address.
+This has consquences for security mechanisms. Implementations need
+to be careful to consider the full network address, for example when
+triggering path validation. See {{four-tuple-changes}} and {{token}}.
+
 
 ## Disjointness {#disjointness}
 
@@ -319,8 +341,10 @@ Based on path metadata ({{metadata-benefit}}) and algorithmic analysis
 paths. THis allows avoiding or abandoning paths for more paths with
 more suitable properties.
 
-
 # Some Pitfalls -- WIP
+
+
+
 
 ## 4-tuple changes {#four-tuple-changes}
 
@@ -411,7 +435,7 @@ traffic and then ensure that traffic goes via their controlled AS.
 
 
 
-## TOKEN
+## TOKEN {#token}
 
 **TODO** See discussion in https://github.com/quicwg/multipath/issues/550
 
