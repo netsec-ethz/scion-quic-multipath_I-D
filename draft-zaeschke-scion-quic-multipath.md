@@ -282,7 +282,7 @@ category.
 
 # Benefits
 
-## Disjointness
+## Disjointness {#disjointness}
 
 For FT, paths are only interesting if they are disjoint.
 For BW, paths should mostly be disjunct, but overlap is
@@ -293,7 +293,7 @@ For LAT and EVA, path disjointness is less important.
 
 **TODO** Discuss link level, router level and AS level path disjunctness.
 
-## Path Metadata
+## Path Metadata {#metadata-benefit}
 
 SCION paths have associated metadata with latency and bandwidth
 information. The values represent best case values and tend to be
@@ -312,8 +312,15 @@ authenticated and cannot be changed by other parties.
 Due to the inherent unreliability, users should implement checks to
 verify that a link holds up to the promised capabilities.
 
+## Explicit Path Selection
 
-# SOme Pitfalls -- WIP
+Based on path metadata ({{metadata-benefit}}) and algorithmic analysis
+({{disjointness}}), an endpoint can explicitly select paths or avoid
+paths. THis allows avoiding or abandoning paths for more paths with
+more suitable properties.
+
+
+# Some Pitfalls -- WIP
 
 ## 4-tuple changes {#four-tuple-changes}
 
@@ -403,12 +410,42 @@ traffic and then ensure that traffic goes via their controlled AS.
 
 
 
+## TOKEN
 
+**TODO** See discussion in https://github.com/quicwg/multipath/issues/550
 
+From {{QUIC-MP}} (adapted):
+> As specified in {{Section 9.3 of QUIC-TRANSPORT}}, a server is
+> expected to send a new address validation token to a client
+> following the successful validation of a new client address.
+> [...]
+> It may be difficult for the client to pick the "right" token among
+> multiple tokens obtained in a previous connection.
+> The client is likely to fall back to the strategy specified in
+> Section 8.1.3 of [QUIC-TRANSPORT], i.e., pick the last received
+> token. To avoid issues when clients make the "wrong" choice, a
+> server SHOULD issue tokens that are capable of validating any of
+> the previously validated addresses. Further guidance on token usage
+> can be found in Section 8.1.3 of [QUIC-TRANSPORT].
 
+Clients may not know their IP address (e.g. NAT) and their IP address
+may change.
 
+As discussed (**TODO** elsewhere: trigger path validation, reset CC
+and RTT estimation algorithms), QUIC-MP implementations should
+consider not only the 4-tuple, but also the AS codes and actual paths
+when comparing network addresses.
 
+One problem here is as follows:
+If we adopt an implementation to use the full nettwork address + path
+for identity, and if we use this to generate tokens, then we may end
+up generating many more or longer tokens.
 
+This needs to be considered carefully.
+
+**TODO** Move this section to _after_ discussing network addresses
+
+**TODO** read the referenced sections and come up with recommendation.
 
 # API Considerations {#apicon}
 
