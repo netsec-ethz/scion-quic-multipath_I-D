@@ -472,7 +472,13 @@ This needs to be considered carefully.
 
 **TODO** read the referenced sections and come up with recommendation.
 
+
+
 # API Considerations {#apicon}
+
+Concrete API design depends on many factors, such as the programming
+language, intended use or simply personal preference. We therefore
+suggest only features, not concrete API designs.
 
 ## Initialization
 
@@ -483,7 +489,9 @@ the programming language) to allow injection of a custom modules:
 - Custom DNS resolver (if the library resolves URLs)
 - Custom congestion control and RTT estimation algorithms
 - Custom Packet scheduling algorithm
-- PAN exclusive: path selection algorithms
+- PAN exclusive: path selection algorithms. This differs from scheduling
+  algorithms by determiniing which paths should be allowed at all and
+  which should be held as backup paths.
 
 Many available implementations already allow injecting most of these
 modules.
@@ -511,8 +519,9 @@ new path that is deemed better.
 
 ### Recommendation
 
-PAN libraries should, as default, not automatically switch paths,
-except for renewing expired paths with identical otherwise paths.
+PAN libraries should, as default when used with QUIC, not
+automatically switch paths, except when renewing expired paths with
+otherwise identical paths.
 
 The PAN library may have a configuration option to automatically
 switch paths, potentially after probing, but this should happen
@@ -530,9 +539,6 @@ See also:
 
 
 ## General API...?
-
-The API of a QUIC-MP implementation that works with PAN should
-probably provide interfaces for
 
 The API of a QUIC-MP implementation that works with PAN should:
 
