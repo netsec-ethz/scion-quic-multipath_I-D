@@ -92,10 +92,10 @@ Table of Contents
      5.2.  Disjointness
      5.3.  Path Metadata
      5.4.  Explicit Path Selection
-   6.  Some Pitfalls -- WIP
+   6.  Some Pitfalls -- WIP -- Renema to Guidelines
      6.1.  4-tuple changes
        6.1.1.  Mitigation
-     6.2.  TOKEN
+     6.2.  Address Validation Token
    7.  API Considerations
      7.1.  Initialization
      7.2.  Network Address and Network Path
@@ -367,10 +367,10 @@ Table of Contents
 
    Based on path metadata (Section 5.3) and algorithmic analysis
    (Section 5.2), an endpoint can explicitly select paths or avoid
-   paths.  THis allows avoiding or abandoning paths for more paths with
+   paths.  This allows avoiding or abandoning paths for more paths with
    more suitable properties.
 
-6.  Some Pitfalls -- WIP
+6.  Some Pitfalls -- WIP -- Renema to Guidelines
 
 6.1.  4-tuple changes
 
@@ -456,12 +456,12 @@ Table of Contents
    more controlled, the attacker can use a wormhole to attract traffic
    and then ensure that traffic goes via their controlled AS.
 
-6.2.  TOKEN
+6.2.  Address Validation Token
 
    *TODO* See discussion in https://github.com/quicwg/multipath/
    issues/550
 
-   From [QUIC-MP] (adapted): > As specified in Section 9.3 of
+   From Section 3.1.3 of [QUIC-MP]: > As specified in Section 9.3 of
    [QUIC-TRANSPORT], a server is > expected to send a new address
    validation token to a client > following the successful validation of
    a new client address. > The client will receive several tokens.  When
@@ -517,7 +517,12 @@ Table of Contents
 
    *  PAN exclusive: path selection algorithms.  This differs from
       scheduling algorithms by determiniing which paths should be
-      allowed at all and which should be held as backup paths.
+      allowed at all and which should be held as backup paths.  Path
+      selection algorithms should have access to initial_max_path_id
+      (Section 2.1 of [QUIC-MP]) and MAX_PATH_ID frames (Section 4.6 of
+      [QUIC-MP] in order to know when, and how many, paths can be
+      created.  Path selection must exclude paths that are too long to
+      guarantee 1200 bytes MTU for QUIC packets.
 
    Many available implementations already allow injecting most of these
    modules.
