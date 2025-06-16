@@ -87,10 +87,11 @@ Table of Contents
        3.1.4.  Path Metadata Reliability
      3.2.  Path Selection
    4.  Multipath Categorization
-   5.  Benefits
-     5.1.  Disjointness
-     5.2.  Path Metadata
-     5.3.  Explicit Path Selection
+   5.  Notable Differences and Benefits
+     5.1.  Endpoint Identity and Path Identity
+     5.2.  Disjointness
+     5.3.  Path Metadata
+     5.4.  Explicit Path Selection
    6.  Some Pitfalls -- WIP
      6.1.  4-tuple changes
        6.1.1.  Mitigation
@@ -311,9 +312,29 @@ Table of Contents
    combined and EVA can be can be useful in combination with any other
    category.
 
-5.  Benefits
+5.  Notable Differences and Benefits
 
-5.1.  Disjointness
+5.1.  Endpoint Identity and Path Identity
+
+   PANs may provide or require an extended definition of idenity.
+
+   In a PAN such as Section 1.1, networks paths are known to the
+   endpoints.  This can, and should, be used to detect changes even when
+   the 4-tuple of local/remote IP/port (or equivalent) stays the same.
+   Change detection can be useful to avoid unintended path changes or to
+   trigger actions, such as resetting congestion control or RTT
+   estimation algorithms.
+
+   Separately, PANs may use a network address beyond the 4-tuple of
+   local/remote IP/port.  For example, SCION (Section 1.1), allows IPs
+   from the private IP ranges (e.g. 192.168.1.1/32).  To uniquely
+   identify endhosts globally, the AS (autonomous system) identifier is
+   added to fully qualify a network address.  This has consquences for
+   security mechanisms.  Implementations need to be careful to consider
+   the full network address, for example when triggering path
+   validation.  See Section 6.1 and Section 6.2.
+
+5.2.  Disjointness
 
    For FT, paths are only interesting if they are disjoint.  For BW,
    paths should mostly be disjunct, but overlap is acceptable if the
@@ -324,7 +345,7 @@ Table of Contents
    *TODO* Discuss link level, router level and AS level path
    disjunctness.
 
-5.2.  Path Metadata
+5.3.  Path Metadata
 
    SCION paths have associated metadata with latency and bandwidth
    information.  The values represent best case values and tend to be
@@ -342,10 +363,10 @@ Table of Contents
    Due to the inherent unreliability, users should implement checks to
    verify that a link holds up to the promised capabilities.
 
-5.3.  Explicit Path Selection
+5.4.  Explicit Path Selection
 
-   Based on path metadata (Section 5.2) and algorithmic analysis
-   (Section 5.1), an endpoint can explicitly select paths or avoid
+   Based on path metadata (Section 5.3) and algorithmic analysis
+   (Section 5.2), an endpoint can explicitly select paths or avoid
    paths.  THis allows avoiding or abandoning paths for more paths with
    more suitable properties.
 
