@@ -302,7 +302,31 @@ endhosts globally, the AS (autonomous system) identifier is added
 to fully qualify a network address.
 This has consquences for security mechanisms. Implementations need
 to be careful to consider the full network address, for example when
-triggering path validation. See {{four-tuple-changes}} and {{token}}.
+triggering path validation (see {{four-tuple-changes}} and {{token}}).
+
+
+### Path ID
+
+{{QUIC-MP}} specifies a path ID that is used to identify and
+distinguish multiple "paths". However, there is not always a 1:1 mapping
+between path IDs and networks paths as they are use in SCION.
+
+- A PAN path may expire and should be replaceable with a new version
+  without requiring a new Path ID (**TODO TBD**: We could also require
+  path migration in this case)
+
+
+**TODO** In future we may have more dynamic path availablility with
+live metadata. Do we really need path migration for every (small) route
+change?
+
+- Network address changes should trigger path validation
+- Network path changes should trigger algorithm reset (CC, RTT
+  estimate, loss detection, ...)
+
+**TODO** It seems path migration is only useful when the network
+address changes?
+
 
 
 ## Disjointness {#disjointness}
@@ -341,6 +365,7 @@ Based on path metadata ({{metadata-benefit}}) and algorithmic analysis
 ({{disjointness}}), an endpoint can explicitly select paths or avoid
 paths. This allows avoiding or abandoning paths for more paths with
 more suitable properties.
+
 
 
 
