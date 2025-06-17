@@ -327,6 +327,10 @@ change?
 **TODO** It seems path migration is only useful when the network
 address changes?
 
+In SCION, neither the AS no the network path are validated and may be
+forged, see {{security}} for a discussion. However, SCION provides
+extrensions for validating these properties, namely SPAO and EPIC.
+(**TODO** remove or replace references to SPAO/EPIC?)
 
 
 ## Disjointness {#disjointness}
@@ -524,7 +528,11 @@ the programming language) to allow injection of a custom modules:
 `initial_max_path_id` ({{Section 2.1 of QUIC-MP}}) and MAX_PATH_ID
 frames ({{Section 4.6 of QUIC-MP}} in order to know when, and how many,
 paths can be created. Path selection must exclude paths that are too
-long to guarantee 1200 bytes MTU for QUIC packets.
+long to guarantee 1200 bytes MTU for QUIC packets. The algorithm
+also needs to know about PATH_AVAILABLE and PATH_BACKUP, see {
+{Section 3.3 of QUIC-MP}}, as wellas PATH_ABANDON {{Section 3.4 of
+QUIC-MP}}. **TODO** Should we also consider probing frames here ({
+{Section 3.1.2 of QUIC-MP}}).?
 
 Many available implementations already allow injecting most of these
 modules.
@@ -982,7 +990,7 @@ application.  This may also depend on API designer to provide such
 transparent  multipathing with additional code on the application level.
 
 
-# Security Considerations
+# Security Considerations {#security}
 
 This document has no security considerations.
 
