@@ -92,8 +92,8 @@ Computer Networks (LCN)"
 
 --- abstract
 
-This document provides guidelines for using the Multipath Extension
-for QUIC {{QUIC-MP}} with path aware networks (PAN).
+This document provides informational guidance for using the
+Multipath Extension for QUIC {{QUIC-MP}} with path aware networks (PAN).
 PANs may provide hundreds of paths between endpoint, each path including
 detailed path metadata that facilitates informed path selection.
 
@@ -322,7 +322,7 @@ change?
 
 - Network address changes should trigger path validation
 - Network path changes should trigger algorithm reset (CC, RTT
-  estimate, loss detection, ...)
+  estimate), see {{Section 5.1 of QUIC-MP}}.
 
 **TODO** It seems path migration is only useful when the network
 address changes?
@@ -344,6 +344,7 @@ For LAT and EVA, path disjointness is less important.
 
 **TODO** Discuss link level, router level and AS level path disjunctness.
 
+
 ## Path Metadata {#metadata-benefit}
 
 SCION paths have associated metadata with latency and bandwidth
@@ -362,6 +363,7 @@ authenticated and cannot be changed by other parties.
 
 Due to the inherent unreliability, users should implement checks to
 verify that a link holds up to the promised capabilities.
+
 
 ## Explicit Path Selection
 
@@ -404,7 +406,6 @@ QUIC-TRANSPORT}}. This attack is still not easy to
 execute because it requires the attacker to have control over an AS
 that lies en-route between server and client.
 
-
 ~~~~
      AS #100               AS #200                   AS #300
    +------------+        +----------------+        +----------------+
@@ -431,6 +432,7 @@ that lies en-route between server and client.
 ~~~~
 {: #fig-example-new-path title="Example of traffic amplification
 attack"}
+
 
 ### Mitigation
 
@@ -511,6 +513,7 @@ See also {{Section 21.3 of QUIC-TRANSPORT}}.
 Concrete API design depends on many factors, such as the programming
 language, intended use or simply personal preference. We therefore
 suggest only features, not concrete API designs.
+
 
 ## Initialization
 
@@ -726,8 +729,20 @@ We need to ensure on some level that no path change or probing occurs.
     "If path validation process succeeds, the endpoints set the path's
     congestion controller and round-trip time estimator according to
     {{Section 9.4 of QUIC-TRANSPORT}}."
+  - {{Section 5.4 of QUIC-MP}} describes how data packets and
+acknowldegement packets may be sent on different paths, making it
+difficult to detemine the RTT.
+    - With PANs, the path is known, so it is easy to tell whether
+      data and acknowledgement were sent on the same path or not.
+    - With PANs, we could recommend a policy (**TODO recommend?**)
+      that ACKs should be sent on the return path of the data
+      (**TODO** why are they sent on different paths? Outside path
+      abandon?)
+    - With PANS, explicit path probing is easier.
+    - We can try to derive lower and upper limits from analysing
+      latency of non-disjoint paths.
   - Should benefit from knowledge about minimum latency expected on
-    a path.
+    a path, see {{metadata}}.
 - Path selections algorithms
 
 - Latency polling
