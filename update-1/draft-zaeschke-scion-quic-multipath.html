@@ -1670,6 +1670,10 @@ estimate, loss detection, ...)<a href="#section-5.1.1-4.2.1" class="pilcrow">¶<
           </ul>
 <p id="section-5.1.1-5"><strong>TODO</strong> It seems path migration is only useful when the network
 address changes?<a href="#section-5.1.1-5" class="pilcrow">¶</a></p>
+<p id="section-5.1.1-6">In SCION, neither the AS no the network path are validated and may be
+forged, see <a href="#security" class="auto internal xref">Section 15</a> for a discussion. However, SCION provides
+extrensions for validating these properties, namely SPAO and EPIC.
+(<strong>TODO</strong> remove or replace references to SPAO/EPIC?)<a href="#section-5.1.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1914,7 +1918,10 @@ Path selection algorithms should have access to
 <code>initial_max_path_id</code> (<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-2.1" class="relref">Section 2.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>) and MAX_PATH_ID
 frames (<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-4.6" class="relref">Section 4.6</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> in order to know when, and how many,
 paths can be created. Path selection must exclude paths that are too
-long to guarantee 1200 bytes MTU for QUIC packets.<a href="#section-7.1-2.5.1" class="pilcrow">¶</a></p>
+long to guarantee 1200 bytes MTU for QUIC packets. The algorithm
+also needs to know about PATH_AVAILABLE and PATH_BACKUP, see {
+{Section 3.3 of QUIC-MP}}, as wellas PATH_ABANDON <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-3.4" class="relref">Section 3.4</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>. <strong>TODO</strong> Should we also consider probing frames here ({
+{Section 3.1.2 of QUIC-MP}}).?<a href="#section-7.1-2.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-7.1-3">Many available implementations already allow injecting most of these
@@ -2502,7 +2509,7 @@ transparent  multipathing with additional code on the application level.<a href=
 </div>
 </section>
 </div>
-<div id="security-considerations">
+<div id="security">
 <section id="section-15">
       <h2 id="name-security-considerations">
 <a href="#section-15" class="section-number selfRef">15. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
