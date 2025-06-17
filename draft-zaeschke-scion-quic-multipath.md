@@ -743,6 +743,10 @@ difficult to detemine the RTT.
       latency of non-disjoint paths.
   - Should benefit from knowledge about minimum latency expected on
     a path, see {{metadata}}.
+  - This allso affects packet scheduling, see {{Section 5.5 of
+    QUIC-MP}}.
+- Retransmission & PTO:
+  See {{Section 5.6 of QUIC-MP}} and {{Section 5.7 of QUIC-MP}}.
 - Path selections algorithms
 
 - Latency polling
@@ -1005,14 +1009,19 @@ application.  This may also depend on API designer to provide such
 transparent  multipathing with additional code on the application level.
 
 
+
 # Security Considerations {#security}
 
-This document has no security considerations.
+THe aim is that {{QUIC-MP}} over PANs retains all security
+properties of {{QUIC-MP}}. However, this requires some
+implementation changes and additional consideration regarding:
 
-May sending data on multiple paths in parallel, or at regular
-intervals, expose information about data streams? E.g. can streams
-be associated with users such that a change in connection ID does
-not help anonymity?
+- endhost identity: a 4-tuple is not sufficient to identify an endhost;
+
+- netwotk path authenticity: paths may be spoofed;
+
+- excessive probing patterns which may expose user intentions or
+  identity.
 
 ## Latency Polling
 
