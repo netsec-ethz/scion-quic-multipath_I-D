@@ -9,8 +9,8 @@
 <meta content="Francois Wirz" name="author">
 <meta content="Tilmann Zaeschke" name="author">
 <meta content="
-       This document provides guidelines for using the Multipath Extension
-for QUIC   with path aware networks (PAN).
+       This document provides informational guidance for using the
+Multipath Extension for QUIC   with path aware networks (PAN).
 PANs may provide hundreds of paths between endpoint, each path including
 detailed path metadata that facilitates informed path selection. 
        Using the QUIC Multipath Extension over PAN creates pitfalls as well as
@@ -1101,8 +1101,8 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">Guidelines for QUIC Multipath over Path Aware Networks</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This document provides guidelines for using the Multipath Extension
-for QUIC <span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> with path aware networks (PAN).
+<p id="section-abstract-1">This document provides informational guidance for using the
+Multipath Extension for QUIC <span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> with path aware networks (PAN).
 PANs may provide hundreds of paths between endpoint, each path including
 detailed path metadata that facilitates informed path selection.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 <p id="section-abstract-2">Using the QUIC Multipath Extension over PAN creates pitfalls as well as
@@ -1665,7 +1665,7 @@ change?<a href="#section-5.1.1-3" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.1.1-4.2">
               <p id="section-5.1.1-4.2.1">Network path changes should trigger algorithm reset (CC, RTT
-estimate, loss detection, ...)<a href="#section-5.1.1-4.2.1" class="pilcrow">¶</a></p>
+estimate), see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.1" class="relref">Section 5.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-5.1.1-4.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <p id="section-5.1.1-5"><strong>TODO</strong> It seems path migration is only useful when the network
@@ -2187,8 +2187,32 @@ congestion controller and round-trip time estimator according to
 <span><a href="https://rfc-editor.org/rfc/rfc9000#section-9.4" class="relref">Section 9.4</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>."<a href="#section-9.2-1.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-9.2-1.3.2.2">
-                <p id="section-9.2-1.3.2.2.1">Should benefit from knowledge about minimum latency expected on
-a path.<a href="#section-9.2-1.3.2.2.1" class="pilcrow">¶</a></p>
+                <p id="section-9.2-1.3.2.2.1"><span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.4" class="relref">Section 5.4</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> describes how data packets and
+acknowldegement packets may be sent on different paths, making it
+difficult to detemine the RTT.<a href="#section-9.2-1.3.2.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.2-1.3.2.2.2.1">
+                    <p id="section-9.2-1.3.2.2.2.1.1">With PANs, the path is known, so it is easy to tell whether
+data and acknowledgement were sent on the same path or not.<a href="#section-9.2-1.3.2.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-9.2-1.3.2.2.2.2">
+                    <p id="section-9.2-1.3.2.2.2.2.1">With PANs, we could recommend a policy (<strong>TODO recommend?</strong>)
+that ACKs should be sent on the return path of the data
+(<strong>TODO</strong> why are they sent on different paths? Outside path
+abandon?)<a href="#section-9.2-1.3.2.2.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-9.2-1.3.2.2.2.3">
+                    <p id="section-9.2-1.3.2.2.2.3.1">With PANS, explicit path probing is easier.<a href="#section-9.2-1.3.2.2.2.3.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-9.2-1.3.2.2.2.4">
+                    <p id="section-9.2-1.3.2.2.2.4.1">We can try to derive lower and upper limits from analysing
+latency of non-disjoint paths.<a href="#section-9.2-1.3.2.2.2.4.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
+</li>
+              <li class="normal" id="section-9.2-1.3.2.3">
+                <p id="section-9.2-1.3.2.3.1">Should benefit from knowledge about minimum latency expected on
+a path, see <a href="#metadata" class="auto internal xref">Section 3.1</a>.<a href="#section-9.2-1.3.2.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>

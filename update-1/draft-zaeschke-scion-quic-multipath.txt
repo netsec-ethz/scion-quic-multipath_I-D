@@ -14,10 +14,10 @@ Expires: 5 December 2025                                      ETH Zurich
 
 Abstract
 
-   This document provides guidelines for using the Multipath Extension
-   for QUIC [QUIC-MP] with path aware networks (PAN).  PANs may provide
-   hundreds of paths between endpoint, each path including detailed path
-   metadata that facilitates informed path selection.
+   This document provides informational guidance for using the Multipath
+   Extension for QUIC [QUIC-MP] with path aware networks (PAN).  PANs
+   may provide hundreds of paths between endpoint, each path including
+   detailed path metadata that facilitates informed path selection.
 
    Using the QUIC Multipath Extension over PAN creates pitfalls as well
    as opportunities for associated algorithms, such as for path
@@ -352,7 +352,7 @@ Table of Contents
    *  Network address changes should trigger path validation
 
    *  Network path changes should trigger algorithm reset (CC, RTT
-      estimate, loss detection, ...)
+      estimate), see Section 5.1 of [QUIC-MP].
 
    *TODO* It seems path migration is only useful when the network
    address changes?
@@ -750,8 +750,25 @@ Table of Contents
          set the path's congestion controller and round-trip time
          estimator according to Section 9.4 of [QUIC-TRANSPORT]."
 
+      -  Section 5.4 of [QUIC-MP] describes how data packets and
+         acknowldegement packets may be sent on different paths, making
+         it difficult to detemine the RTT.
+
+         o  With PANs, the path is known, so it is easy to tell whether
+            data and acknowledgement were sent on the same path or not.
+
+         o  With PANs, we could recommend a policy (*TODO recommend?*)
+            that ACKs should be sent on the return path of the data
+            (*TODO* why are they sent on different paths?  Outside path
+            abandon?)
+
+         o  With PANS, explicit path probing is easier.
+
+         o  We can try to derive lower and upper limits from analysing
+            latency of non-disjoint paths.
+
       -  Should benefit from knowledge about minimum latency expected on
-         a path.
+         a path, see Section 3.1.
 
    *  Path selections algorithms
 
