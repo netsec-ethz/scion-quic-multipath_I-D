@@ -1278,16 +1278,19 @@ applications that use multipath QUIC over SCION.<a href="#section-abstract-2" cl
             <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-quic-implementation-conside" class="internal xref">QUIC implementation Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
-                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-path-change-detection-path-" class="internal xref">Path Change Detection - Path Injection</a></p>
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-automatic-path-changes-init" class="internal xref">Automatic Path Changes - Initial Handshake</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-path-change-detection-path-" class="internal xref">Path Change Detection - Path Injection</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1.2.1">
-                    <p id="section-toc.1-1.8.2.1.2.1.1"><a href="#section-8.1.1" class="auto internal xref">8.1.1</a>.  <a href="#name-problem" class="internal xref">Problem</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2.2.1">
+                    <p id="section-toc.1-1.8.2.2.2.1.1"><a href="#section-8.2.1" class="auto internal xref">8.2.1</a>.  <a href="#name-problem" class="internal xref">Problem</a></p>
 </li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1.2.2">
-                    <p id="section-toc.1-1.8.2.1.2.2.1"><a href="#section-8.1.2" class="auto internal xref">8.1.2</a>.  <a href="#name-mitigation-2" class="internal xref">Mitigation</a></p>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2.2.2">
+                    <p id="section-toc.1-1.8.2.2.2.2.1"><a href="#section-8.2.2" class="auto internal xref">8.2.2</a>.  <a href="#name-mitigation-2" class="internal xref">Mitigation</a></p>
 </li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1.2.3">
-                    <p id="section-toc.1-1.8.2.1.2.3.1"><a href="#section-8.1.3" class="auto internal xref">8.1.3</a>.  <a href="#name-variant" class="internal xref">Variant</a></p>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2.2.3">
+                    <p id="section-toc.1-1.8.2.2.2.3.1"><a href="#section-8.2.3" class="auto internal xref">8.2.3</a>.  <a href="#name-variant" class="internal xref">Variant</a></p>
 </li>
                 </ul>
 </li>
@@ -1297,10 +1300,7 @@ applications that use multipath QUIC over SCION.<a href="#section-abstract-2" cl
             <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-algorithm-considerations" class="internal xref">Algorithm Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
-                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-general" class="internal xref">General</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
-                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-algorithms" class="internal xref">Algorithms</a></p>
+                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-algorithms" class="internal xref">Algorithms</a></p>
 </li>
             </ul>
 </li>
@@ -1943,12 +1943,10 @@ network path may change while the path ID stays the same.<a href="#section-7.2-2
 <p id="section-7.2-3">For example:
 - During path migration (<strong>TODO</strong> ref), a path ID may be (loosely)
 associated with multiple network paths.
-- A PAN library may perform probing (latency, etc.) and switch to a
-new path that is deemed better.
 - A PAN library may have paths that can expire and that can be
   renewed automatically. However, this is should usually result in an
   identical path (except for the expiration date).<a href="#section-7.2-3" class="pilcrow">¶</a></p>
-<div id="recommendation">
+<div id="recommendation-path-switching">
 <section id="section-7.2.1">
           <h4 id="name-recommendation">
 <a href="#section-7.2.1" class="section-number selfRef">7.2.1. </a><a href="#name-recommendation" class="section-name selfRef">Recommendation</a>
@@ -2009,24 +2007,40 @@ selection of Path Selection and Congestion Control algorithms.<a href="#section-
       </h2>
 <p id="section-8-1"><strong>TODO READ:</strong>
 See also "Implementation Considerations" in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5" class="relref">Section 5</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-8-1" class="pilcrow">¶</a></p>
-<div id="pathchange-injection">
+<div id="automatic-path-changes-initial-handshake">
 <section id="section-8.1">
+        <h3 id="name-automatic-path-changes-init">
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-automatic-path-changes-init" class="section-name selfRef">Automatic Path Changes - Initial Handshake</a>
+        </h3>
+<p id="section-8.1-1"><span>[<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> requires that there is no connection migration
+during the initial handshake, and that there are no other packets
+send (including probing packets) during the initial handshake, see
+<span><a href="https://rfc-editor.org/rfc/rfc9000#section-9" class="relref">Section 9</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>, paragraphs 2 and 3.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
+<p id="section-8.1-2">An implementation must ensure on some level that no path change or
+probing occurs.<a href="#section-8.1-2" class="pilcrow">¶</a></p>
+<p id="section-8.1-3">This may be covered by the recommendation that a PAN layer should
+not automatically switch without explicit request by the QUIC(-MP)
+layer. See also <a href="#recommendation-path-switching" class="auto internal xref">Section 7.2.1</a><a href="#section-8.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="pathchange-injection">
+<section id="section-8.2">
         <h3 id="name-path-change-detection-path-">
-<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-path-change-detection-path-" class="section-name selfRef">Path Change Detection - Path Injection</a>
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-path-change-detection-path-" class="section-name selfRef">Path Change Detection - Path Injection</a>
         </h3>
 <div id="problem">
-<section id="section-8.1.1">
+<section id="section-8.2.1">
           <h4 id="name-problem">
-<a href="#section-8.1.1" class="section-number selfRef">8.1.1. </a><a href="#name-problem" class="section-name selfRef">Problem</a>
+<a href="#section-8.2.1" class="section-number selfRef">8.2.1. </a><a href="#name-problem" class="section-name selfRef">Problem</a>
           </h4>
-<p id="section-8.1.1-1"><strong>TODO check SCION IRTF draft for this attack:</strong><a href="#section-8.1.1-1" class="pilcrow">¶</a></p>
-<p id="section-8.1.1-2">This requires the attacker to spoof IP adresses in an AS or fully
+<p id="section-8.2.1-1"><strong>TODO check SCION IRTF draft for this attack:</strong><a href="#section-8.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-8.2.1-2">This requires the attacker to spoof IP adresses in an AS or fully
 control an AS between the attacked endpoints.
 The attacker also needs to learn of the port/IP that the client is
 using, either by probing the client or by reading traffic between
 client and server. (Instead of knowing the port, the attacker may flood
-the server with bad paths).<a href="#section-8.1.1-2" class="pilcrow">¶</a></p>
-<p id="section-8.1.1-3">An attacker can send a spoofed packet to a server. The packet contains
+the server with bad paths).<a href="#section-8.2.1-2" class="pilcrow">¶</a></p>
+<p id="section-8.2.1-3">An attacker can send a spoofed packet to a server. The packet contains
 a new path (for example broken or with high latency).
 The server accepts the packet and stores the path for being used
 for all future communication with the client. The next packet sent to
@@ -2034,8 +2048,8 @@ the client will take the injected malicious path and will fail (or
 at least be redirected).
 This happens even if the packet is rejectd by the QUIC(-MP) layer
 because the SCION layer will never learn about the packet being
-rejected.<a href="#section-8.1.1-3" class="pilcrow">¶</a></p>
-<p id="section-8.1.1-4">In order to execute the attack, the attacker must send the forged path
+rejected.<a href="#section-8.2.1-3" class="pilcrow">¶</a></p>
+<p id="section-8.2.1-4">In order to execute the attack, the attacker must send the forged path
 from somewhere between the two attacked endoints. Usually, a border
 routers that forwards traffic to a neighbour AS will validate the paths
 and check that traffic with a transit path originates from another
@@ -2043,49 +2057,49 @@ border router.
 <strong>TODO</strong> Verify SCION spec.
 To avoid this check, the attacker must either spoof the IP address to
 look like another boirder router, or it must control the border router
-such that it does not perform the check.<a href="#section-8.1.1-4" class="pilcrow">¶</a></p>
-<p id="section-8.1.1-5">A variant of the attack happens when the attacker is located in the
+such that it does not perform the check.<a href="#section-8.2.1-4" class="pilcrow">¶</a></p>
+<p id="section-8.2.1-5">A variant of the attack happens when the attacker is located in the
 same AS a the attacke client endpoint. In that case it must only be
 able to spoof the IP address to look like the attacked client's IP.
 <strong>TODO</strong> Do border routers even check the underlay IP against the SCION
-header IP? They may not do that, see NAT...<a href="#section-8.1.1-5" class="pilcrow">¶</a></p>
+header IP? They may not do that, see NAT...<a href="#section-8.2.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="mitigation-1">
-<section id="section-8.1.2">
+<section id="section-8.2.2">
           <h4 id="name-mitigation-2">
-<a href="#section-8.1.2" class="section-number selfRef">8.1.2. </a><a href="#name-mitigation-2" class="section-name selfRef">Mitigation</a>
+<a href="#section-8.2.2" class="section-number selfRef">8.2.2. </a><a href="#name-mitigation-2" class="section-name selfRef">Mitigation</a>
           </h4>
 <ul class="normal">
-<li class="normal" id="section-8.1.2-1.1">
-              <p id="section-8.1.2-1.1.1">Authenticate packets on SCION level....
-There could still be a replay:<a href="#section-8.1.2-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-8.2.2-1.1">
+              <p id="section-8.2.2-1.1.1">Authenticate packets on SCION level....
+There could still be a replay:<a href="#section-8.2.2-1.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-8.1.2-1.1.2.1">
-                  <p id="section-8.1.2-1.1.2.1.1">Client uses path P1 (P1 could be injected with wormhole attack).<a href="#section-8.1.2-1.1.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-8.2.2-1.1.2.1">
+                  <p id="section-8.2.2-1.1.2.1.1">Client uses path P1 (P1 could be injected with wormhole attack).<a href="#section-8.2.2-1.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-8.1.2-1.1.2.2">
-                  <p id="section-8.1.2-1.1.2.2.1">Attacker captures packet with P1 path<a href="#section-8.1.2-1.1.2.2.1" class="pilcrow">¶</a></p>
+                <li class="normal" id="section-8.2.2-1.1.2.2">
+                  <p id="section-8.2.2-1.1.2.2.1">Attacker captures packet with P1 path<a href="#section-8.2.2-1.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-8.1.2-1.1.2.3">
-                  <p id="section-8.1.2-1.1.2.3.1">Attacker breaks P1 and forces migration to P2<a href="#section-8.1.2-1.1.2.3.1" class="pilcrow">¶</a></p>
+                <li class="normal" id="section-8.2.2-1.1.2.3">
+                  <p id="section-8.2.2-1.1.2.3.1">Attacker breaks P1 and forces migration to P2<a href="#section-8.2.2-1.1.2.3.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-8.1.2-1.1.2.4">
-                  <p id="section-8.1.2-1.1.2.4.1">Attacker can no replay the original packet to get server to
-keep responding on the broken P1 path.<a href="#section-8.1.2-1.1.2.4.1" class="pilcrow">¶</a></p>
+                <li class="normal" id="section-8.2.2-1.1.2.4">
+                  <p id="section-8.2.2-1.1.2.4.1">Attacker can no replay the original packet to get server to
+keep responding on the broken P1 path.<a href="#section-8.2.2-1.1.2.4.1" class="pilcrow">¶</a></p>
 </li>
               </ul>
 </li>
-            <li class="normal" id="section-8.1.2-1.2">
-              <p id="section-8.1.2-1.2.1">Don't allow paths to change (for 4-tuple??) and require
-proper path migration (how?) or even a reconnect<a href="#section-8.1.2-1.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-8.2.2-1.2">
+              <p id="section-8.2.2-1.2.1">Don't allow paths to change (for 4-tuple??) and require
+proper path migration (how?) or even a reconnect<a href="#section-8.2.2-1.2.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-8.1.2-1.3">
-              <p id="section-8.1.2-1.3.1">SOLUTION: The SCION layer <span class="bcp14">MUST NOT</span> cache paths locally, instead
-paths must be accepted by the QUIC layer before being used.<a href="#section-8.1.2-1.3.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-8.2.2-1.3">
+              <p id="section-8.2.2-1.3.1">SOLUTION: The SCION layer <span class="bcp14">MUST NOT</span> cache paths locally, instead
+paths must be accepted by the QUIC layer before being used.<a href="#section-8.2.2-1.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-8.1.2-2">Examples:
+<p id="section-8.2.2-2">Examples:
 * Java over DatagramChannel:
   * Comparing ResponsePath objects <span class="bcp14">MUST</span> return <code>false</code> if the
 paths differ.
@@ -2099,29 +2113,29 @@ paths differ.
     Can this attack be successful with spoofed IPs???
 * Java over DatagramSocket: Problematic, it caches the paths...
 * C + Rust: How exactly do we map PathID to paths? How are paths
-  updated?<a href="#section-8.1.2-2" class="pilcrow">¶</a></p>
+  updated?<a href="#section-8.2.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="variant">
-<section id="section-8.1.3">
+<section id="section-8.2.3">
           <h4 id="name-variant">
-<a href="#section-8.1.3" class="section-number selfRef">8.1.3. </a><a href="#name-variant" class="section-name selfRef">Variant</a>
+<a href="#section-8.2.3" class="section-number selfRef">8.2.3. </a><a href="#name-variant" class="section-name selfRef">Variant</a>
           </h4>
-<p id="section-8.1.3-1">Attack target: server / client.<a href="#section-8.1.3-1" class="pilcrow">¶</a></p>
-<p id="section-8.1.3-2">The attacker can flood the server with packet that contain
+<p id="section-8.2.3-1">Attack target: server / client.<a href="#section-8.2.3-1" class="pilcrow">¶</a></p>
+<p id="section-8.2.3-2">The attacker can flood the server with packet that contain
 slightly varying paths (maybe just client IP/port difference).
 The server may hold paths in a hashmap. This map will either run
 out of memory (server breaks down) or the map will start dropping
 paths (including the client's path -&gt; connection disrupted).
 On the server, the SCION layer cannot easily drop paths because it
-doesn't know which packets are valid or invalid.<a href="#section-8.1.3-2" class="pilcrow">¶</a></p>
-<p id="section-8.1.3-3">Mitigation:
+doesn't know which packets are valid or invalid.<a href="#section-8.2.3-2" class="pilcrow">¶</a></p>
+<p id="section-8.2.3-3">Mitigation:
 - The SCION layer should avoid storing state (such as a hashmap
 with paths). If that cannot be avoided, it should monitor the size of
 the hashmap and stop accepting paths if it is too full. It is important
 that it does "stop accepting" rather than "cleaning out old", otherwise
-it may drop the valid connection to the valid client.<a href="#section-8.1.3-3" class="pilcrow">¶</a></p>
-<p id="section-8.1.3-4"><strong>TODO</strong> Check with scionproto<a href="#section-8.1.3-4" class="pilcrow">¶</a></p>
+it may drop the valid connection to the valid client.<a href="#section-8.2.3-3" class="pilcrow">¶</a></p>
+<p id="section-8.2.3-4"><strong>TODO</strong> Check with scionproto<a href="#section-8.2.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2138,104 +2152,90 @@ it may drop the valid connection to the valid client.<a href="#section-8.1.3-3" 
 - Knowledge about shared links/routers between paths
 - indication of latency+bandwidth limits.
 - (Potentially live traffic info: Avoid "pulsing" -&gt; Simon Scherer?)<a href="#section-9-1" class="pilcrow">¶</a></p>
-<div id="general">
-<section id="section-9.1">
-        <h3 id="name-general">
-<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-general" class="section-name selfRef">General</a>
-        </h3>
-<p id="section-9.1-1"><span>[<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> requires that there is no connection migration
-during the initial handshake, and that there are no other packets
-send (including probing packets) during the initial handshake, see
-<span><a href="https://rfc-editor.org/rfc/rfc9000#section-9" class="relref">Section 9</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>, paragraphs 2 and 3.<a href="#section-9.1-1" class="pilcrow">¶</a></p>
-<p id="section-9.1-2">We need to ensure on some level that no path change or probing occurs.<a href="#section-9.1-2" class="pilcrow">¶</a></p>
-<p id="section-9.1-3"><strong>TODO</strong> Read <span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> on 4-tuple change / path validation.
--&gt; Section 9 in RFC 9000<a href="#section-9.1-3" class="pilcrow">¶</a></p>
-</section>
-</div>
 <div id="algorithms">
-<section id="section-9.2">
+<section id="section-9.1">
         <h3 id="name-algorithms">
-<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-algorithms" class="section-name selfRef">Algorithms</a>
+<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-algorithms" class="section-name selfRef">Algorithms</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="section-9.2-1.1">
-            <p id="section-9.2-1.1.1">MPU detection algorithm can be removed/replaced with metadata query
+<li class="normal" id="section-9.1-1.1">
+            <p id="section-9.1-1.1.1">MPU detection algorithm can be removed/replaced with metadata query
 See Path MTU Discovery in <span><a href="https://rfc-editor.org/rfc/rfc9000#section-14.3" class="relref">Section 14.3</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> and
-<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.8" class="relref">Section 5.8</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-9.2-1.1.1" class="pilcrow">¶</a></p>
+<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.8" class="relref">Section 5.8</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-9.1-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-9.2-1.2">
-            <p id="section-9.2-1.2.1">Congestion control algorithms:<a href="#section-9.2-1.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-9.1-1.2">
+            <p id="section-9.1-1.2.1">Congestion control algorithms:<a href="#section-9.1-1.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-9.2-1.2.2.1">
-                <p id="section-9.2-1.2.2.1.1">Must reset on path change (how?).<a href="#section-9.2-1.2.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-9.1-1.2.2.1">
+                <p id="section-9.1-1.2.2.1.1">Must reset on path change (how?).<a href="#section-9.1-1.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-9.2-1.2.2.2">
-                <p id="section-9.2-1.2.2.2.1">Should benefit from knowledge about path overlaps.<a href="#section-9.2-1.2.2.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-9.1-1.2.2.2">
+                <p id="section-9.1-1.2.2.2.1">Should benefit from knowledge about path overlaps.<a href="#section-9.1-1.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-9.2-1.2.2.3">
-                <p id="section-9.2-1.2.2.3.1">Follow BCP 133, see <span><a href="https://rfc-editor.org/rfc/rfc9743#section-7.10" class="relref">Section 7.10</a> of [<a href="#CC-ALGORITHMS" class="cite xref">CC-ALGORITHMS</a>]</span>.<a href="#section-9.2-1.2.2.3.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-9.1-1.2.2.3">
+                <p id="section-9.1-1.2.2.3.1">Follow BCP 133, see <span><a href="https://rfc-editor.org/rfc/rfc9743#section-7.10" class="relref">Section 7.10</a> of [<a href="#CC-ALGORITHMS" class="cite xref">CC-ALGORITHMS</a>]</span>.<a href="#section-9.1-1.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="normal" id="section-9.2-1.3">
-            <p id="section-9.2-1.3.1">Roundtrip time estimator.<a href="#section-9.2-1.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-9.1-1.3">
+            <p id="section-9.1-1.3.1">Roundtrip time estimator.<a href="#section-9.1-1.3.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-9.2-1.3.2.1">
-                <p id="section-9.2-1.3.2.1.1">Must reset on path change (how?). See also from <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.1" class="relref">Section 5.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>:
+<li class="normal" id="section-9.1-1.3.2.1">
+                <p id="section-9.1-1.3.2.1.1">Must reset on path change (how?). See also from <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.1" class="relref">Section 5.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>:
 "If path validation process succeeds, the endpoints set the path's
 congestion controller and round-trip time estimator according to
-<span><a href="https://rfc-editor.org/rfc/rfc9000#section-9.4" class="relref">Section 9.4</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>."<a href="#section-9.2-1.3.2.1.1" class="pilcrow">¶</a></p>
+<span><a href="https://rfc-editor.org/rfc/rfc9000#section-9.4" class="relref">Section 9.4</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>."<a href="#section-9.1-1.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-9.2-1.3.2.2">
-                <p id="section-9.2-1.3.2.2.1"><span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.4" class="relref">Section 5.4</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> describes how data packets and
+              <li class="normal" id="section-9.1-1.3.2.2">
+                <p id="section-9.1-1.3.2.2.1"><span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.4" class="relref">Section 5.4</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> describes how data packets and
 acknowldegement packets may be sent on different paths, making it
-difficult to detemine the RTT.<a href="#section-9.2-1.3.2.2.1" class="pilcrow">¶</a></p>
+difficult to detemine the RTT.<a href="#section-9.1-1.3.2.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-9.2-1.3.2.2.2.1">
-                    <p id="section-9.2-1.3.2.2.2.1.1">With PANs, the path is known, so it is easy to tell whether
-data and acknowledgement were sent on the same path or not.<a href="#section-9.2-1.3.2.2.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-9.1-1.3.2.2.2.1">
+                    <p id="section-9.1-1.3.2.2.2.1.1">With PANs, the path is known, so it is easy to tell whether
+data and acknowledgement were sent on the same path or not.<a href="#section-9.1-1.3.2.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="normal" id="section-9.2-1.3.2.2.2.2">
-                    <p id="section-9.2-1.3.2.2.2.2.1">With PANs, we could recommend a policy (<strong>TODO recommend?</strong>)
+                  <li class="normal" id="section-9.1-1.3.2.2.2.2">
+                    <p id="section-9.1-1.3.2.2.2.2.1">With PANs, we could recommend a policy (<strong>TODO recommend?</strong>)
 that ACKs should be sent on the return path of the data
 (<strong>TODO</strong> why are they sent on different paths? Outside path
-abandon?)<a href="#section-9.2-1.3.2.2.2.2.1" class="pilcrow">¶</a></p>
+abandon?)<a href="#section-9.1-1.3.2.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="normal" id="section-9.2-1.3.2.2.2.3">
-                    <p id="section-9.2-1.3.2.2.2.3.1">With PANS, explicit path probing is easier.<a href="#section-9.2-1.3.2.2.2.3.1" class="pilcrow">¶</a></p>
+                  <li class="normal" id="section-9.1-1.3.2.2.2.3">
+                    <p id="section-9.1-1.3.2.2.2.3.1">With PANS, explicit path probing is easier.<a href="#section-9.1-1.3.2.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="normal" id="section-9.2-1.3.2.2.2.4">
-                    <p id="section-9.2-1.3.2.2.2.4.1">We can try to derive lower and upper limits from analysing
-latency of non-disjoint paths.<a href="#section-9.2-1.3.2.2.2.4.1" class="pilcrow">¶</a></p>
+                  <li class="normal" id="section-9.1-1.3.2.2.2.4">
+                    <p id="section-9.1-1.3.2.2.2.4.1">We can try to derive lower and upper limits from analysing
+latency of non-disjoint paths.<a href="#section-9.1-1.3.2.2.2.4.1" class="pilcrow">¶</a></p>
 </li>
                 </ul>
 </li>
-              <li class="normal" id="section-9.2-1.3.2.3">
-                <p id="section-9.2-1.3.2.3.1">Should benefit from knowledge about minimum latency expected on
-a path, see <a href="#metadata" class="auto internal xref">Section 3.1</a>.<a href="#section-9.2-1.3.2.3.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-9.1-1.3.2.3">
+                <p id="section-9.1-1.3.2.3.1">Should benefit from knowledge about minimum latency expected on
+a path, see <a href="#metadata" class="auto internal xref">Section 3.1</a>.<a href="#section-9.1-1.3.2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-9.2-1.3.2.4">
-                <p id="section-9.2-1.3.2.4.1">This allso affects packet scheduling, see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.5" class="relref">Section 5.5</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-9.2-1.3.2.4.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-9.1-1.3.2.4">
+                <p id="section-9.1-1.3.2.4.1">This allso affects packet scheduling, see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.5" class="relref">Section 5.5</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-9.1-1.3.2.4.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="normal" id="section-9.2-1.4">
-            <p id="section-9.2-1.4.1">Retransmission &amp; PTO:
-See <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.6" class="relref">Section 5.6</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> and <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.7" class="relref">Section 5.7</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-9.2-1.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-9.1-1.4">
+            <p id="section-9.1-1.4.1">Retransmission &amp; PTO:
+See <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.6" class="relref">Section 5.6</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> and <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.7" class="relref">Section 5.7</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-9.1-1.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-9.2-1.5">
-            <p id="section-9.2-1.5.1">Path selections algorithms<a href="#section-9.2-1.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-9.1-1.5">
+            <p id="section-9.1-1.5.1">Path selections algorithms<a href="#section-9.1-1.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-9.2-1.6">
-            <p id="section-9.2-1.6.1">Latency polling<a href="#section-9.2-1.6.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-9.1-1.6">
+            <p id="section-9.1-1.6.1">Latency polling<a href="#section-9.1-1.6.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-9.2-1.6.2.1">
-                <p id="section-9.2-1.6.2.1.1">How bad is latency polling?<a href="#section-9.2-1.6.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-9.1-1.6.2.1">
+                <p id="section-9.1-1.6.2.1.1">How bad is latency polling?<a href="#section-9.1-1.6.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-9.2-1.6.2.2">
-                <p id="section-9.2-1.6.2.2.1">Traceroute can help to reduce polling (ideally, every links is
+              <li class="normal" id="section-9.1-1.6.2.2">
+                <p id="section-9.1-1.6.2.2.1">Traceroute can help to reduce polling (ideally, every links is
 traversed only by one poll packet). Traceroute also allows to identify
-links with high variance or generally hogh latency.<a href="#section-9.2-1.6.2.2.1" class="pilcrow">¶</a></p>
+links with high variance or generally hogh latency.<a href="#section-9.1-1.6.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>

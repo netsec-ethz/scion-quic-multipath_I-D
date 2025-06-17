@@ -103,13 +103,13 @@ Table of Contents
        7.2.1.  Recommendation
      7.3.  General API
    8.  QUIC implementation Considerations
-     8.1.  Path Change Detection - Path Injection
-       8.1.1.  Problem
-       8.1.2.  Mitigation
-       8.1.3.  Variant
+     8.1.  Automatic Path Changes - Initial Handshake
+     8.2.  Path Change Detection - Path Injection
+       8.2.1.  Problem
+       8.2.2.  Mitigation
+       8.2.3.  Variant
    9.  Algorithm Considerations
-     9.1.  General
-     9.2.  Algorithms
+     9.1.  Algorithms
    10. OLD PART BELOW - IGNORE
    11. OLD - Algorithms
      11.1.  Path Selection
@@ -572,10 +572,9 @@ Table of Contents
 
    For example: - During path migration (*TODO* ref), a path ID may be
    (loosely) associated with multiple network paths. - A PAN library may
-   perform probing (latency, etc.) and switch to a new path that is
-   deemed better. - A PAN library may have paths that can expire and
-   that can be renewed automatically.  However, this is should usually
-   result in an identical path (except for the expiration date).
+   have paths that can expire and that can be renewed automatically.
+   However, this is should usually result in an identical path (except
+   for the expiration date).
 
 7.2.1.  Recommendation
 
@@ -619,9 +618,23 @@ Table of Contents
    *TODO READ:* See also "Implementation Considerations" in Section 5 of
    [QUIC-MP].
 
-8.1.  Path Change Detection - Path Injection
+8.1.  Automatic Path Changes - Initial Handshake
 
-8.1.1.  Problem
+   [QUIC-TRANSPORT] requires that there is no connection migration
+   during the initial handshake, and that there are no other packets
+   send (including probing packets) during the initial handshake, see
+   Section 9 of [QUIC-TRANSPORT], paragraphs 2 and 3.
+
+   An implementation must ensure on some level that no path change or
+   probing occurs.
+
+   This may be covered by the recommendation that a PAN layer should not
+   automatically switch without explicit request by the QUIC(-MP) layer.
+   See also Section 7.2.1
+
+8.2.  Path Change Detection - Path Injection
+
+8.2.1.  Problem
 
    *TODO check SCION IRTF draft for this attack:*
 
@@ -656,7 +669,7 @@ Table of Contents
    *TODO* Do border routers even check the underlay IP against the SCION
    header IP?  They may not do that, see NAT...
 
-8.1.2.  Mitigation
+8.2.2.  Mitigation
 
    *  Authenticate packets on SCION level.... There could still be a
       replay:
@@ -689,7 +702,7 @@ Table of Contents
    paths... * C + Rust: How exactly do we map PathID to paths?  How are
    paths updated?
 
-8.1.3.  Variant
+8.2.3.  Variant
 
    Attack target: server / client.
 
@@ -716,20 +729,7 @@ Table of Contents
    routers between paths - indication of latency+bandwidth limits. -
    (Potentially live traffic info: Avoid "pulsing" -> Simon Scherer?)
 
-9.1.  General
-
-   [QUIC-TRANSPORT] requires that there is no connection migration
-   during the initial handshake, and that there are no other packets
-   send (including probing packets) during the initial handshake, see
-   Section 9 of [QUIC-TRANSPORT], paragraphs 2 and 3.
-
-   We need to ensure on some level that no path change or probing
-   occurs.
-
-   *TODO* Read [QUIC-MP] on 4-tuple change / path validation. ->
-   Section 9 in RFC 9000
-
-9.2.  Algorithms
+9.1.  Algorithms
 
    *  MPU detection algorithm can be removed/replaced with metadata
       query See Path MTU Discovery in Section 14.3 of [QUIC-TRANSPORT]
