@@ -2214,21 +2214,28 @@ latency of non-disjoint paths.<a href="#section-9.2-1.3.2.2.2.4.1" class="pilcro
                 <p id="section-9.2-1.3.2.3.1">Should benefit from knowledge about minimum latency expected on
 a path, see <a href="#metadata" class="auto internal xref">Section 3.1</a>.<a href="#section-9.2-1.3.2.3.1" class="pilcrow">¶</a></p>
 </li>
+              <li class="normal" id="section-9.2-1.3.2.4">
+                <p id="section-9.2-1.3.2.4.1">This allso affects packet scheduling, see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.5" class="relref">Section 5.5</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-9.2-1.3.2.4.1" class="pilcrow">¶</a></p>
+</li>
             </ul>
 </li>
           <li class="normal" id="section-9.2-1.4">
-            <p id="section-9.2-1.4.1">Path selections algorithms<a href="#section-9.2-1.4.1" class="pilcrow">¶</a></p>
+            <p id="section-9.2-1.4.1">Retransmission &amp; PTO:
+See <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.6" class="relref">Section 5.6</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> and <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.7" class="relref">Section 5.7</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-9.2-1.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-9.2-1.5">
-            <p id="section-9.2-1.5.1">Latency polling<a href="#section-9.2-1.5.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-9.2-1.5.2.1">
-                <p id="section-9.2-1.5.2.1.1">How bad is latency polling?<a href="#section-9.2-1.5.2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-9.2-1.5.1">Path selections algorithms<a href="#section-9.2-1.5.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-9.2-1.5.2.2">
-                <p id="section-9.2-1.5.2.2.1">Traceroute can help to reduce polling (ideally, every links is
+          <li class="normal" id="section-9.2-1.6">
+            <p id="section-9.2-1.6.1">Latency polling<a href="#section-9.2-1.6.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.2-1.6.2.1">
+                <p id="section-9.2-1.6.2.1.1">How bad is latency polling?<a href="#section-9.2-1.6.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-9.2-1.6.2.2">
+                <p id="section-9.2-1.6.2.2.1">Traceroute can help to reduce polling (ideally, every links is
 traversed only by one poll packet). Traceroute also allows to identify
-links with high variance or generally hogh latency.<a href="#section-9.2-1.5.2.2.1" class="pilcrow">¶</a></p>
+links with high variance or generally hogh latency.<a href="#section-9.2-1.6.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
@@ -2538,11 +2545,21 @@ transparent  multipathing with additional code on the application level.<a href=
       <h2 id="name-security-considerations">
 <a href="#section-15" class="section-number selfRef">15. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-15-1">This document has no security considerations.<a href="#section-15-1" class="pilcrow">¶</a></p>
-<p id="section-15-2">May sending data on multiple paths in parallel, or at regular
-intervals, expose information about data streams? E.g. can streams
-be associated with users such that a change in connection ID does
-not help anonymity?<a href="#section-15-2" class="pilcrow">¶</a></p>
+<p id="section-15-1">THe aim is that <span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> over PANs retains all security
+properties of <span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>. However, this requires some
+implementation changes and additional consideration regarding:<a href="#section-15-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-15-2.1">
+          <p id="section-15-2.1.1">endhost identity: a 4-tuple is not sufficient to identify an endhost;<a href="#section-15-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-15-2.2">
+          <p id="section-15-2.2.1">netwotk path authenticity: paths may be spoofed;<a href="#section-15-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-15-2.3">
+          <p id="section-15-2.3.1">excessive probing patterns which may expose user intentions or
+identity.<a href="#section-15-2.3.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
 <div id="latency-polling">
 <section id="section-15.1">
         <h3 id="name-latency-polling">
