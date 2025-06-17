@@ -711,49 +711,70 @@ it may drop the valid connection to the valid client.
 
 # Algorithm Considerations {#algcon}
 
-What has changed:
-- Much better MPU
-- Knowledge about shared links/routers between paths
-- indication of latency+bandwidth limits.
-- (Potentially live traffic info: Avoid "pulsing" -> Simon Scherer?)
+The availability of a PAN layer provides addditional information that
+can be used by algorithms for congestion control, RTT estimation,
+MTU estimation, ... and others. It also requires additional
+algorithms, for example for path selection.
+
+The additional information includes
+- path metadata with route information, including MTU and hardware
+limits on bandwidth and latency
+- comparability of multiple paths which gives knowledge about
+shared links/routers between paths
 
 
+## MTU Detection
+
+MPU detection algorithm can be removed/replaced with metadata query
+See Path MTU Discovery in {{Section 14.3 of QUIC-TRANSPORT}} and
+{{Section 5.8 of QUIC-MP}}.
 
 
-## Algorithms
+## Congestion Control
 
-- MPU detection algorithm can be removed/replaced with metadata query
-  See Path MTU Discovery in {{Section 14.3 of QUIC-TRANSPORT}} and
-  {{Section 5.8 of QUIC-MP}}.
-- Congestion control algorithms:
-  - Must reset on path change (how?).
-  - Should benefit from knowledge about path overlaps.
-  - Follow BCP 133, see {{Section 7.10 of CC-ALGORITHMS}}.
-- Roundtrip time estimator.
-  - Must reset on path change (how?). See also from {{Section 5.1 of
-    QUIC-MP}}:
-    "If path validation process succeeds, the endpoints set the path's
-    congestion controller and round-trip time estimator according to
-    {{Section 9.4 of QUIC-TRANSPORT}}."
-  - {{Section 5.4 of QUIC-MP}} describes how data packets and
+Congestion control (CC) algorithms can benefit from exact knowledge of
+a path:
+
+- When using multiple paths, a CC algorithm can access information
+as to if and where the paths overlap and some of the properties of the
+overlapping sections.
+- If implemented by the QUIC-MP library, a CC algorithm can be notified
+  of every paths change, allowing it to reset only when necessary.
+  Without a PAN layer, a CC algorithm has to rely on 4-tuple changes
+  to trigger a reset, with the drawback that changes may get unnoticed
+  (in case of path change without 4-tuple change) or that a reset may
+  be unnecessary (in case only the NAT mapping changed whike leaving
+  the rest of the route intact).
+
+See also {{Section 5.3 of QUIC-MP}}.
+
+
+## RTT Estimation
+
+- Must reset on path change (how?). See also from {{Section 5.1 of
+  QUIC-MP}}:
+  "If path validation process succeeds, the endpoints set the path's
+  congestion controller and round-trip time estimator according to
+  {{Section 9.4 of QUIC-TRANSPORT}}."
+- {{Section 5.4 of QUIC-MP}} describes how data packets and
 acknowldegement packets may be sent on different paths, making it
 difficult to detemine the RTT.
-    - With PANs, the path is known, so it is easy to tell whether
-      data and acknowledgement were sent on the same path or not.
-    - With PANs, we could recommend a policy (**TODO recommend?**)
-      that ACKs should be sent on the return path of the data
-      (**TODO** why are they sent on different paths? Outside path
-      abandon?)
-    - With PANS, explicit path probing is easier.
-    - We can try to derive lower and upper limits from analysing
-      latency of non-disjoint paths.
-  - Should benefit from knowledge about minimum latency expected on
-    a path, see {{metadata}}.
-  - This allso affects packet scheduling, see {{Section 5.5 of
-    QUIC-MP}}.
-- Retransmission & PTO:
-  See {{Section 5.6 of QUIC-MP}} and {{Section 5.7 of QUIC-MP}}.
-- Path selections algorithms
+  - With PANs, the path is known, so it is easy to tell whether
+    data and acknowledgement were sent on the same path or not.
+  - With PANs, we could recommend a policy (**TODO recommend?**)
+    that ACKs should be sent on the return path of the data
+    (**TODO** why are they sent on different paths? Outside path
+    abandon?)
+  - With PANS, explicit path probing is easier.
+  - We can try to derive lower and upper limits from analysing
+    latency of non-disjoint paths.
+- Should benefit from knowledge about minimum latency expected on
+  a path, see {{metadata}}.
+- This allso affects packet scheduling, see {{Section 5.5 of
+  QUIC-MP}}.
+
+
+**TODO** Has this the same purpose as RTT estimation?
 
 - Latency polling
   - How bad is latency polling?
@@ -762,12 +783,15 @@ traversed only by one poll packet). Traceroute also allows to identify
   links with high variance or generally hogh latency.
 
 
-# OLD PART BELOW - IGNORE
+## Retransmission & PTO
 
-# OLD - Algorithms {#algorithmsold}
+See {{Section 5.6 of QUIC-MP}} and {{Section 5.7 of QUIC-MP}}.
 
-**TODO** It would be good to have some introductory text here.
-What type of algorithms are presented?
+
+## DMTP
+
+One example of an application / algorithm is discussed in {{DMTP}}.
+
 
 ## Path Selection {#patsel}
 
@@ -778,6 +802,7 @@ connection appears to be long lasting (e.g. at least 1 second duration
 and 1MB of traffic) it could start adding additional paths and see
 whether the traffic increases. Additional paths can be chosen
 following the guidelines discussed in {{datra}}.
+
 
 ### Bottleneck Detection {#bottleneck}
 
@@ -794,14 +819,10 @@ high traffic and queueing problem on the measured link.
 **TODO** Should we discourage this? It creates unnecessary traffic...
 
 
-## MTU
 
-SCION provides MTU information for every AS-level link on a path.
+# OLD PART BELOW - IGNORE
 
-
-## DMTP
-
-One example of an application / algorithm is discussed in {{DMTP}}.
+# OLD - Algorithms {#algorithmsold}
 
 
 ## Congestion Control {#concon}
