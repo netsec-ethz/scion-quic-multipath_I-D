@@ -1300,7 +1300,30 @@ applications that use multipath QUIC over SCION.<a href="#section-abstract-2" cl
             <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-algorithm-considerations" class="internal xref">Algorithm Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
-                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-algorithms" class="internal xref">Algorithms</a></p>
+                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-mtu-detection" class="internal xref">MTU Detection</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
+                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-congestion-control" class="internal xref">Congestion Control</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.3">
+                <p id="section-toc.1-1.9.2.3.1"><a href="#section-9.3" class="auto internal xref">9.3</a>.  <a href="#name-rtt-estimation" class="internal xref">RTT Estimation</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.4">
+                <p id="section-toc.1-1.9.2.4.1"><a href="#section-9.4" class="auto internal xref">9.4</a>.  <a href="#name-retransmission-pto" class="internal xref">Retransmission &amp; PTO</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.5">
+                <p id="section-toc.1-1.9.2.5.1"><a href="#section-9.5" class="auto internal xref">9.5</a>.  <a href="#name-dmtp" class="internal xref">DMTP</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.6">
+                <p id="section-toc.1-1.9.2.6.1"><a href="#section-9.6" class="auto internal xref">9.6</a>.  <a href="#name-path-selection-2" class="internal xref">Path Selection</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.6.2.1">
+                    <p id="section-toc.1-1.9.2.6.2.1.1"><a href="#section-9.6.1" class="auto internal xref">9.6.1</a>.  <a href="#name-dynamic-approach" class="internal xref">Dynamic Approach</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.6.2.2">
+                    <p id="section-toc.1-1.9.2.6.2.2.1"><a href="#section-9.6.2" class="auto internal xref">9.6.2</a>.  <a href="#name-bottleneck-detection" class="internal xref">Bottleneck Detection</a></p>
+</li>
+                </ul>
 </li>
             </ul>
 </li>
@@ -1311,27 +1334,10 @@ applications that use multipath QUIC over SCION.<a href="#section-abstract-2" cl
             <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-old-algorithms" class="internal xref">OLD - Algorithms</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.1">
-                <p id="section-toc.1-1.11.2.1.1"><a href="#section-11.1" class="auto internal xref">11.1</a>.  <a href="#name-path-selection-2" class="internal xref">Path Selection</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.1.2.1">
-                    <p id="section-toc.1-1.11.2.1.2.1.1"><a href="#section-11.1.1" class="auto internal xref">11.1.1</a>.  <a href="#name-dynamic-approach" class="internal xref">Dynamic Approach</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.1.2.2">
-                    <p id="section-toc.1-1.11.2.1.2.2.1"><a href="#section-11.1.2" class="auto internal xref">11.1.2</a>.  <a href="#name-bottleneck-detection" class="internal xref">Bottleneck Detection</a></p>
-</li>
-                </ul>
+                <p id="section-toc.1-1.11.2.1.1"><a href="#section-11.1" class="auto internal xref">11.1</a>.  <a href="#name-congestion-control-2" class="internal xref">Congestion Control</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.2">
-                <p id="section-toc.1-1.11.2.2.1"><a href="#section-11.2" class="auto internal xref">11.2</a>.  <a href="#name-mtu" class="internal xref">MTU</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.3">
-                <p id="section-toc.1-1.11.2.3.1"><a href="#section-11.3" class="auto internal xref">11.3</a>.  <a href="#name-dmtp" class="internal xref">DMTP</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.4">
-                <p id="section-toc.1-1.11.2.4.1"><a href="#section-11.4" class="auto internal xref">11.4</a>.  <a href="#name-congestion-control" class="internal xref">Congestion Control</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.5">
-                <p id="section-toc.1-1.11.2.5.1"><a href="#section-11.5" class="auto internal xref">11.5</a>.  <a href="#name-load-distribution-schedulin" class="internal xref">Load Distribution (Scheduling)</a></p>
+                <p id="section-toc.1-1.11.2.2.1"><a href="#section-11.2" class="auto internal xref">11.2</a>.  <a href="#name-load-distribution-schedulin" class="internal xref">Load Distribution (Scheduling)</a></p>
 </li>
             </ul>
 </li>
@@ -1686,7 +1692,7 @@ extrensions for validating these properties, namely SPAO and EPIC.
 <p id="section-5.2-1">For FT, paths are only interesting if they are disjoint.
 For BW, paths should mostly be disjunct, but overlap is
 acceptable if the overlapping links have high BW available (see
-<a href="#bottleneck" class="auto internal xref">Section 11.1.2</a>).<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<a href="#bottleneck" class="auto internal xref">Section 9.6.2</a>).<a href="#section-5.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.2-2">For LAT and EVA, path disjointness is less important.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
 <p id="section-5.2-3"><strong>TODO</strong> Discuss link level, router level and AS level path disjunctness.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
 </section>
@@ -2147,99 +2153,162 @@ it may drop the valid connection to the valid client.<a href="#section-8.2.3-3" 
       <h2 id="name-algorithm-considerations">
 <a href="#section-9" class="section-number selfRef">9. </a><a href="#name-algorithm-considerations" class="section-name selfRef">Algorithm Considerations</a>
       </h2>
-<p id="section-9-1">What has changed:
-- Much better MPU
-- Knowledge about shared links/routers between paths
-- indication of latency+bandwidth limits.
-- (Potentially live traffic info: Avoid "pulsing" -&gt; Simon Scherer?)<a href="#section-9-1" class="pilcrow">¶</a></p>
-<div id="algorithms">
+<p id="section-9-1">The availability of a PAN layer provides addditional information that
+can be used by algorithms for congestion control, RTT estimation,
+MTU estimation, ... and others. It also requires additional
+algorithms, for example for path selection.<a href="#section-9-1" class="pilcrow">¶</a></p>
+<p id="section-9-2">The additional information includes
+- path metadata with route information, including MTU and hardware
+limits on bandwidth and latency
+- comparability of multiple paths which gives knowledge about
+shared links/routers between paths<a href="#section-9-2" class="pilcrow">¶</a></p>
+<div id="mtu-detection">
 <section id="section-9.1">
-        <h3 id="name-algorithms">
-<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-algorithms" class="section-name selfRef">Algorithms</a>
+        <h3 id="name-mtu-detection">
+<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-mtu-detection" class="section-name selfRef">MTU Detection</a>
+        </h3>
+<p id="section-9.1-1">MPU detection algorithm can be removed/replaced with metadata query
+See Path MTU Discovery in <span><a href="https://rfc-editor.org/rfc/rfc9000#section-14.3" class="relref">Section 14.3</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> and
+<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.8" class="relref">Section 5.8</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-9.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="congestion-control">
+<section id="section-9.2">
+        <h3 id="name-congestion-control">
+<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-congestion-control" class="section-name selfRef">Congestion Control</a>
+        </h3>
+<p id="section-9.2-1">Congestion control (CC) algorithms can benefit from exact knowledge of
+a path:<a href="#section-9.2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.2-2.1">
+            <p id="section-9.2-2.1.1">When using multiple paths, a CC algorithm can access information
+as to if and where the paths overlap and some of the properties of the
+overlapping sections.<a href="#section-9.2-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.2-2.2">
+            <p id="section-9.2-2.2.1">If implemented by the QUIC-MP library, a CC algorithm can be notified
+of every paths change, allowing it to reset only when necessary.
+Without a PAN layer, a CC algorithm has to rely on 4-tuple changes
+to trigger a reset, with the drawback that changes may get unnoticed
+(in case of path change without 4-tuple change) or that a reset may
+be unnecessary (in case only the NAT mapping changed whike leaving
+the rest of the route intact).<a href="#section-9.2-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-9.2-3">See also <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.3" class="relref">Section 5.3</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-9.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="rtt-estimation">
+<section id="section-9.3">
+        <h3 id="name-rtt-estimation">
+<a href="#section-9.3" class="section-number selfRef">9.3. </a><a href="#name-rtt-estimation" class="section-name selfRef">RTT Estimation</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="section-9.1-1.1">
-            <p id="section-9.1-1.1.1">MPU detection algorithm can be removed/replaced with metadata query
-See Path MTU Discovery in <span><a href="https://rfc-editor.org/rfc/rfc9000#section-14.3" class="relref">Section 14.3</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> and
-<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.8" class="relref">Section 5.8</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-9.1-1.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-9.1-1.2">
-            <p id="section-9.1-1.2.1">Congestion control algorithms:<a href="#section-9.1-1.2.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-9.1-1.2.2.1">
-                <p id="section-9.1-1.2.2.1.1">Must reset on path change (how?).<a href="#section-9.1-1.2.2.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-9.1-1.2.2.2">
-                <p id="section-9.1-1.2.2.2.1">Should benefit from knowledge about path overlaps.<a href="#section-9.1-1.2.2.2.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-9.1-1.2.2.3">
-                <p id="section-9.1-1.2.2.3.1">Follow BCP 133, see <span><a href="https://rfc-editor.org/rfc/rfc9743#section-7.10" class="relref">Section 7.10</a> of [<a href="#CC-ALGORITHMS" class="cite xref">CC-ALGORITHMS</a>]</span>.<a href="#section-9.1-1.2.2.3.1" class="pilcrow">¶</a></p>
-</li>
-            </ul>
-</li>
-          <li class="normal" id="section-9.1-1.3">
-            <p id="section-9.1-1.3.1">Roundtrip time estimator.<a href="#section-9.1-1.3.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-9.1-1.3.2.1">
-                <p id="section-9.1-1.3.2.1.1">Must reset on path change (how?). See also from <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.1" class="relref">Section 5.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>:
+<li class="normal" id="section-9.3-1.1">
+            <p id="section-9.3-1.1.1">Must reset on path change (how?). See also from <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.1" class="relref">Section 5.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>:
 "If path validation process succeeds, the endpoints set the path's
 congestion controller and round-trip time estimator according to
-<span><a href="https://rfc-editor.org/rfc/rfc9000#section-9.4" class="relref">Section 9.4</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>."<a href="#section-9.1-1.3.2.1.1" class="pilcrow">¶</a></p>
+<span><a href="https://rfc-editor.org/rfc/rfc9000#section-9.4" class="relref">Section 9.4</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>."<a href="#section-9.3-1.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-9.1-1.3.2.2">
-                <p id="section-9.1-1.3.2.2.1"><span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.4" class="relref">Section 5.4</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> describes how data packets and
+          <li class="normal" id="section-9.3-1.2">
+            <p id="section-9.3-1.2.1"><span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.4" class="relref">Section 5.4</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> describes how data packets and
 acknowldegement packets may be sent on different paths, making it
-difficult to detemine the RTT.<a href="#section-9.1-1.3.2.2.1" class="pilcrow">¶</a></p>
+difficult to detemine the RTT.<a href="#section-9.3-1.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-9.1-1.3.2.2.2.1">
-                    <p id="section-9.1-1.3.2.2.2.1.1">With PANs, the path is known, so it is easy to tell whether
-data and acknowledgement were sent on the same path or not.<a href="#section-9.1-1.3.2.2.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-9.3-1.2.2.1">
+                <p id="section-9.3-1.2.2.1.1">With PANs, the path is known, so it is easy to tell whether
+data and acknowledgement were sent on the same path or not.<a href="#section-9.3-1.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="normal" id="section-9.1-1.3.2.2.2.2">
-                    <p id="section-9.1-1.3.2.2.2.2.1">With PANs, we could recommend a policy (<strong>TODO recommend?</strong>)
+              <li class="normal" id="section-9.3-1.2.2.2">
+                <p id="section-9.3-1.2.2.2.1">With PANs, we could recommend a policy (<strong>TODO recommend?</strong>)
 that ACKs should be sent on the return path of the data
 (<strong>TODO</strong> why are they sent on different paths? Outside path
-abandon?)<a href="#section-9.1-1.3.2.2.2.2.1" class="pilcrow">¶</a></p>
+abandon?)<a href="#section-9.3-1.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="normal" id="section-9.1-1.3.2.2.2.3">
-                    <p id="section-9.1-1.3.2.2.2.3.1">With PANS, explicit path probing is easier.<a href="#section-9.1-1.3.2.2.2.3.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-9.3-1.2.2.3">
+                <p id="section-9.3-1.2.2.3.1">With PANS, explicit path probing is easier.<a href="#section-9.3-1.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="normal" id="section-9.1-1.3.2.2.2.4">
-                    <p id="section-9.1-1.3.2.2.2.4.1">We can try to derive lower and upper limits from analysing
-latency of non-disjoint paths.<a href="#section-9.1-1.3.2.2.2.4.1" class="pilcrow">¶</a></p>
-</li>
-                </ul>
-</li>
-              <li class="normal" id="section-9.1-1.3.2.3">
-                <p id="section-9.1-1.3.2.3.1">Should benefit from knowledge about minimum latency expected on
-a path, see <a href="#metadata" class="auto internal xref">Section 3.1</a>.<a href="#section-9.1-1.3.2.3.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-9.1-1.3.2.4">
-                <p id="section-9.1-1.3.2.4.1">This allso affects packet scheduling, see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.5" class="relref">Section 5.5</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-9.1-1.3.2.4.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-9.3-1.2.2.4">
+                <p id="section-9.3-1.2.2.4.1">We can try to derive lower and upper limits from analysing
+latency of non-disjoint paths.<a href="#section-9.3-1.2.2.4.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="normal" id="section-9.1-1.4">
-            <p id="section-9.1-1.4.1">Retransmission &amp; PTO:
-See <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.6" class="relref">Section 5.6</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> and <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.7" class="relref">Section 5.7</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-9.1-1.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-9.3-1.3">
+            <p id="section-9.3-1.3.1">Should benefit from knowledge about minimum latency expected on
+a path, see <a href="#metadata" class="auto internal xref">Section 3.1</a>.<a href="#section-9.3-1.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-9.1-1.5">
-            <p id="section-9.1-1.5.1">Path selections algorithms<a href="#section-9.1-1.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-9.3-1.4">
+            <p id="section-9.3-1.4.1">This allso affects packet scheduling, see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.5" class="relref">Section 5.5</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-9.3-1.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-9.1-1.6">
-            <p id="section-9.1-1.6.1">Latency polling<a href="#section-9.1-1.6.1" class="pilcrow">¶</a></p>
+        </ul>
+<p id="section-9.3-2"><strong>TODO</strong> Has this the same purpose as RTT estimation?<a href="#section-9.3-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-9.1-1.6.2.1">
-                <p id="section-9.1-1.6.2.1.1">How bad is latency polling?<a href="#section-9.1-1.6.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-9.3-3.1">
+            <p id="section-9.3-3.1.1">Latency polling<a href="#section-9.3-3.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.3-3.1.2.1">
+                <p id="section-9.3-3.1.2.1.1">How bad is latency polling?<a href="#section-9.3-3.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-9.1-1.6.2.2">
-                <p id="section-9.1-1.6.2.2.1">Traceroute can help to reduce polling (ideally, every links is
+              <li class="normal" id="section-9.3-3.1.2.2">
+                <p id="section-9.3-3.1.2.2.1">Traceroute can help to reduce polling (ideally, every links is
 traversed only by one poll packet). Traceroute also allows to identify
-links with high variance or generally hogh latency.<a href="#section-9.1-1.6.2.2.1" class="pilcrow">¶</a></p>
+links with high variance or generally hogh latency.<a href="#section-9.3-3.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
         </ul>
+</section>
+</div>
+<div id="retransmission-pto">
+<section id="section-9.4">
+        <h3 id="name-retransmission-pto">
+<a href="#section-9.4" class="section-number selfRef">9.4. </a><a href="#name-retransmission-pto" class="section-name selfRef">Retransmission &amp; PTO</a>
+        </h3>
+<p id="section-9.4-1">See <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.6" class="relref">Section 5.6</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> and <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.7" class="relref">Section 5.7</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-9.4-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="dmtp">
+<section id="section-9.5">
+        <h3 id="name-dmtp">
+<a href="#section-9.5" class="section-number selfRef">9.5. </a><a href="#name-dmtp" class="section-name selfRef">DMTP</a>
+        </h3>
+<p id="section-9.5-1">One example of an application / algorithm is discussed in <span>[<a href="#DMTP" class="cite xref">DMTP</a>]</span>.<a href="#section-9.5-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="patsel">
+<section id="section-9.6">
+        <h3 id="name-path-selection-2">
+<a href="#section-9.6" class="section-number selfRef">9.6. </a><a href="#name-path-selection-2" class="section-name selfRef">Path Selection</a>
+        </h3>
+<div id="dynamic-approach">
+<section id="section-9.6.1">
+          <h4 id="name-dynamic-approach">
+<a href="#section-9.6.1" class="section-number selfRef">9.6.1. </a><a href="#name-dynamic-approach" class="section-name selfRef">Dynamic Approach</a>
+          </h4>
+<p id="section-9.6.1-1">A dynamic approach could start with using low latency paths. If the
+connection appears to be long lasting (e.g. at least 1 second duration
+and 1MB of traffic) it could start adding additional paths and see
+whether the traffic increases. Additional paths can be chosen
+following the guidelines discussed in <a href="#datra" class="auto internal xref">Section 13.1</a>.<a href="#section-9.6.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="bottleneck">
+<section id="section-9.6.2">
+          <h4 id="name-bottleneck-detection">
+<a href="#section-9.6.2" class="section-number selfRef">9.6.2. </a><a href="#name-bottleneck-detection" class="section-name selfRef">Bottleneck Detection</a>
+          </h4>
+<p id="section-9.6.2-1">If no live traffic information is available, bottleneck detection
+can help to identify linkks that should be avoided. In PAN this can
+be done using approaches such as <span>[<a href="#UMCC" class="cite xref">UMCC</a>]</span>.<a href="#section-9.6.2-1" class="pilcrow">¶</a></p>
+<p id="section-9.6.2-2">One alternative is to use two SCMP <code>traceroute</code> commands that measure
+latency between two consecutive AS border routers. The measured
+latency can be compared to earlier measurements or to the latency
+given in the path metadata. Discrepancies can be an indication for
+high traffic and queueing problem on the measured link.<a href="#section-9.6.2-2" class="pilcrow">¶</a></p>
+<p id="section-9.6.2-3"><strong>TODO</strong> Should we discourage this? It creates unnecessary traffic...<a href="#section-9.6.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 </section>
@@ -2256,72 +2325,19 @@ links with high variance or generally hogh latency.<a href="#section-9.1-1.6.2.2
       <h2 id="name-old-algorithms">
 <a href="#section-11" class="section-number selfRef">11. </a><a href="#name-old-algorithms" class="section-name selfRef">OLD - Algorithms</a>
       </h2>
-<p id="section-11-1"><strong>TODO</strong> It would be good to have some introductory text here.
-What type of algorithms are presented?<a href="#section-11-1" class="pilcrow">¶</a></p>
-<div id="patsel">
-<section id="section-11.1">
-        <h3 id="name-path-selection-2">
-<a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-path-selection-2" class="section-name selfRef">Path Selection</a>
-        </h3>
-<div id="dynamic-approach">
-<section id="section-11.1.1">
-          <h4 id="name-dynamic-approach">
-<a href="#section-11.1.1" class="section-number selfRef">11.1.1. </a><a href="#name-dynamic-approach" class="section-name selfRef">Dynamic Approach</a>
-          </h4>
-<p id="section-11.1.1-1">A dynamic approach could start with using low latency paths. If the
-connection appears to be long lasting (e.g. at least 1 second duration
-and 1MB of traffic) it could start adding additional paths and see
-whether the traffic increases. Additional paths can be chosen
-following the guidelines discussed in <a href="#datra" class="auto internal xref">Section 13.1</a>.<a href="#section-11.1.1-1" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="bottleneck">
-<section id="section-11.1.2">
-          <h4 id="name-bottleneck-detection">
-<a href="#section-11.1.2" class="section-number selfRef">11.1.2. </a><a href="#name-bottleneck-detection" class="section-name selfRef">Bottleneck Detection</a>
-          </h4>
-<p id="section-11.1.2-1">If no live traffic information is available, bottleneck detection
-can help to identify linkks that should be avoided. In PAN this can
-be done using approaches such as <span>[<a href="#UMCC" class="cite xref">UMCC</a>]</span>.<a href="#section-11.1.2-1" class="pilcrow">¶</a></p>
-<p id="section-11.1.2-2">One alternative is to use two SCMP <code>traceroute</code> commands that measure
-latency between two consecutive AS border routers. The measured
-latency can be compared to earlier measurements or to the latency
-given in the path metadata. Discrepancies can be an indication for
-high traffic and queueing problem on the measured link.<a href="#section-11.1.2-2" class="pilcrow">¶</a></p>
-<p id="section-11.1.2-3"><strong>TODO</strong> Should we discourage this? It creates unnecessary traffic...<a href="#section-11.1.2-3" class="pilcrow">¶</a></p>
-</section>
-</div>
-</section>
-</div>
-<div id="mtu">
-<section id="section-11.2">
-        <h3 id="name-mtu">
-<a href="#section-11.2" class="section-number selfRef">11.2. </a><a href="#name-mtu" class="section-name selfRef">MTU</a>
-        </h3>
-<p id="section-11.2-1">SCION provides MTU information for every AS-level link on a path.<a href="#section-11.2-1" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="dmtp">
-<section id="section-11.3">
-        <h3 id="name-dmtp">
-<a href="#section-11.3" class="section-number selfRef">11.3. </a><a href="#name-dmtp" class="section-name selfRef">DMTP</a>
-        </h3>
-<p id="section-11.3-1">One example of an application / algorithm is discussed in <span>[<a href="#DMTP" class="cite xref">DMTP</a>]</span>.<a href="#section-11.3-1" class="pilcrow">¶</a></p>
-</section>
-</div>
 <div id="concon">
-<section id="section-11.4">
-        <h3 id="name-congestion-control">
-<a href="#section-11.4" class="section-number selfRef">11.4. </a><a href="#name-congestion-control" class="section-name selfRef">Congestion Control</a>
+<section id="section-11.1">
+        <h3 id="name-congestion-control-2">
+<a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-congestion-control-2" class="section-name selfRef">Congestion Control</a>
         </h3>
-<p id="section-11.4-1">General recommendations for congestion control are defined in
+<p id="section-11.1-1">General recommendations for congestion control are defined in
 Congestion Control Principles <span>[<a href="#CC-PRINCIPLES" class="cite xref">CC-PRINCIPLES</a>]</span>.
 Congestion control for QUIC is discussed in
 QUIC Loss Detection and Congestion Control <span>[<a href="#QUIC-RECOVERY" class="cite xref">QUIC-RECOVERY</a>]</span>.
 More generally, congestion control for UDP is discussed in the
 UDP Usage Guidelines <span>[<a href="#UDP-GUIDELINES" class="cite xref">UDP-GUIDELINES</a>]</span>. UDP MTU discovery is further
-developed in <span>[<a href="#MTU-DISCOVERY" class="cite xref">MTU-DISCOVERY</a>]</span>.<a href="#section-11.4-1" class="pilcrow">¶</a></p>
-<p id="section-11.4-2">Multipath congestion control is also discussed for TCP in
+developed in <span>[<a href="#MTU-DISCOVERY" class="cite xref">MTU-DISCOVERY</a>]</span>.<a href="#section-11.1-1" class="pilcrow">¶</a></p>
+<p id="section-11.1-2">Multipath congestion control is also discussed for TCP in
 <span>[<a href="#CC-MULTIPATH-TCP" class="cite xref">CC-MULTIPATH-TCP</a>]</span>. They state that "One of the prominent
    problems is that running existing algorithms such as standard TCP
    independently on each path would give the multipath flow more than
@@ -2329,19 +2345,19 @@ developed in <span>[<a href="#MTU-DISCOVERY" class="cite xref">MTU-DISCOVERY</a>
    subflows.".
 This can be avoided in SCION through link-level analysis of flows
 and selecting paths that do not create or share a bottleneck link.
-This avoids the need for Coupled Congestion Control.<a href="#section-11.4-2" class="pilcrow">¶</a></p>
-<p id="section-11.4-3">Note that SCION uses different paths from IP. While some of the links
+This avoids the need for Coupled Congestion Control.<a href="#section-11.1-2" class="pilcrow">¶</a></p>
+<p id="section-11.1-3">Note that SCION uses different paths from IP. While some of the links
 may carry both IP and SCION traffic, the SCION traffic typically has
-its own bandwidth allocation.<a href="#section-11.4-3" class="pilcrow">¶</a></p>
-<p id="section-11.4-4">The second point in <span>[<a href="#CC-MULTIPATH-TCP" class="cite xref">CC-MULTIPATH-TCP</a>]</span> is "Further, it is desirable
+its own bandwidth allocation.<a href="#section-11.1-3" class="pilcrow">¶</a></p>
+<p id="section-11.1-4">The second point in <span>[<a href="#CC-MULTIPATH-TCP" class="cite xref">CC-MULTIPATH-TCP</a>]</span> is "Further, it is desirable
    that a source with multiple paths
    available will transfer more traffic using the least congested of the
    paths, achieving a property called "resource pooling" where a bundle
    of links effectively behaves like one shared link with bigger
    capacity.".
-This can be achieved with a simple load distribution algorithm.<a href="#section-11.4-4" class="pilcrow">¶</a></p>
-<p id="section-11.4-5"><strong>TODO</strong> Differentiate "load distribution" from "path selection".<a href="#section-11.4-5" class="pilcrow">¶</a></p>
-<p id="section-11.4-6">There are several congestion control algorithms proposed in literature,
+This can be achieved with a simple load distribution algorithm.<a href="#section-11.1-4" class="pilcrow">¶</a></p>
+<p id="section-11.1-5"><strong>TODO</strong> Differentiate "load distribution" from "path selection".<a href="#section-11.1-5" class="pilcrow">¶</a></p>
+<p id="section-11.1-6">There are several congestion control algorithms proposed in literature,
 e.g. LIA, OLIA, BALIA and RSF.  These combine congestion control with
 path selection algorithms.
 For simplicity, we suggest separating concerns in terms of
@@ -2351,45 +2367,45 @@ tailor the solutions to the different scenarios discussed in
 The proposition is to use standard congestion control per path (LIST
 HERE), tailored for each use case (max bandwidth / low latency) and
 on top of that separately use path selection (load distribution)
-algorithms.<a href="#section-11.4-6" class="pilcrow">¶</a></p>
-<p id="section-11.4-7"><strong>TODO</strong> Terminology: path selection vs load distribution?<a href="#section-11.4-7" class="pilcrow">¶</a></p>
+algorithms.<a href="#section-11.1-6" class="pilcrow">¶</a></p>
+<p id="section-11.1-7"><strong>TODO</strong> Terminology: path selection vs load distribution?<a href="#section-11.1-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="loaddist">
-<section id="section-11.5">
+<section id="section-11.2">
         <h3 id="name-load-distribution-schedulin">
-<a href="#section-11.5" class="section-number selfRef">11.5. </a><a href="#name-load-distribution-schedulin" class="section-name selfRef">Load Distribution (Scheduling)</a>
+<a href="#section-11.2" class="section-number selfRef">11.2. </a><a href="#name-load-distribution-schedulin" class="section-name selfRef">Load Distribution (Scheduling)</a>
         </h3>
-<p id="section-11.5-1">Load distribution algorithms are mainly useful for high bandwidth
+<p id="section-11.2-1">Load distribution algorithms are mainly useful for high bandwidth
 (HBW) scenarios. Latency may still be relevant though, for example
 for high definition video streams. Scheduling halps distributing
-the transfer load efficiently over multiple path.<a href="#section-11.5-1" class="pilcrow">¶</a></p>
-<p id="section-11.5-2">However, sending data stream over multiple paths in parallel will
+the transfer load efficiently over multiple path.<a href="#section-11.2-1" class="pilcrow">¶</a></p>
+<p id="section-11.2-2">However, sending data stream over multiple paths in parallel will
 usually result in packets arriving out of order at the receiver.
-This should be avoided because:<a href="#section-11.5-2" class="pilcrow">¶</a></p>
+This should be avoided because:<a href="#section-11.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-11.5-3.1">
-            <p id="section-11.5-3.1.1">Packet reordering requires larger buffers on the receiver side which
+<li class="normal" id="section-11.2-3.1">
+            <p id="section-11.2-3.1.1">Packet reordering requires larger buffers on the receiver side which
 are used to put packets back in order. Latency, jitter and
 drop rate on different paths directly affect the required buffer
-size.<a href="#section-11.5-3.1.1" class="pilcrow">¶</a></p>
+size.<a href="#section-11.2-3.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-11.5-3.2">
-            <p id="section-11.5-3.2.1">Head of line blocking (HOLB): the latency of the slowest packet
+          <li class="normal" id="section-11.2-3.2">
+            <p id="section-11.2-3.2.1">Head of line blocking (HOLB): the latency of the slowest packet
 determines the effective latency of the stream. This may be
-ignored for data transfers where latency is irrelevant.<a href="#section-11.5-3.2.1" class="pilcrow">¶</a></p>
+ignored for data transfers where latency is irrelevant.<a href="#section-11.2-3.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-11.5-4">These problems can be mitigated, but it is difficult to do so for both
+<p id="section-11.2-4">These problems can be mitigated, but it is difficult to do so for both
 problems at the same time.
 A simple way to mitigate these problem is to select multiple paths
-with similar latency.<a href="#section-11.5-4" class="pilcrow">¶</a></p>
-<p id="section-11.5-5">Another way to mitigate these problems is to schedule packets on
+with similar latency.<a href="#section-11.2-4" class="pilcrow">¶</a></p>
+<p id="section-11.2-5">Another way to mitigate these problems is to schedule packets on
 different paths such that they are likely to arrive in (more or less)
 the correct order. Care should be taken to avoid requiring an
-equally large buffer on the sender side.<a href="#section-11.5-5" class="pilcrow">¶</a></p>
-<p id="section-11.5-6"><strong>TODO</strong> Check which existing algorithms do that.<a href="#section-11.5-6" class="pilcrow">¶</a></p>
-<p id="section-11.5-7"><strong>TODO</strong> Can we facilitate QUIC streams for this?<a href="#section-11.5-7" class="pilcrow">¶</a></p>
+equally large buffer on the sender side.<a href="#section-11.2-5" class="pilcrow">¶</a></p>
+<p id="section-11.2-6"><strong>TODO</strong> Check which existing algorithms do that.<a href="#section-11.2-6" class="pilcrow">¶</a></p>
+<p id="section-11.2-7"><strong>TODO</strong> Can we facilitate QUIC streams for this?<a href="#section-11.2-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2517,8 +2533,8 @@ with a current QUIC implementation?<a href="#section-14-1" class="pilcrow">¶</a
         </h3>
 <p id="section-14.1-1">Applications will have very different requirements on a multipath API.
 A comprehensive API should therefore allow for mostly automatic
-selection of <a href="#patsel" class="auto internal xref">Section 11.1</a> Path Selection and Congestion Control
-algorithms <a href="#concon" class="auto internal xref">Section 11.4</a>.<a href="#section-14.1-1" class="pilcrow">¶</a></p>
+selection of <a href="#patsel" class="auto internal xref">Section 9.6</a> Path Selection and Congestion Control
+algorithms <a href="#concon" class="auto internal xref">Section 11.1</a>.<a href="#section-14.1-1" class="pilcrow">¶</a></p>
 <p id="section-14.1-2">At the same time it should give access to SCION paths and their metadata
 to allow implementation of custom algorithms.<a href="#section-14.1-2" class="pilcrow">¶</a></p>
 </section>

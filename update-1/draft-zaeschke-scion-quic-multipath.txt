@@ -109,16 +109,18 @@ Table of Contents
        8.2.2.  Mitigation
        8.2.3.  Variant
    9.  Algorithm Considerations
-     9.1.  Algorithms
+     9.1.  MTU Detection
+     9.2.  Congestion Control
+     9.3.  RTT Estimation
+     9.4.  Retransmission & PTO
+     9.5.  DMTP
+     9.6.  Path Selection
+       9.6.1.  Dynamic Approach
+       9.6.2.  Bottleneck Detection
    10. OLD PART BELOW - IGNORE
    11. OLD - Algorithms
-     11.1.  Path Selection
-       11.1.1.  Dynamic Approach
-       11.1.2.  Bottleneck Detection
-     11.2.  MTU
-     11.3.  DMTP
-     11.4.  Congestion Control
-     11.5.  Load Distribution (Scheduling)
+     11.1.  Congestion Control
+     11.2.  Load Distribution (Scheduling)
    12. QUIC-specific advantages?
    13. OLD - Applications
      13.1.  Data Transfer
@@ -366,7 +368,7 @@ Table of Contents
 
    For FT, paths are only interesting if they are disjoint.  For BW,
    paths should mostly be disjunct, but overlap is acceptable if the
-   overlapping links have high BW available (see Section 11.1.2).
+   overlapping links have high BW available (see Section 9.6.2).
 
    For LAT and EVA, path disjointness is less important.
 
@@ -725,58 +727,71 @@ Table of Contents
 
 9.  Algorithm Considerations
 
-   What has changed: - Much better MPU - Knowledge about shared links/
-   routers between paths - indication of latency+bandwidth limits. -
-   (Potentially live traffic info: Avoid "pulsing" -> Simon Scherer?)
+   The availability of a PAN layer provides addditional information that
+   can be used by algorithms for congestion control, RTT estimation, MTU
+   estimation, ... and others.  It also requires additional algorithms,
+   for example for path selection.
 
-9.1.  Algorithms
+   The additional information includes - path metadata with route
+   information, including MTU and hardware limits on bandwidth and
+   latency - comparability of multiple paths which gives knowledge about
+   shared links/routers between paths
 
-   *  MPU detection algorithm can be removed/replaced with metadata
-      query See Path MTU Discovery in Section 14.3 of [QUIC-TRANSPORT]
-      and Section 5.8 of [QUIC-MP].
+9.1.  MTU Detection
 
-   *  Congestion control algorithms:
+   MPU detection algorithm can be removed/replaced with metadata query
+   See Path MTU Discovery in Section 14.3 of [QUIC-TRANSPORT] and
+   Section 5.8 of [QUIC-MP].
 
-      -  Must reset on path change (how?).
+9.2.  Congestion Control
 
-      -  Should benefit from knowledge about path overlaps.
+   Congestion control (CC) algorithms can benefit from exact knowledge
+   of a path:
 
-      -  Follow BCP 133, see Section 7.10 of [CC-ALGORITHMS].
+   *  When using multiple paths, a CC algorithm can access information
+      as to if and where the paths overlap and some of the properties of
+      the overlapping sections.
 
-   *  Roundtrip time estimator.
+   *  If implemented by the QUIC-MP library, a CC algorithm can be
+      notified of every paths change, allowing it to reset only when
+      necessary.  Without a PAN layer, a CC algorithm has to rely on
+      4-tuple changes to trigger a reset, with the drawback that changes
+      may get unnoticed (in case of path change without 4-tuple change)
+      or that a reset may be unnecessary (in case only the NAT mapping
+      changed whike leaving the rest of the route intact).
 
-      -  Must reset on path change (how?).  See also from Section 5.1 of
-         [QUIC-MP]: "If path validation process succeeds, the endpoints
-         set the path's congestion controller and round-trip time
-         estimator according to Section 9.4 of [QUIC-TRANSPORT]."
+   See also Section 5.3 of [QUIC-MP].
 
-      -  Section 5.4 of [QUIC-MP] describes how data packets and
-         acknowldegement packets may be sent on different paths, making
-         it difficult to detemine the RTT.
+9.3.  RTT Estimation
 
-         o  With PANs, the path is known, so it is easy to tell whether
-            data and acknowledgement were sent on the same path or not.
+   *  Must reset on path change (how?).  See also from Section 5.1 of
+      [QUIC-MP]: "If path validation process succeeds, the endpoints set
+      the path's congestion controller and round-trip time estimator
+      according to Section 9.4 of [QUIC-TRANSPORT]."
 
-         o  With PANs, we could recommend a policy (*TODO recommend?*)
-            that ACKs should be sent on the return path of the data
-            (*TODO* why are they sent on different paths?  Outside path
-            abandon?)
+   *  Section 5.4 of [QUIC-MP] describes how data packets and
+      acknowldegement packets may be sent on different paths, making it
+      difficult to detemine the RTT.
 
-         o  With PANS, explicit path probing is easier.
+      -  With PANs, the path is known, so it is easy to tell whether
+         data and acknowledgement were sent on the same path or not.
 
-         o  We can try to derive lower and upper limits from analysing
-            latency of non-disjoint paths.
+      -  With PANs, we could recommend a policy (*TODO recommend?*) that
+         ACKs should be sent on the return path of the data (*TODO* why
+         are they sent on different paths?  Outside path abandon?)
 
-      -  Should benefit from knowledge about minimum latency expected on
-         a path, see Section 3.1.
+      -  With PANS, explicit path probing is easier.
 
-      -  This allso affects packet scheduling, see Section 5.5 of
-         [QUIC-MP].
+      -  We can try to derive lower and upper limits from analysing
+         latency of non-disjoint paths.
 
-   *  Retransmission & PTO: See Section 5.6 of [QUIC-MP] and Section 5.7
-      of [QUIC-MP].
+   *  Should benefit from knowledge about minimum latency expected on a
+      path, see Section 3.1.
 
-   *  Path selections algorithms
+   *  This allso affects packet scheduling, see Section 5.5 of
+      [QUIC-MP].
+
+   *TODO* Has this the same purpose as RTT estimation?
 
    *  Latency polling
 
@@ -786,16 +801,17 @@ Table of Contents
          traversed only by one poll packet).  Traceroute also allows to
          identify links with high variance or generally hogh latency.
 
-10.  OLD PART BELOW - IGNORE
+9.4.  Retransmission & PTO
 
-11.  OLD - Algorithms
+   See Section 5.6 of [QUIC-MP] and Section 5.7 of [QUIC-MP].
 
-   *TODO* It would be good to have some introductory text here.  What
-   type of algorithms are presented?
+9.5.  DMTP
 
-11.1.  Path Selection
+   One example of an application / algorithm is discussed in [DMTP].
 
-11.1.1.  Dynamic Approach
+9.6.  Path Selection
+
+9.6.1.  Dynamic Approach
 
    A dynamic approach could start with using low latency paths.  If the
    connection appears to be long lasting (e.g. at least 1 second
@@ -803,7 +819,7 @@ Table of Contents
    and see whether the traffic increases.  Additional paths can be
    chosen following the guidelines discussed in Section 13.1.
 
-11.1.2.  Bottleneck Detection
+9.6.2.  Bottleneck Detection
 
    If no live traffic information is available, bottleneck detection can
    help to identify linkks that should be avoided.  In PAN this can be
@@ -817,15 +833,11 @@ Table of Contents
 
    *TODO* Should we discourage this?  It creates unnecessary traffic...
 
-11.2.  MTU
+10.  OLD PART BELOW - IGNORE
 
-   SCION provides MTU information for every AS-level link on a path.
+11.  OLD - Algorithms
 
-11.3.  DMTP
-
-   One example of an application / algorithm is discussed in [DMTP].
-
-11.4.  Congestion Control
+11.1.  Congestion Control
 
    General recommendations for congestion control are defined in
    Congestion Control Principles [CC-PRINCIPLES].  Congestion control
@@ -868,7 +880,7 @@ Table of Contents
 
    *TODO* Terminology: path selection vs load distribution?
 
-11.5.  Load Distribution (Scheduling)
+11.2.  Load Distribution (Scheduling)
 
    Load distribution algorithms are mainly useful for high bandwidth
    (HBW) scenarios.  Latency may still be relevant though, for example
@@ -1000,8 +1012,8 @@ Table of Contents
 
    Applications will have very different requirements on a multipath
    API.  A comprehensive API should therefore allow for mostly automatic
-   selection of Section 11.1 Path Selection and Congestion Control
-   algorithms Section 11.4.
+   selection of Section 9.6 Path Selection and Congestion Control
+   algorithms Section 11.1.
 
    At the same time it should give access to SCION paths and their
    metadata to allow implementation of custom algorithms.
