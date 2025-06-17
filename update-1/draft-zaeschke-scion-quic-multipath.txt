@@ -120,7 +120,7 @@ Table of Contents
    10. OLD PART BELOW - IGNORE
    11. OLD - Algorithms
      11.1.  Congestion Control
-     11.2.  Load Distribution (Scheduling)
+     11.2.  Packet Scheduling
    12. QUIC-specific advantages?
    13. OLD - Applications
      13.1.  Data Transfer
@@ -880,7 +880,7 @@ Table of Contents
 
    *TODO* Terminology: path selection vs load distribution?
 
-11.2.  Load Distribution (Scheduling)
+11.2.  Packet Scheduling
 
    Load distribution algorithms are mainly useful for high bandwidth
    (HBW) scenarios.  Latency may still be relevant though, for example
