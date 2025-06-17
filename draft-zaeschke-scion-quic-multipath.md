@@ -874,7 +874,7 @@ algorithms.
 
 **TODO** Terminology: path selection vs load distribution?
 
-## Load Distribution (Scheduling) {#loaddist}
+## Packet Scheduling {#scheduling}
 
 Load distribution algorithms are mainly useful for high bandwidth
 (HBW) scenarios. Latency may still be relevant though, for example
