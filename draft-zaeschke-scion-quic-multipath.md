@@ -555,13 +555,11 @@ network path may change while the path ID stays the same.
 For example:
 - During path migration (**TODO** ref), a path ID may be (loosely)
 associated with multiple network paths.
-- A PAN library may perform probing (latency, etc.) and switch to a
-new path that is deemed better.
 - A PAN library may have paths that can expire and that can be
   renewed automatically. However, this is should usually result in an
   identical path (except for the expiration date).
 
-### Recommendation
+### Recommendation {#recommendation-path-switching}
 
 PAN libraries should, as default when used with QUIC, not
 automatically switch paths, except when renewing expired paths with
@@ -597,11 +595,26 @@ The API of a QUIC-MP implementation that works with PAN should:
   selection of Path Selection and Congestion Control algorithms.
 
 
+
 # QUIC implementation Considerations {#impcon}
 
 **TODO READ:**
 See also "Implementation Considerations" in {{Section 5 of QUIC-MP}}.
 
+
+## Automatic Path Changes - Initial Handshake
+
+{{QUIC-TRANSPORT}} requires that there is no connection migration
+during the initial handshake, and that there are no other packets
+send (including probing packets) during the initial handshake, see
+{{Section 9 of QUIC-TRANSPORT}}, paragraphs 2 and 3.
+
+An implementation must ensure on some level that no path change or
+probing occurs.
+
+This may be covered by the recommendation that a PAN layer should
+not automatically switch without explicit request by the QUIC(-MP)
+layer. See also {{recommendation-path-switching}}
 
 ## Path Change Detection - Path Injection {#pathchange-injection}
 
@@ -694,6 +707,8 @@ it may drop the valid connection to the valid client.
 **TODO** Check with scionproto
 
 
+
+
 # Algorithm Considerations {#algcon}
 
 What has changed:
@@ -703,16 +718,7 @@ What has changed:
 - (Potentially live traffic info: Avoid "pulsing" -> Simon Scherer?)
 
 
-## General
-{{QUIC-TRANSPORT}} requires that there is no connection migration
-during the initial handshake, and that there are no other packets
-send (including probing packets) during the initial handshake, see
-{{Section 9 of QUIC-TRANSPORT}}, paragraphs 2 and 3.
 
-We need to ensure on some level that no path change or probing occurs.
-
-**TODO** Read {{QUIC-MP}} on 4-tuple change / path validation.
--> Section 9 in RFC 9000
 
 ## Algorithms
 
