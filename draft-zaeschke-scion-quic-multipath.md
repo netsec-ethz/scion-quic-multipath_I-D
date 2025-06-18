@@ -308,7 +308,8 @@ triggering path validation (see {{four-tuple-changes}} and {{token}}).
 
 The identification of "paths" varies between QUIC, QUIC-MP and PANs.
 
-- {{QUIC}} uses a 4-uple of local/remote IP/port to distinguish paths.
+- {{QUIC-TRANSPORT}} uses a 4-uple of local/remote IP/port to
+distinguish paths.
 - {{QUIC-MP}} extends this with a path IDs to distinguish logical
 paths (connections).
 - PANs can typically distinguish paths through detailed
