@@ -1041,8 +1041,7 @@ Table of Contents
 
    *  netwotk path authenticity: paths may be spoofed;
 
-   *  excessive probing patterns which may expose user intentions or
-      identity.
+   *  probing patterns which may expose user intentions or identity.
 
 15.1.  Latency Polling
 
@@ -1055,7 +1054,7 @@ Table of Contents
 
 15.2.  Path Validation
 
-   Following [QUIC-MP] (Section 5.1) and [QUIC-TRANSPORT] (Section 9),
+   Following Section 5 of [QUIC-MP] and Section 9 of [QUIC-TRANSPORT],
    endpoints MUST drop a connection or perform path validation when the
    4-tuple changes:
 

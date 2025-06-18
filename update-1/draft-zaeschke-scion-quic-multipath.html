@@ -20,13 +20,13 @@ This document also gives general considerations for API design and
 applications that use multipath QUIC over SCION. 
        This memo looks speciafically at PANs for inter domain routing. 
     " name="description">
-<meta content="xml2rfc 3.28.1" name="generator">
+<meta content="xml2rfc 3.29.0" name="generator">
 <meta content="SCION" name="keyword">
 <meta content="QUIC" name="keyword">
 <meta content="multipath" name="keyword">
 <meta content="draft-zaeschke-scion-quic-multipath-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.28.1
+  xml2rfc 3.29.0
     Python 3.12.11
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
@@ -2572,8 +2572,7 @@ implementation changes and additional consideration regarding:<a href="#section-
           <p id="section-15-2.2.1">netwotk path authenticity: paths may be spoofed;<a href="#section-15-2.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-15-2.3">
-          <p id="section-15-2.3.1">excessive probing patterns which may expose user intentions or
-identity.<a href="#section-15-2.3.1" class="pilcrow">¶</a></p>
+          <p id="section-15-2.3.1">probing patterns which may expose user intentions or identity.<a href="#section-15-2.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <div id="latency-polling">
@@ -2595,7 +2594,7 @@ Additionally, the number of polled paths should vary.<a href="#section-15.1-1" c
         <h3 id="name-path-validation">
 <a href="#section-15.2" class="section-number selfRef">15.2. </a><a href="#name-path-validation" class="section-name selfRef">Path Validation</a>
         </h3>
-<p id="section-15.2-1">Following <span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> (Section 5.1) and <span>[<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> (Section 9),
+<p id="section-15.2-1">Following <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5" class="relref">Section 5</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> and <span><a href="https://rfc-editor.org/rfc/rfc9000#section-9" class="relref">Section 9</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>,
 endpoints <span class="bcp14">MUST</span> drop a connection or perform path validation when the
 4-tuple changes:<a href="#section-15.2-1" class="pilcrow">¶</a></p>
 <p id="section-15.2-2"><code>
