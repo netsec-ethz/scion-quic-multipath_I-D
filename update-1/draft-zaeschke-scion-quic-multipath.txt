@@ -130,9 +130,12 @@ Table of Contents
      13.4.  Multipathing for Anonymity
    14. Summary of Recommendations
    15. Security Considerations
-     15.1.  Proping Patterns
-     15.2.  Path Validation
-     15.3.  More ?
+     15.1.  Probe Fingerprinting
+     15.2.  Path Injection
+       15.2.1.  QUIC rejects the packet
+       15.2.2.  QUIC accepts the packet
+     15.3.  Path Validation -- OLD
+     15.4.  More ?
    16. IANA Considerations
    17. References
      17.1.  Normative References
@@ -1051,7 +1054,7 @@ Table of Contents
       client's path policy.  The return path SHOULD be determined in the
       QUIC(-MP) library.  This ensures that we are only using paths of
       packets that have been accepted by the QUIC(-MP) layer or above.
-      This protects against several attacks, see Section 15.2.
+      This protects against several attacks, see Section 15.3.
 
    Possible workaround: port/address mangling?
 
@@ -1071,7 +1074,7 @@ Table of Contents
 
    *  probing patterns which may expose user intentions or identity.
 
-15.1.  Proping Patterns
+15.1.  Probe Fingerprinting
 
    PANs invite to probing of multiple path inorder to determine the best
    path(s) for a given usecase.  One example of probing packets are
@@ -1088,11 +1091,95 @@ Table of Contents
    number of probing packets, and by sending probing packets not en
    block but time-shifted.
 
-15.2.  Path Validation
+15.2.  Path Injection
+
+   An attacker may send a packet to a server that uses as sender address
+   an IP/port that is identical to a valid client IP/port.  The IP/port
+   are not spoofed, instead they represent a valid machine in a
+   different AS.
+
+   There are two types of attack that can result from this.  If the
+   QUIC(-MP) layer rejects the packet, a vulnerable PAN implemntation
+   may be coaxed into a traffic amplification or redirection attack, or
+   possibly memory exhaustion on the server.  If the QUIC(-MP) layer
+   accepts the packet, a vulnerable combination of QUIC(-MP) layer and
+   PAN layer may be susceptible to Stateless Reset, see Section 9 of
+   [QUIC-TRANSPORT].
+
+15.2.1.  QUIC rejects the packet
+
+   On a server, a PAN layer implementation may decide to store paths of
+   incoming packets in a map.  This would facilitate use of the PAN
+   layer by a QUIC(-MP) implementation that uses only IP/port to address
+   peers.  The PAN layer, can then use the IP/port to look up a path.
+
+   An attacker may now send a packet with a path to the server.  The
+   server stores the path for future use.
+
+   Problems: 1.  Running out of memory 2.  If IP/port is identical to an
+   existing connection, the server may from now on send outgoing data to
+   the new path+destination 3.  The attacker could establish a correct
+   connection, request a lot of data and then inject a path that
+   redirect to a victim that has the same IP/port, but in a different
+   AS.  The server side QUIC(-MP) library would not know the difference
+   and, without performing path validation, send the requested data to a
+   victim.
+
+   Ad 2./3.: To inject a wrong path, the attacker must have control over
+   an AS that islocated between the server and the victim.
+
+   Solutions for 2.: - PAN Layer could detect QUIC and add connection ID
+   to the IP/port mapping.  This of course violates layer separateion
+
+   Solution?  Using Only non-private IPs is probably neither feasible
+   nor a good protection.  A malicious AS could internally allow public
+   IPs that are duplicates of properly assigned public IPs..
+
+15.2.2.  QUIC accepts the packet
+
+   QUIC may actually accept the packet because the IP/port is the same a
+   with a previously validated client.
+
+   This can be used to trigger a Stateless Reset, see Section 5 of
+   [QUIC-MP] and Section 9 of [QUIC-TRANSPORT].
+
+   To prevent this we need to trigger path validation.
+
+   Ideally, the QUIC(-MP) implementation SHOULD aim to detect a change
+   in the network address, in this case the AS number, and trigger a
+   path validation.  If that is not possible, the PAN layer (server
+   side) should have an option to perform port mangling or IP mangling:
+   when the PAN layer detects a new network address that differs only in
+   the AS number from a previously seen address (IP/port) are the same,
+   the it should perform IP/port mangling, i.e. reporting a modified IP
+   or port to the QUIC(-MP) layer.  This new IP/port would trigger a
+   path validation or algorithm reset where required.
+
+   Caveats
+
+   *  The implementation needs to be careful to avoid memory exhaustion
+      from storing too many mappings of mangel IP/ports.
+
+   *  Offering a mangeled IP/port to the application may have
+      implications for application correctness, such as displaying an
+      unexpected IP/port.
+
+15.3.  Path Validation -- OLD
 
    Following Section 5 of [QUIC-MP] and Section 9 of [QUIC-TRANSPORT],
    endpoints MUST drop a connection or perform path validation when the
    4-tuple changes, unless it has previously validated the address.
+   This is to prevent third parties from generating a Stateless Reset or
+   closing the connection by spoofing or otherwise manipulating observed
+   traffic.  This protection hinges on the assumption that a 4-tuple is
+   sufficient to confirm peer identity, asusming that the peer can
+   answer on the known address.
+
+   *TODO* - The attack in Section 9 talks about Ststeless Reset and
+   spoofing.  We are doing neither here.  -> Maybe we can do stateless
+   reset? - With AS subsitution (substituting the AS while keeping the
+   IP/port the same) we can do something like a man-in-the middle attack
+   (actually: rerouting attack?).
 
    With PANs, the 4-tuple may not be sufficient to confirm peer
    identity.  Two paths with an identical 4-tuple may connect to two
@@ -1137,7 +1224,7 @@ Table of Contents
    It seems with SCION we can insert arbitrary IP addresses into the
    stack before handing incoming packets up to the QUIC layer...?
 
-15.3.  More ?
+15.4.  More ?
 
    See Section 13.4.
 
