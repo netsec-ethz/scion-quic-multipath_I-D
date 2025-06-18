@@ -1371,16 +1371,13 @@ applications that use multipath QUIC over SCION.<a href="#section-abstract-2" cl
             <p id="section-toc.1-1.15.1"><a href="#section-15" class="auto internal xref">15</a>. <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.1">
-                <p id="section-toc.1-1.15.2.1.1"><a href="#section-15.1" class="auto internal xref">15.1</a>.  <a href="#name-latency-polling" class="internal xref">Latency Polling</a></p>
+                <p id="section-toc.1-1.15.2.1.1"><a href="#section-15.1" class="auto internal xref">15.1</a>.  <a href="#name-proping-patterns" class="internal xref">Proping Patterns</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.2">
                 <p id="section-toc.1-1.15.2.2.1"><a href="#section-15.2" class="auto internal xref">15.2</a>.  <a href="#name-path-validation" class="internal xref">Path Validation</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.3">
-                <p id="section-toc.1-1.15.2.3.1"><a href="#section-15.3" class="auto internal xref">15.3</a>.  <a href="#name-proping-patterns" class="internal xref">Proping Patterns</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.4">
-                <p id="section-toc.1-1.15.2.4.1"><a href="#section-15.4" class="auto internal xref">15.4</a>.  <a href="#name-more" class="internal xref">More ?</a></p>
+                <p id="section-toc.1-1.15.2.3.1"><a href="#section-15.3" class="auto internal xref">15.3</a>.  <a href="#name-more" class="internal xref">More ?</a></p>
 </li>
             </ul>
 </li>
@@ -2610,18 +2607,22 @@ implementation changes and additional consideration regarding:<a href="#section-
           <p id="section-15-2.3.1">probing patterns which may expose user intentions or identity.<a href="#section-15-2.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<div id="latency-polling">
+<div id="proping-patterns">
 <section id="section-15.1">
-        <h3 id="name-latency-polling">
-<a href="#section-15.1" class="section-number selfRef">15.1. </a><a href="#name-latency-polling" class="section-name selfRef">Latency Polling</a>
+        <h3 id="name-proping-patterns">
+<a href="#section-15.1" class="section-number selfRef">15.1. </a><a href="#name-proping-patterns" class="section-name selfRef">Proping Patterns</a>
         </h3>
-<p id="section-15.1-1">If a user sends latency measurements on 10 paths in parallel
-every 5 seconds, then these 10 paths can (with some probability)
-be attributed to the same user.
-Solution: do not send all probes at the same time.
-To prevent patterns (1. after 0.1s, 2. after 0.3s, 3. after 0.35s, ...)
-the interval between packets on each path should also vary.
-Additionally, the number of polled paths should vary.<a href="#section-15.1-1" class="pilcrow">¶</a></p>
+<p id="section-15.1-1">PANs invite to probing of multiple path inorder to determine the best
+path(s) for a given usecase. One example of probing packets are
+packets that measure round trip time (RTT).<a href="#section-15.1-1" class="pilcrow">¶</a></p>
+<p id="section-15.1-2">If sent en block, probing packets can be detected because they
+may be sent in bulk, to the same destination, in regular intervals
+and all with slightly different paths attached.<a href="#section-15.1-2" class="pilcrow">¶</a></p>
+<p id="section-15.1-3">This can be used to fingerprinting an endpoints or their intentions
+(applications may have unique intervals definded).<a href="#section-15.1-3" class="pilcrow">¶</a></p>
+<p id="section-15.1-4">This can be mitigated by varying and generally reducing the
+intervals number of probing packets, and by sending probing packets
+not en block but time-shifted.<a href="#section-15.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="security-path-validation">
@@ -2674,26 +2675,14 @@ ISD/AS code).<a href="#section-15.2-8" class="pilcrow">¶</a></p>
 stack before handing incoming packets up to the QUIC layer...?<a href="#section-15.2-9" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="proping-patterns">
-<section id="section-15.3">
-        <h3 id="name-proping-patterns">
-<a href="#section-15.3" class="section-number selfRef">15.3. </a><a href="#name-proping-patterns" class="section-name selfRef">Proping Patterns</a>
-        </h3>
-<p id="section-15.3-1">PANs invite to probing of multiple path inorder to determine the best
-path(s) for a given usecase. One example of probing packets are
-packets that measure round trip time (RTT).<a href="#section-15.3-1" class="pilcrow">¶</a></p>
-<p id="section-15.3-2">If sent en block, probing packets can be detected being sent in bulk,
-to the same destination, and all with slightly different paths attached.<a href="#section-15.3-2" class="pilcrow">¶</a></p>
-</section>
-</div>
 <div id="more-">
-<section id="section-15.4">
+<section id="section-15.3">
         <h3 id="name-more">
-<a href="#section-15.4" class="section-number selfRef">15.4. </a><a href="#name-more" class="section-name selfRef">More ?</a>
+<a href="#section-15.3" class="section-number selfRef">15.3. </a><a href="#name-more" class="section-name selfRef">More ?</a>
         </h3>
-<p id="section-15.4-1">See <a href="#anon" class="auto internal xref">Section 13.4</a>.<a href="#section-15.4-1" class="pilcrow">¶</a></p>
-<p id="section-15.4-2">See other attacks in <span><a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-controlplane-08#section-7.2.4" class="relref">Section 7.2.4</a> of [<a href="#SCION-CP" class="cite xref">SCION-CP</a>]</span>?<a href="#section-15.4-2" class="pilcrow">¶</a></p>
-<p id="section-15.4-3"><strong>TODO</strong><a href="#section-15.4-3" class="pilcrow">¶</a></p>
+<p id="section-15.3-1">See <a href="#anon" class="auto internal xref">Section 13.4</a>.<a href="#section-15.3-1" class="pilcrow">¶</a></p>
+<p id="section-15.3-2">See other attacks in <span><a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-controlplane-08#section-7.2.4" class="relref">Section 7.2.4</a> of [<a href="#SCION-CP" class="cite xref">SCION-CP</a>]</span>?<a href="#section-15.3-2" class="pilcrow">¶</a></p>
+<p id="section-15.3-3"><strong>TODO</strong><a href="#section-15.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
