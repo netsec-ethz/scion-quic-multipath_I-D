@@ -1077,15 +1077,24 @@ implementation changes and additional consideration regarding:
 - probing patterns which may expose user intentions or identity.
 
 
-## Latency Polling
 
-If a user sends latency measurements on 10 paths in parallel
-every 5 seconds, then these 10 paths can (with some probability)
-be attributed to the same user.
-Solution: do not send all probes at the same time.
-To prevent patterns (1. after 0.1s, 2. after 0.3s, 3. after 0.35s, ...)
-the interval between packets on each path should also vary.
-Additionally, the number of polled paths should vary.
+## Proping Patterns
+
+PANs invite to probing of multiple path inorder to determine the best
+path(s) for a given usecase. One example of probing packets are
+packets that measure round trip time (RTT).
+
+If sent en block, probing packets can be detected because they
+may be sent in bulk, to the same destination, in regular intervals
+and all with slightly different paths attached.
+
+This can be used to fingerprinting an endpoints or their intentions
+(applications may have unique intervals definded).
+
+This can be mitigated by varying and generally reducing the
+intervals number of probing packets, and by sending probing packets
+not en block but time-shifted.
+
 
 
 ## Path Validation {#security-path-validation}
@@ -1144,15 +1153,6 @@ stack before handing incoming packets up to the QUIC layer...?
 
 
 
-
-## Proping Patterns
-
-PANs invite to probing of multiple path inorder to determine the best
-path(s) for a given usecase. One example of probing packets are
-packets that measure round trip time (RTT).
-
-If sent en block, probing packets can be detected being sent in bulk,
-to the same destination, and all with slightly different paths attached.
 
 
 
