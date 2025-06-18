@@ -344,9 +344,9 @@ change?
 **TODO** It seems path migration is only useful when the network
 address changes?
 
-In SCION, neither the AS no the network path are validated and may be
+In SCION, neither the AS nor the network path are validated and may be
 forged, see {{security}} for a discussion. However, SCION provides
-extrensions for validating these properties, namely SPAO and EPIC.
+extensions for validating these properties, namely SPAO and EPIC.
 (**TODO** remove or replace references to SPAO/EPIC?)
 
 
@@ -1058,6 +1058,26 @@ transparent  multipathing with additional code on the application level.
 
 
 
+# Summary of Recommendations
+
+- MUST: Enforce endpoint identity by requiring QUIC-MP
+implementations to provide a destination network address instead of
+just a IP/port.
+Related: The SCION stack should not store/cache paths, especially not
+on the server side.
+- SHOULD: Enable QUIC-MP implementations to recognize network path
+changes beyond 4-tuple changes
+- MUST: SCION stack should by default not change the network paths,
+possibly with the exception of refreshing expired paths.
+
+
+Possible workaround: port/address mangling?
+
+Future: how to handle dynamic traffic data? This requires anyway a
+tighter integration if CC algorithms.
+
+
+
 # Security Considerations {#security}
 
 THe aim is that {{QUIC-MP}} over PANs retains all security
@@ -1086,21 +1106,12 @@ Additionally, the number of polled paths should vary.
 
 Following {{Section 5 of QUIC-MP}} and {{Section 9 of QUIC-TRANSPORT}},
 endpoints MUST drop a connection or perform path validation when the
-4-tuple changes:
+4-tuple changes, unless it has previously validated the address.
 
-```
-"Not all changes of peer address are intentional, or active,
-migrations. The peer could experience NAT rebinding: a change of
-address due to a middlebox, usually a NAT, allocating a new outgoing
-port or even a new outgoing IP address for a flow. An endpoint MUST
-perform path validation (Section 8.2) if it detects any change to a
-peer's address, unless it has previously validated that address."
-```
-
-With SCION, endpoints may use private IPs, say 192.168.0.1. These IPs
-are obviously not unique. Two paths with an identical 4-tuple may
-therefor connect to two different machines if the machines are in
-different ASes but use the same IP/port.
+With PANs, the 4-tuple may not be sufficient to confirm peer identity.
+Two paths with an identical 4-tuple may connect to two different
+machines if the machines are in different ASes but use the same
+IP/port, see {{endpoint-identity}}.
 
 In short, an attacker can impersonate a client by using an identical
 IP/port to connect a server. The server would probably just reverse
@@ -1108,10 +1119,10 @@ the path and answer to the client without triggering a path validation.
 
 **TODO** What is the implication of this?
 
-* Can an attacker, without having being able to encrypt/decrypt data,
-cause any harm? Can they redurect traffic to themselves? To prevent
-this, the server SCION stack should accept a new path only if the
-QUIC stack also accepts it! This means we need to trigger a path
+In the case of {{scion}}, to prevent this, the server SCION stack
+should accept a new path only if the
+QUIC stack also accepts it.
+This means we need to trigger a path
 validation and somehow learn whether it worked. Or we use our own
 validation process. Or we don't allow the path to change and require
 a new QUIC connection (with a new SCION connection)?
