@@ -770,7 +770,7 @@ overlapping sections.
 See also {{Section 5.3 of QUIC-MP}}.
 
 
-## RTT Estimation
+## RTT Estimation {#rtt}
 
 - Must reset on path change (how?). See also from {{Section 5.1 of
   QUIC-MP}}:
@@ -1029,36 +1029,11 @@ SCION allows for choosing paths based on trusted or untrusted ASes,
 but this is not specific to multipathing...
 
 
-# API Design consideration {#api}
-
-**TODO** Can we be more concrete here on how SCION would be used
-with a current QUIC implementation?
-
-## Multipathing for Applications
-
-Applications will have very different requirements on a multipath API.
-A comprehensive API should therefore allow for mostly automatic
-selection of {{patsel}} Path Selection and Congestion Control
-algorithms {{concon}}.
-
-At the same time it should give access to SCION paths and their metadata
-to allow implementation of custom algorithms.
-
-## Algorithm Integration
-
-Several proposals in {{lola}} and {{redu}} suggest sending data
-redundantly in parallel on multiple paths.
-Similarly, some proposals suggest sending packets purely for latency
-measurements.
-
-Congestion control algorithms and path selection algorithms should
-try to hide parallel transfer and measurement streams from the
-application.  This may also depend on API designer to provide such
-transparent  multipathing with additional code on the application level.
-
-
 
 # Summary of Recommendations
+
+**TODO** This memo is informative, but we have some MUST and SHOULD
+here.
 
 - MUST: Enforce endpoint identity by requiring QUIC-MP
 implementations to provide a destination network address instead of
@@ -1068,8 +1043,19 @@ on the server side.
 - SHOULD: Enable QUIC-MP implementations to recognize network path
 changes beyond 4-tuple changes
 - MUST: SCION stack should by default not change the network paths,
-possibly with the exception of refreshing expired paths.
-
+possibly with the exception of refreshing expired paths. When a path
+stops working (link errors, etc), it should instead report an error
+to the QUIC(-MP) layer or time out silently.
+- On a server, the PAN layer SHOULD return probing packets on the same
+  network path on which they were received, this greatly simplifies RTT
+  estimation, see {{rtt}}
+- Generally, a server SHOULD respond on the same path on which the data
+  was requested. This ensures that the path does not violate a client's
+  path policy.
+  The return path SHOULD be determined in the QUIC(-MP) library.
+  This ensures that we are only using paths of packets that have been
+  accepted by the QUIC(-MP) layer or above. This protects against
+  several attacks, see {{security-path-validation}}.
 
 Possible workaround: port/address mangling?
 
@@ -1102,7 +1088,7 @@ the interval between packets on each path should also vary.
 Additionally, the number of polled paths should vary.
 
 
-## Path Validation
+## Path Validation {#security-path-validation}
 
 Following {{Section 5 of QUIC-MP}} and {{Section 9 of QUIC-TRANSPORT}},
 endpoints MUST drop a connection or perform path validation when the
@@ -1156,6 +1142,17 @@ ISD/AS code).
 It seems with SCION we can insert arbitrary IP addresses into the
 stack before handing incoming packets up to the QUIC layer...?
 
+
+
+
+## Proping Patterns
+
+PANs invite to probing of multiple path inorder to determine the best
+path(s) for a given usecase. One example of probing packets are
+packets that measure round trip time (RTT).
+
+If sent en block, probing packets can be detected being sent in bulk,
+to the same destination, and all with slightly different paths attached.
 
 
 
