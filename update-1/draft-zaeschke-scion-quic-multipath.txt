@@ -131,14 +131,15 @@ Table of Contents
    14. API Design consideration
      14.1.  Multipathing for Applications
      14.2.  Algorithm Integration
-   15. Security Considerations
-     15.1.  Latency Polling
-     15.2.  Path Validation
-     15.3.  More ?
-   16. IANA Considerations
-   17. References
-     17.1.  Normative References
-     17.2.  Informative References
+   15. Summary of Recommendations
+   16. Security Considerations
+     16.1.  Latency Polling
+     16.2.  Path Validation
+     16.3.  More ?
+   17. IANA Considerations
+   18. References
+     18.1.  Normative References
+     18.2.  Informative References
    Acknowledgments
    Authors' Addresses
 
@@ -378,9 +379,9 @@ Table of Contents
    *TODO* It seems path migration is only useful when the network
    address changes?
 
-   In SCION, neither the AS no the network path are validated and may be
-   forged, see Section 15 for a discussion.  However, SCION provides
-   extrensions for validating these properties, namely SPAO and EPIC.
+   In SCION, neither the AS nor the network path are validated and may
+   be forged, see Section 16 for a discussion.  However, SCION provides
+   extensions for validating these properties, namely SPAO and EPIC.
    (*TODO* remove or replace references to SPAO/EPIC?)
 
 5.3.  Disjointness
@@ -1053,7 +1054,25 @@ Table of Contents
    transparent multipathing with additional code on the application
    level.
 
-15.  Security Considerations
+15.  Summary of Recommendations
+
+   *  MUST: Enforce endpoint identity by requiring QUIC-MP
+      implementations to provide a destination network address instead
+      of just a IP/port.  Related: The SCION stack should not store/
+      cache paths, especially not on the server side.
+
+   *  SHOULD: Enable QUIC-MP implementations to recognize network path
+      changes beyond 4-tuple changes
+
+   *  MUST: SCION stack should by default not change the network paths,
+      possibly with the exception of refreshing expired paths.
+
+   Possible workaround: port/address mangling?
+
+   Future: how to handle dynamic traffic data?  This requires anyway a
+   tighter integration if CC algorithms.
+
+16.  Security Considerations
 
    THe aim is that [QUIC-MP] over PANs retains all security properties
    of [QUIC-MP].  However, this requires some implementation changes and
@@ -1066,7 +1085,7 @@ Table of Contents
 
    *  probing patterns which may expose user intentions or identity.
 
-15.1.  Latency Polling
+16.1.  Latency Polling
 
    If a user sends latency measurements on 10 paths in parallel every 5
    seconds, then these 10 paths can (with some probability) be
@@ -1075,23 +1094,16 @@ Table of Contents
    after 0.35s, ...) the interval between packets on each path should
    also vary.  Additionally, the number of polled paths should vary.
 
-15.2.  Path Validation
+16.2.  Path Validation
 
    Following Section 5 of [QUIC-MP] and Section 9 of [QUIC-TRANSPORT],
    endpoints MUST drop a connection or perform path validation when the
-   4-tuple changes:
+   4-tuple changes, unless it has previously validated the address.
 
-   "Not all changes of peer address are intentional, or active,
-   migrations.  The peer could experience NAT rebinding: a change of
-   address due to a middlebox, usually a NAT, allocating a new outgoing
-   port or even a new outgoing IP address for a flow.  An endpoint MUST
-   perform path validation (Section 8.2) if it detects any change to a
-   peer's address, unless it has previously validated that address."
-
-   With SCION, endpoints may use private IPs, say 192.168.0.1.  These
-   IPs are obviously not unique.  Two paths with an identical 4-tuple
-   may therefor connect to two different machines if the machines are in
-   different ASes but use the same IP/port.
+   With PANs, the 4-tuple may not be sufficient to confirm peer
+   identity.  Two paths with an identical 4-tuple may connect to two
+   different machines if the machines are in different ASes but use the
+   same IP/port, see Section 5.1.
 
    In short, an attacker can impersonate a client by using an identical
    IP/port to connect a server.  The server would probably just reverse
@@ -1100,16 +1112,14 @@ Table of Contents
 
    *TODO* What is the implication of this?
 
-   *  Can an attacker, without having being able to encrypt/decrypt
-      data, cause any harm?  Can they redurect traffic to themselves?
-      To prevent this, the server SCION stack should accept a new path
-      only if the QUIC stack also accepts it!  This means we need to
-      trigger a path validation and somehow learn whether it worked.  Or
-      we use our own validation process.  Or we don't allow the path to
-      change and require a new QUIC connection (with a new SCION
-      connection)?  SOLUTION: The SCION layer MUST NOT cache paths
-      locally, instead paths must be accepted by the QUIC layer before
-      being used.
+   In the case of Section 1.1, to prevent this, the server SCION stack
+   should accept a new path only if the QUIC stack also accepts it.
+   This means we need to trigger a path validation and somehow learn
+   whether it worked.  Or we use our own validation process.  Or we
+   don't allow the path to change and require a new QUIC connection
+   (with a new SCION connection)?  SOLUTION: The SCION layer MUST NOT
+   cache paths locally, instead paths must be accepted by the QUIC layer
+   before being used.
 
    Examples: * Java over DatagramChannel: * Comparing ResponsePath
    objects MUST return false if the paths differ.  * The QUIC layer MUST
@@ -1133,7 +1143,7 @@ Table of Contents
    It seems with SCION we can insert arbitrary IP addresses into the
    stack before handing incoming packets up to the QUIC layer...?
 
-15.3.  More ?
+16.3.  More ?
 
    See Section 13.4.
 
@@ -1141,13 +1151,13 @@ Table of Contents
 
    *TODO*
 
-16.  IANA Considerations
+17.  IANA Considerations
 
    This document has no IANA actions.
 
-17.  References
+18.  References
 
-17.1.  Normative References
+18.1.  Normative References
 
    [CC-ALGORITHMS]
               Duke, M., Ed. and G. Fairhurst, Ed., "Specifying New
@@ -1207,7 +1217,7 @@ Table of Contents
               Guidelines", BCP 145, RFC 8085, DOI 10.17487/RFC8085,
               March 2017, <https://www.rfc-editor.org/rfc/rfc8085>.
 
-17.2.  Informative References
+18.2.  Informative References
 
    [CC-MULTIPATH-TCP]
               Raiciu, C., Handley, M., and D. Wischik, "Coupled
