@@ -1221,26 +1221,29 @@ applications that use multipath QUIC over SCION.<a href="#section-abstract-2" cl
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-notable-differences-and-ben" class="internal xref">Notable Differences and Benefits</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
-                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-endpoint-identity-and-path-" class="internal xref">Endpoint Identity and Path Identity</a></p>
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-endpoint-identity" class="internal xref">Endpoint Identity</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-path-identity" class="internal xref">Path Identity</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.1">
-                    <p id="section-toc.1-1.5.2.1.2.1.1"><a href="#section-5.1.1" class="auto internal xref">5.1.1</a>.  <a href="#name-path-id" class="internal xref">Path ID</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2.2.1">
+                    <p id="section-toc.1-1.5.2.2.2.1.1"><a href="#section-5.2.1" class="auto internal xref">5.2.1</a>.  <a href="#name-interoperability-of-quic-mp" class="internal xref">Interoperability of QUIC-MP and PAN Path Identity</a></p>
 </li>
                 </ul>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
-                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-disjointness" class="internal xref">Disjointness</a></p>
-</li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3">
-                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="auto internal xref">5.3</a>.  <a href="#name-path-metadata-2" class="internal xref">Path Metadata</a></p>
+                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="auto internal xref">5.3</a>.  <a href="#name-disjointness" class="internal xref">Disjointness</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.4">
-                <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="auto internal xref">5.4</a>.  <a href="#name-explicit-path-selection" class="internal xref">Explicit Path Selection</a></p>
+                <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="auto internal xref">5.4</a>.  <a href="#name-path-metadata-2" class="internal xref">Path Metadata</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.5">
+                <p id="section-toc.1-1.5.2.5.1"><a href="#section-5.5" class="auto internal xref">5.5</a>.  <a href="#name-explicit-path-selection" class="internal xref">Explicit Path Selection</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-some-pitfalls-wip-renema-to" class="internal xref">Some Pitfalls -- WIP -- Renema to Guidelines</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-some-pitfalls-wip-rename-to" class="internal xref">Some Pitfalls -- WIP -- Rename to Guidelines</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
                 <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-4-tuple-changes" class="internal xref">4-tuple changes</a></p>
@@ -1491,9 +1494,9 @@ links".<a href="#section-2.1-6" class="pilcrow">¶</a></p>
 <p id="section-2.1-7"><strong>Network Path</strong>: Consists of a 4-tuple of address/IP at each
 endpoint, a list of all traversed ASes, and links inside and between
 ASes, including interface IDs on border routers of each AS.<a href="#section-2.1-7" class="pilcrow">¶</a></p>
-<p id="section-2.1-8"><strong>Path ID</strong>: The Path ID is defined in <span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> . On the network
-layer, it is defined by a 4-tuple of IP/port of the local and remote
-endpoints.<a href="#section-2.1-8" class="pilcrow">¶</a></p>
+<p id="section-2.1-8"><strong>QUIC-MP Path</strong>: Consists of a 4-tuple of address/IP at each
+endpoint and a Path ID (see <span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>). The Path ID allows having
+multiple logical paths for the same 4-tuple.<a href="#section-2.1-8" class="pilcrow">¶</a></p>
 <p id="section-2.1-9"><strong>Path Metadata</strong>: Path metadata is additional data that is available to
 clients when they request a selection of paths to a destination.
 Path metadata is authenticated wrt to owner of each link, but
@@ -1626,114 +1629,140 @@ category.<a href="#section-4-4" class="pilcrow">¶</a></p>
       <h2 id="name-notable-differences-and-ben">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-notable-differences-and-ben" class="section-name selfRef">Notable Differences and Benefits</a>
       </h2>
-<div id="identity">
+<p id="section-5-1">Using QUIC or QUIC-MP over a PAN changes some of underlying
+assumptions. This provides certain benefits, such as additional
+information and control over path, but also some pitfalls.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<div id="endpoint-identity">
 <section id="section-5.1">
-        <h3 id="name-endpoint-identity-and-path-">
-<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-endpoint-identity-and-path-" class="section-name selfRef">Endpoint Identity and Path Identity</a>
+        <h3 id="name-endpoint-identity">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-endpoint-identity" class="section-name selfRef">Endpoint Identity</a>
         </h3>
-<p id="section-5.1-1">PANs may provide or require an extended definition of idenity.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.1-2">In a PAN such as SCION (<a href="#scion" class="auto internal xref">Section 1.1</a>), networks paths are known to the
-endpoints.
-This can, and should, be used to detect changes even when the 4-tuple
-of local/remote IP/port (or equivalent) stays the same. Change
-detection can be useful to avoid unintended path changes or to trigger
-actions, such as resetting congestion control or RTT estimation
-algorithms.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
-<p id="section-5.1-3">Separately, PANs may use a network address beyond the 4-tuple of
+<p id="section-5.1-1">In QUIC, endpoints are identified by their IP and port number. This
+works because IP addresses are unique (globally, or in whatever
+context they are used).<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-2">PANs may use a network address beyond the 4-tuple of
 local/remote IP/port. For example, SCION (<a href="#scion" class="auto internal xref">Section 1.1</a>), allows IPs
 from the private IP ranges (e.g. 192.168.1.1/32). To uniquely identify
 endhosts globally, the AS (autonomous system) identifier is added
 to fully qualify a network address.
-This has consquences for security mechanisms. Implementations need
+This has consequences for security mechanisms. Implementations need
 to be careful to consider the full network address, for example when
-triggering path validation (see <a href="#four-tuple-changes" class="auto internal xref">Section 6.1</a> and <a href="#token" class="auto internal xref">Section 6.2</a>).<a href="#section-5.1-3" class="pilcrow">¶</a></p>
-<div id="path-id">
-<section id="section-5.1.1">
-          <h4 id="name-path-id">
-<a href="#section-5.1.1" class="section-number selfRef">5.1.1. </a><a href="#name-path-id" class="section-name selfRef">Path ID</a>
+triggering path validation (see <a href="#four-tuple-changes" class="auto internal xref">Section 6.1</a> and <a href="#token" class="auto internal xref">Section 6.2</a>).<a href="#section-5.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="path-identity">
+<section id="section-5.2">
+        <h3 id="name-path-identity">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-path-identity" class="section-name selfRef">Path Identity</a>
+        </h3>
+<p id="section-5.2-1">The identification of "paths" varies between QUIC, QUIC-MP and PANs.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.2-2.1">
+            <p id="section-5.2-2.1.1"><span>[<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> uses a 4-uple of local/remote IP/port to
+distinguish paths.<a href="#section-5.2-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.2-2.2">
+            <p id="section-5.2-2.2.1"><span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> extends this with a path IDs to distinguish logical
+paths (connections).<a href="#section-5.2-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.2-2.3">
+            <p id="section-5.2-2.3.1">PANs can typically distinguish paths through detailed
+path metadata based on the physical network path. The metadata may
+also include an expiration date.<a href="#section-5.2-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-5.2-3">When using a PAN, the path identity can, and should, be used to detect
+changes even when the 4-tuple of local/remote IP/port (or equivalent)
+stays the same.
+Change detection can be useful to avoid unintended path changes or
+to trigger actions, such as resetting congestion control or RTT
+estimation algorithms.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+<div id="interoperability-of-quic-mp-and-pan-path-identity">
+<section id="section-5.2.1">
+          <h4 id="name-interoperability-of-quic-mp">
+<a href="#section-5.2.1" class="section-number selfRef">5.2.1. </a><a href="#name-interoperability-of-quic-mp" class="section-name selfRef">Interoperability of QUIC-MP and PAN Path Identity</a>
           </h4>
-<p id="section-5.1.1-1"><span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> specifies a path ID that is used to identify and
-distinguish multiple "paths". However, there is not always a 1:1 mapping
-between path IDs and networks paths as they are use in SCION.<a href="#section-5.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.2.1-1">Unfortunately, there is not always a 1:1 mapping
+between path IDs and networks paths as they are use in SCION.<a href="#section-5.2.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.1.1-2.1">
-              <p id="section-5.1.1-2.1.1">A PAN path may expire and should be replaceable with a new version
+<li class="normal" id="section-5.2.1-2.1">
+              <p id="section-5.2.1-2.1.1">A PAN path may expire and should be replaceable with a new version
 without requiring a new Path ID (<strong>TODO TBD</strong>: We could also require
-path migration in this case)<a href="#section-5.1.1-2.1.1" class="pilcrow">¶</a></p>
+path migration in this case)<a href="#section-5.2.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-5.1.1-3"><strong>TODO</strong> In future we may have more dynamic path availablility with
+<p id="section-5.2.1-3"><strong>TODO</strong> In future we may have more dynamic path availablility with
 live metadata. Do we really need path migration for every (small) route
-change?<a href="#section-5.1.1-3" class="pilcrow">¶</a></p>
+change?<a href="#section-5.2.1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.1.1-4.1">
-              <p id="section-5.1.1-4.1.1">Network address changes should trigger path validation<a href="#section-5.1.1-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-5.2.1-4.1">
+              <p id="section-5.2.1-4.1.1">Network address changes should trigger path validation<a href="#section-5.2.1-4.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-5.1.1-4.2">
-              <p id="section-5.1.1-4.2.1">Network path changes should trigger algorithm reset (CC, RTT
-estimate), see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.1" class="relref">Section 5.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-5.1.1-4.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-5.2.1-4.2">
+              <p id="section-5.2.1-4.2.1">Network path changes should trigger algorithm reset (CC, RTT
+estimate), see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.1" class="relref">Section 5.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-5.2.1-4.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-5.1.1-5"><strong>TODO</strong> It seems path migration is only useful when the network
-address changes?<a href="#section-5.1.1-5" class="pilcrow">¶</a></p>
-<p id="section-5.1.1-6">In SCION, neither the AS no the network path are validated and may be
+<p id="section-5.2.1-5"><strong>TODO</strong> It seems path migration is only useful when the network
+address changes?<a href="#section-5.2.1-5" class="pilcrow">¶</a></p>
+<p id="section-5.2.1-6">In SCION, neither the AS no the network path are validated and may be
 forged, see <a href="#security" class="auto internal xref">Section 15</a> for a discussion. However, SCION provides
 extrensions for validating these properties, namely SPAO and EPIC.
-(<strong>TODO</strong> remove or replace references to SPAO/EPIC?)<a href="#section-5.1.1-6" class="pilcrow">¶</a></p>
+(<strong>TODO</strong> remove or replace references to SPAO/EPIC?)<a href="#section-5.2.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="disjointness">
-<section id="section-5.2">
+<section id="section-5.3">
         <h3 id="name-disjointness">
-<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-disjointness" class="section-name selfRef">Disjointness</a>
+<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-disjointness" class="section-name selfRef">Disjointness</a>
         </h3>
-<p id="section-5.2-1">For FT, paths are only interesting if they are disjoint.
+<p id="section-5.3-1">For FT, paths are only interesting if they are disjoint.
 For BW, paths should mostly be disjunct, but overlap is
 acceptable if the overlapping links have high BW available (see
-<a href="#bottleneck" class="auto internal xref">Section 9.6.2</a>).<a href="#section-5.2-1" class="pilcrow">¶</a></p>
-<p id="section-5.2-2">For LAT and EVA, path disjointness is less important.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
-<p id="section-5.2-3"><strong>TODO</strong> Discuss link level, router level and AS level path disjunctness.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+<a href="#bottleneck" class="auto internal xref">Section 9.6.2</a>).<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+<p id="section-5.3-2">For LAT and EVA, path disjointness is less important.<a href="#section-5.3-2" class="pilcrow">¶</a></p>
+<p id="section-5.3-3"><strong>TODO</strong> Discuss link level, router level and AS level path disjunctness.<a href="#section-5.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="metadata-benefit">
-<section id="section-5.3">
+<section id="section-5.4">
         <h3 id="name-path-metadata-2">
-<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-path-metadata-2" class="section-name selfRef">Path Metadata</a>
+<a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-path-metadata-2" class="section-name selfRef">Path Metadata</a>
         </h3>
-<p id="section-5.3-1">SCION paths have associated metadata with latency and bandwidth
+<p id="section-5.4-1">SCION paths have associated metadata with latency and bandwidth
 information. The values represent best case values and tend to be
 updated rarely, for example every few hours (depending on the
-implementation).<a href="#section-5.3-1" class="pilcrow">¶</a></p>
-<p id="section-5.3-2">Path metadata may also be incomplete, ASes are not required to provide
-or regularly update the data.<a href="#section-5.3-2" class="pilcrow">¶</a></p>
-<p id="section-5.3-3">Users of path metadata must keep in mind that the data is mostly not
+implementation).<a href="#section-5.4-1" class="pilcrow">¶</a></p>
+<p id="section-5.4-2">Path metadata may also be incomplete, ASes are not required to provide
+or regularly update the data.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
+<p id="section-5.4-3">Users of path metadata must keep in mind that the data is mostly not
 verifiable but depends on the diligence and trustworthiness of the
 link owners.
 However, once disseminated by a link owner, the path metadata is
-authenticated and cannot be changed by other parties.<a href="#section-5.3-3" class="pilcrow">¶</a></p>
-<p id="section-5.3-4">Due to the inherent unreliability, users should implement checks to
-verify that a link holds up to the promised capabilities.<a href="#section-5.3-4" class="pilcrow">¶</a></p>
+authenticated and cannot be changed by other parties.<a href="#section-5.4-3" class="pilcrow">¶</a></p>
+<p id="section-5.4-4">Due to the inherent unreliability, users should implement checks to
+verify that a link holds up to the promised capabilities.<a href="#section-5.4-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="explicit-path-selection">
-<section id="section-5.4">
+<section id="section-5.5">
         <h3 id="name-explicit-path-selection">
-<a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-explicit-path-selection" class="section-name selfRef">Explicit Path Selection</a>
+<a href="#section-5.5" class="section-number selfRef">5.5. </a><a href="#name-explicit-path-selection" class="section-name selfRef">Explicit Path Selection</a>
         </h3>
-<p id="section-5.4-1">Based on path metadata (<a href="#metadata-benefit" class="auto internal xref">Section 5.3</a>) and algorithmic analysis
-(<a href="#disjointness" class="auto internal xref">Section 5.2</a>), an endpoint can explicitly select paths or avoid
+<p id="section-5.5-1">Based on path metadata (<a href="#metadata-benefit" class="auto internal xref">Section 5.4</a>) and algorithmic analysis
+(<a href="#disjointness" class="auto internal xref">Section 5.3</a>), an endpoint can explicitly select paths or avoid
 paths. This allows avoiding or abandoning paths for more paths with
-more suitable properties.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
+more suitable properties.<a href="#section-5.5-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
-<div id="some-pitfalls-wip-renema-to-guidelines">
+<div id="some-pitfalls-wip-rename-to-guidelines">
 <section id="section-6">
-      <h2 id="name-some-pitfalls-wip-renema-to">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-some-pitfalls-wip-renema-to" class="section-name selfRef">Some Pitfalls -- WIP -- Renema to Guidelines</a>
+      <h2 id="name-some-pitfalls-wip-rename-to">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-some-pitfalls-wip-rename-to" class="section-name selfRef">Some Pitfalls -- WIP -- Rename to Guidelines</a>
       </h2>
 <div id="four-tuple-changes">
 <section id="section-6.1">
@@ -1744,18 +1773,21 @@ more suitable properties.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
 and <span>[<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> require several actions, including resetting
 congestion control and RTT estimation algorithms, and initiating
 path validation.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
-<p id="section-6.1-2">Using path aware networks affects this in two ways:<a href="#section-6.1-2" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-6.1-3">
-<li id="section-6.1-3.1">
-            <p id="section-6.1-3.1.1">PANs can provide detailed path information that can be used to
+<p id="section-6.1-2"><strong>TODO</strong> What about path migration? Should we always trigger path
+migration when the network path changes (including/excluding
+expiration/renewal)?<a href="#section-6.1-2" class="pilcrow">¶</a></p>
+<p id="section-6.1-3">Using path aware networks affects this in two ways:<a href="#section-6.1-3" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-6.1-4">
+<li id="section-6.1-4.1">
+            <p id="section-6.1-4.1.1">PANs can provide detailed path information that can be used to
 detected path changes with high granularity.
 This can affect algorithm design because they need to be less resilient
 against undetected path changes (diffserv, BGP route changes, ...)
 and can rely more on the path being consistent, at least to the
-granualrity offered by the PAN layer.<a href="#section-6.1-3.1.1" class="pilcrow">¶</a></p>
+granualrity offered by the PAN layer.<a href="#section-6.1-4.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-6.1-3.2">
-            <p id="section-6.1-3.2.1">PANs, such as SCION, extend the network address with path, AS code
+          <li id="section-6.1-4.2">
+            <p id="section-6.1-4.2.1">PANs, such as SCION, extend the network address with path, AS code
 and ISD code. ASes may use private IP ranges with IPs that are
 globally not unique; This would allow a man-in-the-middle attacker to
 construct a scenarion where the IP/port of an attacked machine
@@ -1765,12 +1797,12 @@ changing the destination port/IP.
 This could be used to avoid path validation when coaxing a machine to
 send traffic to a new destination as described in <span><a href="https://rfc-editor.org/rfc/rfc9000#section-9.3.1" class="relref">Section 9.3.1</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>. This attack is still not easy to
 execute because it requires the attacker to have control over an AS
-that lies en-route between server and client.<a href="#section-6.1-3.2.1" class="pilcrow">¶</a></p>
+that lies en-route between server and client.<a href="#section-6.1-4.2.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
 <span id="name-example-of-non-unique-ips"></span><div id="fig-example-non-unique-ip">
 <figure id="figure-1">
-          <div class="alignLeft art-text artwork" id="section-6.1-4.1">
+          <div class="alignLeft art-text artwork" id="section-6.1-5.1">
 <pre>
      AS #100               AS #200                   AS #300
    +------------+        +----------------+        +----------------+
@@ -1788,7 +1820,7 @@ that lies en-route between server and client.<a href="#section-6.1-3.2.1" class=
 </div>
 <span id="name-example-of-traffic-amplific"></span><div id="fig-example-new-path">
 <figure id="figure-2">
-          <div class="alignLeft art-text artwork" id="section-6.1-5.1">
+          <div class="alignLeft art-text artwork" id="section-6.1-6.1">
 <pre>
    Attacker                                                Server
    (Establish connection)
