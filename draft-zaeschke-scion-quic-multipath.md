@@ -1047,8 +1047,8 @@ implementation changes and additional consideration regarding:
 
 - netwotk path authenticity: paths may be spoofed;
 
-- excessive probing patterns which may expose user intentions or
-  identity.
+- probing patterns which may expose user intentions or identity.
+
 
 ## Latency Polling
 
@@ -1060,9 +1060,10 @@ To prevent patterns (1. after 0.1s, 2. after 0.3s, 3. after 0.35s, ...)
 the interval between packets on each path should also vary.
 Additionally, the number of polled paths should vary.
 
+
 ## Path Validation
 
-Following {{QUIC-MP}} (Section 5.1) and {{QUIC-TRANSPORT}} (Section 9),
+Following {{Section 5 of QUIC-MP}} and {{Section 9 of QUIC-TRANSPORT}},
 endpoints MUST drop a connection or perform path validation when the
 4-tuple changes:
 
