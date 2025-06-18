@@ -187,9 +187,9 @@ links".
 endpoint, a list of all traversed ASes, and links inside and between
 ASes, including interface IDs on border routers of each AS.
 
-**Path ID**: The Path ID is defined in {{QUIC-MP}} . On the network
-layer, it is defined by a 4-tuple of IP/port of the local and remote
-endpoints.
+**QUIC-MP Path**: Consists of a 4-tuple of address/IP at each
+endpoint and a Path ID (see {{QUIC-MP}}). The Path ID allows having
+multiple logical paths for the same 4-tuple.
 
 **Path Metadata**: Path metadata is additional data that is available to
 clients when they request a selection of paths to a destination.
@@ -283,38 +283,54 @@ category.
 
 # Notable Differences and Benefits
 
-## Endpoint Identity and Path Identity {#identity}
+Using QUIC or QUIC-MP over a PAN changes some of underlying
+assumptions. This provides certain benefits, such as additional
+information and control over path, but also some pitfalls.
 
-PANs may provide or require an extended definition of idenity.
 
-In a PAN such as SCION ({{scion}}), networks paths are known to the
-endpoints.
-This can, and should, be used to detect changes even when the 4-tuple
-of local/remote IP/port (or equivalent) stays the same. Change
-detection can be useful to avoid unintended path changes or to trigger
-actions, such as resetting congestion control or RTT estimation
-algorithms.
+## Endpoint Identity {#endpoint-identity}
 
-Separately, PANs may use a network address beyond the 4-tuple of
+In QUIC, endpoints are identified by their IP and port number. This
+works because IP addresses are unique (globally, or in whatever
+context they are used).
+
+PANs may use a network address beyond the 4-tuple of
 local/remote IP/port. For example, SCION ({{scion}}), allows IPs
 from the private IP ranges (e.g. 192.168.1.1/32). To uniquely identify
 endhosts globally, the AS (autonomous system) identifier is added
 to fully qualify a network address.
-This has consquences for security mechanisms. Implementations need
+This has consequences for security mechanisms. Implementations need
 to be careful to consider the full network address, for example when
 triggering path validation (see {{four-tuple-changes}} and {{token}}).
 
 
-### Path ID
+## Path Identity {#path-identity}
 
-{{QUIC-MP}} specifies a path ID that is used to identify and
-distinguish multiple "paths". However, there is not always a 1:1 mapping
+The identification of "paths" varies between QUIC, QUIC-MP and PANs.
+
+- {{QUIC}} uses a 4-uple of local/remote IP/port to distinguish paths.
+- {{QUIC-MP}} extends this with a path IDs to distinguish logical
+paths (connections).
+- PANs can typically distinguish paths through detailed
+path metadata based on the physical network path. The metadata may
+also include an expiration date.
+
+When using a PAN, the path identity can, and should, be used to detect
+changes even when the 4-tuple of local/remote IP/port (or equivalent)
+stays the same.
+Change detection can be useful to avoid unintended path changes or
+to trigger actions, such as resetting congestion control or RTT
+estimation algorithms.
+
+
+### Interoperability of QUIC-MP and PAN Path Identity
+
+Unfortunately, there is not always a 1:1 mapping
 between path IDs and networks paths as they are use in SCION.
 
 - A PAN path may expire and should be replaceable with a new version
   without requiring a new Path ID (**TODO TBD**: We could also require
   path migration in this case)
-
 
 **TODO** In future we may have more dynamic path availablility with
 live metadata. Do we really need path migration for every (small) route
@@ -375,7 +391,7 @@ more suitable properties.
 
 
 
-# Some Pitfalls -- WIP -- Renema to Guidelines
+# Some Pitfalls -- WIP -- Rename to Guidelines
 
 ## 4-tuple changes {#four-tuple-changes}
 
@@ -383,6 +399,10 @@ If the 4-tuple (IP/port of local/remote endpoint) changes, {{QUIC-MP}}
 and {{QUIC-TRANSPORT}} require several actions, including resetting
 congestion control and RTT estimation algorithms, and initiating
 path validation.
+
+**TODO** What about path migration? Should we always trigger path
+migration when the network path changes (including/excluding
+expiration/renewal)?
 
 Using path aware networks affects this in two ways:
 
