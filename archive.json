@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-17T00:29:08.670789+00:00",
+  "timestamp": "2025-06-19T00:29:34.158791+00:00",
   "repo": "netsec-ethz/scion-quic-multipath_I-D",
   "labels": [
     {
@@ -181,13 +181,13 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-06-16T14:17:50Z",
-      "updatedAt": "2025-06-16T15:29:52Z",
+      "updatedAt": "2025-06-18T15:02:17Z",
       "baseRepository": "netsec-ethz/scion-quic-multipath_I-D",
       "baseRefName": "main",
       "baseRefOid": "0929488b3659c5008b166e4412b1b7fae95ab3c9",
       "headRepository": "netsec-ethz/scion-quic-multipath_I-D",
       "headRefName": "update-1",
-      "headRefOid": "82e56cdc0cce59e6ee317cc3b993219d713592d7",
+      "headRefOid": "2ac17af53802bf3f24dd0718fa8eff6aaf109daf",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
