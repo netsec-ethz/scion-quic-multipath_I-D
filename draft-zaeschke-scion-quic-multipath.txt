@@ -16,7 +16,7 @@ Abstract
 
    This document provides informational guidance for using the Multipath
    Extension for QUIC [QUIC-MP] with path aware networks (PAN).  PANs
-   may provide hundreds of paths between endpoint, each path including
+   may provide hundreds of paths between endpoints, each path including
    detailed path metadata that facilitates informed path selection.
 
    Using the QUIC Multipath Extension over PAN creates pitfalls as well
@@ -25,7 +25,7 @@ Abstract
    gives general considerations for API design and applications that use
    multipath QUIC over SCION.
 
-   This memo looks speciafically at PANs for inter domain routing.
+   This memo looks specifically at PANs for inter-domain routing.
 
 About This Document
 
@@ -94,21 +94,15 @@ Table of Contents
      5.3.  Disjointness
      5.4.  Path Metadata
      5.5.  Explicit Path Selection
-   6.  Some Pitfalls -- WIP -- Rename to Guidelines
-     6.1.  4-tuple changes
-       6.1.1.  Mitigation
-     6.2.  Address Validation Token
+   6.  QUIC-specific advantages?
    7.  API Considerations
      7.1.  Initialization
      7.2.  Network Address and Network Path
        7.2.1.  Recommendation
      7.3.  General API
-   8.  QUIC implementation Considerations
+   8.  QUIC Implementation Considerations
      8.1.  Automatic Path Changes - Initial Handshake
      8.2.  Path Change Detection - Path Injection
-       8.2.1.  Problem
-       8.2.2.  Mitigation
-       8.2.3.  Variant
    9.  Algorithm Considerations
      9.1.  MTU Detection
      9.2.  Congestion Control
@@ -118,28 +112,29 @@ Table of Contents
      9.6.  Path Selection
        9.6.1.  Dynamic Approach
        9.6.2.  Bottleneck Detection
-   10. OLD PART BELOW - IGNORE
-   11. OLD - Algorithms
-     11.1.  Congestion Control
-     11.2.  Packet Scheduling
-   12. QUIC-specific advantages?
-   13. OLD - Applications
-     13.1.  Data Transfer
-     13.2.  Low Latency
-     13.3.  High Availability / Redundancy
-     13.4.  Multipathing for Anonymity
-   14. Summary of Recommendations
-   15. Security Considerations
-     15.1.  Probe Fingerprinting
-     15.2.  Path Injection
-       15.2.1.  QUIC rejects the packet
-       15.2.2.  QUIC accepts the packet
-     15.3.  Path Validation -- OLD
-     15.4.  More ?
-   16. IANA Considerations
-   17. References
-     17.1.  Normative References
-     17.2.  Informative References
+   10. OLD - REMOVE? - Algorithms
+     10.1.  Congestion Control
+     10.2.  Packet Scheduling
+   11. OLD - REMOVE? - Applications
+     11.1.  Data Transfer
+     11.2.  Low Latency
+     11.3.  High Availability / Redundancy
+     11.4.  Multipathing for Anonymity
+   12. Summary of Recommendations
+     12.1.  Address Validation Token
+   13. Security Considerations
+     13.1.  Probe Fingerprinting
+     13.2.  Path Injection
+       13.2.1.  Memory Exhaustion
+       13.2.2.  Traffic Redirection to Different AS
+       13.2.3.  Traffic Redirection over Different Path
+       13.2.4.  Traffic Amplification
+     13.3.  Jelte's Attack
+     13.4.  More ?
+   14. IANA Considerations
+   15. References
+     15.1.  Normative References
+     15.2.  Informative References
    Acknowledgments
    Authors' Addresses
 
@@ -152,8 +147,8 @@ Table of Contents
    links and router interfaces.
 
    When only one path is used, metadata and path selection capabilities
-   allow identifying the best path for each use case while providing a
-   suitable backup paths if the first paths degrades or others paths
+   allow identifying the best path for each use case while providing
+   suitable backup paths if the first path degrades or other paths
    become comparatively better.
 
    When data is transferred over multiple paths in parallel, detailed
@@ -161,7 +156,7 @@ Table of Contents
    overlap and about the properties of these links.  This allows, for
    example, avoiding bottlenecks by choosing paths such that they don't
    share links that have low bandwidth capacity.  This is useful for
-   developing or improving algorithms, for example for path selection,
+   developing or improving algorithms, for example, for path selection,
    or more informed algorithms for congestion control.
 
    The recommendations in this document are categorized into
@@ -201,37 +196,42 @@ Table of Contents
    SCION ([SCION-CP] and [SCION-DP]).  For ease of reference, we have
    included some definitions here, but refer the reader to the
    references above for complete specifications of the relevant
-   terminiology:
+   terminology.
 
-   *Autonomous System (AS)*: An autonomous system is a network under a
+   *Autonomous System (AS)*: An autonomous system is a network under
    common administrative control.  For example, the network of an
    Internet service provider or organization can constitute an AS.
 
-   *Endpoint*: An endpoint is the start or the end of a path, as defined
-   in [PATH-VOCABULARY].
+   *Endpoint*: An endpoint is the start or end of a path, as defined in
+   [PATH-VOCABULARY].
 
    *Inter-AS Link*: A direct link between two external interfaces of two
    ASes.
 
-   *Intra-AS Link*: A direct link between twi internal interfaces of a
-   single AS.  A direct link may contains several internal hops.
+   *Intra-AS Link*: A direct link between two internal interfaces of a
+   single AS.  A direct link may contain several internal hops.
 
    *Link*: General term that refers to "inter-AS links" and "intra-AS
    links".
 
-   *Network Path*: Consists of a 4-tuple of address/IP at each endpoint,
-   a list of all traversed ASes, and links inside and between ASes,
-   including interface IDs on border routers of each AS.
+   *Network Address*: In IP networks, the network address is the IP and
+   port of an endpoint.  In PANs, the network address may hold
+   additional information, such as the AS number of the endpoint.
 
-   *QUIC-MP Path*: Consists of a 4-tuple of address/IP at each endpoint
-   and a Path ID (see [QUIC-MP]).  The Path ID allows having multiple
-   logical paths for the same 4-tuple.
+   *Network Path*: This term exists only in PANs.  The network path
+   consists of the network address at each endpoint, a list of all
+   traversed ASes, and links inside and between ASes, including
+   interface IDs on border routers of each AS.
+
+   *QUIC-MP Path*: Consists of the network address at each endpoint and
+   a Path ID (see [QUIC-MP]).  The Path ID allows having multiple
+   logical paths for the same set of network addresses.
 
    *Path Metadata*: Path metadata is additional data that is available
    to clients when they request a selection of paths to a destination.
-   Path metadata is authenticated wrt to owner of each link, but
+   Path metadata is authenticated by the owner of each link, but is
    otherwise not verified.  Path metadata includes data about ASes and
-   links, such as MTU, bandwidth, latency, AS internal hopcount, or
+   links, such as MTU, bandwidth, latency, AS internal hop count, or
    geolocation information.  Path metadata is updated infrequently,
    probably at most once per hour.  Properties such as bandwidth and
    latency represent hardware properties rather than live traffic
@@ -245,12 +245,11 @@ Table of Contents
 
 3.1.  Path Metadata
 
-   We assume that path metadata is reflects hardware properties rather
-   than live traffic information (especially for bandwidth and latency).
-   One should not expect path metadata is updated to be more than once
-   every hour.  Path metadata is disseminated together with paths, so
-   its freshness depends on the path livetime, wgich can be several
-   hours.
+   We assume that path metadata reflects hardware properties rather than
+   live traffic information (especially for bandwidth and latency).  One
+   should not expect path metadata to be updated more than once every
+   hour.  Path metadata is disseminated together with paths, so its
+   freshness depends on the path lifetime, which can be several hours.
 
 3.1.1.  Path Metadata Granularity
 
@@ -265,7 +264,7 @@ Table of Contents
 
 3.1.2.  Path Metadata Dimensions
 
-   We assume a protocol a provides information on links and border
+   We assume a protocol that provides information on links and border
    routers, such as MTU, bandwidth, latency, geo-location, as well as
    identities (interface ID, port and IP) of border routers.  We assume
    the data is static, which means that bandwidth and latency reflect
@@ -279,17 +278,17 @@ Table of Contents
 
 3.1.4.  Path Metadata Reliability
 
-   We assume that all values are correct.  The metadata is
-   cryptographically protected.  It is signed by the data originator,
-   which is the relevant AS owner.  However, the data correctness is not
+   We assume that all path metadata is truthful.  The metadata is
+   cryptographically protected and signed by the data originator, which
+   is the relevant AS owner.  However, the data correctness is not
    verified, instead we rely on the AS owner to be honest.
 
 3.2.  Path Selection
 
-   We assume that a PAN protocol allows selecting paths explicitly,
+   We assume that a PAN protocol allows explicitly selecting paths,
    based, for example, on path metadata.  Paths can be added and removed
-   from a connection.  Paths may have a best-before data and may expire,
-   after which they are invalid.
+   from a connection.  Paths may have an expiration date, after which
+   they are invalid.
 
 4.  Multipath Categorization
 
@@ -301,10 +300,10 @@ Table of Contents
    *  Minimum latency (LAT): Optimizing latency for low latency.  This
       can be achieved by regularly checking multiple paths and using the
       one with the lowest latency or by parallel transmission over
-      multiple path.
+      multiple paths.
 
-   *  Fault tolerance (FT): Optimizing for fault tolerance by parallel
-      transfer on multiple paths.
+   *  Fault tolerance (FT): Optimizing fault tolerance through parallel
+      transfers over multiple paths.
 
    *  Evasion (EVA): Avoid certain links or ASes, for example based on
       MTU, geolocation or AS number.
@@ -319,9 +318,9 @@ Table of Contents
 
 5.  Notable Differences and Benefits
 
-   Using QUIC or QUIC-MP over a PAN changes some of underlying
+   Using QUIC or QUIC-MP over a PAN changes some of the underlying
    assumptions.  This provides certain benefits, such as additional
-   information and control over path, but also some pitfalls.
+   information and control over paths, but also some pitfalls.
 
 5.1.  Endpoint Identity
 
@@ -331,12 +330,12 @@ Table of Contents
 
    PANs may use a network address beyond the 4-tuple of local/remote IP/
    port.  For example, SCION (Section 1.1), allows IPs from the private
-   IP ranges (e.g. 192.168.1.1/32).  To uniquely identify endhosts
+   IP ranges (e.g. 192.168.1.1/32).  To uniquely identify endpoints
    globally, the AS (autonomous system) identifier is added to fully
    qualify a network address.  This has consequences for security
    mechanisms.  Implementations need to be careful to consider the full
-   network address, for example when triggering path validation (see
-   Section 6.1 and Section 6.2).
+   network address, for example, when triggering path validation (see
+   Section 13.2 and Section 12.1).
 
 5.2.  Path Identity
 
@@ -352,24 +351,24 @@ Table of Contents
       metadata based on the physical network path.  The metadata may
       also include an expiration date.
 
-   When using a PAN, the path identity can, and should, be used to
-   detect changes even when the 4-tuple of local/remote IP/port (or
-   equivalent) stays the same.  Change detection can be useful to avoid
-   unintended path changes or to trigger actions, such as resetting
-   congestion control or RTT estimation algorithms.
+   When using a PAN, the path identity can and should be used to detect
+   changes even when the 4-tuple of local/remote IP/port (or equivalent)
+   stays the same.  Change detection can be useful to avoid unintended
+   path changes or to trigger actions, such as resetting congestion
+   control or RTT estimation algorithms.
 
 5.2.1.  Interoperability of QUIC-MP and PAN Path Identity
 
    Unfortunately, there is not always a 1:1 mapping between path IDs and
-   networks paths as they are use in SCION.
+   networks paths as they are used in SCION.
 
    *  A PAN path may expire and should be replaceable with a new version
       without requiring a new Path ID (*TODO TBD*: We could also require
       path migration in this case)
 
-   *TODO* In future we may have more dynamic path availablility with
-   live metadata.  Do we really need path migration for every (small)
-   route change?
+   *TODO* In future we may have more dynamic path availability with live
+   metadata.  Do we really need path migration for every (small) route
+   change?
 
    *  Network address changes should trigger path validation
 
@@ -379,8 +378,8 @@ Table of Contents
    *TODO* It seems path migration is only useful when the network
    address changes?
 
-   In SCION, neither the AS nor the network path are validated and may
-   be forged, see Section 15 for a discussion.  However, SCION provides
+   In SCION, neither the AS nor the network path are validated and can
+   be forged, see Section 13 for a discussion.  However, SCION provides
    extensions for validating these properties, namely SPAO and EPIC.
    (*TODO* remove or replace references to SPAO/EPIC?)
 
@@ -420,135 +419,10 @@ Table of Contents
    paths.  This allows avoiding or abandoning paths for more paths with
    more suitable properties.
 
-6.  Some Pitfalls -- WIP -- Rename to Guidelines
+6.  QUIC-specific advantages?
 
-6.1.  4-tuple changes
-
-   If the 4-tuple (IP/port of local/remote endpoint) changes, [QUIC-MP]
-   and [QUIC-TRANSPORT] require several actions, including resetting
-   congestion control and RTT estimation algorithms, and initiating path
-   validation.
-
-   *TODO* What about path migration?  Should we always trigger path
-   migration when the network path changes (including/excluding
-   expiration/renewal)?
-
-   Using path aware networks affects this in two ways:
-
-   1.  PANs can provide detailed path information that can be used to
-       detected path changes with high granularity.  This can affect
-       algorithm design because they need to be less resilient against
-       undetected path changes (diffserv, BGP route changes, ...) and
-       can rely more on the path being consistent, at least to the
-       granualrity offered by the PAN layer.
-
-   2.  PANs, such as SCION, extend the network address with path, AS
-       code and ISD code.  ASes may use private IP ranges with IPs that
-       are globally not unique; This would allow a man-in-the-middle
-       attacker to construct a scenarion where the IP/port of an
-       attacked machine can be duplicated in a different AS.  The
-       attacker can then change the destination (i.e. routing to a
-       different AS) of a connection without changing the destination
-       port/IP.  This could be used to avoid path validation when
-       coaxing a machine to send traffic to a new destination as
-       described in Section 9.3.1 of [QUIC-TRANSPORT].  This attack is
-       still not easy to execute because it requires the attacker to
-       have control over an AS that lies en-route between server and
-       client.
-
-        AS #100               AS #200                   AS #300
-      +------------+        +----------------+        +----------------+
-      | Server     |        | Attacker       |        | Victim         |
-      | IP=1.2.3.4 | ------ | IP=192.168.0.1 | ------ | IP=192.168.0.1 |
-      | port = 42  |        | port= 12345    |        | port= 12345    |
-      +------------+        +----------------+        +----------------+
-
-       **TODO** use IPs from documentation range
-
-                    Figure 1: Example of non-unique IPs
-
-      Attacker                                                Server
-      (Establish connection)
-      Path=[#200, #100] -->
-                                                   <-- Path=[#100, #200]
-
-      (Change Path)
-      Path=[#300, #200, #100] -->
-                                             <-- Path=[#100, #200, #300]
-
-      Client: receives unwanted traffic
-
-             Figure 2: Example of traffic amplification attack
-
-6.1.1.  Mitigation
-
-   *  4-tuple is defined in [QUIC-TRANSPORT] as IP/port of local/remote
-      endpoint.  However, [QUIC-MP] does not clearly define it.  If we
-      assume it to mean network-address/port of local remote/endpoint
-      (replacing IP with network-address) we can define it to include
-      the AS number or any other relevant identifier.  This would ensure
-      that path validation is triggered whenever necessary.
-
-   *  Send a signal to the QUIC implementation that the path has
-      changed:
-
-      -  Use port mangling / IP mangling to emulate a 4-tuple change? ->
-         That is what Anapaya does. *TODO*
-
-      -  We could trigger a "double" path validation by changing the
-         port/IP to a made up value and back to the original value.
-         This would trigger two path validations.  At least eventually,
-         the QUIC layer will know the correct remote IP/port.
-
-   *TODO* This attack works regardless of path validation: The attacker
-   can just intercept path validation requests and answer them!
-
-   However, for that, the attacker really neds to be on-path (e.g.
-   control a border router).
-
-   This attack also works without PAN, e.g. with BGP, but with PAN it is
-   more controlled, the attacker can use a wormhole to attract traffic
-   and then ensure that traffic goes via their controlled AS.
-
-6.2.  Address Validation Token
-
-   *TODO* See discussion in https://github.com/quicwg/multipath/
-   issues/550
-
-   From Section 3.1.3 of [QUIC-MP]: > As specified in Section 9.3 of
-   [QUIC-TRANSPORT], a server is > expected to send a new address
-   validation token to a client > following the successful validation of
-   a new client address. > The client will receive several tokens.  When
-   considering using a > token for subsequent connections, it may be
-   difficult for the > client to pick the "right" token among multiple
-   tokens obtained in > a previous connection. > The client is likely to
-   fall back to the strategy specified in > Section 8.1.3 of
-   [QUIC-TRANSPORT], i.e., pick the last received > token.  To avoid
-   issues when clients make the "wrong" choice, a > server SHOULD issue
-   tokens that are capable of validating any of > the previously
-   validated addresses.  Further guidance on token usage > can be found
-   in Section 8.1.3 of [QUIC-TRANSPORT].
-
-   Clients may not know their IP address (e.g. NAT) and their IP address
-   may change.
-
-   As discussed (*TODO* elsewhere: trigger path validation, reset CC and
-   RTT estimation algorithms), QUIC-MP implementations should consider
-   not only the 4-tuple, but also the AS codes and actual paths when
-   comparing network addresses.
-
-   One problem here is as follows: If we adopt an implementation to use
-   the full nettwork address + path for identity, and if we use this to
-   generate tokens, then we may end up generating many more or longer
-   tokens.
-
-   This needs to be considered carefully.
-
-   See also Section 21.3 of [QUIC-TRANSPORT].
-
-   *TODO* Move this section to _after_ discussing network addresses
-
-   *TODO* read the referenced sections and come up with recommendation.
+   Describe why we are writing this document for QUIC and especially for
+   QUIC-MP. *TODO*
 
 7.  API Considerations
 
@@ -559,7 +433,7 @@ Table of Contents
 7.1.  Initialization
 
    When a QUIC(-MP) socket is created, it can be useful (depending on
-   the programming language) to allow injection of a custom modules:
+   the programming language) to allow injection of custom modules:
 
    *  Custom UDP underlay (for injecting a PAN, such as SCION).
 
@@ -570,16 +444,16 @@ Table of Contents
    *  Custom Packet scheduling algorithm
 
    *  PAN exclusive: path selection algorithms.  This differs from
-      scheduling algorithms by determiniing which paths should be
-      allowed at all and which should be held as backup paths.  Path
-      selection algorithms should have access to initial_max_path_id
-      (Section 2.1 of [QUIC-MP]) and MAX_PATH_ID frames (Section 4.6 of
-      [QUIC-MP] in order to know when, and how many, paths can be
-      created.  Path selection must exclude paths that are too long to
-      guarantee 1200 bytes MTU for QUIC packets.  The algorithm also
-      needs to know about PATH_AVAILABLE and PATH_BACKUP, see {
-      {Section 3.3 of QUIC-MP}}, as wellas PATH_ABANDON Section 3.4 of
-      [QUIC-MP]. *TODO* Should we also consider probing frames here ({
+      scheduling algorithms by determining which paths should be allowed
+      at all and which should be held as backup paths.  Path selection
+      algorithms should have access to initial_max_path_id (Section 2.1
+      of [QUIC-MP]) and MAX_PATH_ID frames (Section 4.6 of [QUIC-MP] in
+      order to know when, and how many, paths can be created.  Path
+      selection must exclude paths that are too long to guarantee 1200
+      bytes MTU for QUIC packets.  The algorithm also needs to know
+      about PATH_AVAILABLE and PATH_BACKUP, see Section 3.3 of
+      [QUIC-MP], as well as PATH_ABANDON Section 3.4 of [QUIC-MP].
+      *TODO* Should we also consider probing frames here ({
       {Section 3.1.2 of QUIC-MP}}).?
 
    Many available implementations already allow injecting most of these
@@ -594,13 +468,13 @@ Table of Contents
 
    Note that a "network path" is different from [QUIC-MP] path ID.
    There is usually a 1:1 mapping from network path to path ID, but the
-   network path may change while the path ID stays the same.
+   network path may change while the path ID remains the same.
 
    For example: - During path migration (*TODO* ref), a path ID may be
    (loosely) associated with multiple network paths. - A PAN library may
    have paths that can expire and that can be renewed automatically.
-   However, this is should usually result in an identical path (except
-   for the expiration date).
+   However, this should usually result in an identical path (except for
+   the expiration date).
 
 7.2.1.  Recommendation
 
@@ -631,27 +505,29 @@ Table of Contents
 
    *  Expose callback for QUIC-MP path abandon (REFERENCE!!!)
 
-   *  Expose API for name resolution (only of library does that), not
-      useful if API works with IP/port only.
+   *  Expose API for name resolution (only if the library does that),
+      not useful if API works with IP/port only.
 
    *  Expose API for usage profile.  Applications will have very
       different requirements on a multipath API, see Section 4.  A
       comprehensive API should therefore allow for mostly automatic
       selection of Path Selection and Congestion Control algorithms.
 
-8.  QUIC implementation Considerations
+8.  QUIC Implementation Considerations
 
    *TODO READ:* See also "Implementation Considerations" in Section 5 of
    [QUIC-MP].
+
+   Recommendations are summarized in Section 12
 
 8.1.  Automatic Path Changes - Initial Handshake
 
    [QUIC-TRANSPORT] requires that there is no connection migration
    during the initial handshake, and that there are no other packets
-   send (including probing packets) during the initial handshake, see
+   sent (including probing packets) during the initial handshake, see
    Section 9 of [QUIC-TRANSPORT], paragraphs 2 and 3.
 
-   An implementation must ensure on some level that no path change or
+   An implementation must ensure at some level that no path change or
    probing occurs.
 
    This may be covered by the recommendation that a PAN layer should not
@@ -660,106 +536,19 @@ Table of Contents
 
 8.2.  Path Change Detection - Path Injection
 
-8.2.1.  Problem
-
-   *TODO check SCION IRTF draft for this attack:*
-
-   This requires the attacker to spoof IP adresses in an AS or fully
-   control an AS between the attacked endpoints.  The attacker also
-   needs to learn of the port/IP that the client is using, either by
-   probing the client or by reading traffic between client and server.
-   (Instead of knowing the port, the attacker may flood the server with
-   bad paths).
-
-   An attacker can send a spoofed packet to a server.  The packet
-   contains a new path (for example broken or with high latency).  The
-   server accepts the packet and stores the path for being used for all
-   future communication with the client.  The next packet sent to the
-   client will take the injected malicious path and will fail (or at
-   least be redirected).  This happens even if the packet is rejectd by
-   the QUIC(-MP) layer because the SCION layer will never learn about
-   the packet being rejected.
-
-   In order to execute the attack, the attacker must send the forged
-   path from somewhere between the two attacked endoints.  Usually, a
-   border routers that forwards traffic to a neighbour AS will validate
-   the paths and check that traffic with a transit path originates from
-   another border router. *TODO* Verify SCION spec.  To avoid this
-   check, the attacker must either spoof the IP address to look like
-   another boirder router, or it must control the border router such
-   that it does not perform the check.
-
-   A variant of the attack happens when the attacker is located in the
-   same AS a the attacke client endpoint.  In that case it must only be
-   able to spoof the IP address to look like the attacked client's IP.
-   *TODO* Do border routers even check the underlay IP against the SCION
-   header IP?  They may not do that, see NAT...
-
-8.2.2.  Mitigation
-
-   *  Authenticate packets on SCION level.... There could still be a
-      replay:
-
-      -  Client uses path P1 (P1 could be injected with wormhole
-         attack).
-
-      -  Attacker captures packet with P1 path
-
-      -  Attacker breaks P1 and forces migration to P2
-
-      -  Attacker can no replay the original packet to get server to
-         keep responding on the broken P1 path.
-
-   *  Don't allow paths to change (for 4-tuple??) and require proper
-      path migration (how?) or even a reconnect
-
-   *  SOLUTION: The SCION layer MUST NOT cache paths locally, instead
-      paths must be accepted by the QUIC layer before being used.
-
-   Examples: * Java over DatagramChannel: * Comparing ResponsePath
-   objects MUST return false if the paths differ.  * The QUIC layer MUST
-   use only those addresses for sending data that have previously been
-   accepted.  If an attacker sends a packet, it should be identified as
-   malicious, be rejected, and the path should not be used.  Why would
-   an attacker packet be accepted?  Replay should be impossible (there
-   are apcket sequence IDs?), and any other requests should be
-   cryptographically protected.  Can this attack be successful with
-   spoofed IPs??? * Java over DatagramSocket: Problematic, it caches the
-   paths... * C + Rust: How exactly do we map PathID to paths?  How are
-   paths updated?
-
-8.2.3.  Variant
-
-   Attack target: server / client.
-
-   The attacker can flood the server with packet that contain slightly
-   varying paths (maybe just client IP/port difference).  The server may
-   hold paths in a hashmap.  This map will either run out of memory
-   (server breaks down) or the map will start dropping paths (including
-   the client's path -> connection disrupted).  On the server, the SCION
-   layer cannot easily drop paths because it doesn't know which packets
-   are valid or invalid.
-
-   Mitigation: - The SCION layer should avoid storing state (such as a
-   hashmap with paths).  If that cannot be avoided, it should monitor
-   the size of the hashmap and stop accepting paths if it is too full.
-   It is important that it does "stop accepting" rather than "cleaning
-   out old", otherwise it may drop the valid connection to the valid
-   client.
-
-   *TODO* Check with scionproto
+   This is a security problem and is discussed in Section 13.2.
 
 9.  Algorithm Considerations
 
-   The availability of a PAN layer provides addditional information that
+   The availability of a PAN layer provides additional information that
    can be used by algorithms for congestion control, RTT estimation, MTU
    estimation, ... and others.  It also requires additional algorithms,
-   for example for path selection.
+   for example, for path selection.
 
-   The additional information includes - path metadata with route
+   The additional information includes: - path metadata with route
    information, including MTU and hardware limits on bandwidth and
-   latency - comparability of multiple paths which gives knowledge about
-   shared links/routers between paths
+   latency. - comparability of multiple paths which gives knowledge
+   about shared links/routers between paths.
 
 9.1.  MTU Detection
 
@@ -777,12 +566,12 @@ Table of Contents
       the overlapping sections.
 
    *  If implemented by the QUIC-MP library, a CC algorithm can be
-      notified of every paths change, allowing it to reset only when
+      notified of every path change, allowing it to reset only when
       necessary.  Without a PAN layer, a CC algorithm has to rely on
       4-tuple changes to trigger a reset, with the drawback that changes
-      may get unnoticed (in case of path change without 4-tuple change)
+      may go unnoticed (in case of path change without 4-tuple change)
       or that a reset may be unnecessary (in case only the NAT mapping
-      changed whike leaving the rest of the route intact).
+      changed while leaving the rest of the route intact).
 
    See also Section 5.3 of [QUIC-MP].
 
@@ -794,19 +583,19 @@ Table of Contents
       according to Section 9.4 of [QUIC-TRANSPORT]."
 
    *  Section 5.4 of [QUIC-MP] describes how data packets and
-      acknowldegement packets may be sent on different paths, making it
+      acknowldegment packets may be sent on different paths, making it
       difficult to detemine the RTT.
 
       -  With PANs, the path is known, so it is easy to tell whether
-         data and acknowledgement were sent on the same path or not.
+         data and acknowledgment were sent on the same path or not.
 
       -  With PANs, we could recommend a policy (*TODO recommend?*) that
          ACKs should be sent on the return path of the data (*TODO* why
-         are they sent on different paths?  Outside path abandon?)
+         are they sent on different paths?  Besides path abandon?)
 
       -  With PANS, explicit path probing is easier.
 
-      -  We can try to derive lower and upper limits from analysing
+      -  We can try to derive lower and upper limits from analyzing
          latency of non-disjoint paths.
 
    *  Should benefit from knowledge about minimum latency expected on a
@@ -821,9 +610,9 @@ Table of Contents
 
       -  How bad is latency polling?
 
-      -  Traceroute can help to reduce polling (ideally, every links is
-         traversed only by one poll packet).  Traceroute also allows to
-         identify links with high variance or generally hogh latency.
+      -  Traceroute can help to reduce polling (ideally, every link is
+         traversed only by one poll packet).  Traceroute also allows
+         identifying links with high variance or generally high latency.
 
 9.4.  Retransmission & PTO
 
@@ -841,7 +630,7 @@ Table of Contents
    connection appears to be long lasting (e.g. at least 1 second
    duration and 1MB of traffic) it could start adding additional paths
    and see whether the traffic increases.  Additional paths can be
-   chosen following the guidelines discussed in Section 13.1.
+   chosen following the guidelines discussed in Section 11.1.
 
 9.6.2.  Bottleneck Detection
 
@@ -852,16 +641,14 @@ Table of Contents
    One alternative is to use two SCMP traceroute commands that measure
    latency between two consecutive AS border routers.  The measured
    latency can be compared to earlier measurements or to the latency
-   given in the path metadata.  Discrepancies can be an indication for
-   high traffic and queueing problem on the measured link.
+   given in the path metadata.  Discrepancies can be an indication of
+   high traffic and queueing problems on the measured link.
 
    *TODO* Should we discourage this?  It creates unnecessary traffic...
 
-10.  OLD PART BELOW - IGNORE
+10.  OLD - REMOVE? - Algorithms
 
-11.  OLD - Algorithms
-
-11.1.  Congestion Control
+10.1.  Congestion Control
 
    General recommendations for congestion control are defined in
    Congestion Control Principles [CC-PRINCIPLES].  Congestion control
@@ -888,7 +675,7 @@ Table of Contents
    traffic using the least congested of the paths, achieving a property
    called "resource pooling" where a bundle of links effectively behaves
    like one shared link with bigger capacity.".  This can be achieved
-   with a simple load distribution algorithm.
+   with a simple path selection algorithm.
 
    *TODO* Differentiate "load distribution" from "path selection".
 
@@ -904,14 +691,14 @@ Table of Contents
 
    *TODO* Terminology: path selection vs load distribution?
 
-11.2.  Packet Scheduling
+10.2.  Packet Scheduling
 
    Load distribution algorithms are mainly useful for high bandwidth
-   (HBW) scenarios.  Latency may still be relevant though, for example
+   (HBW) scenarios.  Latency may still be relevant though, for example,
    for high definition video streams.  Scheduling halps distributing the
-   transfer load efficiently over multiple path.
+   transfer load efficiently over multiple paths.
 
-   However, sending data stream over multiple paths in parallel will
+   However, sending data streams over multiple paths in parallel will
    usually result in packets arriving out of order at the receiver.
    This should be avoided because:
 
@@ -926,7 +713,7 @@ Table of Contents
 
    These problems can be mitigated, but it is difficult to do so for
    both problems at the same time.  A simple way to mitigate these
-   problem is to select multiple paths with similar latency.
+   problems is to select multiple paths with similar latency.
 
    Another way to mitigate these problems is to schedule packets on
    different paths such that they are likely to arrive in (more or less)
@@ -937,13 +724,9 @@ Table of Contents
 
    *TODO* Can we facilitate QUIC streams for this?
 
-12.  QUIC-specific advantages?
+11.  OLD - REMOVE? - Applications
 
-   *TODO* ?
-
-13.  OLD - Applications
-
-13.1.  Data Transfer
+11.1.  Data Transfer
 
    The aim of a data transfer application is to maximize throughput,
    regardless of latency, jitter or packet loss.
@@ -953,7 +736,7 @@ Table of Contents
    than other links on the same paths (i.e. high enough to prevent the
    link from being a bottleneck).
 
-13.2.  Low Latency
+11.2.  Low Latency
 
    There are multiple approaches to transfer traffic with the lowest
    possible latency.  For example:
@@ -962,7 +745,7 @@ Table of Contents
    parallel to data traffic.  This allows performing measurements at a
    different frequency and over many more paths than payload traffic.
    This can be useful if payload packets are large and sending them
-   redundantly over multiple links is to costly or considered too
+   redundantly over multiple links is too costly or considered too
    invasive with respect to other network users.  Low frequency
    measurements may be combined with traffic prediction algorithms in
    order to identify best paths between measurements.  Due to low
@@ -987,10 +770,10 @@ Table of Contents
    This is useful if the application can sensibly be adapted to have its
    own ACK protocol.
 
-   Network analysis can be used to identify, and subsequently avoid,
-   links with high or unreliable latency.
+   Network analysis can be used to identify and subsequently avoid links
+   with high or unreliable latency.
 
-13.3.  High Availability / Redundancy
+11.3.  High Availability / Redundancy
 
    An approach to high availability is to send data on multiple paths in
    parallel.  A tradeoff here is that sending on all available paths may
@@ -1006,16 +789,16 @@ Table of Contents
    Additional polling with SCMP or with an additional QUIC stream may be
    used to regularly measure packet drop rates or latency variations.
 
-13.4.  Multipathing for Anonymity
+11.4.  Multipathing for Anonymity
 
    Multipathing could also be used for anonymity, e.g., by switching
    paths at random intervals.  With a continuous data stream, care
    should be taken that new paths are not just switched over from one to
    the next, otherwise traffic characteristics may be used to identify
    paths.  For example, paths could be identified by packet frequency,
-   packet burst frequency or general bandwidth.  For continuous stream,
-   just moving one stream from one path to another may expose stream
-   identity.
+   packet burst frequency, or general bandwidth.  For continuous
+   streams, just moving one stream from one path to another may expose
+   stream identity.
 
    As mitigation, a sender could start sending on a new path for a while
    before stopping sending on the old path.  The sender could send
@@ -1027,7 +810,7 @@ Table of Contents
    on trusted or untrusted ASes, but this is not specific to
    multipathing...
 
-14.  Summary of Recommendations
+12.  Summary of Recommendations
 
    *TODO* This memo is informative, but we have some MUST and SHOULD
    here.
@@ -1050,18 +833,60 @@ Table of Contents
       simplifies RTT estimation, see Section 9.3
 
    *  Generally, a server SHOULD respond on the same path on which the
-      data was requested.  This ensures that the path does not violate a
-      client's path policy.  The return path SHOULD be determined in the
-      QUIC(-MP) library.  This ensures that we are only using paths of
-      packets that have been accepted by the QUIC(-MP) layer or above.
-      This protects against several attacks, see Section 15.3.
+      data was originally requested, unless the new path has been
+      validated.  This ensures that the path does not violate the path
+      policy of the client.  This also ensures that we are only using
+      paths of packets that have been accepted by the QUIC(-MP) layer or
+      above.  This protects against several attacks, see Section 13.2.
+
+   *  Section 13.3: servers should/must authenticate paths. *TODO*
 
    Possible workaround: port/address mangling?
 
    Future: how to handle dynamic traffic data?  This requires anyway a
    tighter integration if CC algorithms.
 
-15.  Security Considerations
+12.1.  Address Validation Token
+
+   *TODO* See discussion in https://github.com/quicwg/multipath/
+   issues/550
+
+   From Section 3.1.3 of [QUIC-MP]: > As specified in Section 9.3 of
+   [QUIC-TRANSPORT], a server is > expected to send a new address
+   validation token to a client > following the successful validation of
+   a new client address. > The client will receive several tokens.  When
+   considering using a > token for subsequent connections, it may be
+   difficult for the > client to pick the "right" token among multiple
+   tokens obtained in > a previous connection. > The client is likely to
+   fall back to the strategy specified in > Section 8.1.3 of
+   [QUIC-TRANSPORT], i.e., pick the last received > token.  To avoid
+   issues when clients make the "wrong" choice, a > server SHOULD issue
+   tokens that are capable of validating any of > the previously
+   validated addresses.  Further guidance on token usage > can be found
+   in Section 8.1.3 of [QUIC-TRANSPORT].
+
+   Clients may not know their IP address (e.g. NAT) and their IP address
+   may change.
+
+   As discussed (*TODO* elsewhere: trigger path validation, reset CC and
+   RTT estimation algorithms), QUIC-MP implementations should consider
+   not only the 4-tuple, but also the AS codes and actual paths when
+   comparing network addresses.
+
+   One problem here is as follows: If we adopt an implementation to use
+   the full network address + path for identity, and if we use this to
+   generate tokens, then we may end up generating many more or longer
+   tokens.
+
+   This needs to be considered carefully.
+
+   See also Section 21.3 of [QUIC-TRANSPORT].
+
+   *TODO* Move this section to _after_ discussing network addresses
+
+   *TODO* read the referenced sections and come up with recommendations.
+
+13.  Security Considerations
 
    THe aim is that [QUIC-MP] over PANs retains all security properties
    of [QUIC-MP].  However, this requires some implementation changes and
@@ -1074,171 +899,178 @@ Table of Contents
 
    *  probing patterns which may expose user intentions or identity.
 
-15.1.  Probe Fingerprinting
+13.1.  Probe Fingerprinting
 
-   PANs invite to probing of multiple path inorder to determine the best
+   An endpoint may probe multiple paths in order to determine the best
    path(s) for a given usecase.  One example of probing packets are
    packets that measure round trip time (RTT).
 
    If sent en block, probing packets can be detected because they may be
-   sent in bulk, to the same destination, in regular intervals and all
+   sent in bulk, to the same destination, in regular intervals, and all
    with slightly different paths attached.
 
    This can be used to fingerprinting an endpoints or their intentions
    (applications may have unique intervals definded).
 
-   This can be mitigated by varying and generally reducing the intervals
-   number of probing packets, and by sending probing packets not en
-   block but time-shifted.
+   This can be mitigated by varying and generally reducing the number of
+   probing packets, and by sending probing packets not en block but
+   time-shifted.
 
-15.2.  Path Injection
+13.2.  Path Injection
 
-   An attacker may send a packet to a server that uses as sender address
-   an IP/port that is identical to a valid client IP/port.  The IP/port
-   are not spoofed, instead they represent a valid machine in a
-   different AS.
+   There are several potential attacks that build on injecting paths
+   (valid or invalid) into server-side software stack.
 
-   There are two types of attack that can result from this.  If the
-   QUIC(-MP) layer rejects the packet, a vulnerable PAN implemntation
-   may be coaxed into a traffic amplification or redirection attack, or
-   possibly memory exhaustion on the server.  If the QUIC(-MP) layer
-   accepts the packet, a vulnerable combination of QUIC(-MP) layer and
-   PAN layer may be susceptible to Stateless Reset, see Section 9 of
-   [QUIC-TRANSPORT].
+   These attacks can be prevented in several ways, we recommend the
+   following where possible:
 
-15.2.1.  QUIC rejects the packet
+   1.  PAN layers should avoid storing/caching paths and network
+       addresses (beyond IP/port) internally.  Instead, they should be
+       given to the QUIC(-MP) layer or the application layer.  That
+       means that path information would only be accepyted and retained
+       if the QUIC(-MP) or application layer.
 
-   On a server, a PAN layer implementation may decide to store paths of
-   incoming packets in a map.  This would facilitate use of the PAN
-   layer by a QUIC(-MP) implementation that uses only IP/port to address
-   peers.  The PAN layer, can then use the IP/port to look up a path.
+   2.  PAN layers and QUIC(-MP) layers should interface by using network
+       addersses that include all information that identifies an
+       andpoint, including, for example, AS code.  Any change to a
+       network address (including the AS code) should trigger path
+       validation.
 
-   An attacker may now send a packet with a path to the server.  The
-   server stores the path for future use.
+   Alternatives: 1.  If paths and network addresses must be stored in
+   the PAN layer, an alternative solution would be to implement some
+   kind of signalling which would indicate that a packet is (or would
+   be) rejected/dropped by the QUIC(-MP) layer.  These addresses and
+   path from such packets should not be added to storage.  However, to
+   avoid connection drop, they should not be removed if they were
+   previously used with a valid connection.
 
-   Problems: 1.  Running out of memory 2.  If IP/port is identical to an
-   existing connection, the server may from now on send outgoing data to
-   the new path+destination 3.  The attacker could establish a correct
-   connection, request a lot of data and then inject a path that
-   redirect to a victim that has the same IP/port, but in a different
-   AS.  The server side QUIC(-MP) library would not know the difference
-   and, without performing path validation, send the requested data to a
-   victim.
+   Examples of attacks include memory exhaustion attacks, traffic
+   redirection attacks and traffic amplification attacks.
 
-   Ad 2./3.: To inject a wrong path, the attacker must have control over
-   an AS that islocated between the server and the victim.
+13.2.1.  Memory Exhaustion
 
-   Solutions for 2.: - PAN Layer could detect QUIC and add connection ID
-   to the IP/port mapping.  This of course violates layer separateion
+   An attacker may flood a server with packets that each have a
+   different source network address.  If these are stored in the PAN
+   layer, they may cause memory exhaustion.
 
-   Solution?  Using Only non-private IPs is probably neither feasible
-   nor a good protection.  A malicious AS could internally allow public
-   IPs that are duplicates of properly assigned public IPs..
+   Mitigation: do not store state in the PAN layer, or implement a way
+   to clean up state without affecting valid connection.
 
-15.2.2.  QUIC accepts the packet
+13.2.2.  Traffic Redirection to Different AS
 
-   QUIC may actually accept the packet because the IP/port is the same a
-   with a previously validated client.
+   An attacker may craft a packet that appears to originate from the
+   same IP/port but a different AS as an existing connection.  If the
+   server's PAN layer stores paths internally, and uses IP/port as key
+   to look them up. then the new paths may replace the exisintg one and
+   outgoing traffic is redirected to the new paths and destination.
 
-   This can be used to trigger a Stateless Reset, see Section 5 of
-   [QUIC-MP] and Section 9 of [QUIC-TRANSPORT].
+   Mitigation:
 
-   To prevent this we need to trigger path validation.
+   *  the QUIC(-MP) layer MUST trigger path validation if the network
+      address changes, and must consider every attribute of the address,
+      not just IP and port.
 
-   Ideally, the QUIC(-MP) implementation SHOULD aim to detect a change
-   in the network address, in this case the AS number, and trigger a
-   path validation.  If that is not possible, the PAN layer (server
-   side) should have an option to perform port mangling or IP mangling:
-   when the PAN layer detects a new network address that differs only in
-   the AS number from a previously seen address (IP/port) are the same,
-   the it should perform IP/port mangling, i.e. reporting a modified IP
-   or port to the QUIC(-MP) layer.  This new IP/port would trigger a
-   path validation or algorithm reset where required.
+   *  If a packet is rejected by the QUIC(-MP) layer, the PAN layer MUST
+      NOT add it to any local state (including not replacing exisint
+      state).  This can trivially be achieved by not having state in the
+      PAN layer.
+
+13.2.3.  Traffic Redirection over Different Path
+
+   An attacker may craft a path with a network address that is identical
+   to an existing valid client, but with a different path.
+
+   The new route is invalid (contains loops or non-existent links) or
+   may be broken (contains links that are broken or have high latency or
+   drop rate).
+
+   The new route may also work fine, but violate the client's path
+   policy or be used for traffic observation.
+
+        AS #100               AS #200                   AS #300
+      +------------+        +----------------+        +----------------+
+      | Server     |        | Attacker       |        | Victim         |
+      | IP=1.2.3.4 | ------ | IP=192.168.0.1 | ------ | IP=192.168.0.1 |
+      | port = 42  |        | port= 12345    |        | port= 12345    |
+      +------------+        +----------------+        +----------------+
+
+       **TODO** use IPs from documentation range
+
+                    Figure 1: Example of non-unique IPs
+
+   This attack requires either spoofing of the client's IP address (when
+   the attacker is in the same AS as the client) or injection of a path
+   (which requires control over an AS that is en-route between the
+   client and server).
+
+   Mitigation: *TODO*
+
+13.2.4.  Traffic Amplification
+
+   An attacker may establish a normal connection with a server, request
+   a large amount of data, and then inject a path that redirects to a
+   victim that has the same IP/port, but in a different AS.
+
+   If the server-side QUIC-MP doesn't trigger path validation (because
+   IP/port are the same) then it may implicitly accept the new path and
+   send the requested data to a victim.
+
+   This attack requires the attacker to have control over an AS that is
+   en-route between client (victim) and server.
+
+   Mitigation:
+
+   *  the QUIC(-MP) library must consider all attributes (not just the
+      4-tuple) when checking for a change in the network address.  This
+      would then trigger path validation and the attack can be averted.
+
+   *  if the QUIC(-MP) library cannot compare additional attributes
+      (e.g. legacy library), the PAN layer (server side) should have an
+      option to perform port mangling or IP mangling: when the PAN layer
+      detects a new network address that differs only in the AS number
+      from a previously seen address (IP/port) are the same, the it
+      should perform IP/port mangling, i.e. reporting a modified IP or
+      port to the QUIC(-MP) layer.  This new IP/port would trigger a
+      path validation or algorithm reset where required.
 
    Caveats
-
-   *  The implementation needs to be careful to avoid memory exhaustion
-      from storing too many mappings of mangel IP/ports.
 
    *  Offering a mangeled IP/port to the application may have
       implications for application correctness, such as displaying an
       unexpected IP/port.
 
-15.3.  Path Validation -- OLD
+      Attacker                                                Server
+      (Establish connection)
+      Path=[#200, #100] -->
+                                                   <-- Path=[#100, #200]
 
-   Following Section 5 of [QUIC-MP] and Section 9 of [QUIC-TRANSPORT],
-   endpoints MUST drop a connection or perform path validation when the
-   4-tuple changes, unless it has previously validated the address.
-   This is to prevent third parties from generating a Stateless Reset or
-   closing the connection by spoofing or otherwise manipulating observed
-   traffic.  This protection hinges on the assumption that a 4-tuple is
-   sufficient to confirm peer identity, asusming that the peer can
-   answer on the known address.
+      (Change Path)
+      Path=[#300, #200, #100] -->
+                                             <-- Path=[#100, #200, #300]
 
-   *TODO* - The attack in Section 9 talks about Ststeless Reset and
-   spoofing.  We are doing neither here.  -> Maybe we can do stateless
-   reset? - With AS subsitution (substituting the AS while keeping the
-   IP/port the same) we can do something like a man-in-the middle attack
-   (actually: rerouting attack?).
+      Client: receives unwanted traffic
 
-   With PANs, the 4-tuple may not be sufficient to confirm peer
-   identity.  Two paths with an identical 4-tuple may connect to two
-   different machines if the machines are in different ASes but use the
-   same IP/port, see Section 5.1.
+             Figure 2: Example of traffic amplification attack
 
-   In short, an attacker can impersonate a client by using an identical
-   IP/port to connect a server.  The server would probably just reverse
-   the path and answer to the client without triggering a path
-   validation.
+13.3.  Jelte's Attack
 
-   *TODO* What is the implication of this?
+   *TODO*
 
-   In the case of Section 1.1, to prevent this, the server SCION stack
-   should accept a new path only if the QUIC stack also accepts it.
-   This means we need to trigger a path validation and somehow learn
-   whether it worked.  Or we use our own validation process.  Or we
-   don't allow the path to change and require a new QUIC connection
-   (with a new SCION connection)?  SOLUTION: The SCION layer MUST NOT
-   cache paths locally, instead paths must be accepted by the QUIC layer
-   before being used.
+13.4.  More ?
 
-   Examples: * Java over DatagramChannel: * Comparing ResponsePath
-   objects MUST return false if the paths differ.  * The QUIC layer MUST
-   use only those addresses for sending data that have previously been
-   accepted.  If an attacker sends a packet, it should be identified as
-   malicious, be rejected, and the path should not be used.  Why would
-   an attacker packet be accepted?  Replay should be impossible (there
-   are apcket sequence IDs?), and any other requests should be
-   cryptographically protected.  Can this attack be successful with
-   spoofed IPs??? * Java over DatagramSocket: Problematic, it cahces the
-   paths... * C + Rust: How exactly do we map PathID to paths?  How are
-   paths updated?
-
-   To restore the behavior intended by QUIC, we must therefore extend
-   the 4-tuple to a 6-tuple of ISD-AS + IP + port on both endpoints.
-
-   *TODO* This does not require any change in the QUIC layer but can
-   probably be handled in the SCION ayer (the QUIC layer does not know
-   about the ISD/AS code).
-
-   It seems with SCION we can insert arbitrary IP addresses into the
-   stack before handing incoming packets up to the QUIC layer...?
-
-15.4.  More ?
-
-   See Section 13.4.
+   See Section 11.4.
 
    See other attacks in Section 7.2.4 of [SCION-CP]?
 
    *TODO*
 
-16.  IANA Considerations
+14.  IANA Considerations
 
    This document has no IANA actions.
 
-17.  References
+15.  References
 
-17.1.  Normative References
+15.1.  Normative References
 
    [CC-ALGORITHMS]
               Duke, M., Ed. and G. Fairhurst, Ed., "Specifying New
@@ -1298,7 +1130,7 @@ Table of Contents
               Guidelines", BCP 145, RFC 8085, DOI 10.17487/RFC8085,
               March 2017, <https://www.rfc-editor.org/rfc/rfc8085>.
 
-17.2.  Informative References
+15.2.  Informative References
 
    [CC-MULTIPATH-TCP]
               Raiciu, C., Handley, M., and D. Wischik, "Coupled
