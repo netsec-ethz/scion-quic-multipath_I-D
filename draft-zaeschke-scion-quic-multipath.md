@@ -184,7 +184,8 @@ a single AS. A direct link may contain several internal hops.
 links".
 
 **Network Address**: In IP networks, the network address is the IP and
-port of an endpoint. In PANs, the network address may hold additional information, such as the AS number of the endpoint.
+port of an endpoint. In PANs, the network address may hold additional
+information, such as the AS number of the endpoint.
 
 **Network Path**: This term exists only in PANs. The network path
 consists of the network address at each endpoint, a list of all
@@ -195,12 +196,13 @@ IDs on border routers of each AS.
 endpoint and a Path ID (see {{QUIC-MP}}). The Path ID allows having
 multiple logical paths for the same set of network addresses.
 
-**Path Metadata**: Path metadata is additional data that is available to
-endpoints when they request a selection of paths to a destination.
+**Path Metadata**: Path metadata is additional data that is available
+to endpoints when they request a selection of paths to a destination.
 Path metadata is authenticated by the owner of each link, but is
 otherwise not verified.
 Path metadata includes data about ASes and links, such as MTU,
-hardware bandwidth, latency, AS internal hop count, or geolocation information.
+hardware bandwidth, latency, AS internal hop count, or geolocation
+information.
 
 
 # Multipath Features {#mpfeatures}
@@ -577,7 +579,7 @@ UDP Usage Guidelines {{UDP-GUIDELINES}}. UDP MTU discovery is further
 developed in {{MTU-DISCOVERY}}.
 
 
-### Coubpled Congestion Control {#concon}
+### Coupled Congestion Control {#concon}
 
 Multipath congestion control is also discussed for TCP in
 {{CC-MULTIPATH-TCP}}. They state that:
@@ -828,24 +830,29 @@ here.
 - MUST: Enforce endpoint identity by requiring QUIC-MP
 implementations to provide a destination network address instead of
 just a IP/port.
-Related: The SCION stack should not store/cache paths, especially not
-on the server side.
-- SHOULD: Enable QUIC-MP implementations to recognize network path
-changes beyond 4-tuple changes
+- SHOULD (MUST?): The SCION stack should not store/cache paths,
+  especially (<UST?) not on the server side. This prevents memory
+  exhaustion attacks, see {attack-memory-exhaustion}
+- MUST: Enable QUIC-MP implementations to recognize network path
+  changes beyond 4-tuple changes. This protects
+  against several attacks, see {{attack-path-injection}}.
+  This also ensures that we are only using paths of packets that
+  have been accepted by the QUIC(-MP) layer or above.
 - MUST: SCION stack should by default not change the network paths,
 possibly with the exception of refreshing expired paths. When a path
 stops working (link errors, etc), it should instead report an error
 to the QUIC(-MP) layer or time out silently.
-- On a server, the PAN layer SHOULD return probing packets on the same
-  network path on which they were received, this greatly simplifies RTT
-  estimation, see {{rtt}}
-- Generally, a server SHOULD respond on the same path on which the data
-  was originally requested, unless the new path has been validated.
-  This ensures that the path does not violate the path policy of the
-  client.
-  This also ensures that we are only using paths of packets that
-  have been accepted by the QUIC(-MP) layer or above. This protects
-  against several attacks, see {{attack-path-injection}}.
+- A server should return packets on the same path on which they were
+  received.
+  - Generally a server SHOULD respond on the same path on which the data
+    was originally requested, unless the new path has been validated.
+    This ensures that the path does not violate the path policy of the
+    client.
+  - If a path fails / expires, we can use other established path but
+    the server SHOULD NOT try opening new path. This may violate
+    a client's path policy.
+  - Returning probing packets on the same network path on which they
+    were received: this greatly simplifies RTT estimation, see {{rtt}}
 - {{jelte-attack}}: servers should/must authenticate paths. **TODO**
 
 Possible workaround: port/address mangling?
@@ -958,7 +965,7 @@ redirection attacks, and traffic amplification attacks.
 
 
 
-### Memory Exhaustion
+### Memory Exhaustion {#attack-memory-exhaustion}
 
 An attacker may flood a server with packets that each have a
 different source network address. If these are stored in the PAN layer,
