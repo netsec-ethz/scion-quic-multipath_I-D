@@ -107,7 +107,7 @@ Table of Contents
    9.  Algorithm Considerations
      9.1.  MTU Detection
      9.2.  Congestion Control
-       9.2.1.  Coubpled Congestion Control
+       9.2.1.  Coupled Congestion Control
      9.3.  RTT Estimation
      9.4.  Retransmission & PTO
      9.5.  DMTP
@@ -591,7 +591,7 @@ Table of Contents
    discussed in the UDP Usage Guidelines [UDP-GUIDELINES].  UDP MTU
    discovery is further developed in [MTU-DISCOVERY].
 
-9.2.1.  Coubpled Congestion Control
+9.2.1.  Coupled Congestion Control
 
    Multipath congestion control is also discussed for TCP in
    [CC-MULTIPATH-TCP].  They state that:
@@ -835,27 +835,38 @@ Table of Contents
 
    *  MUST: Enforce endpoint identity by requiring QUIC-MP
       implementations to provide a destination network address instead
-      of just a IP/port.  Related: The SCION stack should not store/
-      cache paths, especially not on the server side.
+      of just a IP/port.
 
-   *  SHOULD: Enable QUIC-MP implementations to recognize network path
-      changes beyond 4-tuple changes
+   *  SHOULD (MUST?): The SCION stack should not store/cache paths,
+      especially (<UST?) not on the server side.  This prevents memory
+      exhaustion attacks, see {attack-memory-exhaustion}
+
+   *  MUST: Enable QUIC-MP implementations to recognize network path
+      changes beyond 4-tuple changes.  This protects against several
+      attacks, see Section 12.2.  This also ensures that we are only
+      using paths of packets that have been accepted by the QUIC(-MP)
+      layer or above.
 
    *  MUST: SCION stack should by default not change the network paths,
       possibly with the exception of refreshing expired paths.  When a
       path stops working (link errors, etc), it should instead report an
       error to the QUIC(-MP) layer or time out silently.
 
-   *  On a server, the PAN layer SHOULD return probing packets on the
-      same network path on which they were received, this greatly
-      simplifies RTT estimation, see Section 9.3
+   *  A server should return packets on the same path on which they were
+      received.
 
-   *  Generally, a server SHOULD respond on the same path on which the
-      data was originally requested, unless the new path has been
-      validated.  This ensures that the path does not violate the path
-      policy of the client.  This also ensures that we are only using
-      paths of packets that have been accepted by the QUIC(-MP) layer or
-      above.  This protects against several attacks, see Section 12.2.
+      -  Generally a server SHOULD respond on the same path on which the
+         data was originally requested, unless the new path has been
+         validated.  This ensures that the path does not violate the
+         path policy of the client.
+
+      -  If a path fails / expires, we can use other established path
+         but the server SHOULD NOT try opening new path.  This may
+         violate a client's path policy.
+
+      -  Returning probing packets on the same network path on which
+         they were received: this greatly simplifies RTT estimation, see
+         Section 9.3
 
    *  Section 12.3: servers should/must authenticate paths. *TODO*
 

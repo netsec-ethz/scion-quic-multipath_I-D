@@ -1285,7 +1285,7 @@ applications that use multipath QUIC over SCION.<a href="#section-abstract-2" cl
                 <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-congestion-control" class="internal xref">Congestion Control</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2.2.1">
-                    <p id="section-toc.1-1.9.2.2.2.1.1"><a href="#section-9.2.1" class="auto internal xref">9.2.1</a>.  <a href="#name-coubpled-congestion-control" class="internal xref">Coubpled Congestion Control</a></p>
+                    <p id="section-toc.1-1.9.2.2.2.1.1"><a href="#section-9.2.1" class="auto internal xref">9.2.1</a>.  <a href="#name-coupled-congestion-control" class="internal xref">Coupled Congestion Control</a></p>
 </li>
                 </ul>
 </li>
@@ -1473,7 +1473,8 @@ a single AS. A direct link may contain several internal hops.<a href="#section-2
 <p id="section-2.1-6"><strong>Link</strong>: General term that refers to "inter-AS links" and "intra-AS
 links".<a href="#section-2.1-6" class="pilcrow">¶</a></p>
 <p id="section-2.1-7"><strong>Network Address</strong>: In IP networks, the network address is the IP and
-port of an endpoint. In PANs, the network address may hold additional information, such as the AS number of the endpoint.<a href="#section-2.1-7" class="pilcrow">¶</a></p>
+port of an endpoint. In PANs, the network address may hold additional
+information, such as the AS number of the endpoint.<a href="#section-2.1-7" class="pilcrow">¶</a></p>
 <p id="section-2.1-8"><strong>Network Path</strong>: This term exists only in PANs. The network path
 consists of the network address at each endpoint, a list of all
 traversed ASes, and links inside and between ASes, including interface
@@ -1481,12 +1482,13 @@ IDs on border routers of each AS.<a href="#section-2.1-8" class="pilcrow">¶</a>
 <p id="section-2.1-9"><strong>QUIC-MP Path</strong>: Consists of the network address at each
 endpoint and a Path ID (see <span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>). The Path ID allows having
 multiple logical paths for the same set of network addresses.<a href="#section-2.1-9" class="pilcrow">¶</a></p>
-<p id="section-2.1-10"><strong>Path Metadata</strong>: Path metadata is additional data that is available to
-endpoints when they request a selection of paths to a destination.
+<p id="section-2.1-10"><strong>Path Metadata</strong>: Path metadata is additional data that is available
+to endpoints when they request a selection of paths to a destination.
 Path metadata is authenticated by the owner of each link, but is
 otherwise not verified.
 Path metadata includes data about ASes and links, such as MTU,
-hardware bandwidth, latency, AS internal hop count, or geolocation information.<a href="#section-2.1-10" class="pilcrow">¶</a></p>
+hardware bandwidth, latency, AS internal hop count, or geolocation
+information.<a href="#section-2.1-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1965,8 +1967,8 @@ UDP Usage Guidelines <span>[<a href="#UDP-GUIDELINES" class="cite xref">UDP-GUID
 developed in <span>[<a href="#MTU-DISCOVERY" class="cite xref">MTU-DISCOVERY</a>]</span>.<a href="#section-9.2-4" class="pilcrow">¶</a></p>
 <div id="concon">
 <section id="section-9.2.1">
-          <h4 id="name-coubpled-congestion-control">
-<a href="#section-9.2.1" class="section-number selfRef">9.2.1. </a><a href="#name-coubpled-congestion-control" class="section-name selfRef">Coubpled Congestion Control</a>
+          <h4 id="name-coupled-congestion-control">
+<a href="#section-9.2.1" class="section-number selfRef">9.2.1. </a><a href="#name-coupled-congestion-control" class="section-name selfRef">Coupled Congestion Control</a>
           </h4>
 <p id="section-9.2.1-1">Multipath congestion control is also discussed for TCP in
 <span>[<a href="#CC-MULTIPATH-TCP" class="cite xref">CC-MULTIPATH-TCP</a>]</span>. They state that:<a href="#section-9.2.1-1" class="pilcrow">¶</a></p>
@@ -2272,33 +2274,46 @@ here.<a href="#section-11-1" class="pilcrow">¶</a></p>
 <li class="normal" id="section-11-2.1">
           <p id="section-11-2.1.1"><span class="bcp14">MUST</span>: Enforce endpoint identity by requiring QUIC-MP
 implementations to provide a destination network address instead of
-just a IP/port.
-Related: The SCION stack should not store/cache paths, especially not
-on the server side.<a href="#section-11-2.1.1" class="pilcrow">¶</a></p>
+just a IP/port.<a href="#section-11-2.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-11-2.2">
-          <p id="section-11-2.2.1"><span class="bcp14">SHOULD</span>: Enable QUIC-MP implementations to recognize network path
-changes beyond 4-tuple changes<a href="#section-11-2.2.1" class="pilcrow">¶</a></p>
+          <p id="section-11-2.2.1"><span class="bcp14">SHOULD</span> (<span class="bcp14">MUST</span>?): The SCION stack should not store/cache paths,
+especially (&lt;UST?) not on the server side. This prevents memory
+exhaustion attacks, see {attack-memory-exhaustion}<a href="#section-11-2.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-11-2.3">
-          <p id="section-11-2.3.1"><span class="bcp14">MUST</span>: SCION stack should by default not change the network paths,
-possibly with the exception of refreshing expired paths. When a path
-stops working (link errors, etc), it should instead report an error
-to the QUIC(-MP) layer or time out silently.<a href="#section-11-2.3.1" class="pilcrow">¶</a></p>
+          <p id="section-11-2.3.1"><span class="bcp14">MUST</span>: Enable QUIC-MP implementations to recognize network path
+changes beyond 4-tuple changes. This protects
+against several attacks, see <a href="#attack-path-injection" class="auto internal xref">Section 12.2</a>.
+This also ensures that we are only using paths of packets that
+have been accepted by the QUIC(-MP) layer or above.<a href="#section-11-2.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-11-2.4">
-          <p id="section-11-2.4.1">On a server, the PAN layer <span class="bcp14">SHOULD</span> return probing packets on the same
-network path on which they were received, this greatly simplifies RTT
-estimation, see <a href="#rtt" class="auto internal xref">Section 9.3</a><a href="#section-11-2.4.1" class="pilcrow">¶</a></p>
+          <p id="section-11-2.4.1"><span class="bcp14">MUST</span>: SCION stack should by default not change the network paths,
+possibly with the exception of refreshing expired paths. When a path
+stops working (link errors, etc), it should instead report an error
+to the QUIC(-MP) layer or time out silently.<a href="#section-11-2.4.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-11-2.5">
-          <p id="section-11-2.5.1">Generally, a server <span class="bcp14">SHOULD</span> respond on the same path on which the data
+          <p id="section-11-2.5.1">A server should return packets on the same path on which they were
+received.<a href="#section-11-2.5.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-11-2.5.2.1">
+              <p id="section-11-2.5.2.1.1">Generally a server <span class="bcp14">SHOULD</span> respond on the same path on which the data
 was originally requested, unless the new path has been validated.
 This ensures that the path does not violate the path policy of the
-client.
-This also ensures that we are only using paths of packets that
-have been accepted by the QUIC(-MP) layer or above. This protects
-against several attacks, see <a href="#attack-path-injection" class="auto internal xref">Section 12.2</a>.<a href="#section-11-2.5.1" class="pilcrow">¶</a></p>
+client.<a href="#section-11-2.5.2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-11-2.5.2.2">
+              <p id="section-11-2.5.2.2.1">If a path fails / expires, we can use other established path but
+the server <span class="bcp14">SHOULD NOT</span> try opening new path. This may violate
+a client's path policy.<a href="#section-11-2.5.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-11-2.5.2.3">
+              <p id="section-11-2.5.2.3.1">Returning probing packets on the same network path on which they
+were received: this greatly simplifies RTT estimation, see <a href="#rtt" class="auto internal xref">Section 9.3</a><a href="#section-11-2.5.2.3.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
 </li>
         <li class="normal" id="section-11-2.6">
           <p id="section-11-2.6.1"><a href="#jelte-attack" class="auto internal xref">Section 12.3</a>: servers should/must authenticate paths. <strong>TODO</strong><a href="#section-11-2.6.1" class="pilcrow">¶</a></p>
@@ -2414,7 +2429,7 @@ validation.<a href="#section-12.2-3.2.1" class="pilcrow">¶</a></p>
    a valid connection.<a href="#section-12.2-4" class="pilcrow">¶</a></p>
 <p id="section-12.2-5">Examples of attacks include memory exhaustion attacks, traffic
 redirection attacks, and traffic amplification attacks.<a href="#section-12.2-5" class="pilcrow">¶</a></p>
-<div id="memory-exhaustion">
+<div id="attack-memory-exhaustion">
 <section id="section-12.2.1">
           <h4 id="name-memory-exhaustion">
 <a href="#section-12.2.1" class="section-number selfRef">12.2.1. </a><a href="#name-memory-exhaustion" class="section-name selfRef">Memory Exhaustion</a>
