@@ -318,22 +318,29 @@ Table of Contents
 
    Implementations should try to maintain a 1:1 mapping between QUIC-MP
    path IDs and SCION network paths.  However, this is not always
-   possible or useful. - It seems reasonable that a SCION implementation
-   may refresh an expiring path with a new identical path.  It seems
-   equally reasonable that this is handled by the path selector, see
-   Section 5.7. - This document recommends that a SCION implementation,
-   when used with QUIC-MP should be configured, such that every SCION
-   network path is used for exactly one QUIC-MP path ID.  However, it
-   may not always be possible or feasible to configure SCION
-   implementations this way, for example when they are part of a SCION
-   gateway or proxy, see Section 3.1. - With NAT rebinding, as described
-   in Section 5.2 of [QUIC-MP], the path can effectively change, the
-   implication need to be discussed in a future version of this document
-   *TODO*. - SCION path should be allowed to be reused, e.g., they may
-   be assigned to one path ID, then that path ID is closed, then they
-   may be assigned to another path ID.  This should cause no problem
-   except for the marginal complexity of managing the associate state
-   with a path ID.
+   possible or useful.
+
+   *  It seems reasonable that a SCION implementation may refresh an
+      expiring path with a new identical path.  It seems equally
+      reasonable that this is handled by the path selector, see
+      Section 5.7.
+
+   *  This document recommends that a SCION implementation, when used
+      with QUIC-MP should be configured, such that every SCION network
+      path is used for exactly one QUIC-MP path ID.  However, it may not
+      always be possible or feasible to configure SCION implementations
+      this way, for example when they are part of a SCION gateway or
+      proxy, see Section 3.1.
+
+   *  With NAT rebinding, as described in Section 5.2 of [QUIC-MP], the
+      path can effectively change, the implication need to be discussed
+      in a future version of this document *TODO*.
+
+   *  SCION path should be allowed to be reused, e.g., they may be
+      assigned to one path ID, then that path ID is closed, then they
+      may be assigned to another path ID.  This should cause no problem
+      except for the marginal complexity of managing the associate state
+      with a path ID.
 
    Recommendations, see also Section 7:
 
@@ -410,13 +417,17 @@ Table of Contents
    endpoints, not by server endpoints.
 
    There are several ways for a server to determine the MTU.  If a
-   server wants to know the MTU, it may - Try to determine the MTU from
-   incoming packets. - Use an algorithm to determine the MTU, see Path
-   MTU Discovery in Section 14.3 of [QUIC-TRANSPORT] and Section 5.8 of
-   [QUIC-MP]. - Try to look up the path to the client endpoint that is
-   identical to the incoming path.  This is not recommended because it
-   requires time and effort on the server side, and there is no
-   guarantee that the incoming path is available in the local AS.
+   server wants to know the MTU, it may:
+
+   *  Try to determine the MTU from incoming packets.
+
+   *  Use an algorithm to determine the MTU, see Path MTU Discovery in
+      Section 14.3 of [QUIC-TRANSPORT] and Section 5.8 of [QUIC-MP].
+
+   *  Try to look up the path to the client endpoint that is identical
+      to the incoming path.  This is not recommended because it requires
+      time and effort on the server side, and there is no guarantee that
+      the incoming path is available in the local AS.
 
    Also, note that the MTU information is authenticated but not
    verified, it may be incorrect due to misconfiguration or malicious
@@ -531,10 +542,15 @@ Table of Contents
 5.7.1.  General Path Management
 
    In order to manage paths effectively, the path selection algorithm
-   probably requires acces to the following fields and events : -
-   initial_max_path_id (Section 2.1 of [QUIC-MP]) - MAX_PATH_ID frames
-   (Section 4.6 of [QUIC-MP] - PATH_AVAILABLE and PATH_BACKUP, see
-   Section 3.3 of [QUIC-MP], - PATH_ABANDON Section 3.4 of [QUIC-MP].
+   probably requires acces to the following fields and events:
+
+   *  initial_max_path_id (Section 2.1 of [QUIC-MP])
+
+   *  MAX_PATH_ID frames (Section 4.6 of [QUIC-MP]
+
+   *  PATH_AVAILABLE and PATH_BACKUP, see Section 3.3 of [QUIC-MP],
+
+   *  PATH_ABANDON Section 3.4 of [QUIC-MP].
 
    Moreover, path selection must exclude paths whose MTU is too small to
    guarantee 1200 bytes MTU payload for QUIC packets.  The effective MTU
@@ -565,9 +581,12 @@ Table of Contents
    Discrepancies can be an indication of high traffic and queueing
    problems on the measured link.
 
-   While traceroute may be useful, it should be used with care: -
-   traceroute traffic is not congestion controlled. - it is clearly
-   distinguishable from QUIC traffic, so it may affect anonymity.
+   While traceroute may be useful, it should be used with care:
+
+   *  traceroute traffic is not congestion controlled.
+
+   *  it is clearly distinguishable from QUIC traffic, so it may affect
+      anonymity.
 
 5.8.  Packet Scheduling
 
@@ -661,20 +680,28 @@ Table of Contents
       and AS number.  This protects against several attacks, see
       Section 8.2 and especially Section 8.2.4.
 
-      There are several ways to achieve this, for example: - Adapt the
-      QUIC-MP library to be aware of the AS number in SCION network
-      addresses. - If the network address is available as a single
-      "object", the SCION layer can extend this with the AS code and the
-      QUIC-MP implementation must only ensure to compare the whole
-      object instead of port and IP separately. - The SCION
-      implementation could detect cases where only the AS changes and
-      then mangle the port or IP to trigger a path validation in the
-      QUIC-MP layer.  This may be pragmatic solution but is discouraged,
-      because: - Managing paths in the SCION layer is difficult (when is
-      a path valid?  When is it closed?  ...).  - It creates
-      opportunities for memory exhaustion attacks (for storing the
-      mapping of mangled IP/port).  - It reports a wrong IP/port to the
-      application.
+      There are several ways to achieve this, for example:
+
+      -  Adapt the QUIC-MP library to be aware of the AS number in SCION
+         network addresses.
+
+      -  If the network address is available as a single "object", the
+         SCION layer can extend this with the AS code and the QUIC-MP
+         implementation must only ensure to compare the whole object
+         instead of port and IP separately.
+
+      -  The SCION implementation could detect cases where only the AS
+         changes and then mangle the port or IP to trigger a path
+         validation in the QUIC-MP layer.  This may be pragmatic
+         solution but is discouraged, because:
+
+         o  Managing paths in the SCION layer is difficult (when is a
+            path valid?  When is it closed?  ...).
+
+         o  It creates opportunities for memory exhaustion attacks (for
+            storing the mapping of mangled IP/port).
+
+         o  It reports a wrong IP/port to the application.
 
    *  A QUIC-MP implementations SHOULD be able to recognize network path
       changes beyond 4-tuple or AS changes.  This enables resetting
@@ -810,13 +837,15 @@ Table of Contents
        network address (including the AS code) should trigger path
        validation.
 
-   Alternatives: 1.  If paths and network addresses must be stored in
-   the SCION layer, an alternative solution would be to implement some
-   kind of signalling which would indicate that a packet is (or would
-   be) rejected/dropped by the QUIC(-MP) layer.  These addresses and
-   path from such packets should not be added to storage.  However, to
-   avoid connection drop, they should not be removed if they were
-   previously used with a valid connection.
+   Alternatives:
+
+   1.  If paths and network addresses must be stored in the SCION layer,
+       an alternative solution would be to implement some kind of
+       signalling which would indicate that a packet is (or would be)
+       rejected/dropped by the QUIC(-MP) layer.  These addresses and
+       path from such packets should not be added to storage.  However,
+       to avoid connection drop, they should not be removed if they were
+       previously used with a valid connection.
 
    Examples of attacks include memory exhaustion attacks, traffic
    redirection attacks, and traffic amplification attacks.

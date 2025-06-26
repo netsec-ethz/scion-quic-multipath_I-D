@@ -1565,37 +1565,47 @@ estimation algorithms. See also <a href="#concon" class="auto internal xref">Sec
           </h4>
 <p id="section-4.2.1-1">Implementations should try to maintain a 1:1 mapping between QUIC-MP
 path IDs and SCION network paths.
-However, this is not always possible or useful.
-- It seems reasonable that a SCION implementation may refresh an expiring
-  path with a new identical path. It seems equally reasonable that this is
-  handled by the path selector, see <a href="#patsel" class="auto internal xref">Section 5.7</a>.
-- This document recommends that a SCION implementation, when used with
-  QUIC-MP should be configured, such that every SCION network path is used
-  for exactly one QUIC-MP path ID. However, it may not always be possible
-  or feasible to configure SCION implementations this way, for example
-  when they are part of a SCION gateway or proxy, see <a href="#sig" class="auto internal xref">Section 3.1</a>.
-- With NAT rebinding, as described in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.2" class="relref">Section 5.2</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>,
-  the path can effectively change, the implication need to be discussed in a
-  future version of this document <strong>TODO</strong>.
-- SCION path should be allowed to be reused, e.g., they may be assigned to
-  one path ID, then that path ID is closed, then they may be assigned to
-  another path ID. This should cause no problem except for the marginal
-  complexity of managing the associate state with a path ID.<a href="#section-4.2.1-1" class="pilcrow">¶</a></p>
-<p id="section-4.2.1-2">Recommendations, see also <a href="#recommendations" class="auto internal xref">Section 7</a>:<a href="#section-4.2.1-2" class="pilcrow">¶</a></p>
+However, this is not always possible or useful.<a href="#section-4.2.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-4.2.1-3.1">
-              <p id="section-4.2.1-3.1.1">Changes of the network address, except possibly for expired paths
-being renewed, should trigger path validation.<a href="#section-4.2.1-3.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-4.2.1-2.1">
+              <p id="section-4.2.1-2.1.1">It seems reasonable that a SCION implementation may refresh an expiring
+path with a new identical path. It seems equally reasonable that this is
+handled by the path selector, see <a href="#patsel" class="auto internal xref">Section 5.7</a>.<a href="#section-4.2.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-4.2.1-3.2">
-              <p id="section-4.2.1-3.2.1">Within a QUIC-MP session, every SCION network path should be used only
+            <li class="normal" id="section-4.2.1-2.2">
+              <p id="section-4.2.1-2.2.1">This document recommends that a SCION implementation, when used with
+QUIC-MP should be configured, such that every SCION network path is used
+for exactly one QUIC-MP path ID. However, it may not always be possible
+or feasible to configure SCION implementations this way, for example
+when they are part of a SCION gateway or proxy, see <a href="#sig" class="auto internal xref">Section 3.1</a>.<a href="#section-4.2.1-2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-4.2.1-2.3">
+              <p id="section-4.2.1-2.3.1">With NAT rebinding, as described in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.2" class="relref">Section 5.2</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>,
+the path can effectively change, the implication need to be discussed in a
+future version of this document <strong>TODO</strong>.<a href="#section-4.2.1-2.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-4.2.1-2.4">
+              <p id="section-4.2.1-2.4.1">SCION path should be allowed to be reused, e.g., they may be assigned to
+one path ID, then that path ID is closed, then they may be assigned to
+another path ID. This should cause no problem except for the marginal
+complexity of managing the associate state with a path ID.<a href="#section-4.2.1-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+<p id="section-4.2.1-3">Recommendations, see also <a href="#recommendations" class="auto internal xref">Section 7</a>:<a href="#section-4.2.1-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.2.1-4.1">
+              <p id="section-4.2.1-4.1.1">Changes of the network address, except possibly for expired paths
+being renewed, should trigger path validation.<a href="#section-4.2.1-4.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-4.2.1-4.2">
+              <p id="section-4.2.1-4.2.1">Within a QUIC-MP session, every SCION network path should be used only
 with one path ID. However, it may be reused if the path was abandoned or
-closed.<a href="#section-4.2.1-3.2.1" class="pilcrow">¶</a></p>
+closed.<a href="#section-4.2.1-4.2.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-4.2.1-3.3">
-              <p id="section-4.2.1-3.3.1">Changes of the network path (while the network address stays the same),
+            <li class="normal" id="section-4.2.1-4.3">
+              <p id="section-4.2.1-4.3.1">Changes of the network path (while the network address stays the same),
 except for expired paths being renewed, should trigger algorithm
-reset (CC, RTT estimate), see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.1" class="relref">Section 5.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-4.2.1-3.3.1" class="pilcrow">¶</a></p>
+reset (CC, RTT estimate), see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.1" class="relref">Section 5.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-4.2.1-4.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -1683,16 +1693,24 @@ and <span><a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-con
 <p id="section-5.2-2">However, in SCION, paths are typically only requested by client endpoints,
 not by server endpoints.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
 <p id="section-5.2-3">There are several ways for a server to determine the MTU.
-If a server wants to know the MTU, it may
-- Try to determine the MTU from incoming packets.
-- Use an algorithm to determine the MTU, see Path MTU Discovery in
-  <span><a href="https://rfc-editor.org/rfc/rfc9000#section-14.3" class="relref">Section 14.3</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> and <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.8" class="relref">Section 5.8</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.
-- Try to look up the path to the client endpoint that is identical to
-  the incoming path. This is not recommended because it requires time
-  and effort on the server side, and there is no guarantee that
-  the incoming path is available in the local AS.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
-<p id="section-5.2-4">Also, note that the MTU information is authenticated but not verified,
-it may be incorrect due to misconfiguration or malicious ASes.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
+If a server wants to know the MTU, it may:<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.2-4.1">
+            <p id="section-5.2-4.1.1">Try to determine the MTU from incoming packets.<a href="#section-5.2-4.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.2-4.2">
+            <p id="section-5.2-4.2.1">Use an algorithm to determine the MTU, see Path MTU Discovery in
+<span><a href="https://rfc-editor.org/rfc/rfc9000#section-14.3" class="relref">Section 14.3</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> and <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-5.8" class="relref">Section 5.8</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-5.2-4.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.2-4.3">
+            <p id="section-5.2-4.3.1">Try to look up the path to the client endpoint that is identical to
+the incoming path. This is not recommended because it requires time
+and effort on the server side, and there is no guarantee that
+the incoming path is available in the local AS.<a href="#section-5.2-4.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-5.2-5">Also, note that the MTU information is authenticated but not verified,
+it may be incorrect due to misconfiguration or malicious ASes.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="concon">
@@ -1833,14 +1851,24 @@ them for reuse when they are closed.<a href="#section-5.7-1" class="pilcrow">¶<
 <a href="#section-5.7.1" class="section-number selfRef">5.7.1. </a><a href="#name-general-path-management" class="section-name selfRef">General Path Management</a>
           </h4>
 <p id="section-5.7.1-1">In order to manage paths effectively, the path selection algorithm
-probably requires acces to the following fields and events :
-- <code>initial_max_path_id</code> (<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-2.1" class="relref">Section 2.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>)
-- MAX_PATH_ID frames (<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-4.6" class="relref">Section 4.6</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>
-- PATH_AVAILABLE and PATH_BACKUP, see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-3.3" class="relref">Section 3.3</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>,
-- PATH_ABANDON <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-3.4" class="relref">Section 3.4</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-5.7.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.7.1-2">Moreover, path selection must exclude paths whose MTU is too
+probably requires acces to the following fields and events:<a href="#section-5.7.1-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.7.1-2.1">
+              <p id="section-5.7.1-2.1.1"><code>initial_max_path_id</code> (<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-2.1" class="relref">Section 2.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>)<a href="#section-5.7.1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-5.7.1-2.2">
+              <p id="section-5.7.1-2.2.1">MAX_PATH_ID frames (<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-4.6" class="relref">Section 4.6</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span><a href="#section-5.7.1-2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-5.7.1-2.3">
+              <p id="section-5.7.1-2.3.1">PATH_AVAILABLE and PATH_BACKUP, see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-3.3" class="relref">Section 3.3</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>,<a href="#section-5.7.1-2.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-5.7.1-2.4">
+              <p id="section-5.7.1-2.4.1">PATH_ABANDON <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14#section-3.4" class="relref">Section 3.4</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-5.7.1-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+<p id="section-5.7.1-3">Moreover, path selection must exclude paths whose MTU is too
 small to guarantee 1200 bytes MTU payload for QUIC packets.
-The effective MTU also depends on the length of the paths.<a href="#section-5.7.1-2" class="pilcrow">¶</a></p>
+The effective MTU also depends on the length of the paths.<a href="#section-5.7.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="dynamic-approach">
@@ -1870,10 +1898,16 @@ to measure the latency between two consecutive AS border routers.
 The measured latency can be compared to earlier measurements or to
 the latency given in the path metadata. Discrepancies can be an
 indication of high traffic and queueing problems on the measured link.<a href="#section-5.7.3-2" class="pilcrow">¶</a></p>
-<p id="section-5.7.3-3">While traceroute may be useful, it should be used with care:
-- traceroute traffic is not congestion controlled.
-- it is clearly distinguishable from QUIC traffic, so it
-  may affect anonymity.<a href="#section-5.7.3-3" class="pilcrow">¶</a></p>
+<p id="section-5.7.3-3">While traceroute may be useful, it should be used with care:<a href="#section-5.7.3-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.7.3-4.1">
+              <p id="section-5.7.3-4.1.1">traceroute traffic is not congestion controlled.<a href="#section-5.7.3-4.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-5.7.3-4.2">
+              <p id="section-5.7.3-4.2.1">it is clearly distinguishable from QUIC traffic, so it
+may affect anonymity.<a href="#section-5.7.3-4.2.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
 </section>
 </div>
 </section>
@@ -2002,22 +2036,38 @@ IP, port and AS number. This protects against several attacks,
 see <a href="#attack-path-injection" class="auto internal xref">Section 8.2</a> and especially
 <a href="#attack-amplification" class="auto internal xref">Section 8.2.4</a>.<a href="#section-7.1-1.1.1" class="pilcrow">¶</a></p>
 <p id="section-7.1-1.1.2">
-There are several ways to achieve this, for example:
-- Adapt the QUIC-MP library to be aware of the AS number in SCION
-  network addresses.
-- If the network address is available as a single "object",
-  the SCION layer can extend this with the AS code and the
-  QUIC-MP implementation must only ensure to compare the whole
-  object instead of port and IP separately.
-- The SCION implementation could detect cases where only the AS
-  changes and then mangle the port or IP to trigger a path validation
-  in the QUIC-MP layer. This may be pragmatic solution but is
-  discouraged, because:
-  - Managing paths in the SCION layer is difficult (when is a path
-    valid? When is it closed?  ...).
-  - It creates opportunities for memory exhaustion attacks
-    (for storing the mapping of mangled IP/port).
-  - It reports a wrong IP/port to the application.<a href="#section-7.1-1.1.2" class="pilcrow">¶</a></p>
+There are several ways to achieve this, for example:<a href="#section-7.1-1.1.2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.1-1.1.3.1">
+                <p id="section-7.1-1.1.3.1.1">Adapt the QUIC-MP library to be aware of the AS number in SCION
+network addresses.<a href="#section-7.1-1.1.3.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-7.1-1.1.3.2">
+                <p id="section-7.1-1.1.3.2.1">If the network address is available as a single "object",
+the SCION layer can extend this with the AS code and the
+QUIC-MP implementation must only ensure to compare the whole
+object instead of port and IP separately.<a href="#section-7.1-1.1.3.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-7.1-1.1.3.3">
+                <p id="section-7.1-1.1.3.3.1">The SCION implementation could detect cases where only the AS
+changes and then mangle the port or IP to trigger a path validation
+in the QUIC-MP layer. This may be pragmatic solution but is
+discouraged, because:<a href="#section-7.1-1.1.3.3.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.1-1.1.3.3.2.1">
+                    <p id="section-7.1-1.1.3.3.2.1.1">Managing paths in the SCION layer is difficult (when is a path
+valid? When is it closed?  ...).<a href="#section-7.1-1.1.3.3.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-7.1-1.1.3.3.2.2">
+                    <p id="section-7.1-1.1.3.3.2.2.1">It creates opportunities for memory exhaustion attacks
+(for storing the mapping of mangled IP/port).<a href="#section-7.1-1.1.3.3.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-7.1-1.1.3.3.2.3">
+                    <p id="section-7.1-1.1.3.3.2.3.1">It reports a wrong IP/port to the application.<a href="#section-7.1-1.1.3.3.2.3.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
 </li>
           <li class="normal" id="section-7.1-1.2">
             <p id="section-7.1-1.2.1">A QUIC-MP implementations <span class="bcp14">SHOULD</span> be able to recognize network path
@@ -2189,16 +2239,20 @@ network address (including the AS code) should trigger path
 validation.<a href="#section-8.2-3.2.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
-<p id="section-8.2-4">Alternatives:
-1. If paths and network addresses must be stored in the SCION layer, an
-   alternative solution would be to implement some kind of signalling
-   which would indicate that a packet is (or would be) rejected/dropped
-   by the QUIC(-MP) layer. These addresses and path from such packets
-   should not be added to storage. However, to avoid connection
-   drop, they should not be removed if they were previously used with
-   a valid connection.<a href="#section-8.2-4" class="pilcrow">¶</a></p>
-<p id="section-8.2-5">Examples of attacks include memory exhaustion attacks, traffic
-redirection attacks, and traffic amplification attacks.<a href="#section-8.2-5" class="pilcrow">¶</a></p>
+<p id="section-8.2-4">Alternatives:<a href="#section-8.2-4" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-8.2-5">
+<li id="section-8.2-5.1">
+            <p id="section-8.2-5.1.1">If paths and network addresses must be stored in the SCION layer, an
+alternative solution would be to implement some kind of signalling
+which would indicate that a packet is (or would be) rejected/dropped
+by the QUIC(-MP) layer. These addresses and path from such packets
+should not be added to storage. However, to avoid connection
+drop, they should not be removed if they were previously used with
+a valid connection.<a href="#section-8.2-5.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ol>
+<p id="section-8.2-6">Examples of attacks include memory exhaustion attacks, traffic
+redirection attacks, and traffic amplification attacks.<a href="#section-8.2-6" class="pilcrow">¶</a></p>
 <div id="attack-memory-exhaustion">
 <section id="section-8.2.1">
           <h4 id="name-memory-exhaustion">
