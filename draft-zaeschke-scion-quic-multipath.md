@@ -301,6 +301,7 @@ estimation algorithms. See also {{concon}}, {{rtt}}, and
 Implementations should try to maintain a 1:1 mapping between QUIC-MP
 path IDs and SCION network paths.
 However, this is not always possible or useful.
+
 - It seems reasonable that a SCION implementation may refresh an expiring
   path with a new identical path. It seems equally reasonable that this is
   handled by the path selector, see {{patsel}}.
@@ -401,7 +402,8 @@ However, in SCION, paths are typically only requested by client endpoints,
 not by server endpoints.
 
 There are several ways for a server to determine the MTU.
-If a server wants to know the MTU, it may
+If a server wants to know the MTU, it may:
+
 - Try to determine the MTU from incoming packets.
 - Use an algorithm to determine the MTU, see Path MTU Discovery in
   {{Section 14.3 of QUIC-TRANSPORT}} and {{Section 5.8 of QUIC-MP}}.
@@ -528,7 +530,8 @@ them for reuse when they are closed.
 ### General Path Management
 
 In order to manage paths effectively, the path selection algorithm
-probably requires acces to the following fields and events :
+probably requires acces to the following fields and events:
+
 - `initial_max_path_id` ({{Section 2.1 of QUIC-MP}})
 - MAX_PATH_ID frames ({{Section 4.6 of QUIC-MP}}
 - PATH_AVAILABLE and PATH_BACKUP, see {{Section 3.3 of QUIC-MP}},
@@ -564,6 +567,7 @@ the latency given in the path metadata. Discrepancies can be an
 indication of high traffic and queueing problems on the measured link.
 
 While traceroute may be useful, it should be used with care:
+
 - traceroute traffic is not congestion controlled.
 - it is clearly distinguishable from QUIC traffic, so it
   may affect anonymity.
@@ -670,6 +674,7 @@ relevant to security or performance.
   {{attack-amplification}}.
 
   There are several ways to achieve this, for example:
+
   - Adapt the QUIC-MP library to be aware of the AS number in SCION
     network addresses.
   - If the network address is available as a single "object",
@@ -692,6 +697,7 @@ relevant to security or performance.
 
 
 ## Recommendations for SCION Implementations
+
 - A SCION implementation SHOULD NOT store or cache paths,
   especially (MUST?) not on the server side. This prevents memory
   exhaustion attacks, see {attack-memory-exhaustion}.
@@ -705,6 +711,7 @@ relevant to security or performance.
 
 
 ## Recommendations for both QUIC-MP and SCION Implementations
+
 - A server should return packets on the same path on which they were
   received.
   - Generally a server SHOULD respond on the same path on which the data
@@ -820,6 +827,7 @@ following where possible:
    validation.
 
 Alternatives:
+
 1. If paths and network addresses must be stored in the SCION layer, an
    alternative solution would be to implement some kind of signalling
    which would indicate that a packet is (or would be) rejected/dropped
