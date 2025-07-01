@@ -9,7 +9,7 @@ docname: draft-zaeschke-scion-quic-multipath-latest
 
 submissiontype: IRTF  # also: "independent", "editorial", "IAB", "IRTF"
 
-date: 2025-06-03
+date: 2025-07-01
 
 ipr: trust200902
 
@@ -33,6 +33,8 @@ venue:
 stand_alone: yes
 
 pi: [toc, sortrefs, symrefs]
+
+v: 3
 
 author:
  -  ins: J. van Bommel
@@ -104,7 +106,7 @@ combining QUIC-MP with SCION.
 This document explores various aspects of this combination, such as
 algorithms for congestion control, RTT estimation, or general
 application scenarios.
-In addition it provides techniques and guidance to maintain security
+In addition, it provides techniques and guidance to maintain security
 and to leverage path-aware multi-path networking with QUIC-MP.
 
 --- middle
@@ -815,7 +817,7 @@ See also {{Section 21.3 of QUIC-TRANSPORT}}.
 version of this document.
 
 
-# Summary of Recommendations {#recommendations}
+# Summary of Recommendations {#all-recommendations}
 
 This memo is informational. However, we use {{!RFC2119}}
 imperative language here for recommendations that are
@@ -894,8 +896,8 @@ relevant to security or performance.
 
 # Security Considerations
 
-The aim is that {{QUIC-MP}} over SCION retains all security
-properties of {{QUIC-MP}}. However, this requires some
+The aim is that QUIC-MP over SCION retains all security
+properties of QUIC-MP and SCION. However, this requires some
 implementation changes and additional consideration regarding:
 
 - endhost identity: a 4-tuple is not sufficient to identify an endhost;
@@ -912,25 +914,26 @@ An endpoint may probe multiple paths in order to determine the best
 path(s) for a given usecase. One example of probing packets are
 packets that measure round trip time (RTT).
 
-If sent en-block, probing packets can be detected because they
-may be sent in bulk, to the same destination, in regular intervals,
-and all with slightly different paths attached.
+Probing packets may be detected if they are sent in bulk, to the
+same destination, in regular intervals, and all with slightly
+different paths attached.
 
 This can be used to fingerprinting an endpoints or their intentions
 (applications may have unique intervals defined).
 
 This can be mitigated by varying and generally reducing the
 number of probing packets, and by sending probing packets
-not en block but time-shifted.
+not en-block but time-shifted.
 
 
 ## Path Injection {#attack-path-injection}
 
-There are several potential attacks that build on injecting paths
-(valid or invalid) into the server-side software stack.
+There are several potential attacks that build on injecting
+valid or invalid paths into the server-side software stack.
 
-These attacks can be prevented in several ways, we recommend the
-following where possible:
+In summary, these attacks can be prevented by the recpommendations
+listed in {{all-recommendations}}, specifically we
+recommend the following where possible:
 
 1. SCION layers should avoid storing/caching paths and network addresses
    (beyond IP/port) internally.
@@ -946,7 +949,7 @@ following where possible:
 Alternatives:
 
 1. If paths and network addresses must be stored in the SCION layer, an
-   alternative solution would be to implement some kind of signalling
+   alternative solution is to implement some kind of signalling
    which would indicate that a packet is (or would be) rejected/dropped
    by the QUIC(-MP) layer. These addresses and path from such packets
    should not be added to storage. However, to avoid connection
@@ -955,7 +958,6 @@ Alternatives:
 
 Examples of attacks include memory exhaustion attacks, traffic
 redirection attacks, and traffic amplification attacks.
-
 
 
 ### Memory Exhaustion {#attack-memory-exhaustion}
@@ -990,10 +992,10 @@ Mitigation:
 ### Traffic Redirection over Different Path
 
 An attacker may craft a path with a network address that is identical
-to an existing valid client, but with a different path.
+to an existing valid endpoint, but with a different path.
 
-The new route is invalid (contains loops or non-existent links)
-or may be faulty (contains links that are broken or have high latency
+The new route may be invalid (contains loops or non-existent links)
+or faulty (contains links that are broken or have high latency
 or drop rate).
 
 The new route may also work fine, but violate the client's path policy
@@ -1091,11 +1093,11 @@ Mitigation:
 
 ## More
 
-- Use multipathing for anonymity, see {{categories}}.
+TODO: Complete this section in a future version of this document
 
+- Use multipathing for anonymity, see {{categories}}.
 - See other attacks in {{Section 7.2.4 of SCION-CP}}?
 
-- TODO: Complete this section in a future version of this document
 
 # IANA Considerations
 
