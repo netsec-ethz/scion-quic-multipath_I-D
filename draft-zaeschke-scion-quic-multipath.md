@@ -1076,7 +1076,7 @@ unexpected IP/port.
 attack"}
 
 
-## More ?
+## More
 
 - Use multipathing for anonymity, see {{categories}}.
 
