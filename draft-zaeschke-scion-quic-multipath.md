@@ -859,16 +859,19 @@ relevant to security or performance.
 ## Recommendations for SCION Implementations
 
 - A SCION implementation SHOULD NOT store or cache paths,
-  especially (MUST?) not on the server side. This prevents memory
+  especially not on the server side. This prevents memory
   exhaustion attacks, see {attack-memory-exhaustion}.
-  This also avoid the problem of determining which paths are still
-  alive a which have been closed or abandoned.
+  This also avoid the problem of path lifecycle maintenance, i.e.,
+  determining which paths are still alive and which have been closed
+  or abandoned.
+  Sometimes, storing paths is inevitable, see {{sig}}.
+  For security concerns, see also {{attack-path-injection}}.
 
 - When used with QUIC-MP, a SCION implementation MUST not change the
   network paths, possibly with the exception of refreshing expired
   paths.
-  When a path stops working, the implementation should instead report an
-  error to the QUIC(-MP) layer or time out silently.
+  When a path stops working, the implementation should instead report
+  an error to the QUIC(-MP) layer or time out silently.
 
 
 ## Recommendations for both QUIC-MP and SCION Implementations
@@ -905,25 +908,6 @@ implementation changes and additional consideration regarding:
 - netwotk path authenticity: paths may be spoofed;
 
 - probing patterns which may expose user intentions or identity.
-
-
-
-## Probe Fingerprinting
-
-An endpoint may probe multiple paths in order to determine the best
-path(s) for a given usecase. One example of probing packets are
-packets that measure round trip time (RTT).
-
-Probing packets may be detected if they are sent in bulk, to the
-same destination, in regular intervals, and all with slightly
-different paths attached.
-
-This can be used to fingerprinting an endpoints or their intentions
-(applications may have unique intervals defined).
-
-This can be mitigated by varying and generally reducing the
-number of probing packets, and by sending probing packets
-not en-block but time-shifted.
 
 
 ## Path Injection {#attack-path-injection}
@@ -1089,6 +1073,24 @@ Mitigation:
    additional measures to limit the number of concurrent path validation
    processes e.g. by pacing them out or limiting the number of path
    initiation attempts over a certain time period.
+
+
+## Probe Fingerprinting
+
+An endpoint may probe multiple paths in order to determine the best
+path(s) for a given usecase. One example of probing packets are
+packets that measure round trip time (RTT).
+
+Probing packets may be detected if they are sent in bulk, to the
+same destination, in regular intervals, and all with slightly
+different paths attached.
+
+This can be used to fingerprinting an endpoints or their intentions
+(applications may have unique intervals defined).
+
+This can be mitigated by varying and generally reducing the
+number of probing packets, and by sending probing packets
+not en-block but time-shifted.
 
 
 ## More
