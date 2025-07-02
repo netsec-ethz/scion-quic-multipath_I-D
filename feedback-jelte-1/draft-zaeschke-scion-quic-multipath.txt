@@ -124,13 +124,13 @@ Table of Contents
      6.2.  Recommendations for SCION Implementations
      6.3.  Recommendations for both QUIC-MP and SCION Implementations
    7.  Security Considerations
-     7.1.  Probe Fingerprinting
-     7.2.  Path Injection
-       7.2.1.  Memory Exhaustion
-       7.2.2.  Traffic Redirection to Different AS
-       7.2.3.  Traffic Redirection over Different Path
-       7.2.4.  Traffic Amplification
-     7.3.  Number of Open Path
+     7.1.  Path Injection
+       7.1.1.  Memory Exhaustion
+       7.1.2.  Traffic Redirection to Different AS
+       7.1.3.  Traffic Redirection over Different Path
+       7.1.4.  Traffic Amplification
+     7.2.  Number of Open Path
+     7.3.  Probe Fingerprinting
      7.4.  More
    8.  IANA Considerations
    9.  References
@@ -407,7 +407,7 @@ Table of Contents
    However, with SCION, the 4-tuple does not uniquely identify en
    andpoint.  Two endpoints with identical IP/port could be in different
    ASes.  This can be used to reroute traffic to a different machine
-   without triggering path validation, see Section 7.2 and Section 5.12.
+   without triggering path validation, see Section 7.1 and Section 5.12.
 
 5.1.2.  Recommendations
 
@@ -415,7 +415,7 @@ Table of Contents
       implementation MUST ensure to trigger path validation when the
       network address of the destination changes; this includes IP, port
       and AS number.  This protects against several attacks, see
-      Section 7.2 and especially Section 7.2.4.
+      Section 7.1 and especially Section 7.1.4.
 
    There are several ways to achieve this, for example:
 
@@ -865,7 +865,7 @@ Table of Contents
       implementation MUST ensure to trigger path validation when the
       network address of the destination changes; this includes IP, port
       and AS number.  This protects against several attacks, see
-      Section 7.2 and especially Section 7.2.4.
+      Section 7.1 and especially Section 7.1.4.
 
       There are several ways to achieve this, for example:
 
@@ -897,10 +897,12 @@ Table of Contents
 6.2.  Recommendations for SCION Implementations
 
    *  A SCION implementation SHOULD NOT store or cache paths, especially
-      (MUST?) not on the server side.  This prevents memory exhaustion
-      attacks, see {attack-memory-exhaustion}. This also avoid the
-      problem of determining which paths are still alive a which have
-      been closed or abandoned.
+      not on the server side.  This prevents memory exhaustion attacks,
+      see {attack-memory-exhaustion}. This also avoid the problem of
+      path lifecycle maintenance, i.e., determining which paths are
+      still alive and which have been closed or abandoned.  Sometimes,
+      storing paths is inevitable, see Section 4.6.  For security
+      concerns, see also Section 7.1.
 
    *  When used with QUIC-MP, a SCION implementation MUST not change the
       network paths, possibly with the exception of refreshing expired
@@ -947,24 +949,7 @@ Table of Contents
 
    *  probing patterns which may expose user intentions or identity.
 
-7.1.  Probe Fingerprinting
-
-   An endpoint may probe multiple paths in order to determine the best
-   path(s) for a given usecase.  One example of probing packets are
-   packets that measure round trip time (RTT).
-
-   Probing packets may be detected if they are sent in bulk, to the same
-   destination, in regular intervals, and all with slightly different
-   paths attached.
-
-   This can be used to fingerprinting an endpoints or their intentions
-   (applications may have unique intervals defined).
-
-   This can be mitigated by varying and generally reducing the number of
-   probing packets, and by sending probing packets not en-block but
-   time-shifted.
-
-7.2.  Path Injection
+7.1.  Path Injection
 
    There are several potential attacks that build on injecting valid or
    invalid paths into the server-side software stack.
@@ -998,7 +983,7 @@ Table of Contents
    Examples of attacks include memory exhaustion attacks, traffic
    redirection attacks, and traffic amplification attacks.
 
-7.2.1.  Memory Exhaustion
+7.1.1.  Memory Exhaustion
 
    An attacker may flood a server with packets that each have a
    different source network address.  If these are stored in the SCION
@@ -1007,7 +992,7 @@ Table of Contents
    Mitigation: do not store state in the SCION layer, or implement a way
    to clean up state without affecting valid connection.
 
-7.2.2.  Traffic Redirection to Different AS
+7.1.2.  Traffic Redirection to Different AS
 
    An attacker may craft a packet that appears to originate from the
    same IP/port, but is located in a different AS than an existing
@@ -1027,7 +1012,7 @@ Table of Contents
       existing state).  This can be achieved trivially by not having
       state in the SCION layer.
 
-7.2.3.  Traffic Redirection over Different Path
+7.1.3.  Traffic Redirection over Different Path
 
    An attacker may craft a path with a network address that is identical
    to an existing valid endpoint, but with a different path.
@@ -1059,7 +1044,7 @@ Table of Contents
    always be triggered when the network address or path changes, even if
    the 4-tuple stays the same.
 
-7.2.4.  Traffic Amplification
+7.1.4.  Traffic Amplification
 
    An attacker may establish a normal connection with a server, request
    a large amount of data, and then inject a path that redirects to a
@@ -1106,7 +1091,7 @@ Table of Contents
 
              Figure 2: Example of traffic amplification attack
 
-7.3.  Number of Open Path
+7.2.  Number of Open Path
 
    The number of open paths should be limited, see Section 7.2 of
    [QUIC-MP].  This is important in the context of applications that may
@@ -1119,6 +1104,23 @@ Table of Contents
       limit the number of concurrent path validation processes e.g. by
       pacing them out or limiting the number of path initiation attempts
       over a certain time period.
+
+7.3.  Probe Fingerprinting
+
+   An endpoint may probe multiple paths in order to determine the best
+   path(s) for a given usecase.  One example of probing packets are
+   packets that measure round trip time (RTT).
+
+   Probing packets may be detected if they are sent in bulk, to the same
+   destination, in regular intervals, and all with slightly different
+   paths attached.
+
+   This can be used to fingerprinting an endpoints or their intentions
+   (applications may have unique intervals defined).
+
+   This can be mitigated by varying and generally reducing the number of
+   probing packets, and by sending probing packets not en-block but
+   time-shifted.
 
 7.4.  More
 
