@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-01T00:34:02.027608+00:00",
+  "timestamp": "2025-07-03T00:29:29.952516+00:00",
   "repo": "netsec-ethz/scion-quic-multipath_I-D",
   "labels": [
     {
@@ -193,6 +193,36 @@
       "mergedBy": "tzaeschke",
       "mergeCommit": {
         "oid": "af03a3477eeacaa7e10e089441fd405aa82e02c3"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 6,
+      "id": "PR_kwDOOmGiIc6dCg3A",
+      "title": "Restructuring",
+      "url": "https://github.com/netsec-ethz/scion-quic-multipath_I-D/pull/6",
+      "state": "MERGED",
+      "author": "tzaeschke",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "tzaeschke"
+      ],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-07-02T08:18:34Z",
+      "updatedAt": "2025-07-02T08:21:13Z",
+      "baseRepository": "netsec-ethz/scion-quic-multipath_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "380d137bbc43719bd8e663d1ba9ba8368226b870",
+      "headRepository": "netsec-ethz/scion-quic-multipath_I-D",
+      "headRefName": "feedback-jelte-1",
+      "headRefOid": "908c231c9303ddf1af8f3ef533a8b8537a4abc72",
+      "closedAt": "2025-07-02T08:21:08Z",
+      "mergedAt": "2025-07-02T08:21:08Z",
+      "mergedBy": "tzaeschke",
+      "mergeCommit": {
+        "oid": "f2038960d509b2a665b16a6a53415b300df2842e"
       },
       "comments": [],
       "reviews": []
