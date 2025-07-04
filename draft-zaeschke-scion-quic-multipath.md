@@ -99,14 +99,15 @@ Multipath Extension for QUIC with the SCION networking technology.
 
 SCION is an inter-domain routing protocol that supports path-aware
 multi-path networking.
-The multiple path and their associated path information offered
+The multiple paths and their associated path information offered
 by SCION provide opportunities as well as challenges for
 combining QUIC-MP with SCION.
 
 This document explores various aspects of this combination, such as
-algorithms for congestion control, RTT estimation, or general
+algorithms for congestion control, RTT estimation, and general
 application scenarios.
-In addition, it provides techniques and guidance to maintain security
+In addition, it provides techniques and guidance to maintain the security
+of QUIC-MP and SCION,
 and to leverage path-aware multi-path networking with QUIC-MP.
 
 --- middle
@@ -128,19 +129,19 @@ largely in isolation. QUIC-MP has been designed with traditional
 IP-based routing in mind, where path changes are typically inferred
 from endpoint address changes (i.e., 4-tuples), and where routing is
 opaque to the transport layer.
-In contrast, Path-Aware Networks (PANs), such a SCION, enable
+In contrast, Path-Aware Networks (PANs), such as SCION, enable
 informed path selection based on performance, disjointness,
 policy, or security requirements.
 This combination of QUIC-MP and SCION allows for optimizations, for
 example, for congestion control, RTT estimation, failure recovery,
-performancem, and security.
+performance, and security.
 However, the slightly different assumptions on endpoint addresses
 (4-tuple + path ID vs 4-tuple + AS code + path) and path
 lifecycles (path abandon vs expiry, etc.) can cause some pitfalls.
 
 The purpose of this document is to explore how QUIC-MP and SCION
 can interoperate, how we can leverage the path awareness offered
-by SCION and how to overcome challenges.
+by SCION, and suggestions on how to overcome challenges.
 
 This document
 lists notable points when using QUIC-MP over SCION ({{overview}}),
@@ -210,7 +211,7 @@ traversed ASes and links, such as their identity or MTU.
 **Metadata Extension**:
 SCION offers additional path metadata via extensions. The metadata
 includes properties such as bandwidth and latency. The extension
-is widely supported but not further discusses, here as it is not specified
+is widely supported but not further discussed here as it is not specified
 in {{SCION-CP}} or {{SCION-DP}}.
 
 
@@ -219,14 +220,14 @@ in {{SCION-CP}} or {{SCION-DP}}.
 The Multipath Extension for QUIC (QUIC-MP) is primarily designed for
 traditional IP networks, where each path is identified by a 4-tuple of
 local and remote IP addresses and ports.
-Routing as opaque to endpoints, and path changes are inferred
+Routing is considered opaque to endpoints, and path changes are inferred
 indirectly through changes in the 4-tuple. However, the
 path between two endpoints may change unpredictably due to routing
 dynamics, which is not captured by the 4-tuple.
 
 In SCION, endpoints can discover and select explicit network paths,
-which are described at the level ASes and interfaces, and have
-associate metadata, such as MTU.
+which are described at the level of ASes and inter-AS links, and have
+associated metadata, such as the MTU.
 
 The different underlying assumptions of QUIC-MP and SCION result in
 some mismatches, for instance:
@@ -234,7 +235,7 @@ some mismatches, for instance:
 - **Endpoint Ambiguity**: PANs such as SCION use composite addresses
   (e.g., ISD-AS + Host), where the host can be an IP address from a
   private IP range. This breaks the assumption that IP addresses
-  are globally unique.
+  are unique in the current network.
 - **Path Identity Mismatch**: In QUIC-MP, paths are distinguished by
   4-tuples and Path IDs. In SCION, two distinct physical paths may share
   the same 4-tuple, rendering transport-layer path tracking incomplete.
@@ -243,11 +244,11 @@ some mismatches, for instance:
   This can interfere with RTT estimation, congestion control, and path
   validation logic if not properly accounted for.
 
-However, SCION also opens up opportunities for improving
+However, SCION also opens up opportunities for enhancing
 multipath transport:
 
 - **Explicit path selection** enables endpoints to choose disjoint
-  paths, i.e. paths that do not share links or segments, to improve
+  paths, i.e., paths that do not share links or segments, to improve
   fault tolerance against link failures, or to increase aggregate
   throughput.
 - **Path metadata** allows endpoints to prioritize paths with more
@@ -276,16 +277,17 @@ be combined to meet complex application requirements.
 Multipath transport can improve robustness against network failures in
 several ways:
 
-- An endpoint can immediately send data over a perdetermined backup
-  path if it suspects that a primary path is faulty.
-- In SCION, we may receive error messages that specify the link or node
-  that is faulty. This allows selecting a backup path that does not
-  share the same faulty entity.
+- An endpoint can immediately send data over a predetermined backup
+  path if it suspects or obtains a network notification that a primary
+  path is faulty.
+- In SCION, the network may send error messages that explicitly specify
+  the faulty link. This allows selecting a backup path that circumvents
+  the faulty link.
 - By sending redundant traffic over multiple paths, an application can
   maintain continuity even if one path becomes unavailable.
 
 The use of backup paths or paths for redundant sending can be further
-improved by analysing paths for overlap and selecting disjoint paths.
+improved by analyzing paths for overlap and selecting disjoint paths.
 This reduces the likelihood of multiple paths failing simultaneously.
 
 
@@ -295,9 +297,9 @@ An application may aim to maximize the available bandwidth by spreading
 traffic across multiple paths.
 To optimize this, an application may:
 
-- Select multiple paths with minimum disjointness
+- Select multiple paths with maximum disjointness.
 - Select multiple paths such that disjointness is limited to
-  sub-paths that are expected to have high bandwidth available
+  sub-paths that are expected to have high bandwidth available.
 - When congestion is detected, switch over entirely, or shift
   parts of traffic to an underutilized disjoint path to preserve the
   throughput.
@@ -318,7 +320,7 @@ For deadline sensitive applications, an algorithm as described in
 {{DMTP}} may be useful.
 
 Instead of probing many paths at once, an implementation
-should probe only the most promising paths (following the metadata).
+should probe only the most promising paths (based on the metadata).
 Probing many paths should also be avoided to avoid overloading
 individual links, and it may effectively be limited (except traceroute)
 by the available path IDs and connection IDs, see
@@ -328,8 +330,8 @@ by the available path IDs and connection IDs, see
 ## Policy-Driven Routing and Routing Constraints
 
 Some applications or deployments may wish to avoid routing traffic
-through certain ASes or jurisdictions, e.g. to reduce exposure to
-surveillance, or enforce routing policies. SCION enables this by
+through certain ASes, e.g. to ensure path diversity or to enforce
+routing policies. SCION enables this by
 making path selection explicit and verifiable.
 
 ## Anonymity and Traffic Obfuscation
@@ -351,7 +353,7 @@ that it avoids creating identifiable patterns.
 There are gateways and proxies (including VPN) that translate
 SCION traffic to IP traffic and back.
 These are a special case because they are not used together with a
-QUIC(-MP) implementation, instead they are, and should be, oblivivous
+QUIC(-MP) implementation, instead they are, and should be, oblivious
 to QUIC traffic.
 
 **TODO**
@@ -375,11 +377,11 @@ that IP addresses are globally unique.
 ### Key Implications
 
 QUIC-MP relies on the 4-tuple changes to trigger path validation.
-However, with SCION, the 4-tuple does not uniquely identify en andpoint.
+However, with SCION, the 4-tuple does not uniquely identify an endpoint.
 Two endpoints with identical IP/port could be in different ASes.
-This can be used to reroute traffic to a different machine without
-triggering path validation, see {{attack-path-injection}} and
-{{token}}.
+An attacker could use endpoints with identical 4-tuple to reroute traffic
+to a different machine without triggering path validation, see
+{{attack-path-injection}} and {{token}}.
 
 ### Recommendations
 
@@ -401,9 +403,10 @@ There are several ways to achieve this, for example:
 - The SCION implementation could detect cases where only the AS
   changes and then mangle the port or IP to trigger a path validation
   in the QUIC-MP layer. This may be a pragmatic solution but is
-  discouraged, because:
-  - Managing paths in the SCION layer is difficult (When is a path
-    valid? When is it closed?).
+  discouraged because:
+  - Managing paths in the SCION layer is not trivial because it requires
+    synchronizing the lifecycle of SCION paths and QUIC-MP paths, e.g.,
+    knowing when is a path valid or when is it closed in QUIC-MP.
   - It creates opportunities for memory exhaustion attacks
     (for storing the mapping of mangled IP/port).
   - It reports a wrong IP/port to the application.
@@ -415,13 +418,14 @@ The identification of "paths" varies between QUIC, QUIC-MP and SCION.
 
 - {{QUIC-TRANSPORT}} uses a 4-tuple of local/remote IP/port to
   distinguish paths.
-- {{QUIC-MP}} extends the 4-tuple with a path IDs to distinguish
+- {{QUIC-MP}} extends the 4-tuple with a path ID to distinguish
   logical paths (connections).
-- SCION can distinguish paths based on the physical network path
-  and additional properties, such as an expiration date (the
-  latter may or may not be used to distinguish path instances).
+- SCION can distinguish paths based on the physical inter-domain
+  network path and additional properties, such as an expiration
+  time (the latter may or may not be used to distinguish path
+  instances).
 
-A path changes occurs when at least one of the router interfaces
+A path change occurs when at least one of the router interfaces
 changes. The network address may stay the same.
 
 With NAT rebinding, as described in {{Section 5.2 of QUIC-MP}},
@@ -445,7 +449,7 @@ Implementations should try to maintain a 1:1 mapping between QUIC-MP
 path IDs and SCION network paths.
 However, this is not always possible or useful:
 
-- A SCION network path may expire. Replacing a path width an
+- A SCION network path may expire. Replacing a path with an
   identical new path (except for the expiration date), should be allowed
   without triggering algorithm reset. Alternatively, refresh
   can be handled by the path selector, see {{patsel}}.
@@ -455,18 +459,19 @@ However, this is not always possible or useful:
   However, it may not always be possible or feasible to configure SCION
   implementations in this way, for example. when they are part of a SCION
   gateway or proxy, and are unaware of transporting QUIC, see {{sig}}.
-- SCION path should be allowed to be reused, e.g., they may be assigned
-  to one path ID, then that path ID is closed, then they may be assigned
-  to another path ID. This should not cause any problems except for the
-  marginal complexity of managing the associate state with a path ID.
+- A SCION path should be allowed to be reused, e.g., they may be assigned
+  to one QUIC path ID, and when that path ID is closed, the path
+  must be allowed to be assigned to another path ID.
+  This should not cause any problems except for the
+  marginal complexity of managing the associated state with a path ID.
 
 ### Key Implications
 
-If a path change occurs undetected, the QUIC-MP layer may fail to
-reset congestion control or RTT estimation.
+If a path change occurs undetected, the QUIC-MP layer cannot
+reset congestion control ({{concon}}) or RTT estimation ({{rtt}}).
 This is undesirable but not worse than traditional IP based non-PAN
-transport where routes can change without the endpoints ever
-learning about it.
+transport where routes can change without the endpoints learning about
+it.
 
 ### Recommendations
 
@@ -496,10 +501,11 @@ considered acceptable. Recommendations:
 - The SCION implementation could detect cases where only the router
   interfaces
   change and then mangle the port or IP to trigger a path validation
-  in the QUIC-MP layer. This may a be pragmatic solution but is
+  in the QUIC-MP layer. This may be a pragmatic solution but is
   discouraged, because:
-  - Managing paths in the SCION layer is difficult (When is a path
-    valid? When is it closed?).
+  - Managing paths in the SCION layer is not trivial because it requires
+    synchronizing the lifecycle of SCION paths and QUIC-MP paths, e.g.,
+    knowing when is a path valid or when is it closed in QUIC-MP.
   - It creates opportunities for memory exhaustion attacks
     (for storing the mapping of mangled IP/port).
   - It reports a wrong IP/port to the application.
@@ -514,24 +520,30 @@ sent (including probing packets) during the initial handshake, see
 
 ### Key Implications
 
-Changing the path A violation would
+Changing the path during handshake would violate
+{{Section 9 of QUIC-TRANSPORT}}:
+
+> The design of QUIC relies on endpoints retaining a stable address
+> for the duration of the handshake. An endpoint MUST NOT initiate connection
+> migration before the handshake is confirmed, as defined in
+> {{Section 4.1.2 of QUIC-TLS}}.
 
 ### Recommendations
 
 - A SCION implementation should not automatically change network
   paths switch without explicit request by the QUIC(-MP) layer.
   The only exception allowed is replacing an expiring path with
-  otherwise identical new path.
+  an new path that is identical except for the expiration time.
   We also need to ensure this for gateways  etc, see {{sig}}.
 
 ## Congestion Control {#concon}
 
-Following {{Section 5.1 of QUIC-MP}}, CC algorithm should be reset when
-the 4-tuple of a QUIC-path changes. With SCION, 4-tuples are not
+Following {{Section 5.1 of QUIC-MP}}, the CC algorithm should be reset
+when the 4-tuple of a QUIC path changes. With SCION, 4-tuples are not
 sufficient to identify paths, see {{pathid}}.
 
-To avoid missing a path change, SCION implementation should never
-change a network path unless instructed otherwise by the QUIC-MP
+To avoid missing a path change, the SCION implementation should never
+change a network path unless explicitly instructed by the QUIC-MP
 implementation, see {{recommendations}}.
 
 
@@ -551,25 +563,25 @@ of paths and selecting paths that do not share a bottleneck link.
 Instead, this bottleneck knowledge can be used to effectively use
 separate congestion control for each path.
 Alternatively, a CC algorithm could be employed that focuses
-on known shared shared links (which may be bottlenecks).
+on known shared links (which may be bottlenecks).
 
 There are several congestion control algorithms proposed in literature,
-e.g. LIA, OLIA, BALIA and RSF.  These combine congestion control with
+e.g., LIA, OLIA, BALIA and RSF.  These combine congestion control with
 path selection algorithms.
 For simplicity, we suggest separating concerns in terms of
 congestion control and path selection. This allows us to better
 tailor the solutions to the different usage scenarios.
 
 The proposition is to use non-coupled congestion control per path,
-tailored for each use case {{categories}}, and use separate path
-selection algorithms.
+tailored for each use case in {{categories}}, and use separate
+independent path selection algorithms.
 
 CC algorithms can also benefit from the SCION metadata extension that
-provides bandwidth and latency data for each node and link on a
+provides bandwidth and latency data for each link on a
 network path.
 
 
-## Key Implications
+### Key Implications
 
 A network path change goes unnoticed in case
 a SCION implementation changes a path that happens to have the same
@@ -583,10 +595,10 @@ of a path:
   overlapping sections.
 
 - CC algorithms should be notified of every path change, allowing them
-  to reset only when necessary. A reset may not be unnecessary if the
+  to reset only when necessary. A reset may not be necessary if the
   network path remains the same and only the IP or port of an endpoint
   changes. This can make sense if any congestion is assumed to be on the
-  network path rather than behind the remote IP/port.
+  network path rather than behind the remote IP/port (e.g., behind a proxy).
 
 See also {{Section 5.3 of QUIC-MP}}.
 
@@ -594,7 +606,8 @@ See also {{Section 5.3 of QUIC-MP}}.
 
 - Congestion control algorithms should be reset when the network path
   changes (beyond 4-tuple). This is best achieved by ensuring that
-  the network path changes only when requested by QUIC.
+  the network path changes only in conjunction with QUIC path migration
+  events.
 
 Congestion control algorithms can also benefit from exact
 knowledge of a network path:
@@ -602,7 +615,7 @@ knowledge of a network path:
 - Congestion control algorithms should use the path metadata to
   detect and, if necessary and possible, avoid overlap with
   other paths. Congestion control can then be simplified to work
-  indpependently for each path.
+  independently for each path.
 - Path selection algorithms should try to avoid multiple path
   that share bottleneck links.
 
@@ -610,16 +623,16 @@ knowledge of a network path:
 ## RTT Estimation {#rtt}
 
 Similarly to congestion control, and following
-{{Section 5.1 of QUIC-MP}}, RTT estimation algorithm should be reset
-when the 4-tuple of a QUIC-path changes.
+{{Section 5.1 of QUIC-MP}}, the RTT estimation algorithm should be
+reset when the 4-tuple of a QUIC path changes.
 As described in {{concon}} this can be avoided
-by forbidding SCION implementations to change a network paths unless
+by forbidding SCION implementations to change a network path unless
 instructed otherwise by the QUIC-MP implementation.
 
 ### Key Implications
 
 If a path change occurs undetected, the QUIC-MP layer may fail to
-reset congestion control or RTT estimation.
+reset RTT estimation.
 This is undesirable but not worse than traditional IP based non-PAN
 transport where routes can change without the endpoints ever
 learning about it.
@@ -633,28 +646,29 @@ learning about it.
 Round-trip time estimation algorithms can also benefit from exact
 knowledge of a path:
 
-- An implementation may use SCIONs SCMP traceroute
+- An implementation may use SCION's SCMP traceroute
   ({{Section 6 of SCION-CP}}) to measure the latency of individual
   links and then use this information to select new network paths
-  that favor low latency links and avoid low latency links. See also
+  that favor low latency links and avoid high latency links. See also
   {{bottleneck}}.
 
 - An implementation could use the SCION metadata extension to
-  get latency on links in a path without having to measure it.
-  This latency may not be fully accurate, but may in many cases be
-  "good enough".
+  get propagation latency information of links in a path without
+  having to measure it.
+  This latency does not include queing latency but may in
+  many cases be sufficient for practical use.
 
 ## MTU Discovery {#mtu}
 
 The MTU may be used to calculate the available payload size.
 SCION inserts an additional header ({{Section 2 of SCION-DP}}) into
-each packet. The header size depends on the IP family (e.g., IP4 vs
+each packet. The header size depends on the IP family (e.g., IPv4 vs
 IPv6 addresses) and on the "length" of the path, i.e., the number of
 ASes that are traversed. This must be taken into account when
 calculating the available payload size.
 
-The difference between typical MTU (1500 bytes) and QUI's required packet
-size (1200 bytes) is sufficient for normal real-world SCION headers.
+The difference between typical MTU (1500 bytes) and QUIC's required packet
+size (1200 bytes) is sufficient for typical real-world SCION headers.
 
 PMTU discovery {{Section 14.3 of QUIC-TRANSPORT}} can be used to
 discover or verify MTU sizes. However, path metadata MTU can (at
@@ -714,10 +728,12 @@ further frame scheduling adaptations.
   MTU size from all available network paths. However, it must be
   considered that these values are not verified.
 - On the server, MTU values from path metadata are not available.
-  It is possible to request these from a local control server,
-  but the exact path may not be available.
-  Also, new paths should usually be opened by the client, not the
-  server, see {{Section 9 of QUIC-TRANSPORT}}.
+  The server may request these from the local AS, but the exact
+  path may not be available (in SCION, different ASes may offer
+  different sets of paths to their customers).
+  Also, except for initially proposing a preferred address
+  ({{Section 9.6 of QUIC-TRANSPORT}}), new paths must be opened by
+  the client, not the server, see {{Section 9 of QUIC-TRANSPORT}}.
 
 
 ## Path Selection {#patsel}
@@ -730,8 +746,8 @@ them for reuse when they are closed.
 ### Dynamic Approach
 
 A dynamic approach could start with using low latency paths. If the
-connection appears to be long lasting, it could start, and keep,
-adding additional paths and as long as the traffic increases.
+connection appears to be long lasting, it could start (and keep)
+adding additional paths as long as the traffic increases.
 
 As an example, if the algorithm detects traffic that lasts for
 at least one second and transfers at least 100MB of traffic,
@@ -740,15 +756,15 @@ the algorithm could trigger creation of additional QUIC paths.
 ### Bottleneck Detection {#bottleneck}
 
 If live traffic information is not available, bottleneck detection
-can help to identify links that should be avoided. In path-aware
-networks, this can be done using approaches such as {{UMCC}}.
+can help to identify links that should be avoided. In PANs,
+this can be achieved using approaches such as {{UMCC}}.
 
 An alternative is to use SCION's SCMP `traceroute` command
 ({{Section 6 of SCION-CP}})
 to measure the latency between two consecutive AS border routers.
 The measured latency can be compared to earlier measurements or to
 the latency given in the path metadata. Discrepancies can be an
-indication of high traffic and queueing problems on the measured link.
+indication of high traffic volume and queueing on the measured link.
 
 While traceroute may be useful, it should be used with care:
 
@@ -785,8 +801,8 @@ over multiple paths, see also {{Section 5.5 of QUIC-MP}}.
 
 ### Key Implications
 
-SCION paths are stable, i.e., they cannot change without initiative
-from the endpoints.
+SCION paths are stable, at least on the inter-AS level,
+i.e., they cannot change without initiative from the endpoints.
 
 ### Recommendations
 
@@ -802,11 +818,11 @@ following the successful validation of a new client address.
 
 Potential challenges:
 
-- If we adopt an implementation to use the full network
+- If we adapt an implementation to use the full network
   address + path for identity, and if we use this to
   generate tokens, then we may end up generating many more or
   longer tokens.
-- Clients may not know their IP address (e.g. NAT) and their IP
+- Clients may not know their IP address (e.g., NAT) and their IP
   address may change.
 
 See discussion in https://github.com/quicwg/multipath/issues/550
@@ -845,8 +861,9 @@ relevant to security or performance.
     changes and then mangle the port or IP to trigger a path validation
     in the QUIC-MP layer. This may be a pragmatic solution but is
     discouraged, because:
-    - Managing paths in the SCION layer is difficult (when is a path
-      valid? When is it closed?  ...).
+    - Managing paths in the SCION layer is not trivial because it requires
+      synchronizing the lifecycle of SCION paths and QUIC-MP paths, e.g.,
+      knowing when is a path valid or when is it closed in QUIC-MP.
     - It creates opportunities for memory exhaustion attacks
       (for storing the mapping of mangled IP/port).
     - It reports a wrong IP/port to the application.
@@ -878,21 +895,23 @@ relevant to security or performance.
 
 - A server should return packets on the same path on which they were
   received.
-  - Generally a server SHOULD respond on the same path on which the data
+  - Generally, a server SHOULD respond on the same path on which the data
     was originally requested, unless the new path has been validated.
     This ensures that the path does not violate the path policy of the
     client.
-  - A server SHOULD NOT create new path. Any new path may violate
-    a client's path policy.
+  - A server SHOULD NOT create new paths. This is also stated in
+    {{Section 9 of QUIC-TRANSPORT}}. Servers may communicate a preferred
+    address after the initial handshake. However, it is recommended to
+    avoid that because any new path may violate a client's path policy.
   - Returning probing packets on the same network path on which they
     were received: This greatly simplifies RTT estimation, see {{rtt}}.
 
-- Clients may replace expired paths with identical paths without
-  performing path migration / validation.
+- Clients may replace expired or soon-to-expire paths with identical
+  paths without performing path migration / validation.
 
 - Within a QUIC-MP session, every SCION network path should be used only
   with one path ID. However, it may be reused if the path was abandoned
-  or closed. This is the responsibility of the path selection
+  or closed by QUIC. This is the responsibility of the path selection
   algorithm, regardless of whether it is considered part of SCION or
   part of QUIC-MP.
 
@@ -903,11 +922,11 @@ The aim is that QUIC-MP over SCION retains all security
 properties of QUIC-MP and SCION. However, this requires some
 implementation changes and additional consideration regarding:
 
-- endhost identity: a 4-tuple is not sufficient to identify an endhost;
+- endpoint identity: a 4-tuple is not sufficient to identify an endhost;
 
-- netwotk path authenticity: paths may be spoofed;
+- network path authenticity: paths may be forged by malicious clients;
 
-- probing patterns which may expose user intentions or identity.
+- path probing patterns may expose user intentions or identity.
 
 
 ## Path Injection {#attack-path-injection}
@@ -915,7 +934,7 @@ implementation changes and additional consideration regarding:
 There are several potential attacks that build on injecting
 valid or invalid paths into the server-side software stack.
 
-In summary, these attacks can be prevented by the recpommendations
+In summary, these attacks can be prevented by the recommendations
 listed in {{all-recommendations}}, specifically we
 recommend the following where possible:
 
@@ -923,22 +942,22 @@ recommend the following where possible:
    (beyond IP/port) internally.
    Instead, they should be given to the QUIC(-MP) layer or the
    application layer. That means that path information would only be
-   accepyted and retained if the QUIC(-MP) or application layer.
-2. SCION layers and QUIC(-MP) layers should interface by using
+   accepted and retained if the QUIC(-MP) or application layer decides
+   to do so.
+3. SCION layers and QUIC(-MP) layers should interface by using
    network addresses that include all information that identifies an
-   andpoint, including, for example, AS code. Any change in a
+   endpoint, including, for example, AS code. Any change in a
    network address (including the AS code) should trigger path
    validation.
 
 Alternatives:
 
 1. If paths and network addresses must be stored in the SCION layer, an
-   alternative solution is to implement some kind of signalling
+   alternative solution is to implement a form of signalling
    which would indicate that a packet is (or would be) rejected/dropped
    by the QUIC(-MP) layer. These addresses and path from such packets
-   should not be added to storage. However, to avoid connection
-   drop, they should not be removed if they were previously used with
-   a valid connection.
+   should not be stored. However, to avoid connection drop, they should
+   not be removed if they were previously used with a valid connection.
 
 Examples of attacks include memory exhaustion attacks, traffic
 redirection attacks, and traffic amplification attacks.
@@ -951,7 +970,7 @@ different source network address. If these are stored in the
 SCION layer, they may cause memory exhaustion.
 
 Mitigation: do not store state in the SCION layer, or implement
-a way to clean up state without affecting valid connection.
+a way to clean up state without affecting a valid connection.
 
 
 ### Traffic Redirection to Different AS
@@ -978,12 +997,12 @@ Mitigation:
 An attacker may craft a path with a network address that is identical
 to an existing valid endpoint, but with a different path.
 
-The new route may be invalid (contains loops or nonexistent links)
-or faulty (contains links that are broken or have high latency
+The new route may be invalid (e.g., contain nonexistent links)
+or faulty (contain links that are broken or have high latency
 or drop rate).
 
 The new route may also work fine, but violate the client's path policy
-or be used for traffic observation.
+or be used for traffic analysis.
 
 
 ~~~~
@@ -1011,7 +1030,7 @@ changes, even if the 4-tuple stays the same.
 
 ### Traffic Amplification {#attack-amplification}
 
-An attacker may establish a normal connection with a server,
+An attacker may establish a connection with a server,
 request a large amount of data, and then inject a path that
 redirects to a victim that has the same IP/port, but in a different AS.
 
@@ -1029,11 +1048,11 @@ Mitigation:
   address. This would then trigger path validation, and the attack
   can be averted.
 - If a QUIC(-MP) library cannot compare additional attributes
-  (e.g. legacy library), the SCION layer (server side) should have an
+  (e.g., legacy library), the SCION layer (server side) should have an
   option to perform port mangling or IP mangling: when the SCION layer
   detects a new network address that differs only in the AS number
   from a previously seen address (IP/port are the same), then it
-  should perform IP/port mangling, i.e. reporting a modified IP or
+  should perform IP/port mangling, i.e., reporting a modified IP or
   port to the QUIC(-MP) layer. This new IP/port would trigger a path
   validation or algorithm reset where required.
 
@@ -1059,7 +1078,7 @@ Caveats:
 attack"}
 
 
-## Number of Open Path {#security-many-paths}
+## Number of Open Paths {#security-many-paths}
 
 The number of open paths should be limited, see
 {{Section 7.2 of QUIC-MP}}.
@@ -1078,14 +1097,14 @@ Mitigation:
 ## Probe Fingerprinting
 
 An endpoint may probe multiple paths to determine the best
-path(s) for a given usecase. One example of probing packets are
+path(s) for a given use case. One example of probing packets is
 packets that measure round-trip time (RTT).
 
 Probing packets may be detected if they are sent in bulk, to the
 same destination, in regular intervals, and all with slightly
 different paths attached.
 
-This can be used to fingerprinting an endpoints or their intentions
+This can be used to fingerprint an endpoint or their intentions
 (applications may have unique intervals defined).
 
 This can be mitigated by varying and generally reducing the
@@ -1093,7 +1112,7 @@ number of probing packets, and by sending probing packets
 not en-block but time-shifted.
 
 
-## More
+## Additional Points
 
 TODO: Complete this section in a future version of this document.
 
@@ -1114,4 +1133,4 @@ This document has no IANA actions.
 Thanks to the Path Aware Networking Research Group for discussion
 and feedback. Specifically, we would like to thank Kevin Meynell and
 Nicola Rustignoli from the Scion Association for their valuable input
-on many iterations of this document.
+on several iterations of this document.
