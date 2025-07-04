@@ -9,7 +9,7 @@ docname: draft-zaeschke-scion-quic-multipath-latest
 
 submissiontype: IRTF  # also: "independent", "editorial", "IAB", "IRTF"
 
-date: 2025-07-01
+date: 2025-07-04
 
 ipr: trust200902
 
@@ -524,8 +524,8 @@ Changing the path during handshake would violate
 {{Section 9 of QUIC-TRANSPORT}}:
 
 > The design of QUIC relies on endpoints retaining a stable address
-> for the duration of the handshake. An endpoint MUST NOT initiate connection
-> migration before the handshake is confirmed, as defined in
+> for the duration of the handshake. An endpoint MUST NOT initiate
+> connection migration before the handshake is confirmed, as defined in
 > {{Section 4.1.2 of QUIC-TLS}}.
 
 ### Recommendations
@@ -533,8 +533,8 @@ Changing the path during handshake would violate
 - A SCION implementation should not automatically change network
   paths switch without explicit request by the QUIC(-MP) layer.
   The only exception allowed is replacing an expiring path with
-  an new path that is identical except for the expiration time.
-  We also need to ensure this for gateways  etc, see {{sig}}.
+  a new path that is identical except for the expiration time.
+  We also need to ensure this for gateways etc., see {{sig}}.
 
 ## Congestion Control {#concon}
 
@@ -552,11 +552,11 @@ implementation, see {{recommendations}}.
 {{Section 5.3 of QUIC-MP}} mentions coupled congestion control
 algorithms, such as {{CC-MULTIPATH-TCP}}. {{CC-MULTIPATH-TCP}} states:
 
-> "One of the prominent
+> One of the prominent
    problems is that running existing algorithms such as standard TCP
    independently on each path would give the multipath flow more than
    its fair share at a bottleneck link traversed by more than one of its
-   subflows.".
+   subflows.
 
 This can be avoided in PANs, such as SCION, through link-level analysis
 of paths and selecting paths that do not share a bottleneck link.
@@ -655,7 +655,7 @@ knowledge of a path:
 - An implementation could use the SCION metadata extension to
   get propagation latency information of links in a path without
   having to measure it.
-  This latency does not include queing latency but may in
+  This latency does not include queueing latency but may in
   many cases be sufficient for practical use.
 
 ## MTU Discovery {#mtu}
@@ -670,10 +670,10 @@ calculating the available payload size.
 The difference between typical MTU (1500 bytes) and QUIC's required packet
 size (1200 bytes) is sufficient for typical real-world SCION headers.
 
-PMTU discovery {{Section 14.3 of QUIC-TRANSPORT}} can be used to
-discover or verify MTU sizes. However, path metadata MTU can (at
-least on the client side) be used to preselect paths with desirable
-MTU values.
+PMTU discovery ({{Section 14.3 of QUIC-TRANSPORT}}, {{MTU-DISCOVERY}})
+can be used to discover or verify MTU sizes.
+However, the MTU from the path metadata can (at least on the client
+side) be used to preselect paths with desirable MTU values.
 
 In SCION, when an endpoint requests a network path, it will be
 provided with MTU information for every hop on a path, see also {{mtu}}
@@ -700,6 +700,10 @@ PMTU discovery for multi-path may be improved by using path metadata.
 PMTU will be explored more in detail in a future version of this
 document (**TODO**)).
 
+It may be possible for a client to send the PMTU size directly to a
+server, for example as a parameter via the QUIC Transport Parameter
+Extension, see {{Section 18 of QUIC-TRANSPORT}} and
+{{Section 8.2 of QUIC-TLS}}.
 
 ## Retransmission & PTO {#retransmission}
 
@@ -884,7 +888,7 @@ relevant to security or performance.
   Sometimes, storing paths is inevitable, see {{sig}}.
   For security concerns, see also {{attack-path-injection}}.
 
-- When used with QUIC-MP, a SCION implementation MUST not change the
+- When used with QUIC-MP, a SCION implementation MUST NOT change the
   network paths, possibly with the exception of refreshing expired
   paths.
   When a path stops working, the implementation should instead report
@@ -1010,7 +1014,7 @@ or be used for traffic analysis.
   +-----------------+        +--------------+        +--------------+
   | Server          |        | Attacker     |        | Victim       |
   | IP=198.51.100.1 | ------ | IP=192.0.2.1 | ------ | IP=192.0.2.1 |
-  | port = 42       |        | port= 12345  |        | port= 12345  |
+  | port=42         |        | port=12345   |        | port=12345   |
   +-----------------+        +--------------+        +--------------+
 
 ~~~~
