@@ -1064,7 +1064,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">van Bommel, et al.</td>
-<td class="center">Expires 2 January 2026</td>
+<td class="center">Expires 5 January 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1077,12 +1077,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-zaeschke-scion-quic-multipath-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-07-01" class="published">1 July 2025</time>
+<time datetime="2025-07-04" class="published">4 July 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-01-02">2 January 2026</time></dd>
+<dd class="expires"><time datetime="2026-01-05">5 January 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1153,7 +1153,7 @@ and to leverage path-aware multi-path networking with QUIC-MP.<a href="#section-
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 2 January 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 5 January 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1939,8 +1939,8 @@ sent (including probing packets) during the initial handshake, see
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="section-5.3.1-2.1">
               <p id="section-5.3.1-2.1.1">The design of QUIC relies on endpoints retaining a stable address
-for the duration of the handshake. An endpoint <span class="bcp14">MUST NOT</span> initiate connection
-migration before the handshake is confirmed, as defined in
+for the duration of the handshake. An endpoint <span class="bcp14">MUST NOT</span> initiate
+connection migration before the handshake is confirmed, as defined in
 <span><a href="https://rfc-editor.org/rfc/rfc9001#section-4.1.2" class="relref">Section 4.1.2</a> of [<a href="#QUIC-TLS" class="cite xref">QUIC-TLS</a>]</span>.<a href="#section-5.3.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
@@ -1956,8 +1956,8 @@ migration before the handshake is confirmed, as defined in
               <p id="section-5.3.2-1.1.1">A SCION implementation should not automatically change network
 paths switch without explicit request by the QUIC(-MP) layer.
 The only exception allowed is replacing an expiring path with
-an new path that is identical except for the expiration time.
-We also need to ensure this for gateways  etc, see <a href="#sig" class="auto internal xref">Section 4.6</a>.<a href="#section-5.3.2-1.1.1" class="pilcrow">¶</a></p>
+a new path that is identical except for the expiration time.
+We also need to ensure this for gateways etc., see <a href="#sig" class="auto internal xref">Section 4.6</a>.<a href="#section-5.3.2-1.1.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -1984,11 +1984,11 @@ implementation, see <a href="#recommendations" class="auto internal xref">Sectio
 algorithms, such as <span>[<a href="#CC-MULTIPATH-TCP" class="cite xref">CC-MULTIPATH-TCP</a>]</span>. <span>[<a href="#CC-MULTIPATH-TCP" class="cite xref">CC-MULTIPATH-TCP</a>]</span> states:<a href="#section-5.4.1-1" class="pilcrow">¶</a></p>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="section-5.4.1-2.1">
-              <p id="section-5.4.1-2.1.1">"One of the prominent
+              <p id="section-5.4.1-2.1.1">One of the prominent
    problems is that running existing algorithms such as standard TCP
    independently on each path would give the multipath flow more than
    its fair share at a bottleneck link traversed by more than one of its
-   subflows.".<a href="#section-5.4.1-2.1.1" class="pilcrow">¶</a></p>
+   subflows.<a href="#section-5.4.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <p id="section-5.4.1-3">This can be avoided in PANs, such as SCION, through link-level analysis
@@ -2118,7 +2118,7 @@ that favor low latency links and avoid high latency links. See also
               <p id="section-5.5.2-3.2.1">An implementation could use the SCION metadata extension to
 get propagation latency information of links in a path without
 having to measure it.
-This latency does not include queing latency but may in
+This latency does not include queueing latency but may in
 many cases be sufficient for practical use.<a href="#section-5.5.2-3.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
@@ -2139,10 +2139,10 @@ ASes that are traversed. This must be taken into account when
 calculating the available payload size.<a href="#section-5.6-1" class="pilcrow">¶</a></p>
 <p id="section-5.6-2">The difference between typical MTU (1500 bytes) and QUIC's required packet
 size (1200 bytes) is sufficient for typical real-world SCION headers.<a href="#section-5.6-2" class="pilcrow">¶</a></p>
-<p id="section-5.6-3">PMTU discovery <span><a href="https://rfc-editor.org/rfc/rfc9000#section-14.3" class="relref">Section 14.3</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> can be used to
-discover or verify MTU sizes. However, path metadata MTU can (at
-least on the client side) be used to preselect paths with desirable
-MTU values.<a href="#section-5.6-3" class="pilcrow">¶</a></p>
+<p id="section-5.6-3">PMTU discovery (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-14.3" class="relref">Section 14.3</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>, <span>[<a href="#MTU-DISCOVERY" class="cite xref">MTU-DISCOVERY</a>]</span>)
+can be used to discover or verify MTU sizes.
+However, the MTU from the path metadata can (at least on the client
+side) be used to preselect paths with desirable MTU values.<a href="#section-5.6-3" class="pilcrow">¶</a></p>
 <p id="section-5.6-4">In SCION, when an endpoint requests a network path, it will be
 provided with MTU information for every hop on a path, see also <a href="#mtu" class="auto internal xref">Section 5.6</a>
 and <span><a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-controlplane-08#section-4.4" class="relref">Section 4.4</a> of [<a href="#SCION-CP" class="cite xref">SCION-CP</a>]</span>. However, in SCION, paths are
@@ -2174,6 +2174,10 @@ it may be incorrect due to misconfiguration or malicious ASes.<a href="#section-
 <p id="section-5.6.1-1">PMTU discovery for multi-path may be improved by using path metadata.
 PMTU will be explored more in detail in a future version of this
 document (<strong>TODO</strong>)).<a href="#section-5.6.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.6.1-2">It may be possible for a client to send the PMTU size directly to a
+server, for example as a parameter via the QUIC Transport Parameter
+Extension, see <span><a href="https://rfc-editor.org/rfc/rfc9000#section-18" class="relref">Section 18</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> and
+<span><a href="https://rfc-editor.org/rfc/rfc9001#section-8.2" class="relref">Section 8.2</a> of [<a href="#QUIC-TLS" class="cite xref">QUIC-TLS</a>]</span>.<a href="#section-5.6.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2456,7 +2460,7 @@ Sometimes, storing paths is inevitable, see <a href="#sig" class="auto internal 
 For security concerns, see also <a href="#attack-path-injection" class="auto internal xref">Section 7.1</a>.<a href="#section-6.2-1.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.2-1.2">
-            <p id="section-6.2-1.2.1">When used with QUIC-MP, a SCION implementation <span class="bcp14">MUST</span> not change the
+            <p id="section-6.2-1.2.1">When used with QUIC-MP, a SCION implementation <span class="bcp14">MUST NOT</span> change the
 network paths, possibly with the exception of refreshing expired
 paths.
 When a path stops working, the implementation should instead report
@@ -2625,7 +2629,7 @@ or be used for traffic analysis.<a href="#section-7.1.3-3" class="pilcrow">¶</a
   +-----------------+        +--------------+        +--------------+
   | Server          |        | Attacker     |        | Victim       |
   | IP=198.51.100.1 | ------ | IP=192.0.2.1 | ------ | IP=192.0.2.1 |
-  | port = 42       |        | port= 12345  |        | port= 12345  |
+  | port=42         |        | port=12345   |        | port=12345   |
   +-----------------+        +--------------+        +--------------+
 
 </pre>
