@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-03T00:29:29.952516+00:00",
+  "timestamp": "2025-07-06T00:32:52.334160+00:00",
   "repo": "netsec-ethz/scion-quic-multipath_I-D",
   "labels": [
     {
@@ -223,6 +223,36 @@
       "mergedBy": "tzaeschke",
       "mergeCommit": {
         "oid": "f2038960d509b2a665b16a6a53415b300df2842e"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 7,
+      "id": "PR_kwDOOmGiIc6dboPe",
+      "title": "Feedback 2",
+      "url": "https://github.com/netsec-ethz/scion-quic-multipath_I-D/pull/7",
+      "state": "MERGED",
+      "author": "tzaeschke",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "tzaeschke"
+      ],
+      "labels": [],
+      "body": "Feedback from Adrian and Tony",
+      "createdAt": "2025-07-04T11:59:17Z",
+      "updatedAt": "2025-07-04T12:00:08Z",
+      "baseRepository": "netsec-ethz/scion-quic-multipath_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "8b64c33ebc66faadd939e5037db18a3b983c8f59",
+      "headRepository": "netsec-ethz/scion-quic-multipath_I-D",
+      "headRefName": "fullpass-1",
+      "headRefOid": "cb7b7df8aafa655e20b8d0f7d59b097bfca664be",
+      "closedAt": "2025-07-04T12:00:04Z",
+      "mergedAt": "2025-07-04T12:00:04Z",
+      "mergedBy": "tzaeschke",
+      "mergeCommit": {
+        "oid": "943bf0873501156fb22e62919d4f47afdad431d3"
       },
       "comments": [],
       "reviews": []
