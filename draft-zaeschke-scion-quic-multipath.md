@@ -700,7 +700,7 @@ PMTU discovery for multi-path may be improved by using path metadata.
 PMTU will be explored more in detail in a future version of this
 document (**TODO**)).
 
-It may be possible for a client to send the PMTU size directly to a
+It may be possible for a client to send the PMTU size directly to a************************
 server, for example as a parameter via the QUIC Transport Parameter
 Extension, see {{Section 18 of QUIC-TRANSPORT}} and
 {{Section 8.2 of QUIC-TLS}}.
@@ -888,6 +888,9 @@ relevant to security or performance.
   Sometimes, storing paths is inevitable, see {{sig}}.
   For security concerns, see also {{attack-path-injection}}.
 
+- If a SCION implementation stores paths internally, it must be careful
+  to avoid using IP/port a skey to look up paths. IP/port are not unique
+  to identify endpoints.
 - When used with QUIC-MP, a SCION implementation MUST NOT change the
   network paths, possibly with the exception of refreshing expired
   paths.
@@ -933,67 +936,85 @@ implementation changes and additional consideration regarding:
 - path probing patterns may expose user intentions or identity.
 
 
+## IP Ambiguity {#attack-ip-ambiguity}
+
+In SCION, IP addresses are not sufficient to uniquely identify a peer endpoint.
+ASes are free to use IP addresses from "private" IP ranges.
+
+
+To attack a client with IP address X, an attacker could set up an endpoint
+with identical IP X in a different AS. The attacker can then contact a server
+endpoint that is also used by the client victim.
+
+If the server endpoint stores path internally with IP addresses as keys,
+then this would result in a key collision, which can cause two types of problems:
+
+- If the attacker contacts the server after the client, the contact may result
+  in overwriting the existing entry (of the victim).
+- If overwriting is prevented, the attacker may contact the server before the victim,
+  thus potentially preventing the victim from establishing a connection,
+
+The second case is more difficult to achieve. Often, connections may be store by
+IP+port, so the attacker must guess the victims port when launching the attack.
+
+### Mitigation
+
+- A SCION implementation should avoid storing paths while using
+  the IP address as key to look up paths.
+  For QUIC-MP, the best solution is to use the QUIC Path ID as key.
+- SCION libraries could us port/IP mangling when they detect multiple paths with
+  the same IP/port. However, this may have unintended consequences in the
+  application layer.
+- Higher level libraries, such as QUIC(-MP) should be carefuol to not
+  rely only on IP addresses to trigger path validation or resetting
+  congestion control or RTT estimation algorithms. Instead, QUIC-MP should
+  rely on the QUIC Path ID.
+
+Circumventing path validation is not possible, because that would require injecting
+a new path, see {{attack-path-injection}}.
+
+
 ## Path Injection {#attack-path-injection}
 
-There are several potential attacks that build on injecting
+There are several potential attacks that are based on injecting
 valid or invalid paths into the server-side software stack.
+Injecting a path means sending a packet with an incorrect path to an endpoint
+such that the endpoint sends a response along that path. The path is incorrect
+insofar as it does not accurately describe the route of the original request packet.
 
 In summary, these attacks can be prevented by the recommendations
-listed in {{all-recommendations}}, specifically we
-recommend the following where possible:
+listed in {{all-recommendations}}. The following scenarios are considered:
 
-1. SCION layers should avoid storing/caching paths and network addresses
-   (beyond IP/port) internally.
-   Instead, they should be given to the QUIC(-MP) layer or the
-   application layer. That means that path information would only be
-   accepted and retained if the QUIC(-MP) or application layer decides
-   to do so.
-3. SCION layers and QUIC(-MP) layers should interface by using
-   network addresses that include all information that identifies an
-   endpoint, including, for example, AS code. Any change in a
-   network address (including the AS code) should trigger path
-   validation.
+1. The SCION SRC address is wrong. I.e., the packet originates in the correct AS
+   but from a different IP than what is announced in the SCION SRC address field.
 
-Alternatives:
+   To avoid this, border routers MUST drop egress packets whose path indicates
+   a local origin, but whose SCION SRC address does not match the underlay
+   SRC address.
 
-1. If paths and network addresses must be stored in the SCION layer, an
-   alternative solution is to implement a form of signalling
-   which would indicate that a packet is (or would be) rejected/dropped
-   by the QUIC(-MP) layer. These addresses and path from such packets
-   should not be stored. However, to avoid connection drop, they should
-   not be removed if they were previously used with a valid connection.
+2. The path is too long. The packet originates in an AS that is different from the
+   first AS announced in the path.
 
-Examples of attacks include memory exhaustion attacks, traffic
-redirection attacks, and traffic amplification attacks.
+   To avoid this, a border router MUST drop egress packets whose paths indicate
+   AS-external origin but whose underlay address does not
+   match that of a known border router.
 
+3. The path is not empty. This is an extreme case of the previous example. The
+   packet originates in the destination AS and is sent directly to the endpoint.
+   In this case the path should be empty.
 
-### Memory Exhaustion {#attack-memory-exhaustion}
+   To avoid this, on a server, the SCION layer MUST always respond to the same
+   underlay address from which a request was received.
+   This is anyway useful for servers because responding to the same address also
+   avoids the need for the server to look up the first hop when sending a response.
 
-An attacker may flood a server with packets that each have a
-different source network address. If these are stored in the
-SCION layer, they may cause memory exhaustion.
-
-Mitigation: do not store state in the SCION layer, or implement
-a way to clean up state without affecting a valid connection.
-
-
-### Traffic Redirection to Different AS
-
-An attacker may craft a packet that appears to originate from the same
-IP/port, but is located in a different AS than an existing connection.
-If the server's SCION layer stores paths internally, and uses IP/port
-as key to look them up, then the new paths may replace the existing one,
-and outgoing traffic is redirected to the new paths and destination.
-
-Mitigation:
-
-- The QUIC(-MP) layer MUST trigger path validation if the
-  network address changes, and must consider every attribute of the
-  address, not just IP and port.
-- If a packet is rejected by the QUIC(-MP) layer, the SCION layer MUST
-  NOT add it to any local state (including not replacing existing
-  state).
-  This can be achieved trivially by not having state in the SCION layer.
+An attacker can inject paths into a server only in the following circumstances:
+- The attacker controls the border routers of an AS that is between a victim and
+  a server.
+- The attacker can spoof the address of a border router in an AS that is between
+  the victim and a server.
+- The attacker can spoof the address of a victim while being located inside the
+  victims AS.
 
 
 ### Traffic Redirection over Different Path
@@ -1008,6 +1029,10 @@ or drop rate).
 The new route may also work fine, but violate the client's path policy
 or be used for traffic analysis.
 
+The attacker injects the crafted path into the server, with the intent that the
+non-unique IP causes an existing path/connection mapping to be overwritten, and
+thus replace the victims path with the updated path.
+
 
 ~~~~
      AS #100               AS #200                   AS #300
@@ -1020,14 +1045,15 @@ or be used for traffic analysis.
 ~~~~
 {: #fig-example-non-unique-ip title="Example of non-unique IPs"}
 
-This attack requires either spoofing of the client's IP address
-(when the attacker is in the same AS as the client) or injection
-of a path (which requires control over an AS that is en-route
-between the client and server).
-
 Mitigation:
 
-This is mitigated by the recommendation that path validation
+This attack requires either spoofing of the client's IP address
+(when the attacker is in the same AS as the client),
+spoofing of a border router's IP address (when the attacker
+is in the server's AS), or injection of a path (which requires
+control over an AS that is en-route between the client and server).
+
+This can be further mitigated by the recommendation that path validation
 should always be triggered when the network address or path
 changes, even if the 4-tuple stays the same.
 
@@ -1042,11 +1068,14 @@ If the server-side QUIC-MP does not trigger path validation
 (because IP/port are the same), then it may implicitly accept
 the new path and send the requested data to a victim.
 
-This attack requires the attacker to have control over an AS that
-is en-route between client (victim) and server.
 
 Mitigation:
 
+This attack requires either spoofing of the client's IP address
+(when the attacker is in the same AS as the client),
+spoofing of a border router's IP address (when the attacker
+is in the server's AS), or injection of a path (which requires
+control over an AS that is en-route between the client and server).
 - A QUIC(-MP) library must consider all attributes
   (not just the 4-tuple) when checking for a change in the network
   address. This would then trigger path validation, and the attack
@@ -1081,6 +1110,19 @@ Caveats:
 {: #fig-example-new-path title="Example of traffic amplification
 attack"}
 
+
+
+
+## Memory Exhaustion {#attack-memory-exhaustion}
+
+An attacker may flood a server with packets that each have a
+different source network address or path. If these are stored in the
+SCION layer, they may cause memory exhaustion.
+
+Mitigation: do not store state in the SCION layer, or implement
+a way to clean up state without affecting a valid connection.
+Specifically, the SCION layer must drop a path if the QUIC layer
+closes the path, abandons the path, or rejects a packet with a new path.
 
 ## Number of Open Paths {#security-many-paths}
 
@@ -1138,3 +1180,31 @@ Thanks to the Path Aware Networking Research Group for discussion
 and feedback. Specifically, we would like to thank Kevin Meynell and
 Nicola Rustignoli from the Scion Association for their valuable input
 on several iterations of this document.
+
+
+# Change Log
+{:numbered="false"}
+
+Changes made to drafts since initial submission. This section is to be removed before publication.
+
+## draft-zaeschke-scion-quic-multipath-01
+{:numbered="false"}
+
+Major changes:
+
+- "Path Injectio": clarify that path injection in SCION is, depending on the situation, either
+  impossible or only marginally useful for an attacker.
+  Rewrite sections {{endpoint-identity}} and {{attack-path-injection}}.
+- New section "IP Ambiguity" in security considerations: {{attack-ip-ambiguity}}.
+
+Minor changes:
+
+- Nits and wording improvements
+- Reviewed use of normative language
+- Added Changelog
+- Moved memory exhaustion attack into own section.
+
+## draft-zaeschke-scion-quic-multipath-00
+{:numbered="false"}
+
+Initial submission.
