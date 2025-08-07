@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-08-05T00:32:13.247638+00:00",
+  "timestamp": "2025-08-07T00:32:11.981002+00:00",
   "repo": "netsec-ethz/scion-quic-multipath_I-D",
   "labels": [
     {
@@ -253,6 +253,36 @@
       "mergedBy": "tzaeschke",
       "mergeCommit": {
         "oid": "943bf0873501156fb22e62919d4f47afdad431d3"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 8,
+      "id": "PR_kwDOOmGiIc6iaqSg",
+      "title": "revision 01 first part",
+      "url": "https://github.com/netsec-ethz/scion-quic-multipath_I-D/pull/8",
+      "state": "MERGED",
+      "author": "tzaeschke",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "tzaeschke"
+      ],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-08-06T16:02:17Z",
+      "updatedAt": "2025-08-06T16:03:05Z",
+      "baseRepository": "netsec-ethz/scion-quic-multipath_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "ca605309b8af560533dbb57efc5a4a95f0832d4d",
+      "headRepository": "netsec-ethz/scion-quic-multipath_I-D",
+      "headRefName": "rev01/first-pass",
+      "headRefOid": "ae3de02e02e3a929fd5b0d84c05a3e9b511db0f8",
+      "closedAt": "2025-08-06T16:03:05Z",
+      "mergedAt": "2025-08-06T16:03:05Z",
+      "mergedBy": "tzaeschke",
+      "mergeCommit": {
+        "oid": "ab8d0851287541af459721b6fa295d9a37c98772"
       },
       "comments": [],
       "reviews": []
