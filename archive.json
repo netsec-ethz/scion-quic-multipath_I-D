@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-08-07T00:32:11.981002+00:00",
+  "timestamp": "2025-08-10T00:34:08.879175+00:00",
   "repo": "netsec-ethz/scion-quic-multipath_I-D",
   "labels": [
     {
@@ -269,9 +269,9 @@
         "tzaeschke"
       ],
       "labels": [],
-      "body": "",
+      "body": "Major changes:\r\n\r\n- \"Path Injection\": clarify that path injection in SCION is, depending on the situation, either\r\n  impossible or only marginally useful for an attacker.\r\n  Rewrite sections {{endpoint-identity}} and {{attack-path-injection}}.\r\n- New section \"IP Ambiguity\" in security considerations: {{attack-ip-ambiguity}}.\r\n\r\nMinor changes:\r\n\r\n- Added Changelog\r\n- Moved memory exhaustion attack into own section.",
       "createdAt": "2025-08-06T16:02:17Z",
-      "updatedAt": "2025-08-06T16:03:05Z",
+      "updatedAt": "2025-08-08T17:12:40Z",
       "baseRepository": "netsec-ethz/scion-quic-multipath_I-D",
       "baseRefName": "main",
       "baseRefOid": "ca605309b8af560533dbb57efc5a4a95f0832d4d",
