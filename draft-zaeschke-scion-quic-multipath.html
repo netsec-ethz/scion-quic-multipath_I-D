@@ -2492,6 +2492,13 @@ knowing when is a path valid or when is it closed in QUIC-MP.<a href="#section-6
 path changes beyond 4-tuple or AS changes. This enables resetting
 congestion control and RTT algorithms.<a href="#section-6.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
+          <li class="normal" id="section-6.1-1.3">
+            <p id="section-6.1-1.3.1">A QUIC-MP implementation, especially congestion control, RTT estimation,
+and path selection algorithms should be careful to not accept or probe
+all available SCION network paths. There may be a large number of path
+available and probing or using them all may amount to a denial of service
+attack on the receiver.<a href="#section-6.1-1.3.1" class="pilcrow">¶</a></p>
+</li>
         </ul>
 </section>
 </div>
@@ -3037,6 +3044,9 @@ Rewrite sections <a href="#endpoint-identity" class="auto internal xref">Section
 </li>
           <li class="normal" id="appendix-B.1-2.3">
             <p id="appendix-B.1-2.3.1">Completed section on Address Validation Token, see <a href="#token" class="auto internal xref">Section 5.11</a>.<a href="#appendix-B.1-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-B.1-2.4">
+            <p id="appendix-B.1-2.4.1">Added recommendation to avoid using all SCION paths.<a href="#appendix-B.1-2.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="appendix-B.1-3">Minor changes:<a href="#appendix-B.1-3" class="pilcrow">¶</a></p>
