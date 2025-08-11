@@ -903,6 +903,12 @@ relevant to security or performance.
   path changes beyond 4-tuple or AS changes. This enables resetting
   congestion control and RTT algorithms.
 
+- A QUIC-MP implementation, especially congestion control, RTT estimation,
+  and path selection algorithms should be careful to not accept or probe
+  all available SCION network paths. There may be a large number of path
+  available and probing or using them all may amount to a denial of service
+  attack on the receiver.
+
 
 ## Recommendations for SCION Implementations
 
@@ -1242,6 +1248,7 @@ Major changes:
   Rewrite sections {{endpoint-identity}} and {{attack-path-injection}}.
 - New section "IP Ambiguity" in security considerations: {{attack-ip-ambiguity}}.
 - Completed section on Address Validation Token, see {{token}}.
+- Added recommendation to avoid using all SCION paths.
 
 
 Minor changes:
