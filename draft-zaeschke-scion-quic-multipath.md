@@ -370,9 +370,9 @@ additional information and control over paths, but also some challenges.
 
 ## Addressing {#endpoint-identity}
 
-SCION uses composite addresses (AS + IP + port), where the IP
+SCION uses composite addresses (ISD/AS + IP + port), where the IP
 address can be from a private IP range. This breaks the assumption
-that IP addresses are globally unique.
+that IP addresses are unique in the scope of the network.
 
 ### Key Implications
 
@@ -383,14 +383,45 @@ An attacker could use endpoints with identical 4-tuple to reroute traffic
 to a different machine without triggering path validation, see
 {{attack-path-injection}} and {{token}}.
 
+The implication of a skipped path validation is that a sever can be coaxed into
+sending QUIC packets to an unexpecting client. This is similar to the attacks
+described in {{Section 8 of QUIC-TRANSPORT}} and
+{{Section 21.5.4 of QUIC-TRANSPORT}}.
+
+
 ### Recommendations
 
-- To prevent attackers circumventing path validation, a QUIC-MP
-  implementation MUST ensure to trigger path validation when the
-  network address of the destination changes; this includes
-  IP, port and AS number. This protects against several attacks,
-  see {{attack-path-injection}} and especially
-  {{attack-amplification}}.
+Attacks can be prevented by ensuring that one of the following is achieved:
+
+- Prevent the attacker from exploiting a skipped path validation.
+- Ensure that path validation is not skipped.
+
+#### Avoid Exploitation Of Skipped Path Validation
+
+In order to exploit a skipped path validation event, an attacker must
+first inject an incorrect path or SCION source address into the server.
+This can be prevented as follows:
+
+1) Border routers must verify that any packet whose path indicates origin
+   outside of the local AS, the underlay IP must match a known border router
+   IP.
+2) Border routers must verify that for any packet that originates in the
+   local AS, the underlay IP matches the SCION SRC IP.
+3) SCION server libraries must respond to the underlay IP from which a
+   request was received.
+
+These measures ensure that every packet has a correct SCION SRC IP and path.
+The only way to circumvent these checks is by spoofing the IP address in a
+local AS or by taking control over a border router of an AS along the route
+between two peers.
+
+
+#### Ensure That Path Validation Is Performed
+
+Implementations should ensure that path validation is triggered when
+the network address of the destination changes; this includes
+IP, port and AS number. This protects against several attacks, see
+{{attack-path-injection}} and especially {{attack-amplification}}.
 
 There are several ways to achieve this, for example:
 
@@ -700,7 +731,7 @@ PMTU discovery for multi-path may be improved by using path metadata.
 PMTU will be explored more in detail in a future version of this
 document (**TODO**)).
 
-It may be possible for a client to send the PMTU size directly to a************************
+It may be possible for a client to send the PMTU size directly to a
 server, for example as a parameter via the QUIC Transport Parameter
 Extension, see {{Section 18 of QUIC-TRANSPORT}} and
 {{Section 8.2 of QUIC-TLS}}.
@@ -819,22 +850,18 @@ cannot unexpectedly be rerouted.
 {{Section 9.3 of QUIC-TRANSPORT}} specifies that a server is
 expected to send a new address validation token to a client
 following the successful validation of a new client address.
+{{Section 8.1.4 of QUIC-TRANSPORT}} states:
 
-Potential challenges:
+ - "Tokens sent in Retry packets SHOULD include information that
+allows the server to verify that the source IP address and port
+in client packets remain constant."
 
-- If we adapt an implementation to use the full network
-  address + path for identity, and if we use this to
-  generate tokens, then we may end up generating many more or
-  longer tokens.
-- Clients may not know their IP address (e.g., NAT) and their IP
-  address may change.
+ - "Tokens sent in NEW_TOKEN frames MUST include information that
+allows the server to verify that the client IP address has not
+changed from when the token was issued."
 
-See discussion in https://github.com/quicwg/multipath/issues/550
-
-See also {{Section 21.3 of QUIC-TRANSPORT}}.
-
-**TODO** This section will be completed in a future
-version of this document.
+These must be read such that "IP address" becomes "network address",
+meaning that it includes the ISD/AS code of a peer.
 
 
 # Summary of Recommendations {#all-recommendations}
@@ -879,6 +906,18 @@ relevant to security or performance.
 
 ## Recommendations for SCION Implementations
 
+- SCION implementations can prevent attackers from expoloiting a skipped
+  path validation by preventing path injection ({{attack-path-injection}}).
+  To prevent path injection:
+
+  1) Border routers MUST verify that any packet whose path indicates origin
+     outside of the local AS, the underlay IP must match a known border router
+     IP.
+  2) Border routers MUST verify that for any packet that originates in the
+     local AS, the underlay IP matches the SCION SRC IP.
+  3) SCION server libraries MUST respond to the underlay IP from which a
+     request was received.
+
 - A SCION implementation SHOULD NOT store or cache paths,
   especially not on the server side. This prevents memory
   exhaustion attacks, see {attack-memory-exhaustion}.
@@ -889,7 +928,7 @@ relevant to security or performance.
   For security concerns, see also {{attack-path-injection}}.
 
 - If a SCION implementation stores paths internally, it must be careful
-  to avoid using IP/port a skey to look up paths. IP/port are not unique
+  to avoid using IP/port as key to look up paths. IP/port are not unique
   to identify endpoints.
 - When used with QUIC-MP, a SCION implementation MUST NOT change the
   network paths, possibly with the exception of refreshing expired
@@ -898,7 +937,7 @@ relevant to security or performance.
   an error to the QUIC(-MP) layer or time out silently.
 
 
-## Recommendations for both QUIC-MP and SCION Implementations
+## Recommendations For Both QUIC-MP And SCION Implementations
 
 - A server should return packets on the same path on which they were
   received.
@@ -921,6 +960,12 @@ relevant to security or performance.
   or closed by QUIC. This is the responsibility of the path selection
   algorithm, regardless of whether it is considered part of SCION or
   part of QUIC-MP.
+
+
+## Other Recommendations
+ - Servers and client should aim to be located in respective local networks
+   (local ASes) that have protection against IP spoofing from machines in the
+   same network, see {{attack-path-injection}}.
 
 
 # Security Considerations
@@ -1192,10 +1237,12 @@ Changes made to drafts since initial submission. This section is to be removed b
 
 Major changes:
 
-- "Path Injectio": clarify that path injection in SCION is, depending on the situation, either
+- "Path Injection": clarify that path injection in SCION is, depending on the situation, either
   impossible or only marginally useful for an attacker.
   Rewrite sections {{endpoint-identity}} and {{attack-path-injection}}.
 - New section "IP Ambiguity" in security considerations: {{attack-ip-ambiguity}}.
+- Completed section on Address Validation Token, see {{token}}.
+
 
 Minor changes:
 
