@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-08-10T00:34:08.879175+00:00",
+  "timestamp": "2025-08-12T00:29:18.656219+00:00",
   "repo": "netsec-ethz/scion-quic-multipath_I-D",
   "labels": [
     {
@@ -283,6 +283,66 @@
       "mergedBy": "tzaeschke",
       "mergeCommit": {
         "oid": "ab8d0851287541af459721b6fa295d9a37c98772"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 9,
+      "id": "PR_kwDOOmGiIc6jCXj_",
+      "title": "token-identity",
+      "url": "https://github.com/netsec-ethz/scion-quic-multipath_I-D/pull/9",
+      "state": "MERGED",
+      "author": "tzaeschke",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "tzaeschke"
+      ],
+      "labels": [],
+      "body": "Major changes:\r\n - Rewrote section Tokens\r\n - Updated section on address identity",
+      "createdAt": "2025-08-11T12:27:29Z",
+      "updatedAt": "2025-08-11T12:27:45Z",
+      "baseRepository": "netsec-ethz/scion-quic-multipath_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "ab8d0851287541af459721b6fa295d9a37c98772",
+      "headRepository": "netsec-ethz/scion-quic-multipath_I-D",
+      "headRefName": "rev01/token-and-identity",
+      "headRefOid": "67d91d66dd9b51cbc259087b31b98119b717d6bb",
+      "closedAt": "2025-08-11T12:27:41Z",
+      "mergedAt": "2025-08-11T12:27:41Z",
+      "mergedBy": "tzaeschke",
+      "mergeCommit": {
+        "oid": "a27b7ae138879c44c06b22daf9bfed2095ed49cb"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 10,
+      "id": "PR_kwDOOmGiIc6jC0lo",
+      "title": "many-paths",
+      "url": "https://github.com/netsec-ethz/scion-quic-multipath_I-D/pull/10",
+      "state": "MERGED",
+      "author": "tzaeschke",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "tzaeschke"
+      ],
+      "labels": [],
+      "body": "Add recommendation to be careful with many paths, e.g. avoid probing all paths.",
+      "createdAt": "2025-08-11T13:02:55Z",
+      "updatedAt": "2025-08-11T13:03:06Z",
+      "baseRepository": "netsec-ethz/scion-quic-multipath_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "a27b7ae138879c44c06b22daf9bfed2095ed49cb",
+      "headRepository": "netsec-ethz/scion-quic-multipath_I-D",
+      "headRefName": "rev01/many-paths",
+      "headRefOid": "c08342da565cb7d4fe513867a710e767bada656c",
+      "closedAt": "2025-08-11T13:03:03Z",
+      "mergedAt": "2025-08-11T13:03:03Z",
+      "mergedBy": "tzaeschke",
+      "mergeCommit": {
+        "oid": "e9e516c0afdd62ca537ef253f9df2657acd9f7fb"
       },
       "comments": [],
       "reviews": []
