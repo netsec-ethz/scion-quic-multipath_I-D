@@ -864,6 +864,42 @@ These must be read such that "IP address" becomes "network address",
 meaning that it includes the ISD/AS code of a peer.
 
 
+## Path ID Allocation {#path-id-allocation}
+
+SCION application may use many paths. This poses two problems:
+initial path ID allocation and incremental path ID allocation.
+See also {{Section 4.6 of QUIC-MP}} and {{Section 4.7 of QUIC-MP}}.
+
+When initializing a connection, servers and clients should be careful to
+set the maximum path ID high enough to allow as many paths as an application
+may need, e.g., through the initial_max_path_id transport parameter or the
+MAX_PATH_ID frame.
+
+Afterwards, on a bad connection, paths IDs may still run out earlier than
+expected, so servers should allocate new path IDs either automatically or
+on demand when receiving a PATHS_BLOCKED frame.
+
+### Key Implications
+
+SCION path IDs may run out quickly unless the server provides enough
+initial path IDs and provides enough path IDs once the initial contingent
+runs out.
+
+### Recommendations
+
+- Ensure that servers and clients are prepared to agree on an initial
+  number of path IDs that is high enough for the user application.
+  This should be configurable.
+- Ensure that either the server proactively allocates new path IDs
+  (MAX_PATH_ID frame) when they are running out, or that the server
+  allocates sufficiently many new path IDs once the client sends a
+  PATHS_BLOCKED frame.
+- Optional: Allow the client to send PATHS_BLOCKED proactively even before
+  the path IDs are exhausted. Prepare the server to accept early
+  PATHS_BLOCKED frames and respond by allocating a gracious amount of
+  additional path IDs.
+
+
 # Summary of Recommendations {#all-recommendations}
 
 This memo is informational. However, we use {{!RFC2119}}
@@ -908,6 +944,15 @@ relevant to security or performance.
   all available SCION network paths. There may be a large number of path
   available and probing or using them all may amount to a denial of service
   attack on the receiver.
+
+- To prevent problems with path ID exhaustion with multi-path applications,
+  see {{path-id-allocation}}:
+  - Servers and clients take care to initialize the connection with
+    sufficiently many path IDs.
+  - Servers should proactively allocate new path IDs when they run low.
+  - Clients should proactively send PATHS_BLOCKED when path IDs run low,
+    Servers shold accept and react to PATHS_BLOCKED before path IDs are
+    actually exhausted.
 
 
 ## Recommendations for SCION Implementations
@@ -1249,6 +1294,7 @@ Major changes:
 - New section "IP Ambiguity" in security considerations: {{attack-ip-ambiguity}}.
 - Completed section on Address Validation Token, see {{token}}.
 - Added recommendation to avoid using all SCION paths.
+- Added section {{path-id-allocation}} on path ID allocation and exhaustion.
 
 
 Minor changes:
