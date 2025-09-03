@@ -947,11 +947,11 @@ relevant to security or performance.
 
 - To prevent problems with path ID exhaustion with multi-path applications,
   see {{path-id-allocation}}:
-  - Servers and clients take care to initialize the connection with
+  - Servers and clients should initialize the connection with
     sufficiently many path IDs.
   - Servers should proactively allocate new path IDs when they run low.
   - Clients should proactively send PATHS_BLOCKED when path IDs run low,
-    Servers shold accept and react to PATHS_BLOCKED before path IDs are
+    Servers should accept and react to PATHS_BLOCKED before path IDs are
     actually exhausted.
 
 
