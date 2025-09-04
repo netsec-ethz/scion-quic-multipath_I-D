@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-09-02T00:27:53.610171+00:00",
+  "timestamp": "2025-09-04T00:26:05.617545+00:00",
   "repo": "netsec-ethz/scion-quic-multipath_I-D",
   "labels": [
     {
@@ -343,6 +343,36 @@
       "mergedBy": "tzaeschke",
       "mergeCommit": {
         "oid": "e9e516c0afdd62ca537ef253f9df2657acd9f7fb"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 11,
+      "id": "PR_kwDOOmGiIc6mq8Nf",
+      "title": "Path ID allocation",
+      "url": "https://github.com/netsec-ethz/scion-quic-multipath_I-D/pull/11",
+      "state": "MERGED",
+      "author": "tzaeschke",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "tzaeschke"
+      ],
+      "labels": [],
+      "body": "Add discussion of path ID allocation.",
+      "createdAt": "2025-09-03T15:00:17Z",
+      "updatedAt": "2025-09-03T15:00:32Z",
+      "baseRepository": "netsec-ethz/scion-quic-multipath_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "e9e516c0afdd62ca537ef253f9df2657acd9f7fb",
+      "headRepository": "netsec-ethz/scion-quic-multipath_I-D",
+      "headRefName": "rev01/path-id-allocation",
+      "headRefOid": "ba9a2e280538f4f806e9e06d1b7af30964fac68b",
+      "closedAt": "2025-09-03T15:00:28Z",
+      "mergedAt": "2025-09-03T15:00:28Z",
+      "mergedBy": "tzaeschke",
+      "mergeCommit": {
+        "oid": "be97ce9a803db2ea90706d179a7b7ddad4463cc8"
       },
       "comments": [],
       "reviews": []
