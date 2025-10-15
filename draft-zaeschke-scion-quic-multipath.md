@@ -383,7 +383,7 @@ An attacker could use endpoints with identical 4-tuple to reroute traffic
 to a different machine without triggering path validation, see
 {{attack-path-injection}} and {{token}}.
 
-The implication of a skipped path validation is that a sever can be coaxed into
+The implication of a skipped path validation is that a server can be coaxed into
 sending QUIC packets to an unexpecting client. This is similar to the attacks
 described in {{Section 8 of QUIC-TRANSPORT}} and
 {{Section 21.5.4 of QUIC-TRANSPORT}}.
@@ -957,7 +957,7 @@ relevant to security or performance.
 
 ## Recommendations for SCION Implementations
 
-- SCION implementations can prevent attackers from expoloiting a skipped
+- SCION implementations can prevent attackers from exploiting a skipped
   path validation by preventing path injection ({{attack-path-injection}}).
   To prevent path injection:
 
@@ -1061,7 +1061,7 @@ IP+port, so the attacker must guess the victims port when launching the attack.
 - SCION libraries could us port/IP mangling when they detect multiple paths with
   the same IP/port. However, this may have unintended consequences in the
   application layer.
-- Higher level libraries, such as QUIC(-MP) should be carefuol to not
+- Higher level libraries, such as QUIC(-MP) should be careful to not
   rely only on IP addresses to trigger path validation or resetting
   congestion control or RTT estimation algorithms. Instead, QUIC-MP should
   rely on the QUIC Path ID.
