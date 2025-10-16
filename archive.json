@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-14T00:26:51.346134+00:00",
+  "timestamp": "2025-10-16T00:28:15.485420+00:00",
   "repo": "netsec-ethz/scion-quic-multipath_I-D",
   "labels": [
     {
@@ -374,6 +374,32 @@
       "mergeCommit": {
         "oid": "be97ce9a803db2ea90706d179a7b7ddad4463cc8"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 12,
+      "id": "PR_kwDOOmGiIc6t9pww",
+      "title": "Fixed Several Typos",
+      "url": "https://github.com/netsec-ethz/scion-quic-multipath_I-D/pull/12",
+      "state": "OPEN",
+      "author": "seadog007",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "- sever -> server\r\n- expoloiting -> exploiting\r\n- carefuol -> careful\r\n",
+      "createdAt": "2025-10-15T20:38:37Z",
+      "updatedAt": "2025-10-15T20:38:37Z",
+      "baseRepository": "netsec-ethz/scion-quic-multipath_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "be97ce9a803db2ea90706d179a7b7ddad4463cc8",
+      "headRepository": "seadog007/scion-quic-multipath_I-D",
+      "headRefName": "patch-1",
+      "headRefOid": "f5de1a87aa1ec0a4b63bf95981e27990ca514a35",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
