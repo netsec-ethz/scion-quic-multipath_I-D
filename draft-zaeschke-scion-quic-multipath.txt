@@ -1408,27 +1408,28 @@ Table of Contents
    [QUIC-ACKFREQUENCY]
               Iyengar, J., Swett, I., and M. Kühlewind, "QUIC
               Acknowledgment Frequency", Work in Progress, Internet-
-              Draft, draft-ietf-quic-ack-frequency-11, 28 February 2025,
+              Draft, draft-ietf-quic-ack-frequency-14, 5 February 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-quic-
-              ack-frequency-11>.
+              ack-frequency-14>.
 
    [QUIC-MP]  Liu, Y., Ma, Y., De Coninck, Q., Bonaventure, O., Huitema,
-              C., and M. Kühlewind, "Multipath Extension for QUIC", Work
-              in Progress, Internet-Draft, draft-ietf-quic-multipath-16,
-              21 August 2025, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-quic-multipath-16>.
+              C., and M. Kühlewind, "Managing multiple paths for a QUIC
+              connection", Work in Progress, Internet-Draft, draft-ietf-
+              quic-multipath-21, 17 March 2026,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-quic-
+              multipath-21>.
 
    [SCION-CP] de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
               Plane", Work in Progress, Internet-Draft, draft-dekater-
-              scion-controlplane-09, 7 July 2025,
+              scion-controlplane-18, 30 April 2026,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-controlplane-09>.
+              scion-controlplane-18>.
 
    [SCION-DP] de Kater, C., Rustignoli, N., Hugly, J., and S. Hitz,
               "SCION Data Plane", Work in Progress, Internet-Draft,
-              draft-dekater-scion-dataplane-06, 7 July 2025,
+              draft-dekater-scion-dataplane-15, 24 June 2026,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-dataplane-06>.
+              scion-dataplane-15>.
 
    [UMCC]     Gartner, M. and D. Hausheer, "UMCC: Uncoupling Multipath
               Congestion Control through Shared Bottleneck Detection in
