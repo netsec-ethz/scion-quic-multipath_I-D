@@ -2621,18 +2621,21 @@ match a known border router IP.<a href="#section-6.2-1.1.2.3.1" class="pilcrow">
 </li>
             </ol>
 <p id="section-6.2-1.1.3">
+More generally, SCION implementations should prevent SCION SRC address
+spoofing. They shhould verify, whenever possible, that a SCION SRC
+address is correct.
 All parties that send and receive dataplane traffic (border routers,
-endhosts) must follow these rules:<a href="#section-6.2-1.1.3" class="pilcrow">¶</a></p>
+endhosts, ...) must follow these rules:<a href="#section-6.2-1.1.3" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-6.2-1.1.4">
 <li id="section-6.2-1.1.4.1">
                 <p id="section-6.2-1.1.4.1.1">They <span class="bcp14">MUST</span> verify that for any packet whose path indicates
 origin outside of the local AS, the underlay IP must match a known
-border router IP. This is alreay specified for border routers in
+border router IP. This is specified for border routers in
 <span><a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-dataplane-15#section-4.2.2.2" class="relref">Section 4.2.2.2</a> of [<a href="#SCION-DP" class="cite xref">SCION-DP</a>]</span>.<a href="#section-6.2-1.1.4.1.1" class="pilcrow">¶</a></p>
 </li>
               <li id="section-6.2-1.1.4.2">
-                <p id="section-6.2-1.1.4.2.1">They <span class="bcp14">MUST</span> verify that for any packet that originates
-in the local AS, the underlay IP matches the SCION SRC IP.<a href="#section-6.2-1.1.4.2.1" class="pilcrow">¶</a></p>
+                <p id="section-6.2-1.1.4.2.1">They <span class="bcp14">MUST</span> verify that for any packet that originates in the local
+AS, the underlay address matches the SCION SRC address.<a href="#section-6.2-1.1.4.2.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
 </li>

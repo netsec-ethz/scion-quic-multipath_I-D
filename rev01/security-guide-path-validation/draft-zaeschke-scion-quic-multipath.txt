@@ -1031,16 +1031,19 @@ Table of Contents
           path indicates origin outside of the local AS, the underlay IP
           must match a known border router IP.
 
-      All parties that send and receive dataplane traffic (border
-      routers, endhosts) must follow these rules:
+      More generally, SCION implementations should prevent SCION SRC
+      address spoofing.  They shhould verify, whenever possible, that a
+      SCION SRC address is correct.  All parties that send and receive
+      dataplane traffic (border routers, endhosts, ...) must follow
+      these rules:
 
       1.  They MUST verify that for any packet whose path indicates
           origin outside of the local AS, the underlay IP must match a
-          known border router IP.  This is alreay specified for border
-          routers in Section 4.2.2.2 of [SCION-DP].
+          known border router IP.  This is specified for border routers
+          in Section 4.2.2.2 of [SCION-DP].
 
       2.  They MUST verify that for any packet that originates in the
-          local AS, the underlay IP matches the SCION SRC IP.
+          local AS, the underlay address matches the SCION SRC address.
 
    *  A SCION implementation SHOULD NOT store or cache paths, especially
       not on the server side.  This prevents memory exhaustion attacks,
