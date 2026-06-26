@@ -402,13 +402,14 @@ In order to exploit a skipped path validation event, an attacker must
 first inject an incorrect path or SCION source address into the server.
 This can be prevented as follows:
 
-1) Border routers must verify that any packet whose path indicates origin
-   outside of the local AS, the underlay IP must match a known border router
-   IP.
-2) Border routers must verify that for any packet that originates in the
+1. Border routers must verify that for any packet whose path indicates
+   origin outside of the local AS, the underlay IP must match a known
+   border router IP.
+2. Border routers must verify that for any packet that originates in the
    local AS, the underlay IP matches the SCION SRC IP.
-3) SCION server libraries must respond to the underlay IP from which a
-   request was received.
+3. SCION server libraries must verify that for any packet whose path
+   indicates origin outside of the local AS, the underlay IP must
+   match a known border router IP.
 
 These measures ensure that every packet has a correct SCION SRC IP and path.
 The only way to circumvent these checks is by spoofing the IP address in a
@@ -961,13 +962,26 @@ relevant to security or performance.
   path validation by preventing path injection ({{attack-path-injection}}).
   To prevent path injection:
 
-  1) Border routers MUST verify that any packet whose path indicates origin
-     outside of the local AS, the underlay IP must match a known border router
-     IP.
-  2) Border routers MUST verify that for any packet that originates in the
-     local AS, the underlay IP matches the SCION SRC IP.
-  3) SCION server libraries MUST respond to the underlay IP from which a
-     request was received.
+  1. Border routers MUST verify that for any packet whose path indicates
+     origin outside of the local AS, the underlay IP must match a known
+     border router IP. This is specified in
+     {{Section 4.2.2.2 of SCION-DP}}.
+  2. Border routers MUST verify that for any packet that originates
+     in the local AS, the underlay IP matches the SCION SRC IP.
+  3. SCION server libraries MUST verify that for any packet whose path
+     indicates origin outside of the local AS, the underlay IP must
+     match a known border router IP.
+
+  All parties that send and receive dataplane traffic (border routers,
+  endhosts) must follow these rules:
+
+  1. They MUST verify that for any packet whose path indicates
+     origin outside of the local AS, the underlay IP must match a known
+     border router IP. This is alreay specified for border routers in
+     {{Section 4.2.2.2 of SCION-DP}}.
+  2. They MUST verify that for any packet that originates
+     in the local AS, the underlay IP matches the SCION SRC IP.
+
 
 - A SCION implementation SHOULD NOT store or cache paths,
   especially not on the server side. This prevents memory
