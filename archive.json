@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-06-25T01:02:21.989881+00:00",
+  "timestamp": "2026-06-28T01:06:03.362712+00:00",
   "repo": "netsec-ethz/scion-quic-multipath_I-D",
   "labels": [
     {
@@ -396,6 +396,64 @@
       "headRepository": "seadog007/scion-quic-multipath_I-D",
       "headRefName": "patch-1",
       "headRefOid": "f5de1a87aa1ec0a4b63bf95981e27990ca514a35",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 13,
+      "id": "PR_kwDOOmGiIc7q_EkK",
+      "title": "Update template",
+      "url": "https://github.com/netsec-ethz/scion-quic-multipath_I-D/pull/13",
+      "state": "MERGED",
+      "author": "tzaeschke",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "tzaeschke"
+      ],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-06-26T13:01:24Z",
+      "updatedAt": "2026-06-26T13:02:22Z",
+      "baseRepository": "netsec-ethz/scion-quic-multipath_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "be97ce9a803db2ea90706d179a7b7ddad4463cc8",
+      "headRepository": "netsec-ethz/scion-quic-multipath_I-D",
+      "headRefName": "rev01/update-template",
+      "headRefOid": "9c206ddd049a40b1e54434c2ccb5a7bf51ec81bf",
+      "closedAt": "2026-06-26T13:02:07Z",
+      "mergedAt": "2026-06-26T13:02:07Z",
+      "mergedBy": "tzaeschke",
+      "mergeCommit": {
+        "oid": "76a1f2c73a8f667c6b3664624eb3ab6107aa30dd"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 14,
+      "id": "PR_kwDOOmGiIc7q_0-Q",
+      "title": "Rephrase path-validation problem rules",
+      "url": "https://github.com/netsec-ethz/scion-quic-multipath_I-D/pull/14",
+      "state": "OPEN",
+      "author": "tzaeschke",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "tzaeschke"
+      ],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-06-26T13:37:45Z",
+      "updatedAt": "2026-06-26T14:51:47Z",
+      "baseRepository": "netsec-ethz/scion-quic-multipath_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "76a1f2c73a8f667c6b3664624eb3ab6107aa30dd",
+      "headRepository": "netsec-ethz/scion-quic-multipath_I-D",
+      "headRefName": "rev01/security-guide-path-validation",
+      "headRefOid": "f007d0721f78d6693cfb362977cf244e4b20a3d5",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
