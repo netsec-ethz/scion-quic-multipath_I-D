@@ -2938,9 +2938,13 @@ of an AS), the attacker will need two hosts.<a href="#section-7.2.3-3" class="pi
      obtained by A1 to request data from the server. A2 must be in the
      victim's AS so it can use the same path as the victim. In the GET
      request, it sets the SCION SRC address to be the victim's IP.<a href="#section-7.2.3-4" class="pilcrow">¶</a></p>
+<p id="section-7.2.3-5">If IP spoofing is possible in AS #200 and if border routers and
+endpoints are on the same network in AS #200, then A2 is not
+required. Instead, A1 could send the GET request with a spoofed IP
+of the borderrouter that connects #200 to #300.<a href="#section-7.2.3-5" class="pilcrow">¶</a></p>
 <span id="name-example-of-traffic-amplific"></span><div id="fig-example-new-path">
 <figure id="figure-2">
-            <div class="alignLeft art-text artwork" id="section-7.2.3-5.1">
+            <div class="alignLeft art-text artwork" id="section-7.2.3-6.1">
 <pre>
    Attacker A1                                               Server
    (Establish connection)
@@ -2967,8 +2971,8 @@ of an AS), the attacker will need two hosts.<a href="#section-7.2.3-3" class="pi
 <a href="#name-example-of-traffic-amplific" class="selfRef">Example of traffic amplification attack. #100 is the server AS, #200 is the attacker A1's AS and #300 is the victim's AS.</a>
             </figcaption></figure>
 </div>
-<p id="section-7.2.3-6">Mitigation:<a href="#section-7.2.3-6" class="pilcrow">¶</a></p>
-<p id="section-7.2.3-7">This attack requires spoofing of the victim's IP address.
+<p id="section-7.2.3-7">Mitigation:<a href="#section-7.2.3-7" class="pilcrow">¶</a></p>
+<p id="section-7.2.3-8">This attack requires spoofing of the victim's IP address.
 - A QUIC(-MP) library must consider all attributes
   (not just the 4-tuple) when checking for a change in the network
   address. This would then trigger path validation, and the attack
@@ -2980,12 +2984,12 @@ of an AS), the attacker will need two hosts.<a href="#section-7.2.3-3" class="pi
   from a previously seen address (IP/port are the same), then it
   should perform IP/port mangling, i.e., reporting a modified IP or
   port to the QUIC(-MP) layer. This new IP/port would trigger a path
-  validation or algorithm reset where required.<a href="#section-7.2.3-7" class="pilcrow">¶</a></p>
-<p id="section-7.2.3-8">Caveats:<a href="#section-7.2.3-8" class="pilcrow">¶</a></p>
+  validation or algorithm reset where required.<a href="#section-7.2.3-8" class="pilcrow">¶</a></p>
+<p id="section-7.2.3-9">Caveats:<a href="#section-7.2.3-9" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-7.2.3-9.1">
-              <p id="section-7.2.3-9.1.1">Offering a mangled IP/port to the application may have implications
-for application correctness, such as displaying an unexpected IP/port.<a href="#section-7.2.3-9.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-7.2.3-10.1">
+              <p id="section-7.2.3-10.1.1">Offering a mangled IP/port to the application may have implications
+for application correctness, such as displaying an unexpected IP/port.<a href="#section-7.2.3-10.1.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
