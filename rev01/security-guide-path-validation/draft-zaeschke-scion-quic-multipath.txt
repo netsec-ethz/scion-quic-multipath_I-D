@@ -122,6 +122,9 @@ Table of Contents
      5.12. Path ID Allocation
        5.12.1.  Key Implications
        5.12.2.  Recommendations
+     5.13. Address Spoofing
+       5.13.1.  Key Implications
+       5.13.2.  Recommendations
    6.  Summary of Recommendations
      6.1.  Recommendations for QUIC-MP Implementations
      6.2.  Recommendations for SCION Implementations
@@ -427,41 +430,11 @@ Table of Contents
 
 5.1.2.  Recommendations
 
-   Attacks can be prevented by ensuring that one of the following is
-   achieved:
-
-   *  Prevent the attacker from exploiting a skipped path validation.
-
-   *  Ensure that path validation is not skipped.
-
-5.1.2.1.  Avoid Exploitation Of Skipped Path Validation
-
-   In order to exploit a skipped path validation event, an attacker must
-   first inject an incorrect path or SCION source address into the
-   server.  This can be prevented as follows:
-
-   1.  Border routers must verify that for any packet whose path
-       indicates origin outside of the local AS, the underlay IP must
-       match a known border router IP.
-
-   2.  Border routers must verify that for any packet that originates in
-       the local AS, the underlay IP matches the SCION SRC IP.
-
-   3.  SCION server libraries must verify that for any packet whose path
-       indicates origin outside of the local AS, the underlay IP must
-       match a known border router IP.
-
-   These measures ensure that every packet has a correct SCION SRC IP
-   and path.  The only way to circumvent these checks is by spoofing the
-   IP address in a local AS or by taking control over a border router of
-   an AS along the route between two peers.
-
-5.1.2.2.  Ensure That Path Validation Is Performed
-
-   Implementations should ensure that path validation is triggered when
-   the network address of the destination changes; this includes IP,
-   port and AS number.  This protects against several attacks, see
-   Section 7.2 and especially Section 7.2.2.
+   *  To prevent attackers circumventing QUIC path validation, a QUIC-MP
+      implementation MUST make sure that QUIC path validation is
+      triggered when the network address of the destination changes;
+      this includes IP, port and AS number.  This protects against
+      several attacks, see Section 7.2 and especially Section 7.2.2.
 
    There are several ways to achieve this, for example:
 
@@ -951,6 +924,47 @@ Table of Contents
       early PATHS_BLOCKED frames and respond by allocating a gracious
       amount of additional path IDs.
 
+5.13.  Address Spoofing
+
+   Attackers may create and send packets that look like they originate
+   from somewhere else.  There are two main scenarios:
+
+   1.  An attacker creates a packet with a path that seems to originate
+       outside the local AS.
+
+   2.  An attacker creates a packet that seems to originate from the
+       local AS but the SCION SRC address does not match the attackers
+       IP.
+
+   In both cases the packet may be sent a border router or a local
+   endpoint.
+
+5.13.1.  Key Implications
+
+   Section 4.2.2.2 of [SCION-DP] states: "If the packet path indicates
+   an origin outside of the local AS, verify that the packet underlay
+   source address matches a known border router in the local AS."
+
+   For the 2nd scenario, and for the sending to local endpoints, there
+   are no known attacks.
+
+5.13.2.  Recommendations
+
+   There are no known attacks.  However, ASes should try to avoid
+   exporting faulty packets and endhosts SCION stacks should avoid
+   forwarding faulty packets to the QUIC layer or application layer.
+
+   The recommendation is that receivers (endhost SCION stacks, border
+   routers, ...) should drop any packets:
+
+   1.  Receivers should drop a packet if its path indicates origin
+       outside the local AS but the underlay IP does not match a known
+       border router IP.
+
+   2.  Receivers should drop a packet if its path indicates origin
+       inside the local AS but the underlay IP does not match the SCION
+       SRC address.
+
 6.  Summary of Recommendations
 
    This memo is informational.  However, we use [RFC2119] imperative
@@ -1053,9 +1067,9 @@ Table of Contents
       storing paths is inevitable, see Section 4.6.  For security
       concerns, see also Section 7.2.
 
-   *  If a SCION implementation stores paths internally, it must be
-      careful to avoid using IP/port as key to look up paths.  IP/port
-      are not unique to identify endpoints.
+   *  If a SCION implementation stores paths internally, it MUST NOT use
+      IP/port as key to look up paths.  IP/port are not unique to
+      identify endpoints.
 
    *  When used with QUIC-MP, a SCION implementation MUST NOT change the
       network paths, possibly with the exception of refreshing expired
@@ -1094,9 +1108,9 @@ Table of Contents
 
 6.4.  Other Recommendations
 
-   *  Servers and client should aim to be located in respective local
-      networks (local ASes) that have protection against IP spoofing
-      from machines in the same network, see Section 7.2.
+   *  Endpoints should aim to be located in local networks (local ASes)
+      that have protection against IP spoofing from machines in the same
+      network, see Section 7.2.
 
 7.  Security Considerations
 
@@ -1114,37 +1128,37 @@ Table of Contents
 
 7.1.  IP Ambiguity
 
-   In SCION, IP addresses are not sufficient to uniquely identify a peer
-   endpoint.  ASes are free to use IP addresses from "private" IP
-   ranges.
+   In SCION, ASes are free to use IP addresses from "private" IP ranges.
+   THerfore, IP addresses do not uniquely identify a peer endpoint.
 
    To attack a client with IP address X, an attacker could set up an
    endpoint with identical IP X in a different AS.  The attacker can
    then contact a server endpoint that is also used by the client
    victim.
 
-   If the server endpoint stores path internally with IP addresses as
+   If the server endpoint stores paths internally with IP addresses as
    keys, then this would result in a key collision, which can cause two
    types of problems:
 
    *  If the attacker contacts the server after the client, the contact
-      may result in overwriting the existing entry (of the victim).
+      may result in overwriting the existing entry that points to the
+      victim.
 
    *  If overwriting is prevented, the attacker may contact the server
       before the victim, thus potentially preventing the victim from
-      establishing a connection,
+      establishing a connection.
 
    The second case is more difficult to achieve.  Often, connections may
-   be store by IP+port, so the attacker must guess the victims port when
-   launching the attack.
+   be stored by IP+port, so the attacker must guess the victims port
+   when launching the attack, this is difficult with ephemeral ports.
 
 7.1.1.  Mitigation
 
    *  A SCION implementation should avoid storing paths while using the
-      IP address as key to look up paths.  For QUIC-MP, the best
-      solution is to use the QUIC Path ID as key.
+      IP address as key to look up paths.  For QUIC-MP, the QUIC Path ID
+      should be used as key.
 
-   *  SCION libraries could us port/IP mangling when they detect
+   *  SCION libraries could use IP/port mangling when they detect
       multiple paths with the same IP/port.  However, this may have
       unintended consequences in the application layer.
 
@@ -1159,14 +1173,16 @@ Table of Contents
 7.2.  Path Injection
 
    There are several potential attacks that are based on injecting valid
-   or invalid paths into the server-side software stack.  Injecting a
-   path means sending a packet with an incorrect path to an endpoint
-   such that the endpoint sends a response along that path.  The path is
-   incorrect insofar as it does not accurately describe the route of the
-   original request packet.
+   or invalid paths into the server side software stack.  Server
+   endpoints usually store the path that is used to connect to a client.
+   Injecting a path means sending a packet with a new path to a server
+   such that the server replaces the path to the client with the new
+   path.  The new path may use a unfavorable route or may redirect
+   traffic to a different endpoint.
 
-   In summary, these attacks can be prevented by the recommendations
-   listed in Section 6.  The following scenarios are considered:
+   In summary, path imnjection attacks can be prevented by the
+   recommendations listed in Section 6.  The following scenarios are
+   considered:
 
    1.  The SCION SRC address is wrong.  I.e., the packet originates in
        the correct AS but from a different IP than what is announced in

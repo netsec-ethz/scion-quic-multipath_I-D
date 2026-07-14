@@ -41,7 +41,7 @@ and to leverage path-aware multi-path networking with QUIC-MP.
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.33.1
-    wcwidth 0.8.1
+    wcwidth 0.8.2
 -->
 <link href="draft-zaeschke-scion-quic-multipath.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1341,6 +1341,17 @@ and to leverage path-aware multi-path networking with QUIC-MP.<a href="#section-
 </li>
                 </ul>
 </li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.13">
+                <p id="section-toc.1-1.5.2.13.1"><a href="#section-5.13" class="auto internal xref">5.13</a>. <a href="#name-address-spoofing" class="internal xref">Address Spoofing</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.13.2.1">
+                    <p id="section-toc.1-1.5.2.13.2.1.1"><a href="#section-5.13.1" class="auto internal xref">5.13.1</a>.  <a href="#name-key-implications-10" class="internal xref">Key Implications</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.13.2.2">
+                    <p id="section-toc.1-1.5.2.13.2.2.1"><a href="#section-5.13.2" class="auto internal xref">5.13.2</a>.  <a href="#name-recommendations-10" class="internal xref">Recommendations</a></p>
+</li>
+                </ul>
+</li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
@@ -1752,12 +1763,12 @@ that IP addresses are unique in the scope of the network.<a href="#section-5.1-1
 <p id="section-5.1.1-1">QUIC-MP relies on the 4-tuple changes to trigger path validation.
 However, with SCION, the 4-tuple does not uniquely identify an endpoint.
 Two endpoints with identical IP/port could be in different ASes.
-An attacker could use endpoints with identical 4-tuple to reroute traffic
-to a different machine without triggering path validation, see
+An attacker could use endpoints with identical 4-tuple to reroute
+traffic to a different machine without triggering path validation, see
 <a href="#attack-path-injection" class="auto internal xref">Section 7.2</a> and <a href="#token" class="auto internal xref">Section 5.11</a>.<a href="#section-5.1.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.1.1-2">The implication of a skipped path validation is that a sever can be coaxed into
-sending QUIC packets to an unexpecting client. This is similar to the attacks
-described in <span><a href="https://rfc-editor.org/rfc/rfc9000#section-8" class="relref">Section 8</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> and
+<p id="section-5.1.1-2">The implication of a skipped path validation is that a sever can be
+coaxed into sending QUIC packets to an unexpecting client. This is
+similar to the attacks described in <span><a href="https://rfc-editor.org/rfc/rfc9000#section-8" class="relref">Section 8</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> and
 <span><a href="https://rfc-editor.org/rfc/rfc9000#section-21.5.4" class="relref">Section 21.5.4</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>.<a href="#section-5.1.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1766,89 +1777,49 @@ described in <span><a href="https://rfc-editor.org/rfc/rfc9000#section-8" class=
           <h4 id="name-recommendations">
 <a href="#section-5.1.2" class="section-number selfRef">5.1.2. </a><a href="#name-recommendations" class="section-name selfRef">Recommendations</a>
           </h4>
-<p id="section-5.1.2-1">Attacks can be prevented by ensuring that one of the following is achieved:<a href="#section-5.1.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.1.2-2.1">
-              <p id="section-5.1.2-2.1.1">Prevent the attacker from exploiting a skipped path validation.<a href="#section-5.1.2-2.1.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-5.1.2-2.2">
-              <p id="section-5.1.2-2.2.1">Ensure that path validation is not skipped.<a href="#section-5.1.2-2.2.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-5.1.2-1.1">
+              <p id="section-5.1.2-1.1.1">To prevent attackers circumventing QUIC path validation, a QUIC-MP
+implementation <span class="bcp14">MUST</span> make sure that QUIC path validation is
+triggered when the network address of the destination changes;
+this includes IP, port and AS number. This protects against
+several attacks, see <a href="#attack-path-injection" class="auto internal xref">Section 7.2</a> and especially
+<a href="#attack-amplification" class="auto internal xref">Section 7.2.2</a>.<a href="#section-5.1.2-1.1.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<div id="avoid-exploitation-of-skipped-path-validation">
-<section id="section-5.1.2.1">
-            <h5 id="name-avoid-exploitation-of-skipp">
-<a href="#section-5.1.2.1" class="section-number selfRef">5.1.2.1. </a><a href="#name-avoid-exploitation-of-skipp" class="section-name selfRef">Avoid Exploitation Of Skipped Path Validation</a>
-            </h5>
-<p id="section-5.1.2.1-1">In order to exploit a skipped path validation event, an attacker must
-first inject an incorrect path or SCION source address into the server.
-This can be prevented as follows:<a href="#section-5.1.2.1-1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-5.1.2.1-2">
-<li id="section-5.1.2.1-2.1">
-                <p id="section-5.1.2.1-2.1.1">Border routers must verify that for any packet whose path indicates
-origin outside of the local AS, the underlay IP must match a known
-border router IP.<a href="#section-5.1.2.1-2.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li id="section-5.1.2.1-2.2">
-                <p id="section-5.1.2.1-2.2.1">Border routers must verify that for any packet that originates in the
-local AS, the underlay IP matches the SCION SRC IP.<a href="#section-5.1.2.1-2.2.1" class="pilcrow">¶</a></p>
-</li>
-              <li id="section-5.1.2.1-2.3">
-                <p id="section-5.1.2.1-2.3.1">SCION server libraries must verify that for any packet whose path
-indicates origin outside of the local AS, the underlay IP must
-match a known border router IP.<a href="#section-5.1.2.1-2.3.1" class="pilcrow">¶</a></p>
-</li>
-            </ol>
-<p id="section-5.1.2.1-3">These measures ensure that every packet has a correct SCION SRC IP and path.
-The only way to circumvent these checks is by spoofing the IP address in a
-local AS or by taking control over a border router of an AS along the route
-between two peers.<a href="#section-5.1.2.1-3" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="ensure-that-path-validation-is-performed">
-<section id="section-5.1.2.2">
-            <h5 id="name-ensure-that-path-validation">
-<a href="#section-5.1.2.2" class="section-number selfRef">5.1.2.2. </a><a href="#name-ensure-that-path-validation" class="section-name selfRef">Ensure That Path Validation Is Performed</a>
-            </h5>
-<p id="section-5.1.2.2-1">Implementations should ensure that path validation is triggered when
-the network address of the destination changes; this includes
-IP, port and AS number. This protects against several attacks, see
-<a href="#attack-path-injection" class="auto internal xref">Section 7.2</a> and especially <a href="#attack-amplification" class="auto internal xref">Section 7.2.2</a>.<a href="#section-5.1.2.2-1" class="pilcrow">¶</a></p>
-<p id="section-5.1.2.2-2">There are several ways to achieve this, for example:<a href="#section-5.1.2.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.1.2-2">There are several ways to achieve this, for example:<a href="#section-5.1.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.1.2.2-3.1">
-                <p id="section-5.1.2.2-3.1.1">Adapt the QUIC-MP library to be aware of the AS number in SCION
-network addresses.<a href="#section-5.1.2.2-3.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-5.1.2-3.1">
+              <p id="section-5.1.2-3.1.1">Adapt the QUIC-MP library to be aware of the AS number in SCION
+network addresses.<a href="#section-5.1.2-3.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-5.1.2.2-3.2">
-                <p id="section-5.1.2.2-3.2.1">If the network address is available as a single "object",
+            <li class="normal" id="section-5.1.2-3.2">
+              <p id="section-5.1.2-3.2.1">If the network address is available as a single "object",
 the SCION layer can extend this with the AS code and the
 QUIC-MP implementation must only ensure to compare the whole
-object instead of port and IP separately.<a href="#section-5.1.2.2-3.2.1" class="pilcrow">¶</a></p>
+object instead of port and IP separately.<a href="#section-5.1.2-3.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-5.1.2.2-3.3">
-                <p id="section-5.1.2.2-3.3.1">The SCION implementation could detect cases where only the AS
+            <li class="normal" id="section-5.1.2-3.3">
+              <p id="section-5.1.2-3.3.1">The SCION implementation could detect cases where only the AS
 changes and then mangle the port or IP to trigger a path validation
 in the QUIC-MP layer. This may be a pragmatic solution but is
-discouraged because:<a href="#section-5.1.2.2-3.3.1" class="pilcrow">¶</a></p>
+discouraged because:<a href="#section-5.1.2-3.3.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.1.2.2-3.3.2.1">
-                    <p id="section-5.1.2.2-3.3.2.1.1">Managing paths in the SCION layer is not trivial because it requires
+<li class="normal" id="section-5.1.2-3.3.2.1">
+                  <p id="section-5.1.2-3.3.2.1.1">Managing paths in the SCION layer is not trivial because it requires
 synchronizing the lifecycle of SCION paths and QUIC-MP paths, e.g.,
-knowing when is a path valid or when is it closed in QUIC-MP.<a href="#section-5.1.2.2-3.3.2.1.1" class="pilcrow">¶</a></p>
+knowing when is a path valid or when is it closed in QUIC-MP.<a href="#section-5.1.2-3.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="normal" id="section-5.1.2.2-3.3.2.2">
-                    <p id="section-5.1.2.2-3.3.2.2.1">It creates opportunities for memory exhaustion attacks
-(for storing the mapping of mangled IP/port).<a href="#section-5.1.2.2-3.3.2.2.1" class="pilcrow">¶</a></p>
+                <li class="normal" id="section-5.1.2-3.3.2.2">
+                  <p id="section-5.1.2-3.3.2.2.1">It creates opportunities for memory exhaustion attacks
+(for storing the mapping of mangled IP/port).<a href="#section-5.1.2-3.3.2.2.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="normal" id="section-5.1.2.2-3.3.2.3">
-                    <p id="section-5.1.2.2-3.3.2.3.1">It reports a wrong IP/port to the application.<a href="#section-5.1.2.2-3.3.2.3.1" class="pilcrow">¶</a></p>
+                <li class="normal" id="section-5.1.2-3.3.2.3">
+                  <p id="section-5.1.2-3.3.2.3.1">It reports a wrong IP/port to the application.<a href="#section-5.1.2-3.3.2.3.1" class="pilcrow">¶</a></p>
 </li>
-                </ul>
+              </ul>
 </li>
-            </ul>
-</section>
-</div>
+          </ul>
 </section>
 </div>
 </section>
@@ -2502,6 +2473,63 @@ additional path IDs.<a href="#section-5.12.2-1.3.1" class="pilcrow">¶</a></p>
 </div>
 </section>
 </div>
+<div id="address-spoofing">
+<section id="section-5.13">
+        <h3 id="name-address-spoofing">
+<a href="#section-5.13" class="section-number selfRef">5.13. </a><a href="#name-address-spoofing" class="section-name selfRef">Address Spoofing</a>
+        </h3>
+<p id="section-5.13-1">Attackers may create and send packets that look like they originate
+from somewhere else. There are two main scenarios:<a href="#section-5.13-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-5.13-2">
+<li id="section-5.13-2.1">
+            <p id="section-5.13-2.1.1">An attacker creates a packet with a path that seems to originate
+outside the local AS.<a href="#section-5.13-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-5.13-2.2">
+            <p id="section-5.13-2.2.1">An attacker creates a packet that seems to originate from the
+local AS but the SCION SRC address does not match the attackers IP.<a href="#section-5.13-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ol>
+<p id="section-5.13-3">In both cases the packet may be sent a border router or a local
+endpoint.<a href="#section-5.13-3" class="pilcrow">¶</a></p>
+<div id="key-implications-9">
+<section id="section-5.13.1">
+          <h4 id="name-key-implications-10">
+<a href="#section-5.13.1" class="section-number selfRef">5.13.1. </a><a href="#name-key-implications-10" class="section-name selfRef">Key Implications</a>
+          </h4>
+<p id="section-5.13.1-1"><span><a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-dataplane-15#section-4.2.2.2" class="relref">Section 4.2.2.2</a> of [<a href="#SCION-DP" class="cite xref">SCION-DP</a>]</span> states: "If the packet path
+indicates an origin outside of the local AS, verify that the packet
+underlay source address matches a known border router in the local AS."<a href="#section-5.13.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.13.1-2">For the 2nd scenario, and for the sending to local endpoints, there are
+no known attacks.<a href="#section-5.13.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="recommendations-9">
+<section id="section-5.13.2">
+          <h4 id="name-recommendations-10">
+<a href="#section-5.13.2" class="section-number selfRef">5.13.2. </a><a href="#name-recommendations-10" class="section-name selfRef">Recommendations</a>
+          </h4>
+<p id="section-5.13.2-1">There are no known attacks. However, ASes should try to avoid
+exporting faulty packets and endhosts SCION stacks should avoid
+forwarding faulty packets to the QUIC layer or application layer.<a href="#section-5.13.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.13.2-2">The recommendation is that receivers (endhost SCION stacks, border
+routers, ...) should drop any packets:<a href="#section-5.13.2-2" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-5.13.2-3">
+<li id="section-5.13.2-3.1">
+              <p id="section-5.13.2-3.1.1">Receivers should drop a packet if its path indicates origin outside
+the local AS but the underlay IP does not match a known
+border router IP.<a href="#section-5.13.2-3.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li id="section-5.13.2-3.2">
+              <p id="section-5.13.2-3.2.1">Receivers should drop a packet if its path indicates origin inside
+the local AS but the underlay IP does not match the SCION SRC
+address.<a href="#section-5.13.2-3.2.1" class="pilcrow">¶</a></p>
+</li>
+          </ol>
+</section>
+</div>
+</section>
+</div>
 </section>
 </div>
 <div id="all-recommendations">
@@ -2566,15 +2594,15 @@ path changes beyond 4-tuple or AS changes. This enables resetting
 congestion control and RTT algorithms.<a href="#section-6.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.1-1.3">
-            <p id="section-6.1-1.3.1">A QUIC-MP implementation, especially congestion control, RTT estimation,
-and path selection algorithms should be careful to not accept or probe
-all available SCION network paths. There may be a large number of path
-available and probing or using them all may amount to a denial of service
-attack on the receiver.<a href="#section-6.1-1.3.1" class="pilcrow">¶</a></p>
+            <p id="section-6.1-1.3.1">A QUIC-MP implementation, especially congestion control, RTT
+estimation, and path selection algorithms should be careful to not
+accept or probe all available SCION network paths. There may be a
+large number of path available and probing or using them all may
+amount to a denial of service attack on the receiver.<a href="#section-6.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.1-1.4">
-            <p id="section-6.1-1.4.1">To prevent problems with path ID exhaustion with multi-path applications,
-see <a href="#path-id-allocation" class="auto internal xref">Section 5.12</a>:<a href="#section-6.1-1.4.1" class="pilcrow">¶</a></p>
+            <p id="section-6.1-1.4.1">To prevent problems with path ID exhaustion with multi-path
+applications, see <a href="#path-id-allocation" class="auto internal xref">Section 5.12</a>:<a href="#section-6.1-1.4.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.1-1.4.2.1">
                 <p id="section-6.1-1.4.2.1.1">Servers and clients should initialize the connection with
@@ -2650,8 +2678,8 @@ Sometimes, storing paths is inevitable, see <a href="#sig" class="auto internal 
 For security concerns, see also <a href="#attack-path-injection" class="auto internal xref">Section 7.2</a>.<a href="#section-6.2-1.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.2-1.3">
-            <p id="section-6.2-1.3.1">If a SCION implementation stores paths internally, it must be careful
-to avoid using IP/port as key to look up paths. IP/port are not unique
+            <p id="section-6.2-1.3.1">If a SCION implementation stores paths internally, it <span class="bcp14">MUST NOT</span>
+use IP/port as key to look up paths. IP/port are not unique
 to identify endpoints.<a href="#section-6.2-1.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.2-1.4">
@@ -2713,8 +2741,8 @@ part of QUIC-MP.<a href="#section-6.3-1.3.1" class="pilcrow">¶</a></p>
         </h3>
 <ul class="normal">
 <li class="normal" id="section-6.4-1.1">
-            <p id="section-6.4-1.1.1">Servers and client should aim to be located in respective local networks
-(local ASes) that have protection against IP spoofing from machines in the
+            <p id="section-6.4-1.1.1">Endpoints should aim to be located in local networks (local ASes)
+that have protection against IP spoofing from machines in the
 same network, see <a href="#attack-path-injection" class="auto internal xref">Section 7.2</a>.<a href="#section-6.4-1.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
@@ -2746,25 +2774,29 @@ implementation changes and additional consideration regarding:<a href="#section-
         <h3 id="name-ip-ambiguity">
 <a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-ip-ambiguity" class="section-name selfRef">IP Ambiguity</a>
         </h3>
-<p id="section-7.1-1">In SCION, IP addresses are not sufficient to uniquely identify a peer endpoint.
-ASes are free to use IP addresses from "private" IP ranges.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
-<p id="section-7.1-2">To attack a client with IP address X, an attacker could set up an endpoint
-with identical IP X in a different AS. The attacker can then contact a server
-endpoint that is also used by the client victim.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
-<p id="section-7.1-3">If the server endpoint stores path internally with IP addresses as keys,
-then this would result in a key collision, which can cause two types of problems:<a href="#section-7.1-3" class="pilcrow">¶</a></p>
+<p id="section-7.1-1">In SCION, ASes are free to use IP addresses from "private" IP ranges.
+THerfore, IP addresses do not uniquely identify a peer endpoint.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.1-2">To attack a client with IP address X, an attacker could set up an
+endpoint with identical IP X in a different AS. The attacker can
+then contact a server endpoint that is also used by the client victim.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
+<p id="section-7.1-3">If the server endpoint stores paths internally with IP addresses as
+keys, then this would result in a key collision, which can cause two
+types of problems:<a href="#section-7.1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.1-4.1">
-            <p id="section-7.1-4.1.1">If the attacker contacts the server after the client, the contact may result
-in overwriting the existing entry (of the victim).<a href="#section-7.1-4.1.1" class="pilcrow">¶</a></p>
+            <p id="section-7.1-4.1.1">If the attacker contacts the server after the client, the contact
+may result in overwriting the existing entry that points to the
+victim.<a href="#section-7.1-4.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-7.1-4.2">
-            <p id="section-7.1-4.2.1">If overwriting is prevented, the attacker may contact the server before the victim,
-thus potentially preventing the victim from establishing a connection,<a href="#section-7.1-4.2.1" class="pilcrow">¶</a></p>
+            <p id="section-7.1-4.2.1">If overwriting is prevented, the attacker may contact the server
+before the victim, thus potentially preventing the victim from
+establishing a connection.<a href="#section-7.1-4.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-7.1-5">The second case is more difficult to achieve. Often, connections may be store by
-IP+port, so the attacker must guess the victims port when launching the attack.<a href="#section-7.1-5" class="pilcrow">¶</a></p>
+<p id="section-7.1-5">The second case is more difficult to achieve. Often, connections may
+be stored by IP+port, so the attacker must guess the victims port
+when launching the attack, this is difficult with ephemeral ports.<a href="#section-7.1-5" class="pilcrow">¶</a></p>
 <div id="mitigation">
 <section id="section-7.1.1">
           <h4 id="name-mitigation">
@@ -2774,22 +2806,22 @@ IP+port, so the attacker must guess the victims port when launching the attack.<
 <li class="normal" id="section-7.1.1-1.1">
               <p id="section-7.1.1-1.1.1">A SCION implementation should avoid storing paths while using
 the IP address as key to look up paths.
-For QUIC-MP, the best solution is to use the QUIC Path ID as key.<a href="#section-7.1.1-1.1.1" class="pilcrow">¶</a></p>
+For QUIC-MP, the QUIC Path ID should be used as key.<a href="#section-7.1.1-1.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-7.1.1-1.2">
-              <p id="section-7.1.1-1.2.1">SCION libraries could us port/IP mangling when they detect multiple paths with
-the same IP/port. However, this may have unintended consequences in the
-application layer.<a href="#section-7.1.1-1.2.1" class="pilcrow">¶</a></p>
+              <p id="section-7.1.1-1.2.1">SCION libraries could use IP/port mangling when they detect
+multiple paths with the same IP/port. However, this may have
+unintended consequences in the application layer.<a href="#section-7.1.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-7.1.1-1.3">
               <p id="section-7.1.1-1.3.1">Higher level libraries, such as QUIC(-MP) should be carefuol to not
 rely only on IP addresses to trigger path validation or resetting
-congestion control or RTT estimation algorithms. Instead, QUIC-MP should
-rely on the QUIC Path ID.<a href="#section-7.1.1-1.3.1" class="pilcrow">¶</a></p>
+congestion control or RTT estimation algorithms. Instead, QUIC-MP
+should rely on the QUIC Path ID.<a href="#section-7.1.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-7.1.1-2">Circumventing path validation is not possible, because that would require injecting
-a new path, see <a href="#attack-path-injection" class="auto internal xref">Section 7.2</a>.<a href="#section-7.1.1-2" class="pilcrow">¶</a></p>
+<p id="section-7.1.1-2">Circumventing path validation is not possible, because that would
+require injecting a new path, see <a href="#attack-path-injection" class="auto internal xref">Section 7.2</a>.<a href="#section-7.1.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2800,12 +2832,16 @@ a new path, see <a href="#attack-path-injection" class="auto internal xref">Sect
 <a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-path-injection" class="section-name selfRef">Path Injection</a>
         </h3>
 <p id="section-7.2-1">There are several potential attacks that are based on injecting
-valid or invalid paths into the server-side software stack.
-Injecting a path means sending a packet with an incorrect path to an endpoint
-such that the endpoint sends a response along that path. The path is incorrect
-insofar as it does not accurately describe the route of the original request packet.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
-<p id="section-7.2-2">In summary, these attacks can be prevented by the recommendations
-listed in <a href="#all-recommendations" class="auto internal xref">Section 6</a>. The following scenarios are considered:<a href="#section-7.2-2" class="pilcrow">¶</a></p>
+valid or invalid paths into the server side software stack.
+Server endpoints usually store the path that is used to connect to
+a client.
+Injecting a path means sending a packet with a new path to a server
+such that the server replaces the path to the client with the new path.
+The new path may use a unfavorable route or may redirect traffic to
+a different endpoint.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2-2">In summary, path imnjection attacks can be prevented by the
+recommendations listed in <a href="#all-recommendations" class="auto internal xref">Section 6</a>. The following
+scenarios are considered:<a href="#section-7.2-2" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-7.2-3">
 <li id="section-7.2-3.1">
             <p id="section-7.2-3.1.1">The SCION SRC address is wrong. I.e., the packet originates in the correct AS
