@@ -971,33 +971,6 @@ relevant to security or performance.
 
 ## Recommendations for SCION Implementations
 
-- SCION implementations can prevent attackers from expoloiting a skipped
-  path validation by preventing path injection ({{attack-path-injection}}).
-  To prevent path injection:
-
-  1. Border routers MUST verify that for any packet whose path indicates
-     origin outside of the local AS, the underlay IP must match a known
-     border router IP. This is specified in
-     {{Section 4.2.2.2 of SCION-DP}}.
-  2. Border routers MUST verify that for any packet that originates
-     in the local AS, the underlay IP matches the SCION SRC IP.
-  3. SCION server libraries MUST verify that for any packet whose path
-     indicates origin outside of the local AS, the underlay IP must
-     match a known border router IP.
-
-  More generally, SCION implementations should prevent SCION SRC address
-  spoofing. They shhould verify, whenever possible, that a SCION SRC
-  address is correct.
-  All parties that send and receive dataplane traffic (border routers,
-  endhosts, ...) must follow these rules:
-
-  1. They MUST verify that for any packet whose path indicates
-     origin outside of the local AS, the underlay IP must match a known
-     border router IP. This is specified for border routers in
-     {{Section 4.2.2.2 of SCION-DP}}.
-  2. They MUST verify that for any packet that originates in the local
-     AS, the underlay address matches the SCION SRC address.
-
 - A SCION implementation SHOULD NOT store or cache paths,
   especially not on the server side. This prevents memory
   exhaustion attacks, see {attack-memory-exhaustion}.
@@ -1015,6 +988,26 @@ relevant to security or performance.
   paths.
   When a path stops working, the implementation should instead report
   an error to the QUIC(-MP) layer or time out silently.
+
+- Attackers may create packste with faulty spoofed addresses or
+  paths. While there is no known associated attack, border routers
+  should not forward faulty packets to other ASes and endhost SCION
+  libraries should not forward faulty packets to the QUIC layer or
+  applications.
+
+  To prevent this, packets receivers, such as border routers or
+  SCION endhost libraries, should drop faulty packets.
+
+  1. Receivers MAY drop a packet if its path indicates origin outside
+     the local AS but the underlay IP does not match a known
+     border router IP.
+  2. Receivers MAY drop a packet if its path indicates origin inside
+     the local AS but the underlay IP does not match the SCION SRC
+     address.
+
+  NB: 1. The check for packets that seeminlgy originate outside the
+  local AS is already specified for border routers in
+  {{Section 4.2.2.2 of SCION-DP}}.
 
 
 ## Recommendations For Both QUIC-MP And SCION Implementations
@@ -1104,49 +1097,46 @@ require injecting a new path, see {{attack-path-injection}}.
 
 ## Path Injection {#attack-path-injection}
 
-There are several potential attacks that are based on injecting
-valid or invalid paths into the server side software stack.
-Server endpoints usually store the path that is used to connect to
-a client.
-Injecting a path means sending a packet with a new path to a server
-such that the server replaces the path to the client with the new path.
-The new path may use a unfavorable route or may redirect traffic to
-a different endpoint.
+There are several potential attacks that build on injecting
+valid or invalid paths into the server-side software stack.
 
-In summary, path imnjection attacks can be prevented by the
-recommendations listed in {{all-recommendations}}. The following
-scenarios are considered:
+In summary, these attacks can be prevented by the recommendations
+listed in {{all-recommendations}}, specifically we
+recommend the following where possible:
 
-1. The SCION SRC address is wrong. I.e., the packet originates in the correct AS
-   but from a different IP than what is announced in the SCION SRC address field.
+1. SCION layers should avoid storing/caching paths and network addresses
+   (beyond IP/port) internally.
+   Instead, they should be given to the QUIC(-MP) layer or the
+   application layer. That means that path information would only be
+   accepted and retained if the QUIC(-MP) or application layer decides
+   to do so.
+3. SCION layers and QUIC(-MP) layers should interface by using
+   network addresses that include all information that identifies an
+   endpoint, including, for example, AS code. Any change in a
+   network address (including the AS code) should trigger path
+   validation.
 
-   To avoid this, border routers MUST drop egress packets whose path indicates
-   a local origin, but whose SCION SRC address does not match the underlay
-   SRC address.
+Examples of attacks include memory exhaustion attacks, traffic
+redirection attacks, and traffic amplification attacks.
 
-2. The path is too long. The packet originates in an AS that is different from the
-   first AS announced in the path.
 
-   To avoid this, a border router MUST drop egress packets whose paths indicate
-   AS-external origin but whose underlay address does not
-   match that of a known border router.
+### Traffic Redirection to Different AS
 
-3. The path is not empty. This is an extreme case of the previous example. The
-   packet originates in the destination AS and is sent directly to the endpoint.
-   In this case the path should be empty.
+An attacker may craft a packet that appears to originate from the same
+IP/port, but is located in a different AS than an existing connection.
+If the server's SCION layer stores paths internally, and uses IP/port
+as key to look them up, then the new paths may replace the existing one,
+and outgoing traffic is redirected to the new paths and destination.
 
-   To avoid this, on a server, the SCION layer MUST always respond to the same
-   underlay address from which a request was received.
-   This is anyway useful for servers because responding to the same address also
-   avoids the need for the server to look up the first hop when sending a response.
+Mitigation:
 
-An attacker can inject paths into a server only in the following circumstances:
-- The attacker controls the border routers of an AS that is between a victim and
-  a server.
-- The attacker can spoof the address of a border router in an AS that is between
-  the victim and a server.
-- The attacker can spoof the address of a victim while being located inside the
-  victims AS.
+- The QUIC(-MP) layer MUST trigger path validation if the
+  network address changes, and must consider every attribute of the
+  address, not just IP and port.
+- If a packet is rejected by the QUIC(-MP) layer, the SCION layer MUST
+  NOT add it to any local state (including not replacing existing
+  state).
+  This can be achieved trivially by not having state in the SCION layer.
 
 
 ### Traffic Redirection over Different Path
@@ -1317,20 +1307,27 @@ on several iterations of this document.
 # Change Log
 {:numbered="false"}
 
-Changes made to drafts since initial submission. This section is to be removed before publication.
+Changes made to drafts since initial submission. This section is to
+be removed before publication.
 
 ## draft-zaeschke-scion-quic-multipath-01
 {:numbered="false"}
 
 Major changes:
 
-- "Path Injection": clarify that path injection in SCION is, depending on the situation, either
-  impossible or only marginally useful for an attacker.
+- Reverted {{endpoint-identity}} and {{attack-path-injection}}
+  because the attack can only be mitigated by SCION aware QUIC
+  implementations. The previously proposed new rules do not help.
+- "Path Injection": clarify that path injection in SCION is,
+  depending on the situation, either impossible or only marginally
+  useful for an attacker.
   Rewrite sections {{endpoint-identity}} and {{attack-path-injection}}.
-- New section "IP Ambiguity" in security considerations: {{attack-ip-ambiguity}}.
+- New section "IP Ambiguity" in security considerations:
+  {{attack-ip-ambiguity}}.
 - Completed section on Address Validation Token, see {{token}}.
 - Added recommendation to avoid using all SCION paths.
-- Added section {{path-id-allocation}} on path ID allocation and exhaustion.
+- Added section {{path-id-allocation}} on path ID allocation and
+  exhaustion.
 
 
 Minor changes:
