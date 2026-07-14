@@ -1208,6 +1208,11 @@ of an AS), the attacker will need two hosts.
      victim's AS so it can use the same path as the victim. In the GET
      request, it sets the SCION SRC address to be the victim's IP.
 
+If IP spoofing is possible in AS #200 and if border routers and
+endpoints are on the same network in AS #200, then A2 is not
+required. Instead, A1 could send the GET request with a spoofed IP
+of the borderrouter that connects #200 to #300.
+
 ~~~~
    Attacker A1                                               Server
    (Establish connection)
