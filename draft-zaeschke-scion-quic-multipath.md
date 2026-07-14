@@ -979,7 +979,6 @@ relevant to security or performance.
   or abandoned.
   Sometimes, storing paths is inevitable, see {{sig}}.
   For security concerns, see also {{attack-path-injection}}.
-
 - If a SCION implementation stores paths internally, it MUST NOT
   use IP/port as key to look up paths. IP/port are not unique
   to identify endpoints.
@@ -1151,9 +1150,10 @@ or drop rate).
 The new route may also work fine, but violate the client's path policy
 or be used for traffic analysis.
 
-The attacker injects the crafted path into the server, with the intent that the
-non-unique IP causes an existing path/connection mapping to be overwritten, and
-thus replace the victims path with the updated path.
+The attacker injects the crafted path into the server, with the
+intention that the non-unique IP causes an existing path/connection
+mapping to be overwritten, and thus replace the victims path with
+the updated path.
 
 
 ~~~~
@@ -1167,16 +1167,24 @@ thus replace the victims path with the updated path.
 ~~~~
 {: #fig-example-non-unique-ip title="Example of non-unique IPs"}
 
-Mitigation:
-
 This attack requires either spoofing of the client's IP address
 (when the attacker is in the same AS as the client),
 spoofing of a border router's IP address (when the attacker
 is in the server's AS), or injection of a path (which requires
 control over an AS that is en-route between the client and server).
 
-This can be further mitigated by the recommendation that path validation
-should always be triggered when the network address or path
+Mitigation:
+
+From the recommendations:
+
+  1) SCION implementations SHOULD NOT store or cache paths,
+     especially not on the server side.
+  2) SCION endhost implementations MUST not use IP/port as key to
+     store paths or connections to peers.
+
+Both recommendations prevent the attack.
+Further mitigation comes from the recommendation that path validation
+MUST always be triggered when the network address or path
 changes, even if the 4-tuple stays the same.
 
 
@@ -1190,20 +1198,51 @@ If the server-side QUIC-MP does not trigger path validation
 (because IP/port are the same), then it may implicitly accept
 the new path and send the requested data to a victim.
 
+Since injecting a path from on an-path AS is hard (requires control
+of an AS), the attacker will need two hosts.
+
+  1) Host A1 is located in an on-path AS or the server AS. A1
+     uses the victims IP to initiate a handshake with the server.
+  2) Host A2 is located in the victims AS. A2 use the secret
+     obtained by A1 to request data from the server. A2 must be in the
+     victim's AS so it can use the same path as the victim. In the GET
+     request, it sets the SCION SRC address to be the victim's IP.
+
+~~~~
+   Attacker A1                                               Server
+   (Establish connection)
+   QUIC=Init,Hello
+   IP Address=victim-IP
+   SCION Address=#200,victim-IP
+   Path=[#200, #100] -->
+                                             QUIC=Init,Hello,Cert,FIN
+                                                <-- Path=[#100, #200]
+
+   Attacker A2
+   (Request data)
+   QUIC=FIN,GET
+   IP Address=spoofed victim-IP
+   SCION Address=#300,victim-IP
+   Path=[#300, #200, #100] -->
+                                                            QUIC=Data
+                                          <-- Path=[#100, #200, #300]
+
+   Client: receives unwanted traffic
+~~~~
+{: #fig-example-new-path title="Example of traffic amplification
+attack. #100 is the server AS, #200 is the attacker A1's AS and #300
+is the victim's AS."}
+
 
 Mitigation:
 
-This attack requires either spoofing of the client's IP address
-(when the attacker is in the same AS as the client),
-spoofing of a border router's IP address (when the attacker
-is in the server's AS), or injection of a path (which requires
-control over an AS that is en-route between the client and server).
+This attack requires spoofing of the victim's IP address.
 - A QUIC(-MP) library must consider all attributes
   (not just the 4-tuple) when checking for a change in the network
   address. This would then trigger path validation, and the attack
   can be averted.
 - If a QUIC(-MP) library cannot compare additional attributes
-  (e.g., legacy library), the SCION layer (server side) should have an
+  (e.g., legacy library), the SCION layer (server side) may have an
   option to perform port mangling or IP mangling: when the SCION layer
   detects a new network address that differs only in the AS number
   from a previously seen address (IP/port are the same), then it
@@ -1215,24 +1254,6 @@ Caveats:
 
 - Offering a mangled IP/port to the application may have implications
   for application correctness, such as displaying an unexpected IP/port.
-
-
-~~~~
-   Attacker                                                Server
-   (Establish connection)
-   Path=[#200, #100] -->
-                                                <-- Path=[#100, #200]
-
-   (Change Path)
-   Path=[#300, #200, #100] -->
-                                          <-- Path=[#100, #200, #300]
-
-   Client: receives unwanted traffic
-~~~~
-{: #fig-example-new-path title="Example of traffic amplification
-attack"}
-
-
 
 
 ## Memory Exhaustion {#attack-memory-exhaustion}
