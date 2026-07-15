@@ -1769,7 +1769,7 @@ Two endpoints with identical IP/port could be in different ASes.
 An attacker could use endpoints with identical 4-tuple to reroute
 traffic to a different machine without triggering path validation, see
 <a href="#attack-path-injection" class="auto internal xref">Section 7.2</a> and <a href="#token" class="auto internal xref">Section 5.11</a>.<a href="#section-5.1.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.1.1-2">The implication of a skipped path validation is that a sever can be
+<p id="section-5.1.1-2">The implication of a skipped path validation is that a server can be
 coaxed into sending QUIC packets to an unexpecting client. This is
 similar to the attacks described in <span><a href="https://rfc-editor.org/rfc/rfc9000#section-8" class="relref">Section 8</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> and
 <span><a href="https://rfc-editor.org/rfc/rfc9000#section-21.5.4" class="relref">Section 21.5.4</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>.<a href="#section-5.1.1-2" class="pilcrow">¶</a></p>
@@ -2803,7 +2803,7 @@ multiple paths with the same IP/port. However, this may have
 unintended consequences in the application layer.<a href="#section-7.1.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-7.1.1-1.3">
-              <p id="section-7.1.1-1.3.1">Higher level libraries, such as QUIC(-MP) should be carefuol to not
+              <p id="section-7.1.1-1.3.1">Higher level libraries, such as QUIC(-MP) should be careful to not
 rely only on IP addresses to trigger path validation or resetting
 congestion control or RTT estimation algorithms. Instead, QUIC-MP
 should rely on the QUIC Path ID.<a href="#section-7.1.1-1.3.1" class="pilcrow">¶</a></p>

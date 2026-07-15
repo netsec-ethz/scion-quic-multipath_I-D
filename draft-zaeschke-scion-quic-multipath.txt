@@ -424,7 +424,7 @@ Table of Contents
    reroute traffic to a different machine without triggering path
    validation, see Section 7.2 and Section 5.11.
 
-   The implication of a skipped path validation is that a sever can be
+   The implication of a skipped path validation is that a server can be
    coaxed into sending QUIC packets to an unexpecting client.  This is
    similar to the attacks described in Section 8 of [QUIC-TRANSPORT] and
    Section 21.5.4 of [QUIC-TRANSPORT].
@@ -1154,10 +1154,10 @@ Table of Contents
       multiple paths with the same IP/port.  However, this may have
       unintended consequences in the application layer.
 
-   *  Higher level libraries, such as QUIC(-MP) should be carefuol to
-      not rely only on IP addresses to trigger path validation or
-      resetting congestion control or RTT estimation algorithms.
-      Instead, QUIC-MP should rely on the QUIC Path ID.
+   *  Higher level libraries, such as QUIC(-MP) should be careful to not
+      rely only on IP addresses to trigger path validation or resetting
+      congestion control or RTT estimation algorithms.  Instead, QUIC-MP
+      should rely on the QUIC Path ID.
 
    Circumventing path validation is not possible, because that would
    require injecting a new path, see Section 7.2.
