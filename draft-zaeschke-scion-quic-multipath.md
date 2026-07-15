@@ -9,7 +9,7 @@ docname: draft-zaeschke-scion-quic-multipath-latest
 
 submissiontype: IRTF  # also: "independent", "editorial", "IAB", "IRTF"
 
-date: 2025-07-04
+date: 2026-07-15
 
 ipr: trust200902
 
