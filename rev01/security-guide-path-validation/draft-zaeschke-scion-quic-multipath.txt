@@ -1510,6 +1510,8 @@ draft-zaeschke-scion-quic-multipath-01
 
    Major changes:
 
+   *  Added suggestions for SCION level spoofing protection.
+
    *  Reverted Section 5.1 and Section 7.2 because the attack can only
       be mitigated by SCION aware QUIC implementations.  The previously
       proposed new rules do not help.
