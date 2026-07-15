@@ -1341,6 +1341,7 @@ be removed before publication.
 
 Major changes:
 
+- Added suggestions for SCION level spoofing protection.
 - Reverted {{endpoint-identity}} and {{attack-path-injection}}
   because the attack can only be mitigated by SCION aware QUIC
   implementations. The previously proposed new rules do not help.
