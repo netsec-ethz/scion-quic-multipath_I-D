@@ -383,7 +383,7 @@ An attacker could use endpoints with identical 4-tuple to reroute
 traffic to a different machine without triggering path validation, see
 {{attack-path-injection}} and {{token}}.
 
-The implication of a skipped path validation is that a sever can be
+The implication of a skipped path validation is that a server can be
 coaxed into sending QUIC packets to an unexpecting client. This is
 similar to the attacks described in {{Section 8 of QUIC-TRANSPORT}} and
 {{Section 21.5.4 of QUIC-TRANSPORT}}.
@@ -1085,7 +1085,7 @@ when launching the attack, this is difficult with ephemeral ports.
 - SCION libraries could use IP/port mangling when they detect
   multiple paths with the same IP/port. However, this may have
   unintended consequences in the application layer.
-- Higher level libraries, such as QUIC(-MP) should be carefuol to not
+- Higher level libraries, such as QUIC(-MP) should be careful to not
   rely only on IP addresses to trigger path validation or resetting
   congestion control or RTT estimation algorithms. Instead, QUIC-MP
   should rely on the QUIC Path ID.
