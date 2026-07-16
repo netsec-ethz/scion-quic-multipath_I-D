@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-07-14T02:46:50.230960+00:00",
+  "timestamp": "2026-07-16T02:51:39.180370+00:00",
   "repo": "netsec-ethz/scion-quic-multipath_I-D",
   "labels": [
     {
@@ -382,25 +382,35 @@
       "id": "PR_kwDOOmGiIc6t9pww",
       "title": "Fixed Several Typos",
       "url": "https://github.com/netsec-ethz/scion-quic-multipath_I-D/pull/12",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "seadog007",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "- sever -> server\r\n- expoloiting -> exploiting\r\n- carefuol -> careful\r\n",
       "createdAt": "2025-10-15T20:38:37Z",
-      "updatedAt": "2025-10-15T20:38:37Z",
+      "updatedAt": "2026-07-15T13:18:09Z",
       "baseRepository": "netsec-ethz/scion-quic-multipath_I-D",
       "baseRefName": "main",
-      "baseRefOid": "be97ce9a803db2ea90706d179a7b7ddad4463cc8",
+      "baseRefOid": "8d1c736a7146a68e6009dabbd0ebdb229614e2f1",
       "headRepository": "seadog007/scion-quic-multipath_I-D",
       "headRefName": "patch-1",
-      "headRefOid": "f5de1a87aa1ec0a4b63bf95981e27990ca514a35",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "headRefOid": "d90e4fd8926fb872e7c18ddf7b0a635b2eed35e2",
+      "closedAt": "2026-07-15T13:18:01Z",
+      "mergedAt": "2026-07-15T13:18:01Z",
+      "mergedBy": "tzaeschke",
+      "mergeCommit": {
+        "oid": "b1b0ffc64b41119917cc380a2afa347696ca4e3d"
+      },
+      "comments": [
+        {
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thanks!",
+          "createdAt": "2026-07-15T13:18:09Z",
+          "updatedAt": "2026-07-15T13:18:09Z"
+        }
+      ],
       "reviews": []
     },
     {
@@ -436,9 +446,9 @@
     {
       "number": 14,
       "id": "PR_kwDOOmGiIc7q_0-Q",
-      "title": "Rephrase path-validation problem rules",
+      "title": "Revert recommendations on SCION level spoofing protection",
       "url": "https://github.com/netsec-ethz/scion-quic-multipath_I-D/pull/14",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tzaeschke",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -447,17 +457,19 @@
       "labels": [],
       "body": "",
       "createdAt": "2026-06-26T13:37:45Z",
-      "updatedAt": "2026-06-26T14:51:47Z",
+      "updatedAt": "2026-07-15T13:13:07Z",
       "baseRepository": "netsec-ethz/scion-quic-multipath_I-D",
       "baseRefName": "main",
       "baseRefOid": "76a1f2c73a8f667c6b3664624eb3ab6107aa30dd",
       "headRepository": "netsec-ethz/scion-quic-multipath_I-D",
       "headRefName": "rev01/security-guide-path-validation",
-      "headRefOid": "f007d0721f78d6693cfb362977cf244e4b20a3d5",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "621156f1b7dee4ce3ce0db05267e863238ed2127",
+      "closedAt": "2026-07-15T13:13:02Z",
+      "mergedAt": "2026-07-15T13:13:02Z",
+      "mergedBy": "tzaeschke",
+      "mergeCommit": {
+        "oid": "8d1c736a7146a68e6009dabbd0ebdb229614e2f1"
+      },
       "comments": [],
       "reviews": []
     }
