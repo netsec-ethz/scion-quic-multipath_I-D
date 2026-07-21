@@ -836,7 +836,7 @@ allows the server to verify that the client IP address has not
 changed from when the token was issued."
 
 These must be read such that "IP address" becomes "network address",
-meaning that it includes the ISD-AS code of a peer.
+meaning that it includes the ISD-AS identifier of a peer.
 
 
 ## Path ID Allocation {#path-id-allocation}
@@ -1000,7 +1000,7 @@ relevant to security or performance.
   1. Receivers MAY drop a packet if its path indicates origin outside
      the local AS but the underlay IP does not match a known
      border router IP.
-  2. Receivers MAY drop a packet if its path indicates origin inside
+  2. Receivers SHOULD drop a packet if its path indicates origin inside
      the local AS but the underlay IP does not match the SCION SRC
      address.
 
@@ -1074,7 +1074,7 @@ types of problems:
   establishing a connection.
 
 The second case is more difficult to achieve. Often, connections may
-be stored by IP+port, so the attacker must guess the victims port
+be stored by IP+port, so the attacker must guess the victim's port
 when launching the attack, this is difficult with ephemeral ports.
 
 ### Mitigation
@@ -1152,7 +1152,7 @@ or be used for traffic analysis.
 
 The attacker injects the crafted path into the server, with the
 intention that the non-unique IP causes an existing path/connection
-mapping to be overwritten, and thus replace the victims path with
+mapping to be overwritten, and thus replace the victim's path with
 the updated path.
 
 
