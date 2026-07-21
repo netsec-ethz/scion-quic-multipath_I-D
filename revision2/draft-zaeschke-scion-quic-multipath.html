@@ -19,9 +19,9 @@ combining QUIC-MP with SCION.
        This document explores various aspects of this combination, such as
 algorithms for congestion control, RTT estimation, and general
 application scenarios.
-In addition, it provides techniques and guidance to maintain the security
-of QUIC-MP and SCION,
-and to leverage path-aware multipath networking with QUIC-MP. 
+In addition, it provides techniques and guidance to maintain the
+security of QUIC-MP and SCION, and to leverage path-aware multipath
+networking with QUIC-MP. 
     " name="description">
 <meta content="xml2rfc 3.34.0" name="generator">
 <meta content="SCION" name="keyword">
@@ -1114,9 +1114,9 @@ combining QUIC-MP with SCION.<a href="#section-abstract-2" class="pilcrow">¶</a
 <p id="section-abstract-3">This document explores various aspects of this combination, such as
 algorithms for congestion control, RTT estimation, and general
 application scenarios.
-In addition, it provides techniques and guidance to maintain the security
-of QUIC-MP and SCION,
-and to leverage path-aware multipath networking with QUIC-MP.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
+In addition, it provides techniques and guidance to maintain the
+security of QUIC-MP and SCION, and to leverage path-aware multipath
+networking with QUIC-MP.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1539,8 +1539,8 @@ otherwise not verified. This data describes properties of
 traversed ASes and links, such as their identity or MTU.<a href="#section-2.1-10" class="pilcrow">¶</a></p>
 <p id="section-2.1-11"><strong>Metadata Extension</strong>:
 SCION offers additional path metadata via extensions. The metadata
-includes properties such as bandwidth and latency. The extension
-is widely supported but not further discussed here as it is not specified
+includes properties such as bandwidth and latency. The extension is
+widely supported but not further discussed here as it is not specified
 in <span>[<a href="#SCION-CP" class="cite xref">SCION-CP</a>]</span> or <span>[<a href="#SCION-DP" class="cite xref">SCION-DP</a>]</span>.<a href="#section-2.1-11" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1566,8 +1566,8 @@ some mismatches, for instance:<a href="#section-3-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3-4.1">
           <p id="section-3-4.1.1"><strong>Endpoint Ambiguity</strong>: PANs such as SCION use composite addresses
-(e.g., ISD-AS + Host Address), where the host can be an IP address from a
-private IP range. This breaks the assumption that IP addresses
+(e.g., ISD-AS + Host Address), where the host can be an IP address
+from a private IP range. This breaks the assumption that IP addresses
 are unique in the current network.<a href="#section-3-4.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-3-4.2">
@@ -1755,8 +1755,8 @@ additional information and control over paths, but also some challenges.<a href=
         <h3 id="name-addressing">
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-addressing" class="section-name selfRef">Addressing</a>
         </h3>
-<p id="section-5.1-1">SCION uses composite addresses (ISD-AS + host address + port), where the IP
-address can be from a private IP range. This breaks the assumption
+<p id="section-5.1-1">SCION uses composite addresses (ISD-AS + host address + port), where the
+IP address can be from a private IP range. This breaks the assumption
 that IP addresses are unique in the scope of the network.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 <div id="key-implications">
 <section id="section-5.1.1">
@@ -1765,7 +1765,8 @@ that IP addresses are unique in the scope of the network.<a href="#section-5.1-1
           </h4>
 <p id="section-5.1.1-1">QUIC-MP relies on the 4-tuple changes to trigger path validation.
 However, with SCION, the 4-tuple does not uniquely identify an endpoint.
-Two endpoints with identical host address/port could be in different ASes.
+Two endpoints with identical host address/port could be in different
+ASes.
 An attacker could use endpoints with identical 4-tuple to reroute
 traffic to a different machine without triggering path validation, see
 <a href="#attack-path-injection" class="auto internal xref">Section 7.2</a> and <a href="#token" class="auto internal xref">Section 5.11</a>.<a href="#section-5.1.1-1" class="pilcrow">¶</a></p>
@@ -1782,8 +1783,8 @@ similar to the attacks described in <span><a href="https://rfc-editor.org/rfc/rf
           </h4>
 <ul class="normal">
 <li class="normal" id="section-5.1.2-1.1">
-              <p id="section-5.1.2-1.1.1">To prevent attackers from circumventing QUIC path validation, a QUIC-MP
-implementation <span class="bcp14">MUST</span> make sure that QUIC path validation is
+              <p id="section-5.1.2-1.1.1">To prevent attackers from circumventing QUIC path validation, a
+QUIC-MP implementation <span class="bcp14">MUST</span> make sure that QUIC path validation is
 triggered when the network address of the destination changes;
 this includes host address, port and AS number. This protects against
 several attacks, see <a href="#attack-path-injection" class="auto internal xref">Section 7.2</a> and especially
@@ -1804,9 +1805,9 @@ object instead of port and host address separately.<a href="#section-5.1.2-3.2.1
 </li>
             <li class="normal" id="section-5.1.2-3.3">
               <p id="section-5.1.2-3.3.1">The SCION implementation could detect cases where only the AS
-changes and then mangle the port or host address to trigger a path validation
-in the QUIC-MP layer. This may be a pragmatic solution but is
-discouraged because:<a href="#section-5.1.2-3.3.1" class="pilcrow">¶</a></p>
+changes and then mangle the port or host address to trigger a path
+validation in the QUIC-MP layer. This may be a pragmatic solution but
+is discouraged because:<a href="#section-5.1.2-3.3.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.1.2-3.3.2.1">
                   <p id="section-5.1.2-3.3.2.1.1">Managing paths in the SCION layer is not trivial because it requires
@@ -1880,13 +1881,14 @@ can be handled by the path selector, see <a href="#patsel" class="auto internal 
 such that every SCION network path is used for exactly one QUIC-MP
 Path ID.
 However, it may not always be possible or feasible to configure SCION
-implementations in this way, for example. when they are part of a SCION
-gateway or proxy, and are unaware of transporting QUIC, see <a href="#sig" class="auto internal xref">Section 4.6</a>.<a href="#section-5.2-8.2.1" class="pilcrow">¶</a></p>
+implementations in this way, for example. when they are part of a
+SCION gateway or proxy, and are unaware of transporting QUIC, see
+<a href="#sig" class="auto internal xref">Section 4.6</a>.<a href="#section-5.2-8.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.2-8.3">
-            <p id="section-5.2-8.3.1">A SCION path should be allowed to be reused, e.g., they may be assigned
-to one QUIC Path ID, and when that path ID is closed, the path
-must be allowed to be assigned to another Path ID.
+            <p id="section-5.2-8.3.1">A SCION path should be allowed to be reused, e.g., they may be
+assigned to one QUIC Path ID, and when that path ID is closed, the
+path must be allowed to be assigned to another Path ID.
 This should not cause any problems except for the
 marginal complexity of managing the associated state with a Path ID.<a href="#section-5.2-8.3.1" class="pilcrow">¶</a></p>
 </li>
@@ -1945,9 +1947,9 @@ object instead of port and host address separately.<a href="#section-5.2.2-3.2.1
             <li class="normal" id="section-5.2.2-3.3">
               <p id="section-5.2.2-3.3.1">The SCION implementation could detect cases where only the router
 interfaces
-change and then mangle the port or host address to trigger a path validation
-in the QUIC-MP layer. This may be a pragmatic solution but is
-discouraged, because:<a href="#section-5.2.2-3.3.1" class="pilcrow">¶</a></p>
+change and then mangle the port or host address to trigger a path
+validation in the QUIC-MP layer. This may be a pragmatic solution but
+is discouraged, because:<a href="#section-5.2.2-3.3.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.2.2-3.3.2.1">
                   <p id="section-5.2.2-3.3.2.1.1">Managing paths in the SCION layer is not trivial because it requires
@@ -2017,9 +2019,9 @@ We also need to ensure this for gateways etc., see <a href="#sig" class="auto in
         <h3 id="name-congestion-control">
 <a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-congestion-control" class="section-name selfRef">Congestion Control</a>
         </h3>
-<p id="section-5.4-1">Following <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21#section-5.1" class="relref">Section 5.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>, the congestion control (CC) algorithm should be reset
-when the 4-tuple of a QUIC path changes. With SCION, 4-tuples are not
-sufficient to identify paths, see <a href="#pathid" class="auto internal xref">Section 5.2</a>.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
+<p id="section-5.4-1">Following <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21#section-5.1" class="relref">Section 5.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>, the congestion control (CC)
+algorithm should be reset when the 4-tuple of a QUIC path changes. With
+SCION, 4-tuples are not sufficient to identify paths, see <a href="#pathid" class="auto internal xref">Section 5.2</a>.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
 <p id="section-5.4-2">To avoid missing a path change, the SCION implementation should never
 change a network path unless explicitly instructed by the QUIC-MP
 implementation, see <a href="#recommendations" class="auto internal xref">Section 5.1.2</a>.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
@@ -2046,8 +2048,8 @@ separate congestion control for each path.
 Alternatively, a CC algorithm could be employed that focuses
 on known shared links (which may be bottlenecks).<a href="#section-5.4.1-3" class="pilcrow">¶</a></p>
 <p id="section-5.4.1-4">There are several congestion control algorithms proposed in literature,
-e.g., LIA, <span>[<a href="#OLIA" class="cite xref">OLIA</a>]</span>, BALIA and RSF.  These combine congestion control with
-path selection algorithms.
+e.g., LIA, <span>[<a href="#OLIA" class="cite xref">OLIA</a>]</span>, BALIA and RSF.  These combine congestion control
+with path selection algorithms.
 For simplicity, we suggest separating concerns in terms of
 congestion control and path selection. This allows us to better
 tailor the solutions to the different usage scenarios.<a href="#section-5.4.1-4" class="pilcrow">¶</a></p>
@@ -2072,15 +2074,16 @@ of a path:<a href="#section-5.4.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.4.2-3.1">
               <p id="section-5.4.2-3.1.1">When using multiple paths, a CC algorithm can access path metadata
-as to whether and where the paths overlap and some of the properties of the
-overlapping sections.<a href="#section-5.4.2-3.1.1" class="pilcrow">¶</a></p>
+as to whether and where the paths overlap and some of the properties
+of the overlapping sections.<a href="#section-5.4.2-3.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.4.2-3.2">
               <p id="section-5.4.2-3.2.1">CC algorithms should be notified of every path change, allowing them
 to reset only when necessary. A reset may not be necessary if the
-network path remains the same and only the host address or port of an endpoint
-changes. This can make sense if any congestion is assumed to be on the
-network path rather than behind the remote host address/port (e.g., behind a proxy).<a href="#section-5.4.2-3.2.1" class="pilcrow">¶</a></p>
+network path remains the same and only the host address or port of an
+endpoint changes. This can make sense if any congestion is assumed to
+be on the network path rather than behind the remote host address/port
+(e.g., behind a proxy).<a href="#section-5.4.2-3.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <p id="section-5.4.2-4">See also <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21#section-5.3" class="relref">Section 5.3</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-5.4.2-4" class="pilcrow">¶</a></p>
@@ -2181,12 +2184,13 @@ many cases be sufficient for practical use.<a href="#section-5.5.2-3.2.1" class=
         </h3>
 <p id="section-5.6-1">The MTU may be used to calculate the available payload size.
 SCION inserts an additional header (<span><a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-dataplane-15#section-2" class="relref">Section 2</a> of [<a href="#SCION-DP" class="cite xref">SCION-DP</a>]</span>) into
-each packet. The header size depends on the host address family (e.g., IPv4 vs
-IPv6 addresses) and on the "length" of the path, i.e., the number of
-ASes that are traversed. This must be taken into account when
+each packet. The header size depends on the host address family (e.g.,
+IPv4 vs IPv6 addresses) and on the "length" of the path, i.e., the
+number of ASes that are traversed. This must be taken into account when
 calculating the available payload size.<a href="#section-5.6-1" class="pilcrow">¶</a></p>
-<p id="section-5.6-2">The difference between typical MTU (1500 bytes) and QUIC's required packet
-size (1200 bytes) is sufficient for typical real-world SCION headers.<a href="#section-5.6-2" class="pilcrow">¶</a></p>
+<p id="section-5.6-2">The difference between typical MTU (1500 bytes) and QUIC's required
+packet size (1200 bytes) is sufficient for typical real-world SCION
+headers.<a href="#section-5.6-2" class="pilcrow">¶</a></p>
 <p id="section-5.6-3">PMTU discovery (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-14.3" class="relref">Section 14.3</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>, <span>[<a href="#MTU-DISCOVERY" class="cite xref">MTU-DISCOVERY</a>]</span>)
 can be used to discover or verify MTU sizes.
 However, the MTU from the path metadata can (at least on the client
@@ -2432,20 +2436,20 @@ meaning that it includes the ISD-AS identifier of a peer.<a href="#section-5.11-
 initial path ID allocation and incremental Path ID allocation.
 See also <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21#section-4.6" class="relref">Section 4.6</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> and <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21#section-4.7" class="relref">Section 4.7</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-5.12-1" class="pilcrow">¶</a></p>
 <p id="section-5.12-2">When initializing a connection, servers and clients should be careful to
-set the maximum Path ID high enough to allow as many paths as an application
-may need, e.g., through the initial_max_path_id transport parameter or the
-MAX_PATH_ID frame.<a href="#section-5.12-2" class="pilcrow">¶</a></p>
-<p id="section-5.12-3">Afterwards, on a bad connection, Paths IDs may still run out earlier than
-expected, so servers should allocate new Path IDs either automatically or
-on demand when receiving a PATHS_BLOCKED frame.<a href="#section-5.12-3" class="pilcrow">¶</a></p>
+set the maximum Path ID high enough to allow as many paths as an
+application may need, e.g., through the initial_max_path_id transport
+parameter or the MAX_PATH_ID frame.<a href="#section-5.12-2" class="pilcrow">¶</a></p>
+<p id="section-5.12-3">Afterwards, on a bad connection, Paths IDs may still run out earlier
+than expected, so servers should allocate new Path IDs either
+automatically or on demand when receiving a PATHS_BLOCKED frame.<a href="#section-5.12-3" class="pilcrow">¶</a></p>
 <div id="key-implications-8">
 <section id="section-5.12.1">
           <h4 id="name-key-implications-9">
 <a href="#section-5.12.1" class="section-number selfRef">5.12.1. </a><a href="#name-key-implications-9" class="section-name selfRef">Key Implications</a>
           </h4>
 <p id="section-5.12.1-1">SCION Path IDs may run out quickly unless the server provides enough
-initial Path IDs and provides enough path IDs once the initial contingent
-runs out.<a href="#section-5.12.1-1" class="pilcrow">¶</a></p>
+initial Path IDs and provides enough path IDs once the initial
+contingent runs out.<a href="#section-5.12.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="recommendations-8">
@@ -2466,8 +2470,8 @@ allocates sufficiently many new Path IDs once the client sends a
 PATHS_BLOCKED frame.<a href="#section-5.12.2-1.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.12.2-1.3">
-              <p id="section-5.12.2-1.3.1">Optional: Allow the client to send PATHS_BLOCKED proactively even before
-the Path IDs are exhausted. Prepare the server to accept early
+              <p id="section-5.12.2-1.3.1">Optional: Allow the client to send PATHS_BLOCKED proactively even
+before the Path IDs are exhausted. Prepare the server to accept early
 PATHS_BLOCKED frames and respond by allocating a gracious amount of
 additional Path IDs.<a href="#section-5.12.2-1.3.1" class="pilcrow">¶</a></p>
 </li>
@@ -2489,8 +2493,9 @@ from somewhere else. There are two main scenarios:<a href="#section-5.13-1" clas
 outside the local AS.<a href="#section-5.13-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-5.13-2.2">
-            <p id="section-5.13-2.2.1">An attacker creates a packet that seems to originate from the
-local AS but the SCION SRC address does not match the attackers host address.<a href="#section-5.13-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-5.13-2.2.1">An attacker creates a packet that seems to originate from the local
+AS but the SCION SRC address does not match the attackers host
+ address.<a href="#section-5.13-2.2.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
 <p id="section-5.13-3">In both cases the packet may be sent to a border router or a local
@@ -2551,11 +2556,10 @@ relevant to security or performance.<a href="#section-6-1" class="pilcrow">¶</a
 <ul class="normal">
 <li class="normal" id="section-6.1-1.1">
             <p id="section-6.1-1.1.1">To prevent attackers circumventing path validation, a QUIC-MP
-implementation <span class="bcp14">MUST</span> ensure to trigger path validation when the
-network address of the destination changes; this includes
-host address, port and AS number. This protects against several attacks,
-see <a href="#attack-path-injection" class="auto internal xref">Section 7.2</a> and especially
-<a href="#attack-amplification" class="auto internal xref">Section 7.2.3</a>.<a href="#section-6.1-1.1.1" class="pilcrow">¶</a></p>
+implementation <span class="bcp14">MUST</span> ensure to trigger path validation when the network
+address of the destination changes; this includes host address, port
+and AS number. This protects against several attacks, see
+<a href="#attack-path-injection" class="auto internal xref">Section 7.2</a> and especially <a href="#attack-amplification" class="auto internal xref">Section 7.2.3</a>.<a href="#section-6.1-1.1.1" class="pilcrow">¶</a></p>
 <p id="section-6.1-1.1.2">
 There are several ways to achieve this, for example:<a href="#section-6.1-1.1.2" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -2571,14 +2575,15 @@ object instead of port and host address separately.<a href="#section-6.1-1.1.3.2
 </li>
               <li class="normal" id="section-6.1-1.1.3.3">
                 <p id="section-6.1-1.1.3.3.1">The SCION implementation could detect cases where only the AS
-changes and then mangle the port or host address to trigger a path validation
-in the QUIC-MP layer. This may be a pragmatic solution but is
-discouraged, because:<a href="#section-6.1-1.1.3.3.1" class="pilcrow">¶</a></p>
+changes and then mangle the port or host address to trigger a path
+validation in the QUIC-MP layer. This may be a pragmatic solution
+but is discouraged, because:<a href="#section-6.1-1.1.3.3.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.1-1.1.3.3.2.1">
-                    <p id="section-6.1-1.1.3.3.2.1.1">Managing paths in the SCION layer is not trivial because it requires
-synchronizing the lifecycle of SCION paths and QUIC-MP paths, e.g.,
-knowing when a path is valid or when is it closed in QUIC-MP.<a href="#section-6.1-1.1.3.3.2.1.1" class="pilcrow">¶</a></p>
+                    <p id="section-6.1-1.1.3.3.2.1.1">Managing paths in the SCION layer is not trivial because it
+requires synchronizing the lifecycle of SCION paths and QUIC-MP
+paths, e.g., knowing when a path is valid or when is it closed in
+QUIC-MP.<a href="#section-6.1-1.1.3.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
                   <li class="normal" id="section-6.1-1.1.3.3.2.2">
                     <p id="section-6.1-1.1.3.3.2.2.1">It creates opportunities for memory exhaustion attacks
@@ -2641,9 +2646,9 @@ Sometimes, storing paths is inevitable, see <a href="#sig" class="auto internal 
 For security concerns, see also <a href="#attack-path-injection" class="auto internal xref">Section 7.2</a>.<a href="#section-6.2-1.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.2-1.2">
-            <p id="section-6.2-1.2.1">If a SCION implementation stores paths internally, it <span class="bcp14">MUST NOT</span>
-use host address/port as key to look up paths. Host address/port are not unique
-to identify endpoints.<a href="#section-6.2-1.2.1" class="pilcrow">¶</a></p>
+            <p id="section-6.2-1.2.1">If a SCION implementation stores paths internally, it <span class="bcp14">MUST NOT</span> use
+host address/port as key to look up paths. Host address/port are not
+unique to identify endpoints.<a href="#section-6.2-1.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.2-1.3">
             <p id="section-6.2-1.3.1">When used with QUIC-MP, a SCION implementation <span class="bcp14">MUST NOT</span> change the
@@ -2692,10 +2697,10 @@ local AS is already specified for border routers in
 received.<a href="#section-6.3-1.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.3-1.1.2.1">
-                <p id="section-6.3-1.1.2.1.1">Generally, a server <span class="bcp14">SHOULD</span> respond on the same path on which the data
-was originally requested, unless the new path has been validated.
-This ensures that the path does not violate the path policy of the
-client.<a href="#section-6.3-1.1.2.1.1" class="pilcrow">¶</a></p>
+                <p id="section-6.3-1.1.2.1.1">Generally, a server <span class="bcp14">SHOULD</span> respond on the same path on which the
+data was originally requested, unless the new path has been
+validated.  This ensures that the path does not violate the path
+policy of the client.<a href="#section-6.3-1.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-6.3-1.1.2.2">
                 <p id="section-6.3-1.1.2.2.1">A server <span class="bcp14">SHOULD NOT</span> create new paths. This is also stated in
@@ -2731,8 +2736,8 @@ part of QUIC-MP.<a href="#section-6.3-1.3.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.4-1.1">
             <p id="section-6.4-1.1.1">Endpoints should aim to be located in local networks (local ASes)
-that have protection against source address spoofing from machines in the
-same network, see <a href="#attack-path-injection" class="auto internal xref">Section 7.2</a>.<a href="#section-6.4-1.1.1" class="pilcrow">¶</a></p>
+that have protection against source address spoofing from machines in
+the same network, see <a href="#attack-path-injection" class="auto internal xref">Section 7.2</a>.<a href="#section-6.4-1.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -2763,8 +2768,9 @@ implementation changes and additional consideration regarding:<a href="#section-
         <h3 id="name-ip-ambiguity">
 <a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-ip-ambiguity" class="section-name selfRef">IP Ambiguity</a>
         </h3>
-<p id="section-7.1-1">In SCION, ASes are free to use IP addresses from RFC1918 "Private-Use" IP ranges.
-Therefore, IP addresses do not uniquely identify a peer endpoint.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.1-1">In SCION, ASes are free to use IP addresses from RFC1918 "Private-Use"
+IP ranges.  Therefore, IP addresses do not uniquely identify a peer
+endpoint.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
 <p id="section-7.1-2">To attack a client with host address X, an attacker could set up an
 endpoint with identical host X in a different AS. The attacker can
 then contact a server endpoint that is also used by the client victim.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
@@ -2784,8 +2790,8 @@ establishing a connection.<a href="#section-7.1-4.2.1" class="pilcrow">¶</a></p
 </li>
         </ul>
 <p id="section-7.1-5">The second case is more difficult to achieve. Often, connections may
-be stored by host address+port, so the attacker must guess the victim's port
-when launching the attack, this is difficult with ephemeral ports.<a href="#section-7.1-5" class="pilcrow">¶</a></p>
+be stored by host address+port, so the attacker must guess the victim's
+port when launching the attack, this is difficult with ephemeral ports.<a href="#section-7.1-5" class="pilcrow">¶</a></p>
 <div id="mitigation">
 <section id="section-7.1.1">
           <h4 id="name-mitigation">
@@ -2850,10 +2856,11 @@ redirection attacks, and traffic amplification attacks.<a href="#section-7.2-4" 
 <a href="#section-7.2.1" class="section-number selfRef">7.2.1. </a><a href="#name-traffic-redirection-to-diff" class="section-name selfRef">Traffic Redirection to Different AS</a>
           </h4>
 <p id="section-7.2.1-1">An attacker may craft a packet that appears to originate from the same
-host address/port, but is located in a different AS than an existing connection.
-If the server's SCION layer stores paths internally, and uses host address/port
-as key to look them up, then the new paths may replace the existing one,
-and outgoing traffic is redirected to the new paths and destination.<a href="#section-7.2.1-1" class="pilcrow">¶</a></p>
+host address/port, but is located in a different AS than an existing
+connection.  If the server's SCION layer stores paths internally, and
+uses host address/port as key to look them up, then the new paths may
+replace the existing one, and outgoing traffic is redirected to the new
+paths and destination.<a href="#section-7.2.1-1" class="pilcrow">¶</a></p>
 <p id="section-7.2.1-2">Mitigation:<a href="#section-7.2.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.2.1-3.1">
@@ -2882,9 +2889,9 @@ or drop rate).<a href="#section-7.2.2-2" class="pilcrow">¶</a></p>
 <p id="section-7.2.2-3">The new route may also work fine, but violate the client's path policy
 or be used for traffic analysis.<a href="#section-7.2.2-3" class="pilcrow">¶</a></p>
 <p id="section-7.2.2-4">The attacker injects the crafted path into the server, with the
-intention that the non-unique host address causes an existing path/connection
-mapping to be overwritten, and thus replace the victim's path with
-the updated path.<a href="#section-7.2.2-4" class="pilcrow">¶</a></p>
+intention that the non-unique host address causes an existing
+path/connection mapping to be overwritten, and thus replace the victim's
+path with the updated path.<a href="#section-7.2.2-4" class="pilcrow">¶</a></p>
 <span id="name-example-of-non-unique-ips"></span><div id="fig-example-non-unique-ip">
 <figure id="figure-1">
             <div class="alignLeft art-text artwork" id="section-7.2.2-5.1">
@@ -2911,8 +2918,8 @@ control over an AS that is en-route between the client and server).<a href="#sec
 <p id="section-7.2.2-8">From the recommendations:<a href="#section-7.2.2-8" class="pilcrow">¶</a></p>
 <p id="section-7.2.2-9">1) SCION implementations <span class="bcp14">SHOULD NOT</span> store or cache paths,
      especially not on the server side.
-  2) SCION endhost implementations <span class="bcp14">MUST NOT</span> use host address/port as key to
-     store paths or connections to peers.<a href="#section-7.2.2-9" class="pilcrow">¶</a></p>
+  2) SCION endhost implementations <span class="bcp14">MUST NOT</span> use host address/port as key
+     to store paths or connections to peers.<a href="#section-7.2.2-9" class="pilcrow">¶</a></p>
 <p id="section-7.2.2-10">Both recommendations prevent the attack.
 Further mitigation comes from the recommendation that path validation
 <span class="bcp14">MUST</span> always be triggered when the network address or path
@@ -2925,8 +2932,8 @@ changes, even if the 4-tuple stays the same.<a href="#section-7.2.2-10" class="p
 <a href="#section-7.2.3" class="section-number selfRef">7.2.3. </a><a href="#name-traffic-amplification" class="section-name selfRef">Traffic Amplification</a>
           </h4>
 <p id="section-7.2.3-1">An attacker may establish a connection with a server,
-request a large amount of data, and then inject a path that
-redirects to a victim that has the same host address/port, but in a different AS.<a href="#section-7.2.3-1" class="pilcrow">¶</a></p>
+request a large amount of data, and then inject a path that redirects to
+a victim that has the same host address/port, but in a different AS.<a href="#section-7.2.3-1" class="pilcrow">¶</a></p>
 <p id="section-7.2.3-2">If the server-side QUIC-MP does not trigger path validation
 (because host address/port are the same), then it may implicitly accept
 the new path and send the requested data to a victim.<a href="#section-7.2.3-2" class="pilcrow">¶</a></p>
