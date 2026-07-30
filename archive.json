@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-07-28T02:47:33.926472+00:00",
+  "timestamp": "2026-07-30T02:39:23.783477+00:00",
   "repo": "netsec-ethz/scion-quic-multipath_I-D",
   "labels": [
     {
@@ -485,7 +485,7 @@
       "labels": [],
       "body": "Consistency review throughout",
       "createdAt": "2026-07-21T15:49:22Z",
-      "updatedAt": "2026-07-21T15:49:22Z",
+      "updatedAt": "2026-07-28T09:41:51Z",
       "baseRepository": "netsec-ethz/scion-quic-multipath_I-D",
       "baseRefName": "main",
       "baseRefOid": "91d48fc1745304c094499dfe48db9aaee0ed7c9d",
@@ -497,7 +497,238 @@
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOOmGiIc8AAAABHdb7aQ",
+          "commit": {
+            "abbreviatedOid": "6b7df8f"
+          },
+          "author": "tzaeschke",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "I changed a lot of thew IP->host changes back to use IP.\n- I found some of the changes a bit confusing, because other parts of the sentences still referred to IP.\n- I think \"host address\" is to easily confused with \"network address\"\n- For consistency, when we say \"host address\"then we also need to spell out \"port *number*\" and \"ISD-AS *identifier*\u00a8. I think that doesn't help readability and makes the text unnecessarily long.\n\nI left the \"underlay address\" untouched. In out scenarios, this is also an IP (we compare it to the SCION SRC IP). So maybe we should also change that back?",
+          "createdAt": "2026-07-28T09:03:18Z",
+          "updatedAt": "2026-07-28T09:41:48Z",
+          "comments": [
+            {
+              "originalPosition": 103,
+              "body": "```suggestion\nSCION uses composite addresses (ISD-AS + IP + port), where the\n```\nI would leave that as IP: the rest of the sentence refers to `IP`. Also, for consistency we would need to add ISD-AS *number* and port * number*.  ",
+              "createdAt": "2026-07-28T09:03:18Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 64,
+              "body": "```suggestion\n  (e.g., ISD-AS + IP), where the host can be an IP address\n```\nThis sentence is specifically talking about IP.",
+              "createdAt": "2026-07-28T09:11:38Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 127,
+              "body": "```suggestion\n  this includes IP, port and ISD-AS identifier. This protects against\n```",
+              "createdAt": "2026-07-28T09:12:34Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 139,
+              "body": "```suggestion\n  object instead of port and IP separately.\n```",
+              "createdAt": "2026-07-28T09:13:19Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 144,
+              "body": "```suggestion\n  changes and then mangle the port or IP to trigger a path\n```",
+              "createdAt": "2026-07-28T09:13:37Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 154,
+              "body": "```suggestion\n    (for storing the mapping of mangled IP/port).\n```",
+              "createdAt": "2026-07-28T09:14:05Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 154,
+              "body": "```suggestion\n    (for storing the mapping of mangled IP/port).\n```",
+              "createdAt": "2026-07-28T09:14:40Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 155,
+              "body": "```suggestion\n  - It reports a wrong IP/port to the application.\n```",
+              "createdAt": "2026-07-28T09:14:59Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 173,
+              "body": "```suggestion\naddress (IP, port, AS), so this case is not a concern.\n```",
+              "createdAt": "2026-07-28T09:15:20Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 224,
+              "body": "```suggestion\n  object instead of port and IP separately.\n```",
+              "createdAt": "2026-07-28T09:16:03Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 230,
+              "body": "```suggestion\n  change and then mangle the port or IP to trigger a path\n```",
+              "createdAt": "2026-07-28T09:16:19Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 240,
+              "body": "```suggestion\n    (for storing the mapping of IP/port).\n```",
+              "createdAt": "2026-07-28T09:16:41Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 241,
+              "body": "```suggestion\n  - It reports a wrong IP/port to the application.\n```",
+              "createdAt": "2026-07-28T09:16:56Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 282,
+              "body": "```suggestion\nIP/port for both endpoints.\n```",
+              "createdAt": "2026-07-28T09:18:16Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 292,
+              "body": "```suggestion\n  as to determine whether and where the paths overlap and some of the\n  properties of the overlapping sections.\n```",
+              "createdAt": "2026-07-28T09:21:03Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 360,
+              "body": "```suggestion\nto a destination, ordering the paths based on policies and preferences,\n```",
+              "createdAt": "2026-07-28T09:23:26Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 456,
+              "body": "```suggestion\nforwarding faulty packets to neighbor ASes and endhosts SCION stacks\nshould avoid forwarding faulty packets to the QUIC layer or application layer.\n```",
+              "createdAt": "2026-07-28T09:26:47Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 495,
+              "body": "```suggestion\n    object instead of port and IP separately.\n```",
+              "createdAt": "2026-07-28T09:27:42Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 513,
+              "body": "```suggestion\n      (for storing the mapping of mangled IP/port).\n```",
+              "createdAt": "2026-07-28T09:27:58Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 514,
+              "body": "```suggestion\n    - It reports a wrong IP/port to the application.\n```",
+              "createdAt": "2026-07-28T09:28:11Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 550,
+              "body": "```suggestion\n  IP/port as key to look up paths. IP/port are not\n```",
+              "createdAt": "2026-07-28T09:28:49Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 634,
+              "body": "```suggestion\nTo attack a client with IP address X, an attacker could set up an\n```",
+              "createdAt": "2026-07-28T09:30:37Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 635,
+              "body": "```suggestion\nendpoint with identical IP X in a different AS. The attacker can\n```",
+              "createdAt": "2026-07-28T09:30:51Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 639,
+              "body": "```suggestion\nIf the server endpoint stores paths internally with IP addresses as\n```",
+              "createdAt": "2026-07-28T09:31:13Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 649,
+              "body": "```suggestion\nbe stored by IP+port, so the attacker must guess the victim's\n```",
+              "createdAt": "2026-07-28T09:32:05Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 656,
+              "body": "```suggestion\n  the IP address as key to look up paths.\n```",
+              "createdAt": "2026-07-28T09:32:36Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 660,
+              "body": "```suggestion\n- SCION libraries could use IP/port mangling when they detect\n```",
+              "createdAt": "2026-07-28T09:32:51Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 661,
+              "body": "```suggestion\n  multiple paths with the same IP/port. However, this may have\n```",
+              "createdAt": "2026-07-28T09:33:04Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 665,
+              "body": "```suggestion\n  rely only on IP/port to trigger path validation or resetting\n```",
+              "createdAt": "2026-07-28T09:33:30Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 674,
+              "body": "```suggestion\n   (beyond IP/port) internally.\n```",
+              "createdAt": "2026-07-28T09:33:48Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 684,
+              "body": "```suggestion\n   network address (including ISD-AS) should trigger path\n```",
+              "createdAt": "2026-07-28T09:34:33Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 707,
+              "body": "```suggestion\n  address, not just IP and port.\n```",
+              "createdAt": "2026-07-28T09:34:52Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 718,
+              "body": "```suggestion\nintention that the non-unique IP/portt causes an existing\n```",
+              "createdAt": "2026-07-28T09:35:57Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 730,
+              "body": "```suggestion\n  2) SCION endhost implementations MUST NOT use IP/port as key\n```",
+              "createdAt": "2026-07-28T09:36:11Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 742,
+              "body": "```suggestion\na victim that has the same IP/port, but in a different AS.\n```",
+              "createdAt": "2026-07-28T09:36:38Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            },
+            {
+              "originalPosition": 746,
+              "body": "```suggestion\n(because IP/port are the same), then it may implicitly accept\n```",
+              "createdAt": "2026-07-28T09:36:55Z",
+              "updatedAt": "2026-07-28T09:41:48Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
